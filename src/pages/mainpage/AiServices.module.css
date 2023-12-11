@@ -69,3 +69,19 @@ li {
     display: flex;
     justify-content: center;
 }
+
+.pdfIcon {
+    display: flex;
+    justify-content: center;
+}
+
+
+.headIcon {
+    display: flex;
+    justify-content: center;
+}
+
+.speakerIcon {
+    display: flex;
+    justify-content: center;  
+}
