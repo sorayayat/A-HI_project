@@ -1,0 +1,26 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.companyInfoContainer {
+    display: flex;
+    
+    flex-wrap: wrap;
+    width: 500px;
+}
+
+.titleText1 {
+    flex: 1;
+    width: 1000px;
+    border: 1px solid rgba(0.1, 0.1, 0.1, 0.1);
+    
+}
+
+.titleText2,
+.titleText3 {
+    /* flex: 1; */
+    width: 50%;
+}
+
