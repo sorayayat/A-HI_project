@@ -1,0 +1,29 @@
+.footerWrapper {
+    width: 100%;
+    padding: 13px 0 16px;
+    background-color: #fff;
+    border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.footerRowClass {
+    width: 90%;
+    max-width: 1060px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.footerText {
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    grid-gap: 8px;
+    gap: 8px;
+    margin-top: 28px;
+    color: gray;
+}
+
+.footerP {
+    margin-top: 0;
+    margin-bottom: 0;
+}
