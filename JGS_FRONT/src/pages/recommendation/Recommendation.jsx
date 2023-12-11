@@ -33,6 +33,7 @@ function Recommendation() {
     return (
         <>
 
+
             <div className={style.container}>
                 
                 <img className={style.logo} src={logo} alt="로고" />
@@ -67,6 +68,8 @@ function Recommendation() {
 
                 <h2 className={style.noResume}>AI로 이력서를 작성 해보세요!</h2>
             </div>
+
+            
 
         </>    
     )
