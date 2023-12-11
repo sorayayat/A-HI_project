@@ -71,6 +71,19 @@ const Announcement = () => {
                                 </div>
                             </div>
                         </div>
+                        {/* 공고 5 */}
+                        <div data-index="4" className={styles.slick}>
+                            <div className={styles.jobContainer}>
+                                <div data-cy="jobCard">
+                                    <a href="/announcement/3">
+                                    <div className={styles.jobThumbnail}></div>
+                                    <div>
+                                        <p>파이썬 개발자</p>
+                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
