@@ -22,9 +22,7 @@ li {
 }
 
 .boxList {
-    /* display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box; */
+
     display: flex;
     height: 100%;
     -webkit-column-gap: 16px;
@@ -70,4 +68,20 @@ li {
 .paperIcon {
     display: flex;
     justify-content: center;
+}
+
+.pdfIcon {
+    display: flex;
+    justify-content: center;
+}
+
+
+.headIcon {
+    display: flex;
+    justify-content: center;
+}
+
+.speakerIcon {
+    display: flex;
+    justify-content: center;  
 }
