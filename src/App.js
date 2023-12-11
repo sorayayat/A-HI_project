@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/layout";
 import MainContents from './pages/mainpage/MainContents'
 
-function App() {
+function App() { 
 
 
 
