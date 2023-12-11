@@ -22,9 +22,7 @@ li {
 }
 
 .boxList {
-    /* display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box; */
+
     display: flex;
     height: 100%;
     -webkit-column-gap: 16px;
