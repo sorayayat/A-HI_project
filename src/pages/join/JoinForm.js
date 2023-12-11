@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../css/JoinForm.module.css';
+import styles from './JoinForm.module.css';
 
 const JoinForm = () => {
   return (
@@ -41,13 +41,13 @@ const JoinForm = () => {
           <span></span>
         </div>
 
-        <div className={styles.inputContainer}>
+        {/* <div className={styles.inputContainer}>
           <label htmlFor="age">나이</label>
           <div className={styles.inputOnly}>
             <input type="number" id="age" min={1} max={110} />
           </div>
           <span></span>
-        </div>
+        </div> */}
 
         <div className={styles.inputContainer}>
           <label htmlFor="phoneNumber">전화번호</label>
