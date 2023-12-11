@@ -1,0 +1,63 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-width: 1500px;
+    font-family: 'Nanum Gothic', sans-serif;
+}
+
+
+.headerWrapper {
+    min-width: 1700px;
+    background-color: #ffffff;
+    color: rgb(90, 88, 88);
+    border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+@media (min-width: 1200px){
+    .headerMenu {
+        width: 87.72%;
+    }
+}
+
+.headerMenu {
+    max-width: 1060px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.asideMenu {
+    display: flex;
+    align-items: center;
+    margin-left: 600px;
+    width: 160px;
+    height: 40px;
+}
+
+.asideMenuList {
+    display: flex;
+    align-items: center;
+}
+
+
+.loginOrLogout {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 22px;
+    margin-right: 10px;
+    height: 100%;
+    text-decoration: none;
+    color: rgb(57, 57, 57);
+}
+
+.mypage {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 22px;
+    margin-left: 10px;
+    height: 100%;
+    text-decoration: none;
+    color: rgb(57, 57, 57);
+}
