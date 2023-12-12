@@ -4,6 +4,7 @@ import Layout from "./layouts/layout";
 import MainContents from './pages/mainpage/MainContents'
 import CompanyDetails from './pages/company/CompanyDetails';
 import Recommendation from './pages/recommendation/Recommendation';
+import CompanyList from './pages/company/CompanyList';
 
 function App() { 
 
@@ -18,6 +19,7 @@ function App() {
           
           <Route path='/companyDetails' element={<CompanyDetails />} />
           <Route path='/recommendation' element={<Recommendation />} />
+          <Route path='/companyList' element={<CompanyList />} />
           
         </Route>
 

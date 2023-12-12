@@ -1,6 +1,6 @@
 import style from './Recommendation.module.css'
 import { useState } from 'react'
-import logo from './images/images.png'
+import logo from './images/다운로드.png'
 
 
 
