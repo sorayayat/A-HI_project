@@ -4,7 +4,7 @@ import Layout from "./layouts/layout";
 import MainContents from './pages/mainpage/MainContents'
 import CompanyDetails from './pages/company/CompanyDetails';
 import Recommendation from './pages/recommendation/Recommendation';
-import inspection from './pages/inspection/inspection'
+import Inspection from './pages/inspection/Inspection';
 
 function App() { 
 
@@ -19,8 +19,9 @@ function App() {
           
           <Route path='/companyDetails' element={<CompanyDetails />} />
           <Route path='/recommendation' element={<Recommendation />} />
-          <Route path='/inspection' element={<inspection />}/>
+          <Route path='/inspection' element={<Inspection/>}/>
         </Route>
+
 
 
         
