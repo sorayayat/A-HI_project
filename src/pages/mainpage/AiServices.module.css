@@ -41,6 +41,7 @@ li {
     background-color: #dbe6fc;
     border-radius: 8px;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 .box:hover {
