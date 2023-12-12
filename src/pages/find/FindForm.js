@@ -3,7 +3,6 @@ import styles from './FindForm.module.css';
 import {  Link } from "react-router-dom";
 const FindForm = () => {
     return (
-       /* JSX */
 <div className={styles.findFormContainer}>
   <h2>ID/PW 찾기</h2>
   <label htmlFor="email" className={styles.labelEmail}>이메일 찾기</label>

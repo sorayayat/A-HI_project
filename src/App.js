@@ -4,9 +4,6 @@ import Layout from "./layouts/layout";
 import MainContents from './pages/mainpage/MainContents'
 import CompanyDetails from './pages/company/CompanyDetails';
 import Recommendation from './pages/recommendation/Recommendation';
-import LoginForm from './pages/login/LoginForm';
-import JoinForm from './pages/join/JoinForm';
-import FindForm from './pages/find/FindForm';
 
 function App() { 
 
@@ -21,9 +18,6 @@ function App() {
           
           <Route path='/companyDetails' element={<CompanyDetails />} />
           <Route path='/recommendation' element={<Recommendation />} />
-          <Route path="/loginForm" element={<LoginForm />} />
-          <Route path="/joinForm" element={<JoinForm />} />
-          <Route path="/findForm" element={<FindForm />} />
           
         </Route>
 
