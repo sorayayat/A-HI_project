@@ -6,6 +6,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Announcement = () => {
 
+    // 캐러셀 함수
     const [startIndex, setStartIndex] = useState(0);
     const numToShow = 4; // 한 번에 보여줄 공고 수
 
@@ -19,6 +20,15 @@ const Announcement = () => {
         if (startIndex - numToShow >= 0) {
             setStartIndex(startIndex - numToShow);
         }
+    };
+
+
+    // 글자수 넘어가면 ...으로 표시
+    const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + '...';
+        }
+        return text;
     };
 
 
@@ -52,7 +62,7 @@ const Announcement = () => {
                                         <a href="/announcement/0">
                                         <div className={styles.jobThumbnail}></div>
                                         <div>
-                                            <p>DMS 개발 및 운영 담당</p>
+                                            <p>{truncateText('DMS 개발 및 운영 담당', 16)}</p>
                                         </div>
                                         </a>
                                     </div>
@@ -65,7 +75,7 @@ const Announcement = () => {
                                         <a href="/announcement/1">
                                         <div className={styles.jobThumbnail}></div>
                                         <div>
-                                            <p>엔씨소프트 부문별 수시 채용</p>
+                                            <p>{truncateText('엔씨소프트 부문별 수시 채용', 16)}</p>
                                         </div>
                                         </a>
                                     </div>
@@ -143,7 +153,7 @@ const Announcement = () => {
                                         <a href="/announcement/3">
                                         <div className={styles.jobThumbnail}></div>
                                         <div>
-                                            <p>윈도우 어플리케이션 개발 및 유지보수</p>
+                                            <p>{truncateText('윈도우 어플리케이션 개발 및 유지보수',16)}</p>
                                         </div>
                                         </a>
                                     </div>
