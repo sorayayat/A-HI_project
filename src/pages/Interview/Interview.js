@@ -4,6 +4,8 @@ import SearchBarStyle from '../mainpage/Search.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
+
+// 폰트 수정하기 
 const Interview = () => {
 
     const [question, setquestion] = useState('');
@@ -36,7 +38,7 @@ const Interview = () => {
     return (
         <>
          {/* 첫 화면에 나타날 내용 */}
-         
+
          <div className={style.header}><h1>AI 면접</h1></div>
          <div className={style.shoulder}><h3>AI와 함께 면접을 준비해보세요</h3></div>
 
