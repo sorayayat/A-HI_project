@@ -1,5 +1,4 @@
-import { PaperIcon } from './Icons';
-import { PDFIcon } from './Icons';
+
 import Interview from '../Interview/Interview';
 import React, {useState} from 'react';
 import styles from './AiServices.module.css';
