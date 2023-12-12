@@ -43,6 +43,11 @@ li {
     box-sizing: border-box;
 }
 
+.box:hover {
+    border: 3px solid #bfd1f5;
+    background-color: #e9eff9;
+}
+
 .boxTitle {
     text-align: center;   
 }
