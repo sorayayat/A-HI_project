@@ -25,6 +25,7 @@
     border: 2px solid;
     border-radius: 5px;
     border-color: #cccccc;
+    cursor: pointer;
 }
 
 .afterBtn {
@@ -32,6 +33,14 @@
     border: 2px solid;
     border-radius: 5px;
     border-color: #cccccc;
+    cursor: pointer;
+}
+
+.beforeBtn:disabled,
+.afterBtn:disabled {
+    color: gray;
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 .anmList {
