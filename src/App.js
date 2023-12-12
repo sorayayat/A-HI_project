@@ -4,9 +4,22 @@ import Layout from "./layouts/layout";
 import MainContents from './pages/mainpage/MainContents'
 import CompanyDetails from './pages/company/CompanyDetails';
 import Recommendation from './pages/recommendation/Recommendation';
+<<<<<<< HEAD
 import Inspection from './pages/inspection/Inspection';
 import CompanyList from './pages/company/CompanyList';
 import Interview from './pages/Interview/Interview';
+=======
+import LoginForm from './pages/login/LoginForm';
+import JoinForm from './pages/join/JoinForm';
+import FindForm from './pages/find/FindForm';
+import MemberUpdate from './pages/memberUpdate/MemberUpdate';
+import Withdrawal from './pages/withdrawal/Withdrawal';
+import Mypage from './pages/mypage/Mypage';
+import Inspection from './pages/inspection/Inspection';
+import CompanyList from './pages/company/CompanyList';
+import Interview from './pages/Interview/Interview';
+import CreateResume from './pages/createresume/CreateResume';
+>>>>>>> 78a7164a32dd1cfce2d0fa72ca76f5e1ebd3b27c
 
 function App() { 
 
@@ -18,16 +31,33 @@ function App() {
         <Route path='/' element={<Layout/>}>
           {/* 메인 */}
           <Route index element={<MainContents/>}/>
+
+          <Route path='/companyDetails' element={<CompanyDetails />} />
+          <Route path='/recommendation' element={<Recommendation />} />
+          <Route path="/loginForm" element={<LoginForm />} />
+          <Route path="/joinForm" element={<JoinForm />} />
+          <Route path="/findForm" element={<FindForm />} />
+          <Route path="/member_update" element={<MemberUpdate />} />
+          <Route path="/withdrawal" element={<Withdrawal />} />
+          <Route path="/mypage" element={<Mypage />} />
+
+
+
           <Route path='/companyDetails' element={<CompanyDetails />} />
           <Route path='/recommendation' element={<Recommendation />} />
           <Route path='/inspection' element={<Inspection/>}/>
           <Route path='/companyList' element={<CompanyList />} />
           <Route path='/interview' element={<Interview/>}/>
+<<<<<<< HEAD
         </Route>
 
 
 
         
+=======
+          <Route path='/createResume' element={<CreateResume/>}/>
+        </Route>       
+>>>>>>> 78a7164a32dd1cfce2d0fa72ca76f5e1ebd3b27c
       </Routes>
     </BrowserRouter>
 
