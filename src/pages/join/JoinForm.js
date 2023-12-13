@@ -1,8 +1,10 @@
 import React from 'react';
 import styles from './JoinForm.module.css';
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const JoinForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -13,6 +15,7 @@ const JoinForm = () => {
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!isEmailChecked) {
       alert('이메일 중복 확인을 해주세요.');
       return;
@@ -28,26 +31,57 @@ const JoinForm = () => {
       return;
     }
 
-  };
-  const handleEmailCheck = () => {
-    axios.get(`http://localhost:8001/api/email_duplication_check?email=${formData.email}`)
+    axios.post(`./api/signup`,formData)
         .then(response => {
-          // 응답 처리
-          console.log(response.data);
+          alert(response.data);
+          navigate('/');
         })
         .catch(error => {
-          // 오류 처리
           console.error('Error fetching data: ', error);
         })
         .finally(() => {
-          // 항상 실행되는 로직 (옵션)
         });
 
-    setIsEmailChecked(true);
+
+
+
+
+
+  };
+  const handleEmailCheck = () => {
+    const emailInput = document.getElementById('email');
+
+    if (emailInput.validity.valid) {
+
+
+      axios.get(`./api/email_duplication_check?email=${formData.email}`)
+          .then(response => {
+            setIsEmailChecked(response.data);
+            alert(response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching data: ', error);
+          })
+          .finally(() => {
+          });
+    }else{
+      alert('유효하지 않은 이메일 형식입니다.');
+    }
+
+
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    if (name === "email") {
+      setIsEmailChecked(false);
+      setFormData({ ...formData, [name]: value });
+    }else if (name === 'phoneNumber'){
+      const sanitizedValue = value.replace(/[^0-9]/g, '');
+      setFormData({ ...formData, [name]: sanitizedValue });
+    }else{
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   return (
@@ -102,7 +136,7 @@ const JoinForm = () => {
         <div className={styles.inputContainer}>
           <label htmlFor="phoneNumber">전화번호</label>
           <div className={styles.inputOnly}>
-            <input type="number" id="phoneNumber"  name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='전화번호는 10자리이상이어야 합니다.'/>
+            <input type="number" id="phoneNumber" max="99999999999" name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
           </div>
           <span></span>
         </div>
