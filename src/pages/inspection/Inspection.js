@@ -1,4 +1,7 @@
 import { useState , useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { callInspectionAskAPI } from "../../apis/inspectionAPICalls";
+import { postAsk } from "../../modules/inspectionModule";
 import style from "./static/css/inspection.module.css"
 
 function Inspection()
@@ -6,6 +9,7 @@ function Inspection()
     const [isInspection, setIsInspection] = useState(false); // 수정 | 검수 전환 버튼
     const [title,setTitle] = useState("검수"); // 제목
     const [form, setForm] = useState({});
+    const dispatch = useDispatch();
     
 
     const onClickModifyBtnHandler = () =>
@@ -26,15 +30,16 @@ function Inspection()
             ...form,
             [e.target.name] : [e.target.value]
         });
-        console.log(form)
     }
 
-    const onResultClickHandler = (e) =>
+    const onResultClickHandler = () =>
     {
-        if(form.introductionTitle || form.keyWord || form.content){
+        if(form?.introductionTitle && form?.keyword && form?.content){
+            console.log(form);
+        }
+        else{
             
         }
-        console.log(form);
     }
 
 

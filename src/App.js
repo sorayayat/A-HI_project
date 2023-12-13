@@ -4,11 +4,6 @@ import Layout from "./layouts/layout";
 import MainContents from './pages/mainpage/MainContents'
 import CompanyDetails from './pages/company/CompanyDetails';
 import Recommendation from './pages/recommendation/Recommendation';
-<<<<<<< HEAD
-import Inspection from './pages/inspection/Inspection';
-import CompanyList from './pages/company/CompanyList';
-import Interview from './pages/Interview/Interview';
-=======
 import LoginForm from './pages/login/LoginForm';
 import JoinForm from './pages/join/JoinForm';
 import FindForm from './pages/find/FindForm';
@@ -19,7 +14,6 @@ import Inspection from './pages/inspection/Inspection';
 import CompanyList from './pages/company/CompanyList';
 import Interview from './pages/Interview/Interview';
 import CreateResume from './pages/createresume/CreateResume';
->>>>>>> 78a7164a32dd1cfce2d0fa72ca76f5e1ebd3b27c
 
 function App() { 
 
@@ -48,16 +42,8 @@ function App() {
           <Route path='/inspection' element={<Inspection/>}/>
           <Route path='/companyList' element={<CompanyList />} />
           <Route path='/interview' element={<Interview/>}/>
-<<<<<<< HEAD
-        </Route>
-
-
-
-        
-=======
           <Route path='/createResume' element={<CreateResume/>}/>
         </Route>       
->>>>>>> 78a7164a32dd1cfce2d0fa72ca76f5e1ebd3b27c
       </Routes>
     </BrowserRouter>
 
