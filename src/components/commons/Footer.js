@@ -4,7 +4,7 @@ import styles from '../commons/Footer.module.css'
 const Footer = () => {
     return (
         <>
-            <div className={styles.footerWrapper}>
+            <footer className={styles.footerWrapper}>
                 <div className={styles.footerRowClass}>
                     <div className={styles.footerText}>
                         <p className={styles.footerP}><span>(주)전지적 개발자 시점</span></p>
@@ -12,7 +12,7 @@ const Footer = () => {
                         <p><span>© 2023 JGS, Inc.</span></p> 
                     </div>
                 </div>
-            </div>
+            </footer>
         </>
     )
 }

@@ -1,9 +1,15 @@
+import Interview from '../Interview/Interview';
+import React, {useState} from 'react';
 import styles from './AiServices.module.css';
-import { PaperIcon } from './Icons';
-import { PDFIcon } from './Icons';
+import Paper from './Icons/MattPaper.png';
+import PDFIcon from './Icons/PDF.png';
+import SpeakingHead from './Icons/SpeakingHead.png'
+import LoudSpeaker from './Icons/Loudspeaker.png'
+
 
 
 const AiServices = () => {
+
     return (
         <>
             {/* 검색div와 서비스div사이 간격 */}
@@ -24,7 +30,7 @@ const AiServices = () => {
                                     </div>
                                     {/* 아이콘 */}
                                     <div className={styles.paperIcon}>
-                                    <PaperIcon/>
+                                        <img src={Paper} alt='paperIcon' style={{width: "90px"}}/>
                                     </div>
                                     {/* 텍스트 */}
                                     <div className={styles.boxText}>
@@ -36,31 +42,33 @@ const AiServices = () => {
                                 <article className={styles.box}>
                                     {/* 서비스 2 - 이력서 PDF 검수 */}
                                     <div className={styles.boxTitle}>
-                                        <h2>이력서 PDF 검수</h2>
+                                    <h2>이력서 PDF 검수</h2>
                                     </div>
                                     {/* 아이콘 */}
                                     <div className={styles.pdfIcon}>
+                                        <img src={PDFIcon} alt='pdfIcon' style={{width: "85px", height: "90px"}}/>
                                     </div>
                                     {/* 텍스트 */}
                                     <div className={styles.boxText}>
-                                        <h4>이력서를 PDF로 첨부하여<br/>AI 챗봇에게 첨삭받아보세요</h4>
+                                        <h4 >이력서를 PDF로 첨부하여<br/>AI 챗봇에게 첨삭받아보세요</h4>
                                     </div>      
                                 </article>
                             </li>
                             <li className={styles.boxBanner}>
                                 <article className={styles.box}>
-                                    {/* 서비스 3 - 면접 예상 질문 */}
                                     <div className={styles.boxTitle}>
                                         <h2>면접 예상 질문</h2>
                                     </div>
                                     {/* 아이콘 */}
                                     <div className={styles.headIcon}>
-
+                                        <img src={SpeakingHead} alt='speakingIcon' style={{width: "85px", height: "90x"}}/>
                                     </div>
                                     {/* 텍스트 */}
+
+                                    <div className={styles.headIcon}></div>
                                     <div className={styles.boxText}>
                                         <h4>AI 챗봇과 면접 예상 질문에<br/>대비해보세요</h4>
-                                    </div>      
+                                    </div>       
                                 </article>
                             </li>
                             <li className={styles.boxBanner}>
@@ -71,7 +79,7 @@ const AiServices = () => {
                                     </div>
                                     {/* 아이콘 */}
                                     <div className={styles.speakerIcon}>
-
+                                        <img src={LoudSpeaker} alt='speakerIcon' style={{width: "80px", height: "80x"}}/>
                                     </div>
                                     {/* 텍스트 */}
                                     <div className={styles.boxText}>
