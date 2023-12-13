@@ -8,6 +8,7 @@ import Inspection from './pages/inspection/Inspection';
 import CompanyList from './pages/company/CompanyList';
 import Interview from './pages/Interview/Interview';
 import CreateResume from './pages/createresume/CreateResume';
+import ChatbotMain from './pages/chatbot/ChatbotMain';
 
 function App() { 
 
@@ -25,6 +26,7 @@ function App() {
           <Route path='/companyList' element={<CompanyList />} />
           <Route path='/interview' element={<Interview/>}/>
           <Route path='/createResume' element={<CreateResume/>}/>
+          <Route path='/chatbot' element={<ChatbotMain/>}/>
         </Route>       
       </Routes>
     </BrowserRouter>
