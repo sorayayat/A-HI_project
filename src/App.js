@@ -14,6 +14,8 @@ import Inspection from './pages/inspection/Inspection';
 import CompanyList from './pages/company/CompanyList';
 import Interview from './pages/Interview/Interview';
 import CreateResume from './pages/createresume/CreateResume';
+import CompanyRegist from './pages/company/CompanyRegist';
+import WriteInfo from './pages/company/WriteInfo';
 
 function App() { 
 
@@ -43,6 +45,9 @@ function App() {
           <Route path='/companyList' element={<CompanyList />} />
           <Route path='/interview' element={<Interview/>}/>
           <Route path='/createResume' element={<CreateResume/>}/>
+          <Route path='/companyList/companyRegist' element={<CompanyRegist />} />
+          <Route path='/companyList/companyRegist/writeInfo' element={<WriteInfo />} />
+          
         </Route>       
       </Routes>
     </BrowserRouter>

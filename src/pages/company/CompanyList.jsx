@@ -1,5 +1,6 @@
 import style from './CompanyList.module.css'
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function Apply(){
 
@@ -17,7 +18,12 @@ function Apply(){
             <div className={style.mainContainer}>
                 <div>
                     <div className={style.companyList}>
-                        <h1 style={{ marginLeft: '100px'}}>채용정보</h1>
+                        <div className={style.title}>
+                            <h1 style={{ marginLeft: '100px'}}>채용정보</h1>
+                            <Link to="/companyList/companyRegist" className={style.registButton}>
+                                공고 등록
+                            </Link>
+                        </div>
                         <div className={style.companyDetails}>
                             <div className={style.companyTitle}>
                                 <div><strong>유비온 프론트엔드 개발/퍼블리셔 담당자 모집 </strong></div>
@@ -105,7 +111,9 @@ function Apply(){
 
                     </div>
                 </div>
+                
                 <div className={style.likeConpany}>
+                    
                     <div className={style.subTitle}><strong>내가 찜한 공고와 비슷한 공고</strong></div>
                     <div> <div className={style.companyTitle}>
                                 <div><strong>웹/앱 sw 개발자 </strong></div>
