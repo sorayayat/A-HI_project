@@ -1,5 +1,9 @@
 /* Interview.module.css */
 
+.parent {
+    text-align: center;
+}
+
 /* General Styles */
 .container {
     display: flex;
@@ -67,6 +71,40 @@
 .actionButton:hover {
     background-color: #1e7e34;
 }
+
+.question_box {
+
+        display: block;
+        position: relative;
+        width: 500px;
+        height: auto;
+        padding: 15px;
+        border: 1px solid #dbe6fc;
+        background-color: #dbe6fc;
+        border-radius: 8px;
+        box-sizing: content-box;
+               
+}
+
+.question_Text {
+    font-size: 18px;
+    color: black;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.answer_box{
+    display: block;
+        position: relative;
+        width: 500px;
+        height: auto;
+        padding: 15px;
+        border: 1px solid white;
+        background-color: white;
+        border-radius: 8px;
+        box-sizing: content-box;
+}
+
 
 /* Input and Label Style */
 .inputLabel {
