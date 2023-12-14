@@ -1,6 +1,7 @@
 import style from './Recommendation.module.css'
 import { useState } from 'react'
 import logo from './images/다운로드.png'
+import { Link } from 'react-router-dom';
 
 
 
@@ -63,9 +64,9 @@ function Recommendation() {
                 <button className={style.recommendationButton}>공고 추천하기</button>
 
                 <h1 className={style.noResume}>이력서가 없으시다면?</h1>
-
-                <button className={style.resumeButton}>이력서 작성 바로가기</button>
-
+                <Link to="/createResume">                                    
+                    <button className={style.resumeButton}>이력서 작성 바로가기</button>
+                </Link>                                        
                 <h2 className={style.noResume}>AI로 이력서를 작성 해보세요!</h2>
             </div>
 
