@@ -41,7 +41,7 @@ const AiServices = () => {
                                 </Link>
                             </li>
                             <li className={styles.boxBanner}>
-                                <Link to="/">
+                                <Link to="/inspection">
                                     <article className={styles.box}>
                                         {/* 서비스 2 - 자소서 PDF 검수 */}
                                         <div className={styles.boxTitle}>

@@ -16,8 +16,8 @@ export const callInspectionAskAPI = (form) =>{
             body : JSON.stringify(form)
         }).then(resp => resp.json());
         if(result.status === 200){
-            console.log("[callInspectionAskAPI] callInspectionAskAPI : {}",result);
-            console.log("form",form);
+            // console.log("[callInspectionAskAPI] callInspectionAskAPI : {}",result);
+            dispath(postAsk(result));
         }
     }
 }

@@ -1,5 +1,5 @@
 import { useState , useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { callInspectionAskAPI } from "../../apis/inspectionAPICalls";
 import { postAsk } from "../../modules/inspectionModule";
 import Swal from "sweetalert2";
@@ -21,8 +21,9 @@ function Inspection()
             toast.addEventListener('mouseenter', () => Swal.stopTimer())
             toast.addEventListener('mouseleave', () => Swal.resumeTimer())
         }});
+    const data = useSelector(state => state.inspectionReducer)
+    const [answer , setAnswer] = useState("결과 없음")
     
-
     const onClickModifyBtnHandler = () =>
     {
         if(!isInspection){
@@ -46,6 +47,10 @@ function Inspection()
     const onResultClickHandler = () =>
     {
         if(form?.introductionTitle && form?.keyword && form?.content){
+            setForm({
+                ...form,
+                title : title
+            });
             dispatch(callInspectionAskAPI(form));
         }
         else{
@@ -55,6 +60,10 @@ function Inspection()
             });
         }
     }
+
+    useEffect( () =>{
+        {data.ask && setAnswer(data.ask.result)}
+    },[data])
 
 
     return(
@@ -106,7 +115,7 @@ function Inspection()
                 <textarea
                     name="result" 
                     className={style.resultTextArea}
-                    placeholder="결과없음"
+                    placeholder={answer}
                     readOnly
                     value={form?.result}
                     onChange={ onChangeHandler }
