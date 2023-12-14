@@ -23,9 +23,9 @@ const AiServices = () => {
                     <div className={styles.boxWrapper}>
                         <ul className={styles.boxList}>
                             <li className={styles.boxBanner}>
-                                <Link to="/">
+                                <Link to="/chatbot">
                                     <article className={styles.box}>
-                                        {/* 서비스 1 - 자소서 초안 작성 */}
+                                        {/* 서비스 1 - 이력서 초안 작성 */}
                                         <div className={styles.boxTitle}>
                                             <h2>한장 이력서 작성</h2>
                                         </div>
@@ -43,7 +43,7 @@ const AiServices = () => {
                             <li className={styles.boxBanner}>
                                 <Link to="/">
                                     <article className={styles.box}>
-                                        {/* 서비스 2 - 이력서 PDF 검수 */}
+                                        {/* 서비스 2 - 자소서 PDF 검수 */}
                                         <div className={styles.boxTitle}>
                                         <h2>자소서 PDF 검수</h2>
                                         </div>
