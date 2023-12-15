@@ -10,10 +10,10 @@ import rootReducer from "./modules";
 const persistedState = loadFromLocalStorage();
 const store = createStore (
     rootReducer,
+    persistedState,    
     applyMiddleware(thunk , logger)
 )
-    persistedState
-)
+    
 
 
 
