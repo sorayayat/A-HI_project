@@ -7,7 +7,7 @@ export const callInterview = (/* 넘겨줄 값 없으면 비워도됌 */) => {
     const requestURL = `${FAST_PRE_URL}/여기다가 서버 API 주소`;
     return async(dispatch, getState) => {
         const result = await fetch(requestURL,{
-            method: 'GET',
+            method: 'POST',
             headers : {
                 "Content-Type" : "application/json"
             },
