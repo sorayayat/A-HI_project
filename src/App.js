@@ -46,6 +46,9 @@ function App() {
           <Route path='/companyList' element={<CompanyList />} />
           <Route path='/interview' element={<Interview/>}/>
           <Route path='/createResume' element={<CreateResume/>}/>
+          <Route path='/companyList/companyRegist' element={<CompanyRegist/>}/>
+          
+
         </Route>       
       </Routes>
     </BrowserRouter>
