@@ -3,13 +3,13 @@
     width: 300px;
     height: 100%;
     background-color: #e7efff;
-    border-right: 1px solid rgb(225, 231, 245);
+    border-right: 1px solid rgb(228, 227, 227);
 }
 
 
 .roomListWrapper {
     width: 100%;
-    flex: 1 1 0%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -30,22 +30,37 @@
     font-family: "Pretendard";
     color: #3674EA;
     font-weight: 600;
+    cursor: pointer;
 }
 
 
-.roomListmenu {
-    /* overflow-y: scroll; */
+.roomListMenu {
+    height: 300px;
     flex: 1 1 0%;
 }
 
+.roomListMenuSet {
+    width: 100%;
+    flex: 1 1 0%;
+}
 
-.roomListmenu1 {
+.roomListMenu1 {
     padding: 10px 15px
 }
 
 
-.roomListmenu2 {
-    padding: 20px 15px
+.roomListMenu2 {
+    padding: 20px 15px;
+    display: flex;
+    border-top: 1px solid rgb(228, 227, 227);
+}
+
+.roomListMenu2:hover {
+    background-color: #cadbfc;
+}
+
+.roomListMenu3:hover {
+    background-color: #cadbfc;
 }
 
 
@@ -66,3 +81,7 @@ p {
     margin: 0px;
 }
 
+.chatRoomContents {
+    width: 100%;
+    height: 100%;
+    transition: padding-left 0.5s ease 0s;}
