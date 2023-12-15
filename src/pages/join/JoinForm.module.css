@@ -96,3 +96,37 @@
 /* .labelEmail{
   margin-bottom: -5px;
 } */
+
+
+
+.selectType {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #5d91f1;
+  margin-top: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+  font-weight: bold;
+}
+.selectType option{  font-weight: bold;}
+
+.selectType:focus {
+  box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
+  border-color: #3674EA;
+}
+.establishmentDate{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #5d91f1;
+  margin-top: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+}
+.establishmentDate:focus{
+  box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
+  border-color: #3674EA;
+}

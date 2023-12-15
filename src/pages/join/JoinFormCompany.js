@@ -3,7 +3,7 @@ import styles from './JoinForm.module.css';
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-const JoinForm = () => {
+const JoinFormCompany = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -11,6 +11,11 @@ const JoinForm = () => {
     confirmPassword: "",
     name:"",
     phoneNumber:"",
+    company:"",
+    companyType:"",
+    employeesNumber:"",
+    establishmentDate:"",
+    companyHomepage:"",
   });
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const handleSubmit = (e) => {
@@ -31,7 +36,7 @@ const JoinForm = () => {
       return;
     }
 
-    axios.post(`./api/signup`,formData)
+    axios.post(`./api/signupCompany`,formData)
         .then(response => {
           alert(response.data);
           navigate('/');
@@ -50,7 +55,6 @@ const JoinForm = () => {
   };
   const handleEmailCheck = () => {
     const emailInput = document.getElementById('email');
-
     if (emailInput.validity.valid) {
 
 
@@ -118,20 +122,12 @@ const JoinForm = () => {
         </div>
 
         <div className={styles.inputContainer}>
-          <label htmlFor="name">이름</label>
+          <label htmlFor="name">담당자명</label>
           <div className={styles.inputOnly}>
-            <input type="text" id="name" name="name" value={formData.name} required onChange={handleChange}/>
+            <input type="text" id="name" name="name" value={formData.name} required onChange={handleChange} />
           </div>
           <span></span>
         </div>
-
-        {/* <div className={styles.inputContainer}>
-          <label htmlFor="age">나이</label>
-          <div className={styles.inputOnly}>
-            <input type="number" id="age" min={1} max={110} />
-          </div>
-          <span></span>
-        </div> */}
 
         <div className={styles.inputContainer}>
           <label htmlFor="phoneNumber">전화번호</label>
@@ -140,51 +136,53 @@ const JoinForm = () => {
           </div>
           <span></span>
         </div>
-
-        {/* <div className={styles.inputContainer}>
-          <label htmlFor="address">주소</label>
+        <div className={styles.inputContainer}>
+          <label htmlFor="company">회사명</label>
           <div className={styles.inputOnly}>
-            <input type="text" id="address" />
+            <input type="text" id="company" name="company" value={formData.company} required onChange={handleChange}/>
+          </div>
+          <span></span>
+        </div>
+        
+
+        <div className={styles.inputContainer}>
+          <label htmlFor="companyType">기업형태</label>
+          <div className={styles.inputOnly}>
+          <select id="companyType" name="companyType" className={styles.selectType}   value={formData.companyType} required 
+      onChange={handleChange}>
+    <option value="micro">5인 이하</option>
+    <option value="small">중소기업</option>
+    <option value="medium">중견기업</option>
+    <option value="large">대기업</option>
+    <option value="global">글로벌기업</option>
+</select>
+          </div>
+          <span></span>
+        </div>
+
+<div className={styles.inputContainer}>
+          <label htmlFor="employeesNumber ">직원수</label>
+          <div className={styles.inputOnly}>
+            <input type="number" id="employeesNumber" max="99999999999" name='employeesNumber' value={formData.employeesNumber} required onChange={handleChange} placeholder='몇명의 직원이 근무중인가요?'/>
+          </div>
+          <span></span>
+        </div>
+        <div className={styles.inputContainer}>
+          <label htmlFor="establishmentDate">설립일</label>
+          <div className={styles.inputOnly}>
+            <input type="date" id="establishmentDate" name="establishmentDate" value={formData.establishmentDate} required onChange={handleChange} className={styles.establishmentDate}/>
           </div>
           <span></span>
         </div>
 
         <div className={styles.inputContainer}>
-          <label htmlFor="score">점수</label>
+          <label htmlFor="companyHomepage">홈페이지</label>
           <div className={styles.inputOnly}>
-            <input type="text" id="score" />
+            <input type="text" id="companyHomepage" name="companyHomepage" value={formData.companyHomepage} required onChange={handleChange}/>
           </div>
           <span></span>
-        </div> */}
-
-{/* 
-        <div className={styles.radioContainer}>
-          <label>성별</label>
-          <div className={styles.radioButtons}>
-            <div>
-              남성
-              <input type="radio" name="gender" value="male" />
-            </div>
-            <div>
-              여성
-              <input type="radio" name="gender" value="female" />
-            </div>
-          </div>
         </div>
 
-        <div className={styles.radioContainer}>
-          <label>구직여부</label>
-          <div className={styles.radioButtons}>
-            <div>
-              구직중
-              <input type="radio" name="jobStatus" value="yes" />
-            </div>
-            <div>
-              휴식중
-              <input type="radio" name="jobStatus" value="no" />
-            </div>
-          </div>
-        </div> */}
         <div className={styles.inputContainer}>
             <button className={styles.joinBtn} type="submit">회원가입</button>
           <span></span>
@@ -195,4 +193,4 @@ const JoinForm = () => {
   );
 };
 
-export default JoinForm;
+export default JoinFormCompany;

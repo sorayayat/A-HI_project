@@ -79,22 +79,20 @@ const AiServices = () => {
                                 </Link>
                             </li>
                             <li className={styles.boxBanner}>
-                                <Link to="recommendation">
-                                    <article className={styles.box}>
-                                        {/* 서비스 4 - 맞춤 공고 추천 */}
-                                        <div className={styles.boxTitle}>
-                                            <h2>맞춤 공고 추천</h2>
-                                        </div>
-                                        {/* 아이콘 */}
-                                        <div className={styles.speakerIcon}>
-                                            <img src={LoudSpeaker} alt='speakerIcon' style={{width: "80px", height: "80x"}}/>
-                                        </div>
-                                        {/* 텍스트 */}
-                                        <div className={styles.boxText}>
-                                            <h4>이력서의 기술 스택과<br/>관련된 맞춤형 공고를<br/>확인해보세요</h4>
-                                        </div>      
-                                    </article>
-                                </Link> 
+                                <Link to="/recommendation" className={styles.box}>
+                                    {/* 서비스 4 - 맞춤 공고 추천 */}
+                                    <div className={styles.boxTitle}>
+                                        <h2>맞춤 공고 추천</h2>
+                                    </div>
+                                    {/* 아이콘 */}
+                                    <div className={styles.speakerIcon}>
+                                        <img src={LoudSpeaker} alt='speakerIcon' style={{width: "80px", height: "80x"}}/>
+                                    </div>
+                                    {/* 텍스트 */}
+                                    <div className={styles.boxText}>
+                                        <h4>이력서의 기술 스택과<br/>관련된 맞춤형 공고를<br/>확인해보세요</h4>
+                                    </div>      
+                                </Link>
                             </li>
                         </ul>
                     </div>
