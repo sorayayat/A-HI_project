@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9991455d.css",
+    "main.js": "/static/js/main.212f3aa2.js",
+    "static/media/Pretendard-Regular.otf": "/static/media/Pretendard-Regular.57ca7a4b20797e3b9625.otf",
+    "static/media/logo.png": "/static/media/logo.3daac8a0b57b9f97212f.png",
+    "index.html": "/index.html",
+    "main.9991455d.css.map": "/static/css/main.9991455d.css.map",
+    "main.212f3aa2.js.map": "/static/js/main.212f3aa2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9991455d.css",
+    "static/js/main.212f3aa2.js"
+  ]
+}
