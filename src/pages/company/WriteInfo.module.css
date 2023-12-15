@@ -1,0 +1,54 @@
+.companyRegistBody {
+    /* background-color: aliceblue; */
+
+}
+.quillContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 50px;
+    width: 500px;
+    line-height: 1.5;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.title {
+    font-size: 25px;
+    padding: 20px;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.mainContainer {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.registButton {
+    height: 50px;
+    align-self: flex-end;
+    margin-right: 100px;
+    margin-bottom: 80px;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    /* text-decoration: none; */
+    cursor: pointer;
+    border: 2px solid #3498db;
+    background-color: #fff;
+    color: #3498db;
+    border-radius: 30px;
+    transition: background-color 0.5s, color 0.5s;
+    width: 100px;
+
+}
+
+.registButton:hover {
+    background-color: #3498db;
+    color: #fff;
+
+}

@@ -2,16 +2,20 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    font-family: 'Pretendard-Medium'; /* 폰트 스타일은 원하는 대로 변경 가능 */
-    background-color: #ffffff; /* 배경색 */
-    color: #333; /* 기본 텍스트 색상 */
+    font-family: 'Pretendard-Medium';
+    /* 폰트 스타일 */
+    background-color: #ffffff;
+    /* 배경색 */
+    color: #333;
+    /* 기본 텍스트 색상 */
 }
 
 .logo {
     color: #3674EA;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 40px;
     font-family: 'Pretendard-Medium';
+    margin-bottom: 20px;
 }
 
 .header {
@@ -22,37 +26,82 @@
 
 .formBox {
     background-color: white;
-    border: 1px solid #d3d3d3;
+    border: 2px solid #d3d3d3;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 40px;
+    padding: 60px;
 }
 
 .profileSection {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
-    font-size: 18px;
+    margin-top: 100px;
+    margin-bottom: 110px;
+    font-size: 17px;
+    height: 200px;
+}
+
+.profileImageWrapper {
+    /* 이미지 래퍼에 대한 스타일 설정*/
+    position: relative;
+    /* 자식 요소의 위치를 조정 */
+    margin-right: 20px;
+    /* 이미지와 세부 정보 사이의 간격 */
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    /* 세로축 중앙 정렬 */
 }
 
 .profileImage {
     width: 100px;
+    /* 이미지 크기 */
     height: 100px;
     border-radius: 50%;
-    background-color: #ddd; /* 이미지 경로를 설정하기 전의 임시 색상 */
+    object-fit: cover;
+    background-color: #ddd;
+    /* 이미지 경로 설정 전 임시 색상 */
     margin-right: 30px;
+    margin-bottom: 10px;
+    background-size: cover;
+    /* 이미지 크기를 박스에 맞추기 */
+    background-position: center;
+    /* 이미지를 중앙에 배치 */
+}
+
+.fileEditButton {
+    display: inline-block;
+    padding: 1px 4px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    color: #333;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    text-align: center;
+    font-size: 0.7em;
+    width: 90px;
 }
 
 .profileInfo {
     display: flex;
     flex-direction: column;
-    gap: 4px; /* 항목 간 간격을 조정합니다 */
+    gap: 4px;
+
 }
 
-.profileName,
+.profileName
+ {
+    font-size: 20px;
+    margin-bottom: 3px;
+    font-weight:bold
+}
+
 .profileEmail,
 .profilePhone {
     margin-bottom: 4px;
+    align-items: center;
+    display: flex;
 }
 
 .userInfoSection {
@@ -74,7 +123,7 @@
 .userInfoField input {
     border: 1px solid #d3d3d3;
     border-radius: 5px;
-    padding: 10px;
+    padding: 12px;
     font-size: 1em;
 }
 
@@ -94,35 +143,44 @@
 }
 
 .saveButton {
-    background-color: #f0f0f0; /* 저장 버튼 색상 */
+    background-color: #f0f0f0;
+    /* 저장 버튼 색상 */
 }
 
 .submitButton {
-    background-color: #007bff; /* 제출 버튼 색상 */
+    background-color: #007bff;
+    /* 제출 버튼 색상 */
     color: white;
 }
 
 .profileContact {
     display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-}
-
-.icon { /* 아이콘 스타일 란 */
-    margin-right: 8px;
-    font-size: 15px;
-    display: inline-block; /* 블록 레벨 요소로 만들어 줄 공간 추가 */
+    align-items: flex-start;
+    gap: 8px;
     margin-bottom: 3px;
 }
 
-.editButton { /* 수정 버튼 스타일 */
+.icon {
+    /* 아이콘 스타일 란 */
+    margin-right: 5px;
+    margin-bottom: 3px;
+    font-size: 15px;
+    display: inline-block;
+    /* 블록 레벨 요소로 만들어 줄 공간 추가 */
+    margin-bottom: 3px;
+    color: #333;
+}
+
+.editButton {
+    /* 수정 버튼 스타일 */
     background: none;
     border: none;
     cursor: pointer;
     margin-left: 10px;
 }
 
-.profileBirthday { /* 생년월일 입력란 스타일 */
+.profileBirthday {
+    /* 생년월일 입력란 스타일 */
     border: 1px solid #ccc;
     border-radius: 3px;
     padding: 3px;
@@ -135,7 +193,33 @@
     display: block;
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px; /* 각 입력 필드 사이의 간격 */
+    margin-bottom: 10px;
+    /* 각 입력 필드 사이의 간격 */
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.dropdown {
+    font-family: 'Pretendard-Medium';
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #d3d3d3;
+    border-radius: 5px;
+    appearance: none; /* 네이티브 외관 제거 */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    position: relative;
+    color: #333;
+    font-size: 16px;
+}
+
+.dropdown::after {
+    font-family: 'Pretendard-Medium';
+    content: '▼';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-30%);
+    pointer-events: none;
 }
