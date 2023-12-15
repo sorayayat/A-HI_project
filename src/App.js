@@ -37,6 +37,7 @@ function App() {
           <Route path="/member_update" element={<MemberUpdate />} />
           <Route path="/withdrawal" element={<Withdrawal />} />
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/chatbot" element={<ChatbotMain/>} />
 
 
 
