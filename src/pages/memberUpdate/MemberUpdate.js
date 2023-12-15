@@ -13,7 +13,7 @@ const MemberUpdate = () => {
             <span></span>
           </div>
   
-          <div className={styles.inputContainer}>
+          {/* <div className={styles.inputContainer}>
             <label htmlFor="password">비밀번호</label>
             <div className={styles.inputOnly}>
               <input type="password" id="password" />
@@ -28,7 +28,7 @@ const MemberUpdate = () => {
             </div>
             <span></span>
           </div>
-  
+   */}
           <div className={styles.inputContainer}>
             <label htmlFor="name">이름</label>
             <div className={styles.inputOnly}>

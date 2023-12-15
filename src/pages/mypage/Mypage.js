@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './mypage.module.css';
+
 const Mypage = () => {
     return (
         <>
@@ -22,6 +23,10 @@ const Mypage = () => {
             <div><img src='/images/k1.jpg'></img></div>
             <button >다음</button>
       </div>
+
+
+
+
       </div>
       </>
     );

@@ -17,9 +17,9 @@ import CreateResume from './pages/createresume/CreateResume';
 import ChatbotMain from './pages/chatbot/ChatbotMain';
 import CompanyRegist from './pages/company/CompanyRegist';
 import WriteInfo from './pages/company/WriteInfo';
+import JoinFormCompany from './pages/join/JoinFormCompany';
 
 function App() { 
-
 
 
   return (
@@ -38,6 +38,7 @@ function App() {
           <Route path="/withdrawal" element={<Withdrawal />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/chatbot" element={<ChatbotMain/>} />
+          <Route path="/joinFormCompany" element={<JoinFormCompany/>} />
 
 
 
