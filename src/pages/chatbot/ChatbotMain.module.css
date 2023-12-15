@@ -1,0 +1,7 @@
+.chatbotContainer {
+    overflow-x: auto;
+    height: calc(100vh - 80px); 
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+}

@@ -2,7 +2,7 @@ import styles from './Search.module.css';
 import logoImage from '../../components/commons/logo.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-
+import { Link } from 'react-router-dom';
 
 
 const Search = () => {
@@ -10,7 +10,9 @@ const Search = () => {
         <>
             {/* 검색창 위 로고 */}
             <div className={styles.searchLogo}>
-                <img src={logoImage} style={{ width:"200px", height:"110px"}} alt="logoImage" />
+                <Link to="/">
+                    <img src={logoImage} style={{ width:"200px", height:"110px"}} alt="logoImage" />
+                </Link>
             </div>
             {/* 검색창 */}
             <div className={styles.searchWrapper}>
