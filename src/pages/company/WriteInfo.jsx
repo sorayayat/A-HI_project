@@ -8,7 +8,7 @@ function WriteInfo() {
 
     useEffect(() => {
         document.body.classList.add(style.companyRegistBody);
-
+        window.scrollTo(0, 0)
         return () => {
             document.body.classList.remove(style.companyRegistBody);
         };

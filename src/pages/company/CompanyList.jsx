@@ -6,11 +6,12 @@ function Apply(){
 
     useEffect(() => {
         document.body.classList.add(style.companyListBody);
-
+        window.scrollTo(0, 0);
         return () => {
             document.body.classList.remove(style.companyListBody);
         };
     }, []);
+
 
     return (
 

@@ -5,6 +5,7 @@ import Paper from './Icons/MattPaper.png';
 import PDFIcon from './Icons/PDF.png';
 import SpeakingHead from './Icons/SpeakingHead.png'
 import LoudSpeaker from './Icons/Loudspeaker.png'
+import { Link } from 'react-router-dom';
 
 
 
@@ -72,7 +73,7 @@ const AiServices = () => {
                                 </article>
                             </li>
                             <li className={styles.boxBanner}>
-                                <article className={styles.box}>
+                                <Link to="/recommendation" className={styles.box}>
                                     {/* 서비스 4 - 맞춤 공고 추천 */}
                                     <div className={styles.boxTitle}>
                                         <h2>맞춤 공고 추천</h2>
@@ -85,7 +86,7 @@ const AiServices = () => {
                                     <div className={styles.boxText}>
                                         <h4>이력서의 기술 스택과<br/>관련된 맞춤형 공고를<br/>확인해보세요</h4>
                                     </div>      
-                                </article>
+                                </Link>
                             </li>
                         </ul>
                     </div>

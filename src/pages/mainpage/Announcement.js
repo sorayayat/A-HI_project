@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import styles from './Announcement.module.css';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'; 
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import {Link} from "react-router-dom"
 
 
 
@@ -31,6 +32,8 @@ const Announcement = () => {
         return text;
     };
 
+   
+
 
     return (
         <>
@@ -39,9 +42,9 @@ const Announcement = () => {
                     <aside className={styles.anmTitle}>
                         <div><h1>채용공고</h1></div>
                         <div className={styles.anmNav}>
-                            <a href="/announcement" className={styles.seeAllAnm}>
+                            <Link to="/companyList" className={styles.seeAllAnm}>
                                 전체공고
-                            </a>
+                            </Link>
                             <button className={styles.beforeBtn} onClick={prevAnnouncements} disabled={startIndex === 0}><FaChevronLeft style={{ color: 'gray' }}/></button>
                             <button className={styles.afterBtn} onClick={nextAnnouncements} disabled={startIndex + numToShow >= 12}><FaChevronRight style={{ color: 'gray' }}/></button>
                         </div>
