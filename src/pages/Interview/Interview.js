@@ -26,13 +26,13 @@ const Interview = () => {
     const dispatch = useDispatch();
     
    
-    useEffect ( () =>{
-        dispatch(callInterview(
-            {
-                name : name
-            }
-        ))
-    },[])
+    // useEffect ( () =>{
+    //     dispatch(callInterview(
+    //         {
+    //             name : name
+    //         }
+    //     ))
+    // },[])
     
  // 답변 입력 핸들러
     const handleAnswerChange = (e) => {
