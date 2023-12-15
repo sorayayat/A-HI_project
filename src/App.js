@@ -14,9 +14,9 @@ import Inspection from './pages/inspection/Inspection';
 import CompanyList from './pages/company/CompanyList';
 import Interview from './pages/Interview/Interview';
 import CreateResume from './pages/createresume/CreateResume';
+import JoinFormCompany from './pages/join/JoinFormCompany';
 
 function App() { 
-
 
 
   return (
@@ -34,6 +34,7 @@ function App() {
           <Route path="/member_update" element={<MemberUpdate />} />
           <Route path="/withdrawal" element={<Withdrawal />} />
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/joinFormCompany" element={<JoinFormCompany/>} />
 
 
 

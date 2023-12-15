@@ -1,17 +1,37 @@
-import { NavLink } from 'react-router-dom';
-import styles from '../commons/Header.module.css'
-
+// components/Header.js
+import React from 'react';
+import { NavLink  } from 'react-router-dom';
+import { useSelector,useDispatch  } from 'react-redux';
+import styles from '../commons/Header.module.css';
+import {logout} from '../../pages/login/authActions';
 const Header = () => {
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const dispatch = useDispatch();
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/logout', { method: 'POST' });
+            if (response.ok) {
+                dispatch(logout());
+                localStorage.setItem('isLoggedIn', 'false');
+            } else {
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+
+    };
 
     return(
         <>
             <div className={styles.headerWrapper}>
                 <div className={styles.headerMenu}>
-                    {/* 로그인  로그아웃 */}
-                    {/* 세션에 사용자 정보 있는 경우 '로그아웃', 없는 경우 '로그인'으로 표시 -> 일단 로그인으로 연결할게요. */}
                     <div className={styles.asideMenu}>
                         <div className={styles.asideMenuList}>
-                            <NavLink to ="/loginForm" className={styles.loginOrLogout}> 로그인 </NavLink>
+                            {isLoggedIn ? (
+                                <NavLink  className={styles.loginOrLogout} onClick={handleLogout}> 로그아웃 </NavLink>
+                            ) : (
+                                <NavLink to="/loginForm" className={styles.loginOrLogout}> 로그인 </NavLink>
+                            )}
                             {' | '}
                             <NavLink to="/mypage" className={styles.mypage}> 마이페이지 </NavLink>
                         </div>
@@ -19,7 +39,7 @@ const Header = () => {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default Header;
