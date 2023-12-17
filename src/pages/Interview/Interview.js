@@ -1,29 +1,39 @@
 import { useState, useEffect } from "react";
-
+import { useDispatch } from "react-redux";
 import style from './Interview.module.css';
 import SearchBarStyle from '../mainpage/Search.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { callInterview } from '../../apis/interviewAPICalls'
 
 // 수정 사항 
 // 폰트 수정하기 
 
-const AI_Question = ({ question }) => (
+
+
+// const AI_Question = ({ question }) => (
     //서버에서 받은 에상 질문을 가져올 코드
-    <div>
-        <p>{question}</p>
-    </div>
-);
+    // <div>
+    //     <p>{question}</p>
+    // </div>
+// );
 
 const Interview = () => {
 
     const [question, setquestion] = useState('');
     const [answer, setAnswer] = useState('');
     const [AIanswer, setAianswer] = useState(''); 
+    const dispatch = useDispatch();
+    
    
-    useEffect ( () =>{
-
-    },[])
+    // useEffect ( () =>{
+    //     dispatch(callInterview(
+    //         {
+    //             name : name
+    //         }
+    //     ))
+    // },[])
+    
  // 답변 입력 핸들러
     const handleAnswerChange = (e) => {
         setAnswer(e.target.value);
