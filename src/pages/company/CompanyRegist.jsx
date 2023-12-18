@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import { Modal, Button } from 'antd';
 import style from './CompanyRegist.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import moment from 'moment';
+
 
 function CompanyRegist() {
+
     const [isOpen, setIsOpen] = useState(false);
     const [q1, setQ1] = useState('');
     const [q3, setQ3] = useState('');
@@ -12,6 +17,19 @@ function CompanyRegist() {
     const [selectedJob, setSelectedJob] = useState("직무");
     const [education, setEducation] = useState("학력");
     const [selectedCareer, setSelectedCareer] = useState([]);
+    const [selectedSkills, setSelectedSkills] = useState([]);
+    const [selectedConditions, setSelectedConditions] = useState([]);
+    const navigate = useNavigate();
+    const [postingTitle, setPostingTitle] = useState('');
+    const [date, setDate] = useState();
+    const [deadLine, setDeadLine ] = useState('');
+    
+
+    const skillList = ["HTML", "CSS", "JavaScript", "React", "Vue.js", "Angular", "Node.js", "Python", "Ruby"
+        , "Java", "MySQL", "PostgreSQL", "MongoDB", "Apache", "Nginx", "Git"];
+
+    const conditionList = ["재택가능", "정규직", "주 5일(월~금)", "주 6일(월~토)", "주 3일(격일제)",
+        "유연 근무제", "면접후 결정", "2600~", "2800~", "3000~"];
 
 
 
@@ -22,6 +40,8 @@ function CompanyRegist() {
             document.body.classList.remove(style.companyRegistBody);
         };
     }, []);
+
+
 
     const onToggleModal = () => {
         setIsOpen((prev) => !prev);
@@ -57,13 +77,86 @@ function CompanyRegist() {
 
     const handleCareerChange = (value) => {
         if (selectedCareer.includes(value)) {
-            // 이미 선택된 경우, 선택 해제
+
             setSelectedCareer(selectedCareer.filter(item => item !== value));
         } else {
-            // 선택되지 않은 경우, 선택 추가
+
             setSelectedCareer([...selectedCareer, value]);
         }
     };
+
+    const handleSkillChange = (skill) => {
+        if (selectedSkills.includes(skill)) {
+
+            setSelectedSkills(selectedSkills.filter(item => item !== skill));
+        } else {
+
+            setSelectedSkills([...selectedSkills, skill]);
+        }
+    };
+
+    const handleConditionChange = (value) => {
+        if (selectedConditions.includes(value)) {
+
+            setSelectedConditions(selectedConditions.filter(item => item !== value));
+
+        } else {
+
+            setSelectedConditions([...selectedConditions, value]);
+
+
+        }
+
+    };
+
+    const onChangePostingTitleHandler = (e) => {
+
+        setPostingTitle(e.target.value)
+
+    }
+
+    const handleDeadlineChange = (e) => {
+        
+        setDeadLine(e.target.value)
+
+    }
+
+
+    const handleNextClick = () => {
+        const dataObject = {
+            q1,
+            q3,
+            detailAddress,
+            selectedJob,
+            education,
+            selectedCareer,
+            selectedSkills,
+            selectedConditions,
+            postingTitle,
+            date,
+            deadLine,
+        };
+
+        navigate("/companyList/companyRegist/writeInfo", {
+            state: { dataObject: dataObject }
+        });
+    };
+
+    const handleDateChange = (newDate) => {
+
+        const formattedDate = newDate.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          });
+        
+        console.log(formattedDate);
+        setDate(formattedDate);
+          
+        
+        };
+
+
 
 
 
@@ -75,6 +168,13 @@ function CompanyRegist() {
                 </div>
 
                 <div className={style.detailsContainer}>
+
+                    <div className={style.postingTitle}>공고 제목</div>
+                    <label>
+                        <input type="text" className={style.postingTitleText} placeholder="공고의 제목을 입력해주세요"
+                            onChange={onChangePostingTitleHandler} />
+                    </label>
+
                     <div style={{ padding: '20px' }}>직무 / 직군</div>
                     <select name="job" id={style.job} value={selectedJob} onChange={handleJobChange}>
                         <option value="직무">직군/직무</option>
@@ -85,13 +185,23 @@ function CompanyRegist() {
 
                     <div className={style.education}>
                         <div style={{ padding: '20px' }}>학력</div>
-                        <select name="job" id={style.job} value={education} defaultValue="직무" onChange={handleEducationChange}>
+                        <select name="job" id={style.job} value={education} defaultValue="학력" onChange={handleEducationChange}>
                             <option value="학력무관">학력무관</option>
                             <option value="고등학교 졸업">고등학교 졸업</option>
                             <option value="대학졸업(2,3년)">대학졸업(2,3년)</option>
                             <option value="대학졸업(4년)">대학졸업(4년)</option>
                             <option value="대학원 석사졸업">대학원 석사졸업</option>
                             <option value="대학원 박사졸업">대학원 박사졸업</option>
+                        </select>
+                    </div>
+
+                    <div className={style.closingForm}>
+                        <div style={{ padding: "20px" }}>마감 형식</div>
+                        <select name="job" id={style.job} value={deadLine} defaultValue="마감 형식" onChange={handleDeadlineChange}>
+                            <option value="상시 채용">상시채용</option>
+                            <option value="채용시 마감">채용시 마감</option>
+                            <option value="선착순 마감">선착순 마감</option>
+
                         </select>
                     </div>
 
@@ -151,23 +261,16 @@ function CompanyRegist() {
                     <div className={style.skill} style={{ padding: '20px' }}>
                         <div>지원자격</div>
                         <div className={style.skillCheckBox}>
-                            <input type="checkbox" />HTML
-                            <input type="checkbox" />CSS
-                            <input type="checkbox" />JavaScript
-                            <input type="checkbox" />React
-                            <input type="checkbox" />Vue.js
-                            <input type="checkbox" />Angular
-                            <input type="checkbox" />Node.js
-                            <input type="checkbox" />Python
-                            <input type="checkbox" />Ruby
-                            <input type="checkbox" />Java
-                            <input type="checkbox" />MySQL
-                            <input type="checkbox" />Java
-                            <input type="checkbox" />PostgreSQL
-                            <input type="checkbox" />MongoDB
-                            <input type="checkbox" />Apache
-                            <input type="checkbox" />Nginx
-                            <input type="checkbox" />Git
+                            {skillList.map(skill => (
+                                <label key={skill}>
+                                    <input
+                                        type='checkbox'
+
+                                        onChange={() => handleSkillChange(skill)}
+                                    />
+                                    {skill}
+                                </label>
+                            ))}
 
                         </div>
                     </div>
@@ -175,25 +278,36 @@ function CompanyRegist() {
                     <div className={style.condition} style={{ padding: "20px" }}>
                         <div>근무조건</div>
                         <div className={style.conditionCheckbox}>
-                            <input type="checkbox" />재택가능
-                            <input type="checkbox" />정규직
-                            <input type="checkbox" />주 5일(월~금)
-                            <input type="checkbox" />주 6일(월~토)
-                            <input type="checkbox" />주 3일(격일제)
-                            <input type="checkbox" />유연 근무제
-                            <input type="checkbox" />면접후 결정
-                            <input type="checkbox" />2600~
-                            <input type="checkbox" />2800~
-                            <input type="checkbox" />3000~
-
-
+                            {conditionList.map(condition => (
+                                <label key={condition}>
+                                    <input
+                                        type="checkbox"
+                                        onChange={() => handleConditionChange(condition)}
+                                    />
+                                    {condition}
+                                </label>
+                            ))}
                         </div>
+                    </div>
+
+                    <div className={style.endDate}>공고 마감일</div>
+
+                    <div className={style.calendarContainer}>
+                        
+                        <Calendar
+                            onChange={handleDateChange}
+                            value={date}
+                            className={style.customCalendar}
+                            formatDay={(locale, date) => moment(date).format('D')}
+                        />
+                        <input type='text' className={style.calendarValue} value={date || ''}></input>
 
 
                     </div>
+
                 </div>
 
-                <Link to="/companyList/companyRegist/writeInfo" className={style.nextButton}>다음</Link>
+                <div onClick={handleNextClick} className={style.nextButton}>다음</div>
             </div>
         </>
     );

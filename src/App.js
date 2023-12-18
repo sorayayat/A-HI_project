@@ -47,6 +47,8 @@ function App() {
           <Route path='/interview' element={<Interview/>}/>
           <Route path='/createResume' element={<CreateResume/>}/>
           <Route path='/companyList/companyRegist' element={<CompanyRegist/>}/>
+          <Route path='/companyList/companyRegist/writeInfo' element={<WriteInfo/>}/>
+          
           
 
         </Route>       

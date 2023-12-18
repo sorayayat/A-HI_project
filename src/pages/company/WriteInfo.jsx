@@ -1,10 +1,17 @@
 import style from './WriteInfo.module.css'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { callPostingAPI, calltestAPI } from '../../apis/postingAPIAPICalls';
+
 function WriteInfo() {
 
+    const dispatch = useDispatch();
     const [content, setContent] = useState('');
+    const location = useLocation();
+    const dataObject = location.state ? location.state.dataObject : null;
 
     useEffect(() => {
         document.body.classList.add(style.companyRegistBody);
@@ -44,6 +51,35 @@ function WriteInfo() {
 
     };
 
+    const onClickHandler = () => {
+        const formData = new FormData();
+    
+        const fullAddress = dataObject.q1 + " " + dataObject.q3 + " " + dataObject.detailAddress;
+    
+        formData.append("postingTitle" , dataObject.postingTitle)
+        formData.append("location", fullAddress);
+        formData.append("education", dataObject.education);
+        formData.append("selectedCareer", JSON.stringify(dataObject.selectedCareer));
+        formData.append("selectedConditions", JSON.stringify(dataObject.selectedConditions));
+        formData.append("position", dataObject.selectedJob);
+        formData.append("selectedSkills", JSON.stringify(dataObject.selectedSkills));
+        formData.append("content", content);
+        formData.append("endDate" , dataObject.date)
+        formData.append("closingForm", dataObject.deadLine)
+    
+        console.log("content:", formData.get("content"));
+    
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+    
+        dispatch(callPostingAPI({
+            form: formData,
+        }));
+        
+    }
+    
+
     return (
         <>
             <div className={style.mainContainer}>
@@ -60,7 +96,7 @@ function WriteInfo() {
                     
                 </div>
 
-                <button className={style.registButton}>등록</button>
+                <button className={style.registButton} onClick={ onClickHandler }>등록</button>
             </div>
         </>
     )
