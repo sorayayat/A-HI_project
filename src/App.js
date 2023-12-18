@@ -46,6 +46,7 @@ function App() {
           <Route path='/recommendation' element={<Recommendation />} />
           <Route path='/inspection' element={<Inspection/>}/>
           <Route path='/companyList' element={<CompanyList />} />
+          
           <Route path='/interview' element={<Interview/>}/>
           <Route path='/createResume' element={<CreateResume/>}/>
         </Route>       
