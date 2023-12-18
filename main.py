@@ -7,6 +7,12 @@ app = FastAPI()
 
 app.include_router(Interview_router)
 app.include_router(ITrouter)
+from fastapi.middleware.cors import CORSMiddleware
+from company.posting import COrouter
+
+app = FastAPI()
+
+app.include_router(COrouter)
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,6 +21,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/")
 async def main():
@@ -29,3 +36,4 @@ async def main():
 #  return 
 # #
 
+# #
