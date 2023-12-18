@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from inspection.inspection import ITrouter
+from chatting.chattingList import CLrouter
 
 app = FastAPI()
 
-app.include_router(ITrouter)
+app.include_router(CLrouter)
 
 app.add_middleware(
     CORSMiddleware,
