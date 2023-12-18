@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from company.companyList import COrouter
+from company.posting import COrouter
 
 app = FastAPI()
 

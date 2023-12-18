@@ -1,4 +1,4 @@
-from fastapi import APIRouter , Request , Form
+from fastapi import APIRouter , Request , Form , HTTPException
 from pydantic import BaseModel
 from typing import List
 import chromadb
@@ -7,6 +7,7 @@ from sentence_transformers import SentenceTransformer
 import openai
 from typing import List
 from fastapi.responses import JSONResponse
+import requests
 
 
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
@@ -15,42 +16,64 @@ client = chromadb.PersistentClient()
 
 openai.api_key = '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'
 
-COrouter = APIRouter(prefix="/company")
+COrouter = APIRouter(prefix="/posting")
 
 class CompanyRegistration(BaseModel):
-    detailAddress: str
+    postingTitle : str
+    location: str
     education: str
     selectedCareer: List[str]
     selectedConditions: List[str]
-    selectedJob: str
+    position: str
     selectedSkills: List[str]
     content: str
+    endDate : str
+    closingForm : str
 
 @COrouter.post("/regist")
 async def registCompany(
-    detailAddress: str = Form(...),
+    postingTitle: str = Form(...),
+    location: str = Form(...),
     education: str = Form(...),
     selectedCareer: List[str] = Form(...),
     selectedConditions: List[str] = Form(...),
-    selectedJob: str = Form(...),
+    position: str = Form(...),
     selectedSkills: List[str] = Form(...),
     content: str = Form(...),
+    endDate: str = Form(...),
+    closingForm: str = Form(...),
 ):
-    
     data = CompanyRegistration(
-        detailAddress=detailAddress,
+        
+        postingTitle = postingTitle,
+        location=location,
         education=education,
         selectedCareer=selectedCareer,
         selectedConditions=selectedConditions,
-        selectedJob=selectedJob,
+        position=position,
         selectedSkills=selectedSkills,
         content=content,
+        endDate = endDate,
+        closingForm = closingForm,
     )
 
-    # Process the data as needed
     print(data)
+    
+    
 
-    return JSONResponse(content={"message": "Success"}, status_code=200)
+    # Spring Boot 엔드포인트 URL 정의
+    spring_boot_endpoint = "http://localhost:8001/posting/regist"
+
+    try:
+        # Spring Boot 애플리케이션으로 POST 요청 보내기
+        response = requests.post(spring_boot_endpoint, json=data.dict())
+
+        # 응답 확인
+        response.raise_for_status()
+        return JSONResponse(content={"message": "Success"}, status_code=200)
+    except requests.exceptions.RequestException as e:
+        # 오류 처리
+        raise HTTPException(status_code=500, detail=f"Failed to send data: {e}")
 
 
 
