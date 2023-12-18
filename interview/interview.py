@@ -1,10 +1,14 @@
 from fastapi import FastAPI, APIRouter, Body, File, Request, UploadFile, Depends, Form
 import openai
 from pydantic import BaseModel
+from config.config import getAPIkey,getModel
 
 Interview_router = APIRouter(prefix='/interview')
 
-openai.api_key = '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'
+OPENAI_API_KEY = getAPIkey()
+openai.api_key = OPENAI_API_KEY
+MODEL = getModel()
+
 
 # data = 'company/test1.txt'
 
@@ -13,7 +17,7 @@ class InterviewData(BaseModel):
 
 
 # 클라이언트에서 정보를 받아서 모델에 질문을 생성한다.
-@Interview_router.get('/')
+@Interview_router.get('/makequestion')
 async def AIiterview(searchQuery: InterviewData):
     
     question = gpt_question(searchQuery.searchQuery)
@@ -28,12 +32,9 @@ async def AI_question(answer: str = Body(...)):
 
 
 
-
-
-
 def gpt_question(data):
   response = openai.ChatCompletion.create(
-      model="gpt-3.5-turbo", # 필수적으로 사용 될 모델을 불러온다.
+      model=MODEL, # 필수적으로 사용 될 모델을 불러온다.
       frequency_penalty=0.5, # 반복되는 내용 값을 설정 한다.
       temperature=0.6,
       messages=[
@@ -51,7 +52,7 @@ def gpt_question(data):
 
 def gpt_feedback():
    response = openai.ChatCompletion.create(
-      model="gpt-3.5-turbo",
+      model=MODEL,
       temperature=0.6,
       messages=[
           {"role": "system", "content": "너는 면접관이야"},
