@@ -1,7 +1,19 @@
 .chatbotContainer {
-    overflow-x: auto;
+    /* overflow-x: auto; */
     height: calc(100vh - 80px); 
     margin: 0 auto;
     display: flex;
     flex-direction: row;
+}
+
+.roomlistMainContainer {
+    display: flex;
+    width: 300px;
+    height: 100%;
+    background-color: #e7efff;
+    border-right: 1px solid rgb(228, 227, 227);
+}
+
+.chatRoomContents {
+    width: 100vw;
 }

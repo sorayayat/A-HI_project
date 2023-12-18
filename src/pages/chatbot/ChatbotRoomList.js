@@ -1,6 +1,4 @@
-import ChatbotRoomListItem from "./ChatbotRoomListItem";
 import styles from './ChatbotRoomList.module.css';
-import ChatRoom from "./ChatRoom";
 
 const ChatbotRoomList = () => {
 
@@ -14,7 +12,6 @@ const ChatbotRoomList = () => {
 
     return (
         <>
-            <div className={styles.roomlistMainContainer}>
                 {/* 채팅방 목록 영역 */}
                 <div className={styles.roomListWrapper}>
                     <div className={styles.roomListMenu}>
@@ -29,6 +26,7 @@ const ChatbotRoomList = () => {
                             <div className={styles.roomLists}>
                                 {/* 최근 채팅 미리보기로 보여줌(실제 데이터 가져와야됨)*/}
                                 {/* <input class={styles.createNewChat}></input> */}
+                                <p className={styles.newOrExp}>신입</p>
                                 <div class={styles.roomListItem}>
                                 <p>{truncateText('취준생의 이력서 분석 및 자기소개서 작성 방향성',16)}</p>
                                 </div>
@@ -40,11 +38,6 @@ const ChatbotRoomList = () => {
                         <p>도움말</p>
                     </div>
                 </div>
-            </div>
-            {/* 채팅이 이루어지는 영역 */}
-            <div className={styles.chatRoomContents}>
-                <ChatRoom />
-            </div>
         </>
     )
 }
