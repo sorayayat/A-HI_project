@@ -57,7 +57,7 @@ const Interview = () => {
 
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100px' }}>
             <div className={style.question_box}>
-                {/* 질문 표시 위치 */}
+                <p>{question}</p>
             </div>
         </div>
         
