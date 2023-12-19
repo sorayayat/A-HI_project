@@ -3,6 +3,7 @@ package com.jsg.ahispringboot.member.service;
 import com.jsg.ahispringboot.member.dto.ChatGptRequest;
 import com.jsg.ahispringboot.member.dto.ChatGptResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,6 +15,7 @@ public class ChatGptService {
     @Value("${openai.url}")
     private String apiURL;
     @Autowired
+    @Qualifier("openAiRestTemplate")
     private RestTemplate template;
 
 
