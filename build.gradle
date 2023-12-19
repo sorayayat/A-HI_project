@@ -36,8 +36,6 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.3'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-
-
 }
 
 tasks.named('test') {
