@@ -40,7 +40,7 @@ def gpt_question(data):
       messages=[
               {"role": "system", "content": "너는 면접관이야"},
               {"role": "system", "content": f"{data}에서 기술과 관련된 부분을 질문해줘"},           
-              {"role": "system", "content": "세가지 정도로 질문해줘 "},           
+              {"role": "system", "content": "세가지 정도로 질문해줘 "},      
                        
           ]
       
