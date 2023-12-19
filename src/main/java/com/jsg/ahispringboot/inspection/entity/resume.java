@@ -10,16 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 @DynamicInsert
 @Table(name = "resume")
-public class resume {
-
+public class Resume {
     @Id
     @Column(name = "resume_code")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +29,10 @@ public class resume {
     @Column(name = "military_service")
     private String militaryService;
 
+    @Column(name = "path")
+    private String path;
+
+    @ManyToOne
+    @JoinColumn(name = "user_code")
+    private User user;
 }
