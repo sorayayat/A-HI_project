@@ -16,13 +16,12 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Setter
 @Getter
-@Entity
 @DynamicInsert
 @Table(name = "user")
-public class user {
-
+public class User {
     @Id
     @Column(name = "user_code")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +39,6 @@ public class user {
     @Column(name = "phon_number")
     private String phonNumber;
 
-    @OneToMany
-    private List<resume> resume = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Resume> resume = new ArrayList<>();
 }
