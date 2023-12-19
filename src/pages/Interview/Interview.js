@@ -5,49 +5,35 @@ import SearchBarStyle from '../mainpage/Search.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { callInterview } from '../../apis/interviewAPICalls'
+import axios, { AxiosInstance } from 'axios';
 
-// 수정 사항 
+// 수정 사항 aaaaa
 // 폰트 수정하기 
-
-
-
-// const AI_Question = ({ question }) => (
-    //서버에서 받은 에상 질문을 가져올 코드
-    // <div>
-    //     <p>{question}</p>
-    // </div>
-// );
 
 const Interview = () => {
 
+    const [searchQuery, setSearchQuery] = useState('');
     const [question, setquestion] = useState('');
     const [answer, setAnswer] = useState('');
     const [AIanswer, setAianswer] = useState(''); 
     const dispatch = useDispatch();
-    
-   
-    // useEffect ( () =>{
-    //     dispatch(callInterview(
-    //         {
-    //             name : name
-    //         }
-    //     ))
-    // },[])
-    
- // 답변 입력 핸들러
-    const handleAnswerChange = (e) => {
-        setAnswer(e.target.value);
-    };
-
-// 제출 버튼 핸들러
-    const handleAskQuestion = () => {
-    // 여기에 답변을 서버로 전송하는 로직을 구현
-    // 예시: console.log("Submitted answer: ", answer);
-    };
-
+      
     const handleSearchAnnouncement = () => {
-        //공고를 검색
+
+        dispatch(callInterview({
+
+            searchQuery : searchQuery
+        }))
     }
+
+    const handleSendAnswer = async () => {
+
+        dispatch(callInterview({
+
+            answer : answer
+        }))
+    };
+
     // 화면 작업은 return 내부에 작성한다.
     return (
         <>
@@ -59,41 +45,33 @@ const Interview = () => {
         <div className={SearchBarStyle.searchWrapper}>
             <div className={SearchBarStyle.searchBar}>
                 <FontAwesomeIcon icon={faMagnifyingGlass} className={SearchBarStyle.faMagnifyingGlass} style={{cursor: 'pointer'}} />
-                <input type="search" className={SearchBarStyle.searchBox} autocomplete='off' placeholder="채용 공고 링크를 입력하세요">
+                <input type="search" className={SearchBarStyle.searchBox} autoComplete='off' placeholder="채용 공고 링크를 입력하세요"
+                    value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}>
                 </input> 
             </div>
         </div>
                    
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100px', background: 'white', borderRadius: '70px' }}>
-                <button className={style.blueButton} onClick={handleSearchAnnouncement}>AI 면접 시작하기</button>
-            </div>
-    
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100px' }}>
-            <div className={style.question_box}>
-            </div>
+            <button className={style.blueButton} onClick={handleSearchAnnouncement}>AI 면접 시작하기</button>
         </div>
 
-                {/* <input type="text" className={style.answer_box} autocomplete='off' placeholder="여기에 답변을 입력해주세요."> </input> */}
-        
-
-                {/* 링크가 입력되어서 값이 들어오면 나타나게 한다.
-        <div>            
-        <label htmlFor="questionInput">면접예상 질문:</label>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100px' }}>
+            <div className={style.question_box}>
                 <p>{question}</p>
             </div>
-            <div>
-                <label htmlFor="aswerInput">답변:</label>
-                <input
-                    type="text"
-                    id="aswerInput"
-                    value={answer}
-                    onChange={handleAnswerChange}
-                />
-                <button onClick={handleAskQuestion}>제출</button>
-                <p>{answer}</p>
+        </div>
+        
+        <div className={style.answer_box}>
+            <input type="text"
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
+            <button onClick={handleSendAnswer}>답변 하기</button>
+        </div>
 
-            </div> */}
-
+        <div>
+            {AIanswer && <p>AI 피드백: {AIanswer}</p>}
+        </div>
     
         </>
     )
