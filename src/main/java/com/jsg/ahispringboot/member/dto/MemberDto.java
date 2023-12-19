@@ -8,7 +8,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class MemberDto {
-    private  String email;
+
+    private Long id;
+    private String email;
     private String name;
     private String password;
     private Long phoneNumber;

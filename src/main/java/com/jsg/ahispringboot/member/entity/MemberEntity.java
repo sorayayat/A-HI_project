@@ -22,7 +22,7 @@ public class MemberEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "company_id")
     private CompanyEntity companyEntity;
 

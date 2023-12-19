@@ -1,10 +1,14 @@
 package com.jsg.ahispringboot.member.repository;
 
+import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
+import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -14,6 +18,7 @@ import java.util.List;
 import static com.jsg.ahispringboot.member.entity.QMemberEntity.memberEntity;
 
 @Repository
+@Slf4j
 public class MemberRepositoryImpl implements MemberRepository {
 
     private final EntityManager em;
@@ -80,5 +85,26 @@ public class MemberRepositoryImpl implements MemberRepository {
     public void updatePwd(MemberEntity member) {
         MemberEntity memberEntity1 = em.find(MemberEntity.class, member.getId());
         memberEntity1.setPassword(member.getPassword());
+    }
+    @Transactional
+    @Override
+    public UserDetails updateMember(MemberDto memberDto) {
+        MemberEntity memberEntity1 = em.find(MemberEntity.class, memberDto.getId());
+        memberEntity1.setName(memberDto.getName());
+        memberEntity1.setPhoneNumber(memberDto.getPhoneNumber());
+        return new CustomUserDetail(memberEntity1);
+    }
+    @Transactional
+    @Override
+    public UserDetails updateCompany(CompanyDto companyDto) {
+        MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getId());
+        memberEntity1.setName(companyDto.getName());
+        memberEntity1.setPhoneNumber(companyDto.getPhoneNumber());
+        memberEntity1.getCompanyEntity().setCompany(companyDto.getCompany());
+        memberEntity1.getCompanyEntity().setCompanyType(companyDto.getCompanyType());
+        memberEntity1.getCompanyEntity().setCompanyHomepage(companyDto.getCompanyHomepage());
+        memberEntity1.getCompanyEntity().setEmployeesNumber(companyDto.getEmployeesNumber());
+        memberEntity1.getCompanyEntity().setEstablishmentDate(companyDto.getEstablishmentDate());
+        return  new CustomUserDetail(memberEntity1);
     }
 }

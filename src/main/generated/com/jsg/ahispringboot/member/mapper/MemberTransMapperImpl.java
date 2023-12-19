@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-12-14T20:51:42+0900",
+    date = "2023-12-19T14:49:42+0900",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.5.jar, environment: Java 17.0.8 (Oracle Corporation)"
 )
 public class MemberTransMapperImpl implements MemberTransMapper {
@@ -21,6 +21,7 @@ public class MemberTransMapperImpl implements MemberTransMapper {
 
         MemberEntity memberEntity = new MemberEntity();
 
+        memberEntity.setId( memberDto.getId() );
         memberEntity.setEmail( memberDto.getEmail() );
         memberEntity.setName( memberDto.getName() );
         memberEntity.setPassword( memberDto.getPassword() );
@@ -37,6 +38,7 @@ public class MemberTransMapperImpl implements MemberTransMapper {
 
         MemberDto.MemberDtoBuilder memberDto = MemberDto.builder();
 
+        memberDto.id( memberEntity.getId() );
         memberDto.email( memberEntity.getEmail() );
         memberDto.name( memberEntity.getName() );
         memberDto.password( memberEntity.getPassword() );
@@ -53,6 +55,7 @@ public class MemberTransMapperImpl implements MemberTransMapper {
 
         CompanyEntity.CompanyEntityBuilder companyEntity = CompanyEntity.builder();
 
+        companyEntity.id( companyDto.getId() );
         companyEntity.company( companyDto.getCompany() );
         companyEntity.companyType( companyDto.getCompanyType() );
         companyEntity.employeesNumber( companyDto.getEmployeesNumber() );
@@ -70,6 +73,7 @@ public class MemberTransMapperImpl implements MemberTransMapper {
 
         MemberEntity memberEntity = new MemberEntity();
 
+        memberEntity.setId( companyDto.getId() );
         memberEntity.setEmail( companyDto.getEmail() );
         memberEntity.setName( companyDto.getName() );
         memberEntity.setPassword( companyDto.getPassword() );

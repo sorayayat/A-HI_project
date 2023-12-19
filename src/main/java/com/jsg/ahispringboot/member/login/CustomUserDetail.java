@@ -1,10 +1,12 @@
 package com.jsg.ahispringboot.member.login;
 
 import com.jsg.ahispringboot.member.entity.MemberEntity;
+import com.mysql.cj.log.Log;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 @RequiredArgsConstructor
@@ -31,6 +33,19 @@ public class CustomUserDetail implements UserDetails {
         return memberEntity.getEmail();
     }
 
+    public String getRealName(){
+        return memberEntity.getName();
+    }
+
+    public Long getPhoneNumber(){
+        return memberEntity.getPhoneNumber();
+    }
+
+    public Long getPk(){
+        return memberEntity.getId();
+    }
+
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -49,5 +64,21 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String company(){
+        return memberEntity.getCompanyEntity().getCompany();
+    }
+    public String companyType(){
+        return memberEntity.getCompanyEntity().getCompanyType();
+    }
+    public int employeesNumber(){
+        return memberEntity.getCompanyEntity().getEmployeesNumber();
+    }
+    public Date establishmentDate(){
+        return memberEntity.getCompanyEntity().getEstablishmentDate();
+    }
+    public String companyHomepage(){
+        return memberEntity.getCompanyEntity().getCompanyHomepage();
     }
 }

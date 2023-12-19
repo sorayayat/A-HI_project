@@ -24,5 +24,8 @@ public class CompanyEntity {
     private Date establishmentDate;
     private String companyHomepage;
 
-
+  /*  @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "member_id")
+    private MemberEntity memberEntity;
+*/
 }
