@@ -24,6 +24,7 @@ async def AIiterview(searchQuery: InterviewData):
     print(searchQuery)
     return {"question" : question} 
 
+
 # 사용자에 답변을 받아서 피드백 해준다
 @Interview_router.post('/sendAnswer')
 async def AI_question(answer: str = Body(...)):
@@ -40,7 +41,7 @@ def gpt_question(data):
       messages=[
               {"role": "system", "content": "너는 면접관이야"},
               {"role": "system", "content": f"{data}에서 기술과 관련된 부분을 질문해줘"},           
-              {"role": "system", "content": "세가지 정도로 질문해줘 "},           
+              {"role": "system", "content": "세가지 정도로 질문해줘 "},      
                        
           ]
       
