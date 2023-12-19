@@ -1,8 +1,11 @@
-import { postAsk } from "../modules/inspectionModule";
+import { get } from "react-scroll/modules/mixins/scroller";
+import { getResume, postAsk } from "../modules/inspectionModule";
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
+const SB_SERVER_PORT = `${process.env.REACT_APP_FAST_SB_SERVER_PORT}`;
 const FAST_PRE_URL =`http://${FAST_SERVER_IP}:${FAST_SERVER_PORT}/inspection`
+const SB_PRE_URL = `http://${FAST_SERVER_IP}:${SB_SERVER_PORT}/inspection`
 
 
 export const callInspectionAskAPI = (form) =>{
@@ -18,6 +21,17 @@ export const callInspectionAskAPI = (form) =>{
         if(result.status === 200){
             // console.log("[callInspectionAskAPI] callInspectionAskAPI : {}",result);
             dispath(postAsk(result));
+        }
+    }
+}
+
+export const callInspectionResumeAPI = () =>{
+    const requestURL = `${SB_PRE_URL}/getResume`;
+    return async(dispath,getState) =>{
+        const result = await fetch(requestURL).then(resp => resp.json());
+        if(result.status === 200)
+        {
+            dispath(getResume(result));
         }
     }
 }
