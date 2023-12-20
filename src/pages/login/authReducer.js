@@ -2,7 +2,17 @@
 import { LOGIN, LOGOUT } from './authActions';
 
 const initialState = {
-    isLoggedIn: false
+    isLoggedIn: false,
+    // companyId: "",
+    // memberId:"",
+    // email:"",
+    // name:"",
+    // phoneNumber:"",
+    // company:"",
+    // companyType:"",
+    // employeesNumber:"",
+    // establishmentDate:"",
+    // companyHomepage:"",
 };
 
 const authReducer = (state = initialState, action) => {

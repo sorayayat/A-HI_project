@@ -30,6 +30,7 @@ const LoginForm = () => {
             .then(response => {
                 if(response.data.message==='success'){
                     localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userInfo', JSON.stringify(response.data)); 
                     dispatch(login());
                     navigate('/');
                 }

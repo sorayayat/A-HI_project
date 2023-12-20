@@ -13,6 +13,7 @@ const Header = () => {
             if (response.ok) {
                 dispatch(logout());
                 localStorage.setItem('isLoggedIn', 'false');
+                localStorage.removeItem('userInfo'); 
             } else {
             }
         } catch (error) {
