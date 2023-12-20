@@ -1,5 +1,6 @@
 package com.jsg.ahispringboot.config;
 
+import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,17 +25,24 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig implements WebMvcConfigurer {
+public class SecurityConfig  {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("Authorization", "Content-Type")
-                .exposedHeaders("Custom-Header")
-                .allowCredentials(true)
-                .maxAge(3600);
+
+
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**") // 모든 경로에 대해
+                        .allowedOrigins("http://localhost:3000") // 허용할 오리진 설정
+                        .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메소드 설정
+                        .allowedHeaders("*") // 허용할 헤더 설정
+                        .allowCredentials(true) // 쿠키를 포함한 요청 허용
+                        .maxAge(3600); // pre-flight 요청의 캐시 시간(초 단위)
+            }
+        };
     }
 
     @Bean
@@ -51,10 +60,26 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .successHandler(new AuthenticationSuccessHandler() {
                                     @Override
                                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                                        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+                                        String json = "{"
+                                                + "\"message\": \"success\","
+                                                + "\"email\": \"" + userDetails.getUsername() + "\","
+                                                + "\"name\": \"" + userDetails.getRealName() + "\","
+                                                + "\"phoneNumber\": " + userDetails.getPhoneNumber() + ","
+                                                + "\"company\": \"" + userDetails.company() + "\","
+                                                + "\"companyType\": \"" + userDetails.companyType() + "\","
+                                                + "\"employeesNumber\": " + userDetails.employeesNumber() + ","
+                                                + "\"establishmentDate\": \"" + userDetails.establishmentDate() + "\","
+                                                + "\"companyHomepage\": \"" + userDetails.companyHomepage() + "\""
+                                                + "\"companyId\": \"" + userDetails.companyPk() + "\","
+                                                + "\"memberId\": \"" + userDetails.getPk() + "\","
+                                                + "}";
+
                                         response.setStatus(HttpServletResponse.SC_OK);
                                         response.setCharacterEncoding("UTF-8");
                                         response.setContentType("application/json");
-                                        response.getWriter().write("{\"message\": \"success\"}");
+                                        response.getWriter().write(json);
+
                                     }
                                 })
                                 .failureHandler(new AuthenticationFailureHandler() {

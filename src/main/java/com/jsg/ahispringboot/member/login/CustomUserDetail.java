@@ -81,4 +81,7 @@ public class CustomUserDetail implements UserDetails {
     public String companyHomepage(){
         return memberEntity.getCompanyEntity().getCompanyHomepage();
     }
+    public Long companyPk(){
+        return memberEntity.getCompanyEntity().getCompanyId();
+    }
 }
