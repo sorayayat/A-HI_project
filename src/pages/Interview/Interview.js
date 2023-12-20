@@ -23,6 +23,7 @@ const Interview = () => {
         dispatch(callInterview({
 
             searchQuery : searchQuery
+
         }))
     }
 
@@ -31,6 +32,7 @@ const Interview = () => {
         dispatch(callInterview({
 
             answer : answer
+            
         }))
     };
 
