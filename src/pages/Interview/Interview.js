@@ -19,11 +19,9 @@ const Interview = () => {
     const dispatch = useDispatch();
       
     const handleSearchAnnouncement = () => {
-
-        dispatch(callInterview({
-
-            searchQuery : searchQuery
-        }))
+        dispatch(callInterview({searchQuery: searchQuery}, (result) => {
+            setquestion(result.question); // 상태 업데이트 함수 이름 수정
+        }));
     }
 
     const handleSendAnswer = async () => {
@@ -31,6 +29,7 @@ const Interview = () => {
         dispatch(callInterview({
 
             answer : answer
+
         }))
     };
 
@@ -39,7 +38,7 @@ const Interview = () => {
         <>
          {/* 첫 화면에 나타날 내용 */}
         
-         <div className={style.header}><h1>aaaAI 면접</h1></div>
+         <div className={style.header}><h1>AI 면접</h1></div>
          <div className={style.shoulder}><h3>AI와 함께 면접을 준비해보세요</h3></div>
 
         <div className={SearchBarStyle.searchWrapper}>
