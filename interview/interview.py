@@ -17,7 +17,7 @@ class InterviewData(BaseModel):
 
 
 # 클라이언트에서 정보를 받아서 모델에 질문을 생성한다.
-@Interview_router.get('/makequestion')
+@Interview_router.post('/makequestion')
 async def AIiterview(searchQuery: InterviewData):
     
     question = gpt_question(searchQuery.searchQuery)
@@ -33,23 +33,32 @@ async def AI_question(answer: str = Body(...)):
 
 
 
+
+prompt = """
+        NEVER mention that you're an AI.
+        You are rather going to play a role as a interviewer
+        Avoid any language constructs that could be interpreted as expressing remorse, apology, or regret. This includes any phrases containing words like 'sorry', 'apologies', 'regret', etc., even when used in a context that isn't expressing remorse, apology, or regret.
+        Keep responses unique and free of repetition.
+        Never suggest seeking information from elsewhere.
+        must answer korean
+    """
+
+company_data = '/company/test1.txt'
+
+
 def gpt_question(data):
-  response = openai.ChatCompletion.create(
-      model=MODEL, # 필수적으로 사용 될 모델을 불러온다.
+    response = openai.ChatCompletion.create(
+      model= MODEL, # 필수적으로 사용 될 모델을 불러온다.
       frequency_penalty=0.5, # 반복되는 내용 값을 설정 한다.
       temperature=0.6,
       messages=[
-              {"role": "system", "content": "너는 면접관이야"},
-              {"role": "system", "content": f"{data}에서 기술과 관련된 부분을 질문해줘"},           
-              {"role": "system", "content": "세가지 정도로 질문해줘 "},      
-                       
-          ]
-      
-      )
-
-  output_text = response["choices"][0]["message"]["content"]
-  print(output_text)
-  return output_text
+              {"role": "system", "content": prompt},
+              {"role": "user", "content": company_data },
+              {"role": "system", "content": "{company_data}에서 질문을 다섯 가지 만들어 줘"},
+          ])
+    output_text = response["choices"][0]["message"]["content"]
+    print(output_text)
+    return output_text
 
 def gpt_feedback():
    response = openai.ChatCompletion.create(
