@@ -39,7 +39,7 @@ const Interview = () => {
         <>
          {/* 첫 화면에 나타날 내용 */}
         
-         <div className={style.header}><h1>AI 면접</h1></div>
+         <div className={style.header}><h1>aaaAI 면접</h1></div>
          <div className={style.shoulder}><h3>AI와 함께 면접을 준비해보세요</h3></div>
 
         <div className={SearchBarStyle.searchWrapper}>
