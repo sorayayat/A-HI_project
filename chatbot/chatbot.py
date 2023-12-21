@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 import openai
 from pydantic import BaseModel
-from config.config import getAPIkey,getModel
+from configset.config import getAPIkey, getModel
 
 
 CBrouter = APIRouter(prefix="/chatbot")

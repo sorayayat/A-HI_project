@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter, Body, File, Request, UploadFile, Depends, Form
 import openai
 from pydantic import BaseModel
-from config.config import getAPIkey,getModel
+from configset.config import getAPIkey,getModel
 from typing import List
 
 Interview_router = APIRouter(prefix='/interview')
@@ -71,7 +71,7 @@ def gpt_feedback():
       temperature=0.6,
       messages=[
           {"role": "system", "content": "너는 면접관이야"},
-          {"role": "system", "content": f"{a}에 대해 면접자의 대답을 들어줘"},
+        #   {"role": "system", "content": f"{a}에 대해 면접자의 대답을 들어줘"},
           {"role": "system", "content": "어떻게 말하면 더 좋을지 면접자에게 답해줘"},
           
       ]

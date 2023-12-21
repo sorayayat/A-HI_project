@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from inspection.inspection import ITrouter
 from company.posting import COrouter
 from chatbot.chatbot import CBrouter
+from resume.resume import resume_router
 
 app = FastAPI()
 
@@ -11,6 +12,7 @@ app.include_router(Interview_router)
 app.include_router(ITrouter)
 app.include_router(COrouter)
 app.include_router(CBrouter)
+app.include_router(resume_router)
 
 
 app.add_middleware(
