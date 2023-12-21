@@ -48,4 +48,3 @@ def create_prediction_prompt(ask):
     print(f'sentences : {sentences}')
 
     return sentences
-
