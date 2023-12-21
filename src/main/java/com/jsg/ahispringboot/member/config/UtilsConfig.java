@@ -8,7 +8,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 @Configuration
 public class UtilsConfig {
 
-
     private final JavaMailSender mailSender;
 
     public UtilsConfig(JavaMailSender mailSender) {
@@ -16,7 +15,7 @@ public class UtilsConfig {
     }
 
     @Bean
-    public MailSend mailSend(){
+    public MailSend mailSend() {
         return new MailSend(mailSender);
     }
 }

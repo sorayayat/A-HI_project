@@ -25,14 +25,23 @@ public class InspectionService {
         this.modelMapper = modelMapper;
     }
 
-    public List<ResumeDTO> findResume(Long code) {
-        List<Resume> resume = inspectionRepositroy.findByUserUserCode(code);
-        List<ResumeDTO> resumeDTO = resume.stream().map(res -> modelMapper.map(resume, ResumeDTO.class))
+    // public List<ResumeDTO> findResume(Long code) {
+    // List<Resume> resume = inspectionRepositroy.findByUserUserCode(code);
+    // List<ResumeDTO> resumeDTO = resume.stream().map(res ->
+    // modelMapper.map(resume, ResumeDTO.class))
+    // .collect(Collectors.toList());
+
+    // log.info("resume : {}", resumeDTO);
+
+    // return null;
+    // }
+
+    public void selectMemberResume(Long memberId) {
+        List<Resume> Resumes = inspectionRepositroy.FindById(memberId);
+        List<ResumeDTO> ResumeDTO = Resumes.stream().map(Resume -> modelMapper.map(Resume, ResumeDTO.class))
                 .collect(Collectors.toList());
+        ResumeDTO.forEach(resume -> log.info("resume :", resume));
 
-        log.info("resume : {}", resumeDTO);
-
-        return null;
     }
 
 }

@@ -11,9 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ResumeDTO {
     private Long resumeCode;
-    private String enlistmentDate;
-    private String dischargeDate;
-    private String militaryService;
-    private String path;
-    private UserDTO user;
+    private String resumePath;
+    private String createDate;
+    private String modifyDate;
+    private Long memberId;
 }

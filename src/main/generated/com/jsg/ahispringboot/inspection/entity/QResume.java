@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -18,41 +17,28 @@ public class QResume extends EntityPathBase<Resume> {
 
     private static final long serialVersionUID = 1545329704L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QResume resume = new QResume("resume");
 
-    public final StringPath dischargeDate = createString("dischargeDate");
+    public final StringPath createDate = createString("createDate");
 
-    public final StringPath enlistmentDate = createString("enlistmentDate");
+    public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
-    public final StringPath militaryService = createString("militaryService");
-
-    public final StringPath path = createString("path");
+    public final StringPath modifyDate = createString("modifyDate");
 
     public final NumberPath<Long> resumeCode = createNumber("resumeCode", Long.class);
 
-    public final QUser user;
+    public final StringPath resumePath = createString("resumePath");
 
     public QResume(String variable) {
-        this(Resume.class, forVariable(variable), INITS);
+        super(Resume.class, forVariable(variable));
     }
 
     public QResume(Path<? extends Resume> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QResume(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QResume(PathMetadata metadata, PathInits inits) {
-        this(Resume.class, metadata, inits);
-    }
-
-    public QResume(Class<? extends Resume> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
+        super(Resume.class, metadata);
     }
 
 }
