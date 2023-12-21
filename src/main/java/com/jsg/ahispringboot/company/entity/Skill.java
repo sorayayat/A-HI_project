@@ -4,27 +4,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.naming.Name;
-
 @Entity
-@Table(name = "work_type")
+@Table(name = "skill")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class WorkType {
+public class Skill {
 
     @Id
+    @Column(name = "skill_code")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "work_code")
-    private Integer workCode;
+    private Integer skillCode;
 
-    @Column(name = "work_conditions")
-    private String workConditions;
+    @Column(name = "skill_name")
+    private String skillName;
 
-    @JoinColumn(name = "posting_code")
     @ManyToOne
+    @JoinColumn(name = "posting_code")
     @JsonIgnore
     private Posting posting;
 }

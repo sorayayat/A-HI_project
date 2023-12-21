@@ -1,8 +1,10 @@
 package com.jsg.ahispringboot.company.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.naming.Name;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,7 +24,7 @@ public class Posting {
     @Column(name = "posting_date")
     private LocalDateTime postingDate;
 
-    @Column(name = "end-date")
+    @Column(name = "end_date")
     private String endDate;
 
     @Column(name = "view_count")
@@ -34,7 +36,7 @@ public class Posting {
     @Column(name = "position")
     private String position;
 
-    @Column(name = "closing _form")
+    @Column(name = "closing_form")
     private String closingForm;
 
     @Column(name = "content")
@@ -42,6 +44,11 @@ public class Posting {
 
     @Column(name = "posting_title")
     private String postingTitle;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    @JsonIgnore
+    private Company company;
 
     @PrePersist
     public void prePersist() {
