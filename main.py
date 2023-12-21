@@ -2,17 +2,14 @@ from fastapi import FastAPI
 from interview.interview import Interview_router
 from fastapi.middleware.cors import CORSMiddleware
 from inspection.inspection import ITrouter
+from company.posting import COrouter
 
 app = FastAPI()
 
 app.include_router(Interview_router)
 app.include_router(ITrouter)
-from fastapi.middleware.cors import CORSMiddleware
-from company.posting import COrouter
-
-app = FastAPI()
-
 app.include_router(COrouter)
+
 
 app.add_middleware(
     CORSMiddleware,

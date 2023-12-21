@@ -30,8 +30,9 @@ class CompanyRegistration(BaseModel):
     endDate : str
     closingForm : str
 
-@COrouter.post("/regist")
+@COrouter.post("/regist/{companyCode}")
 async def registCompany(
+    companyCode : int,
     postingTitle: str = Form(...),
     location: str = Form(...),
     education: str = Form(...),
@@ -42,8 +43,10 @@ async def registCompany(
     content: str = Form(...),
     endDate: str = Form(...),
     closingForm: str = Form(...),
+    
 ):
     data = CompanyRegistration(
+        
         
         postingTitle = postingTitle,
         location=location,
@@ -55,14 +58,17 @@ async def registCompany(
         content=content,
         endDate = endDate,
         closingForm = closingForm,
+        
     )
+
+    print(companyCode)
 
     print(data)
     
     
 
     # Spring Boot 엔드포인트 URL 정의
-    spring_boot_endpoint = "http://localhost:8001/posting/regist"
+    spring_boot_endpoint = "http://localhost:8001/posting/regist/{0}".format(companyCode)
 
     try:
         # Spring Boot 애플리케이션으로 POST 요청 보내기
