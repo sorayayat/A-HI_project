@@ -75,6 +75,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 
@@ -150,3 +151,36 @@
     padding-top: 13px;
     padding-left: 18px;
 }
+
+
+
+/* ========================== 채팅창 메세지, 말풍선 디자인 ========================== */
+
+/* 수정된 클래스명에 대한 CSS */
+.userMessage {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  
+  .chatbotMessage {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .userMessage .messageBubble {
+    background-color: #007aff;
+    color: rgb(255, 255, 255);
+    border-radius: 20px;
+    padding: 10px 15px;
+    max-width: 75%;
+  }
+  
+  .chatbotMessage .messageBubble {
+    background-color: #d3d3fa;
+    border-radius: 20px;
+    padding: 10px 15px;
+    max-width: 75%;
+  }
+  
