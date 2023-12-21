@@ -15,7 +15,7 @@ const Interview = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [question, setquestion] = useState('');
     const [answer, setAnswer] = useState('');
-    const [AIanswer, setAianswer] = useState(''); 
+    const [AIanswer, setAIanswer] = useState(''); 
     const dispatch = useDispatch();
       
     const handleSearchAnnouncement = () => {
@@ -26,12 +26,10 @@ const Interview = () => {
 
     const handleSendAnswer = async () => {
 
-        dispatch(callInterview({
-
-            answer : answer
-
-        }))
-    };
+        dispatch(callInterview({answer : answer}, (sandresult) => {
+            setAIanswer(sandresult.AIanswer);
+        }));
+    }
 
     // 화면 작업은 return 내부에 작성한다.
     return (
