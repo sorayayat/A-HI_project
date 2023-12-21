@@ -5,7 +5,7 @@ import SearchBarStyle from '../mainpage/Search.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { callInterview } from '../../apis/interviewAPICalls'
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 
 // 수정 사항 aaaaa
 // 폰트 수정하기 
@@ -28,7 +28,7 @@ const InterviewSpring = () => {
 
     const handleSendAnswer = async () => {
 
-        axios.get(`./interview/bot?gpt=${searchQuery}`)
+        axios.get(`/interview/gpt?prompt=${searchQuery}`)
         .then(response => {
           alert(response.data);
         })
@@ -37,7 +37,7 @@ const InterviewSpring = () => {
         })
         .finally(() => {
         });
-
+    
 
     };
 
