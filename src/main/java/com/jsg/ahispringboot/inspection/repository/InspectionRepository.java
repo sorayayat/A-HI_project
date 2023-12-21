@@ -11,7 +11,7 @@ import com.jsg.ahispringboot.inspection.entity.Resume;
 @Repository
 public interface InspectionRepository extends JpaRepository<Resume, Long> {
 
-    @Query(value = "select r from Resume where r.memberId = :memberId")
+    @Query(value = "select r from Resume r where r.memberId = :memberId")
     public List<Resume> FindById(Long memberId);
 
 }
