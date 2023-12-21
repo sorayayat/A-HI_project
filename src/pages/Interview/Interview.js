@@ -15,24 +15,21 @@ const Interview = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [question, setquestion] = useState('');
     const [answer, setAnswer] = useState('');
-    const [AIanswer, setAianswer] = useState(''); 
+    const [AIanswer, setAIanswer] = useState(''); 
     const dispatch = useDispatch();
       
     const handleSearchAnnouncement = () => {
-
-        dispatch(callInterview({
-
-            searchQuery : searchQuery
-        }))
+        dispatch(callInterview({searchQuery: searchQuery}, (result) => {
+            setquestion(result.question); // 상태 업데이트 함수 이름 수정
+        }));
     }
 
     const handleSendAnswer = async () => {
 
-        dispatch(callInterview({
-
-            answer : answer
-        }))
-    };
+        dispatch(callInterview({answer : answer}, (sandresult) => {
+            setAIanswer(sandresult.AIanswer);
+        }));
+    }
 
     // 화면 작업은 return 내부에 작성한다.
     return (

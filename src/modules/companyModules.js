@@ -4,9 +4,11 @@ import { createActions, handleActions } from "redux-actions";
 const initialState = [];
 
 export const POST_COMPANY = 'COMPANY/POST_COMPANY';
+export const GET_JOBLISTING = 'JOBLISTING/GET_JOBLISTING'
 
 const actions = createActions({
-    [POST_COMPANY]: () => { },
+    [POST_COMPANY]: () => {},
+    [GET_JOBLISTING]: () => {},
 
 })
 
@@ -16,8 +18,14 @@ const companyReducer = handleActions(
         [POST_COMPANY]: (state, { payload }) => {
 
             return payload
+        },
+        
+        [GET_JOBLISTING] : (state, {payload }) => {
+
+            return payload
         }
     },
     initialState);
 
 export default companyReducer;
+

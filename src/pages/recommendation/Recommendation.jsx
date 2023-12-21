@@ -1,6 +1,6 @@
 import style from './Recommendation.module.css'
 import { useState } from 'react'
-import logo from './images/다운로드.png'
+import logo from './images/KakaoTalk_20231218_121636945 (2).jpg'
 import {Link} from "react-router-dom"
 
 

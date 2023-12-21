@@ -1,16 +1,32 @@
 import style from './CompanyList.module.css'
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { callSelectJobListing  } from '../../apis/postingAPIAPICalls'
+import { useDispatch, useSelector } from 'react-redux';
 
 function Apply(){
+
+    const dispatch = useDispatch();
+    const posting = useSelector(state => state.companyReducer);
+    const postingList = posting.data;
+
+    console.log(postingList, "gdgd");
+    
 
     useEffect(() => {
         document.body.classList.add(style.companyListBody);
         window.scrollTo(0, 0);
+
+        dispatch(callSelectJobListing({
+            companyCode : 1
+        }))
+        
         return () => {
             document.body.classList.remove(style.companyListBody);
         };
     }, []);
+
+    
 
 
     return (
