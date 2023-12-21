@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import com.jsg.ahispringboot.inspection.dto.FileDTO;
-import com.jsg.ahispringboot.inspection.entity.File;
+import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
+import com.jsg.ahispringboot.inspection.entity.Resume;
 import com.jsg.ahispringboot.inspection.repository.InspectionRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,10 +37,10 @@ public class InspectionService {
     // }
 
     public void selectMemberResume(Long memberId) {
-        List<File> files = inspectionRepositroy.FindById(memberId);
-        List<FileDTO> fileDTOs = files.stream().map(file -> modelMapper.map(file, FileDTO.class))
+        List<Resume> Resumes = inspectionRepositroy.FindById(memberId);
+        List<ResumeDTO> ResumeDTO = Resumes.stream().map(Resume -> modelMapper.map(Resume, ResumeDTO.class))
                 .collect(Collectors.toList());
-        fileDTOs.forEach(file -> log.info("file :", file));
+        ResumeDTO.forEach(resume -> log.info("resume :", resume));
 
     }
 

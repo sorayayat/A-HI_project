@@ -21,7 +21,7 @@ public class InspectionController {
     @GetMapping("/getResume")
     public String selectResume() {
         Long code = 1L;
-
+        System.out.println("H2");
         return "Hello World";
     }
 

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -23,7 +25,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jsg.ahispringboot.inspection.dto.FileDTO;
+import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
+import com.jsg.ahispringboot.inspection.entity.Resume;
 import com.jsg.ahispringboot.inspection.repository.InspectionRepository;
 
 import jakarta.persistence.EntityManagerFactory;
@@ -52,7 +55,7 @@ public class inspectionTest {
         File filePath = new File(findPdf);
         File[] fw = filePath.listFiles();
         List<String> filePaths = new ArrayList<>();
-        List<FileDTO> fileDTOs = new ArrayList<>();
+        List<ResumeDTO> ResumeDTOs = new ArrayList<>();
 
         // when
         for (File f : fw) {
@@ -65,19 +68,22 @@ public class inspectionTest {
         }
 
         for (String path : filePaths) {
-            FileDTO f = new FileDTO();
-            f.setFilePath(path);
-            f.setFileType("자소서");
-            f.setMemberId(1L);
-            fileDTOs.add(f);
+            ResumeDTO r = new ResumeDTO();
+            LocalDate date = LocalDate.now();
+            String newDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
+            r.setResumePath(path);
+            r.setCreateDate(newDate);
+            r.setModifyDate(newDate);
+            r.setMemberId(1L);
+            ResumeDTOs.add(r);
         }
-        System.out.println("fileDTOs : " + fileDTOs);
+        System.out.println("fileDTOs : " + ResumeDTOs);
         // then
         try {
-            List<com.jsg.ahispringboot.inspection.entity.File> file = fileDTOs.stream()
-                    .map(f -> modelMapper.map(f, com.jsg.ahispringboot.inspection.entity.File.class))
+            List<Resume> resume = ResumeDTOs.stream()
+                    .map(r -> modelMapper.map(r, Resume.class))
                     .collect(Collectors.toList());
-            inspectionRepository.saveAll(file);
+            inspectionRepository.saveAll(resume);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -4,17 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class FileDTO {
-    private Long fileCode;
-    private String filePath;
-    private String fileType;
+public class ResumeDTO {
+    private Long resumeCode;
+    private String resumePath;
+    private String createDate;
+    private String modifyDate;
     private Long memberId;
-    private Long postionCode;
 }

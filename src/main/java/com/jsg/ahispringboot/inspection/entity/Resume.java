@@ -14,25 +14,25 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "file")
+@Table(name = "resume")
 @NoArgsConstructor
 @AllArgsConstructor
-public class File {
+public class Resume {
 
     @Id
-    @Column(name = "file_code")
+    @Column(name = "resume_code")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long fileCode;
+    private Long resumeCode;
 
-    @Column(name = "file_path")
-    private String filePath;
+    @Column(name = "resume_path")
+    private String resumePath;
 
-    @Column(name = "file_type")
-    private String fileType;
+    @Column(name = "create_date")
+    private String createDate;
+
+    @Column(name = "modify_date")
+    private String modifyDate;
 
     @Column(name = "member_id")
     private Long memberId;
-
-    @Column(name = "posting_code")
-    private Long postionCode;
 }

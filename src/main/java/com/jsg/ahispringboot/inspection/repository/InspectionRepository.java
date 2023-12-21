@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.jsg.ahispringboot.inspection.entity.File;
+import com.jsg.ahispringboot.inspection.entity.Resume;
 
 @Repository
-public interface InspectionRepository extends JpaRepository<File, Long> {
+public interface InspectionRepository extends JpaRepository<Resume, Long> {
 
-    @Query(value = "select f from File f where f.memberId = :memberId and f.fileType = '자소서'")
-    public List<File> FindById(Long memberId);
+    @Query(value = "select r from Resume where r.memberId = :memberId")
+    public List<Resume> FindById(Long memberId);
 
 }

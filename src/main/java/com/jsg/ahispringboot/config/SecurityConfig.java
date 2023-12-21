@@ -20,7 +20,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
@@ -28,7 +27,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOrigins("http://localhost:3000", "http://localhost:8000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("Authorization", "Content-Type")
                 .exposedHeaders("Custom-Header")
@@ -45,39 +44,39 @@ public class SecurityConfig implements WebMvcConfigurer {
                         .requestMatchers("/api/member/**").authenticated()
 
                 )
-                .formLogin((form) ->
-                        form.loginPage("/api/loginForm")
-                                .loginProcessingUrl("/login")
-                                .successHandler(new AuthenticationSuccessHandler() {
-                                    @Override
-                                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                                        response.setStatus(HttpServletResponse.SC_OK);
-                                        response.setCharacterEncoding("UTF-8");
-                                        response.setContentType("application/json");
-                                        response.getWriter().write("{\"message\": \"success\"}");
-                                    }
-                                })
-                                .failureHandler(new AuthenticationFailureHandler() {
-                                    @Override
-                                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                        response.setCharacterEncoding("UTF-8");
-                                        response.setContentType("application/json");
-                                        response.getWriter().write("{\"message\": \"로그인 실패 이메일,비밀번호를 확인 해주세요.\"}");
-                                    }
-                                }
-                                )
-                )
-                .logout((out) ->out
-                                .logoutUrl("/logout") // 로그아웃 처리 URL 설정
-                                .logoutSuccessUrl("/") // 로그아웃 성공 후 리다이렉트할 URL
-                                .invalidateHttpSession(true) // 세션 무효화
-                                .deleteCookies("JSESSIONID")
-                                .invalidateHttpSession(true))
+                .formLogin((form) -> form.loginPage("/api/loginForm")
+                        .loginProcessingUrl("/login")
+                        .successHandler(new AuthenticationSuccessHandler() {
+                            @Override
+                            public void onAuthenticationSuccess(HttpServletRequest request,
+                                    HttpServletResponse response, Authentication authentication)
+                                    throws IOException, ServletException {
+                                response.setStatus(HttpServletResponse.SC_OK);
+                                response.setCharacterEncoding("UTF-8");
+                                response.setContentType("application/json");
+                                response.getWriter().write("{\"message\": \"success\"}");
+                            }
+                        })
+                        .failureHandler(new AuthenticationFailureHandler() {
+                            @Override
+                            public void onAuthenticationFailure(HttpServletRequest request,
+                                    HttpServletResponse response, AuthenticationException exception)
+                                    throws IOException, ServletException {
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                response.setCharacterEncoding("UTF-8");
+                                response.setContentType("application/json");
+                                response.getWriter().write("{\"message\": \"로그인 실패 이메일,비밀번호를 확인 해주세요.\"}");
+                            }
+                        }))
+                .logout((out) -> out
+                        .logoutUrl("/logout") // 로그아웃 처리 URL 설정
+                        .logoutSuccessUrl("/") // 로그아웃 성공 후 리다이렉트할 URL
+                        .invalidateHttpSession(true) // 세션 무효화
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true))
 
                 .build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
