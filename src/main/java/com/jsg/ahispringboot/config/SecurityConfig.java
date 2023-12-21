@@ -30,25 +30,19 @@ import static io.micrometer.core.instrument.util.StringEscapeUtils.escapeJson;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig implements WebMvcConfigurer  {
 
-
-
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // 모든 경로에 대해
-                        .allowedOrigins("http://localhost:3000") // 허용할 오리진 설정
-                        .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메소드 설정
-                        .allowedHeaders("*") // 허용할 헤더 설정
-                        .allowCredentials(true) // 쿠키를 포함한 요청 허용
-                        .maxAge(3600); // pre-flight 요청의 캐시 시간(초 단위)
-            }
-        };
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("Authorization", "Content-Type")
+                .exposedHeaders("Custom-Header")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
+
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
