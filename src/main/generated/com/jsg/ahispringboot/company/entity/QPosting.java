@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,9 +18,13 @@ public class QPosting extends EntityPathBase<Posting> {
 
     private static final long serialVersionUID = -169392494L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QPosting posting = new QPosting("posting");
 
     public final StringPath closingForm = createString("closingForm");
+
+    public final com.jsg.ahispringboot.member.entity.QCompanyEntity company;
 
     public final StringPath content = createString("content");
 
@@ -38,15 +43,24 @@ public class QPosting extends EntityPathBase<Posting> {
     public final NumberPath<Integer> viewCount = createNumber("viewCount", Integer.class);
 
     public QPosting(String variable) {
-        super(Posting.class, forVariable(variable));
+        this(Posting.class, forVariable(variable), INITS);
     }
 
     public QPosting(Path<? extends Posting> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QPosting(PathMetadata metadata) {
-        super(Posting.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QPosting(PathMetadata metadata, PathInits inits) {
+        this(Posting.class, metadata, inits);
+    }
+
+    public QPosting(Class<? extends Posting> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.company = inits.isInitialized("company") ? new com.jsg.ahispringboot.member.entity.QCompanyEntity(forProperty("company")) : null;
     }
 
 }

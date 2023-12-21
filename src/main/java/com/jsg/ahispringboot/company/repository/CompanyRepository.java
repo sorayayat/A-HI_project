@@ -1,9 +1,10 @@
 package com.jsg.ahispringboot.company.repository;
 
-import com.jsg.ahispringboot.company.entity.Company;
+
+import com.jsg.ahispringboot.member.entity.CompanyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CompanyRepository extends JpaRepository<Company, Integer > {
+public interface CompanyRepository extends JpaRepository<CompanyEntity, Long > {
 
-    Company findByCompanyId(Integer companyId);
+    CompanyEntity findByCompanyId(Integer companyId);
 }

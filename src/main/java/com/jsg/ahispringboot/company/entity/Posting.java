@@ -1,6 +1,7 @@
 package com.jsg.ahispringboot.company.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jsg.ahispringboot.member.entity.CompanyEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -48,7 +49,7 @@ public class Posting {
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     @JsonIgnore
-    private Company company;
+    private CompanyEntity company;
 
     @PrePersist
     public void prePersist() {
