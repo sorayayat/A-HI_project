@@ -9,6 +9,6 @@ Accept: */*
 Content-Type: application/json
 
 {
-  "name" : "김효연",
-  "contents" : "호빵이 산책시키고 있어"
+    "name": "권예린"
+    "contents" : "안녕하세요"
 }
