@@ -9,6 +9,6 @@ Accept: */*
 Content-Type: application/json
 
 {
-    "name": "권예린"
+    "name": "권예린",
     "contents" : "안녕하세요"
 }
