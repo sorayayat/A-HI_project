@@ -46,8 +46,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation group: 'org.json', name: 'json', version: '20231013'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.modelmapper:modelmapper:2.4.4'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 tasks.named('test') {

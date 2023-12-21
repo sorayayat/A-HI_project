@@ -65,7 +65,6 @@ public class SecurityConfig  {
                                 .successHandler(new AuthenticationSuccessHandler() {
                                     @Override
                                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                                        System.out.println("여기가 문제니?");
                                         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
                                         if(userDetails.getMemberEntity().getRole()!= MemberRole.ROLE_COMPANY){
                                             CompanyEntity companyEntity = new CompanyEntity();
