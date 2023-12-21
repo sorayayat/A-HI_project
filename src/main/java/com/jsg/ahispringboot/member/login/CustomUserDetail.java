@@ -2,7 +2,9 @@ package com.jsg.ahispringboot.member.login;
 
 import com.jsg.ahispringboot.member.entity.MemberEntity;
 //import com.mysql.cj.log.Log;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +12,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class CustomUserDetail implements UserDetails {
 
     private final MemberEntity memberEntity;

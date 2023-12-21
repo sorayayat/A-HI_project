@@ -1,6 +1,8 @@
 package com.jsg.ahispringboot.config;
 
+import com.jsg.ahispringboot.member.entity.CompanyEntity;
 import com.jsg.ahispringboot.member.login.CustomUserDetail;
+import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +23,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
+import java.sql.Date;
+
+import static io.micrometer.core.instrument.util.StringEscapeUtils.escapeJson;
 
 
 @Configuration
@@ -60,19 +65,32 @@ public class SecurityConfig  {
                                 .successHandler(new AuthenticationSuccessHandler() {
                                     @Override
                                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                                        System.out.println("여기가 문제니?");
                                         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+                                        if(userDetails.getMemberEntity().getRole()!= MemberRole.ROLE_COMPANY){
+                                            CompanyEntity companyEntity = new CompanyEntity();
+                                            companyEntity.setCompanyId(0L);
+                                            companyEntity.setCompanyHomepage("no");
+                                            java.util.Date utilDate = new java.util.Date();
+                                            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                                            companyEntity.setEstablishmentDate(sqlDate);
+                                            companyEntity.setEmployeesNumber(0);
+                                            companyEntity.setCompanyType("no");
+                                            companyEntity.setCompany("no");
+                                            userDetails.getMemberEntity().setCompanyEntity(companyEntity);
+                                        }
                                         String json = "{"
                                                 + "\"message\": \"success\","
-                                                + "\"email\": \"" + userDetails.getUsername() + "\","
-                                                + "\"name\": \"" + userDetails.getRealName() + "\","
+                                                + "\"email\": \"" + escapeJson(userDetails.getUsername()) + "\","
+                                                + "\"name\": \"" + escapeJson(userDetails.getRealName()) + "\","
                                                 + "\"phoneNumber\": " + userDetails.getPhoneNumber() + ","
-                                                + "\"company\": \"" + userDetails.company() + "\","
-                                                + "\"companyType\": \"" + userDetails.companyType() + "\","
+                                                + "\"company\": \"" + escapeJson(userDetails.company()) + "\","
+                                                + "\"companyType\": \"" + escapeJson(userDetails.companyType()) + "\","
                                                 + "\"employeesNumber\": " + userDetails.employeesNumber() + ","
                                                 + "\"establishmentDate\": \"" + userDetails.establishmentDate() + "\","
-                                                + "\"companyHomepage\": \"" + userDetails.companyHomepage() + "\""
+                                                + "\"companyHomepage\": \"" + escapeJson(userDetails.companyHomepage()) + "\","
                                                 + "\"companyId\": \"" + userDetails.companyPk() + "\","
-                                                + "\"memberId\": \"" + userDetails.getPk() + "\","
+                                                + "\"memberId\": \"" + userDetails.getPk() + "\""
                                                 + "}";
 
                                         response.setStatus(HttpServletResponse.SC_OK);
