@@ -75,6 +75,7 @@ function WriteInfo() {
     
         dispatch(callPostingAPI({
             form: formData,
+            companyCode : 1,
         }));
         
     }

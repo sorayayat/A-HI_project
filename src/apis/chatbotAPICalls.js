@@ -1,19 +1,18 @@
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
-const FAST_PRE_URL = `http://${FAST_SERVER_IP}:${FAST_SERVER_PORT}/interview`
+const FAST_PRE_URL =`http://${FAST_SERVER_IP}:${FAST_SERVER_PORT}/interview`
 
-export const callInterview = (searchQuery, callback) => {
-    const requestURL = `${FAST_PRE_URL}/makequestion`;
-    return async (dispatch, getState) => {
+export const callChatbot = (message, callback) => {
+    const requestURL = "http://localhost:8000/chatbot";
+    return async(dispatch, getState) => {
         try {
             const result = await fetch(requestURL, {
                 method: 'POST',
                 headers: {
-
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(searchQuery)
+                body: JSON.stringify(message)
             });
 
             if (result.ok) {

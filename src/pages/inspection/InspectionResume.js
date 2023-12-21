@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callInspectionResumeAPI } from "../../apis/inspectionAPICalls";
+import style from './static/css/InspectionResume.module.css';
 
 function InspectionResume()
 {
@@ -10,7 +11,7 @@ function InspectionResume()
     useEffect(
         () =>
         {
-           // dispatch(callInspectionResumeAPI());
+            dispatch(callInspectionResumeAPI());
         },
         []
     )
@@ -18,8 +19,14 @@ function InspectionResume()
 
 
     return(
-        <div>
-            <h2>hello world다 그지 꺵꺵이야</h2>
+        <div className={style.BackGround}>
+            <h2 className={style.title}>회원의 이력서</h2>
+            <div className={style.resume_back_griund}>
+                <div className={style.resume}>
+                    <h2>HI</h2>
+                    <h2>이력서 제목제목제목</h2>
+                </div>
+            </div>
         </div>
     )
 }
