@@ -1,9 +1,4 @@
 from fastapi import FastAPI
-<<<<<<< HEAD
-
-app = FastAPI()
-
-=======
 from interview.interview import Interview_router
 from fastapi.middleware.cors import CORSMiddleware
 from inspection.inspection import ITrouter
@@ -29,7 +24,6 @@ app.add_middleware(
 @app.get("/")
 async def main():
     return "추론서버"
->>>>>>> c94fb63a5330731a8083c7d5dbfe8ee7d35330e1
 #
 # 각 기능 별로 컴포넌트 나누시면 React처럼 router 따서 사용하시면 됍니다.
 # from fastapi import APIRouter
