@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from interview.interview import Interview_router
 from fastapi.middleware.cors import CORSMiddleware
 from inspection.inspection import ITrouter
-from fastapi.middleware.cors import CORSMiddleware
 from company.posting import COrouter
 from chatbot.chatbot import CBrouter
 
