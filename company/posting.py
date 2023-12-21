@@ -14,7 +14,6 @@ model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
 client = chromadb.PersistentClient()
 
-openai.api_key = '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'
 
 COrouter = APIRouter(prefix="/posting")
 
