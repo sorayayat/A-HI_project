@@ -28,8 +28,10 @@ const LoginForm = () => {
 
         axios.post(`/login`,formData.toString())
             .then(response => {
+              console.log(response.data.message);
                 if(response.data.message==='success'){
                     localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userInfo', JSON.stringify(response.data)); 
                     dispatch(login());
                     navigate('/');
                 }
