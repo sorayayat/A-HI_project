@@ -17,6 +17,8 @@ public class PostingDTO {
 
     private String endDate;
 
+    private String education;
+
     private int viewCount;
 
     private String location;
@@ -29,10 +31,16 @@ public class PostingDTO {
 
     private String postingTitle;
 
-    private List<String> selectedCareer;
+    private String selectedCareer;
 
-    private List<String> selectedConditions;
+    private String selectedConditions;
 
-    private List<String> selectedSkills;
+    private String selectedSkills;
+
+    private List<WorkTypeDTO> workTypeDTOs;
+
+    private List<SkillDTO> skillDTOs;
+
+    private List<PostingExperienceDTO> postingExperienceDTOS;
 }
 
