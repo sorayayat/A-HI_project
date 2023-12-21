@@ -23,13 +23,13 @@ public class QCompanyEntity extends EntityPathBase<CompanyEntity> {
 
     public final StringPath companyHomepage = createString("companyHomepage");
 
-    public final NumberPath<Long> companyId = createNumber("companyId", Long.class);
+    public final NumberPath<Integer> companyId = createNumber("companyId", Integer.class);
 
     public final StringPath companyType = createString("companyType");
 
-    public final NumberPath<Integer> employeesNumber = createNumber("employeesNumber", Integer.class);
+    public final StringPath employeesNumber = createString("employeesNumber");
 
-    public final DatePath<java.sql.Date> establishmentDate = createDate("establishmentDate", java.sql.Date.class);
+    public final StringPath establishmentDate = createString("establishmentDate");
 
     public QCompanyEntity(String variable) {
         super(CompanyEntity.class, forVariable(variable));
