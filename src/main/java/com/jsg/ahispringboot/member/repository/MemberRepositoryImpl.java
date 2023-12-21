@@ -97,7 +97,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Transactional
     @Override
     public UserDetails updateCompany(CompanyDto companyDto) {
-        MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getId());
+        MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getCompanyId());
         memberEntity1.setName(companyDto.getName());
         memberEntity1.setPhoneNumber(companyDto.getPhoneNumber());
         memberEntity1.getCompanyEntity().setCompany(companyDto.getCompany());

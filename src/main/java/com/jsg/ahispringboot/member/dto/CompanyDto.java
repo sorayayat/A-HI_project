@@ -10,7 +10,7 @@ import java.sql.Date;
 @Setter
 @Builder
 public class CompanyDto {
-    private Long id;
+    private Long companyId;
     private  String email;
     private String name;
     private String password;

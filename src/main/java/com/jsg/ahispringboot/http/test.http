@@ -1,0 +1,14 @@
+#### 특정 사용자 조회
+#GET http://localhost:8001/mongo/find?name=홍다희
+#Accept: */*
+#Content-Type: application/json
+
+### 사용자 추가
+POST http://localhost:8001/mongo/save
+Accept: */*
+Content-Type: application/json
+
+{
+    "name": "권예린",
+    "contents" : "안녕하세요"
+}

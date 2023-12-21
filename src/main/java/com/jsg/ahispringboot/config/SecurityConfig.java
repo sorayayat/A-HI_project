@@ -1,5 +1,8 @@
 package com.jsg.ahispringboot.config;
 
+import com.jsg.ahispringboot.member.entity.CompanyEntity;
+import com.jsg.ahispringboot.member.login.CustomUserDetail;
+import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,6 +23,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
+import java.sql.Date;
+
+import static io.micrometer.core.instrument.util.StringEscapeUtils.escapeJson;
 
 @Configuration
 @EnableWebSecurity
@@ -51,10 +58,38 @@ public class SecurityConfig implements WebMvcConfigurer {
                             public void onAuthenticationSuccess(HttpServletRequest request,
                                     HttpServletResponse response, Authentication authentication)
                                     throws IOException, ServletException {
+                                CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+                                if (userDetails.getMemberEntity().getRole() != MemberRole.ROLE_COMPANY) {
+                                    CompanyEntity companyEntity = new CompanyEntity();
+                                    companyEntity.setCompanyId(0L);
+                                    companyEntity.setCompanyHomepage("no");
+                                    java.util.Date utilDate = new java.util.Date();
+                                    java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                                    companyEntity.setEstablishmentDate(sqlDate);
+                                    companyEntity.setEmployeesNumber(0);
+                                    companyEntity.setCompanyType("no");
+                                    companyEntity.setCompany("no");
+                                    userDetails.getMemberEntity().setCompanyEntity(companyEntity);
+                                }
+                                String json = "{"
+                                        + "\"message\": \"success\","
+                                        + "\"email\": \"" + escapeJson(userDetails.getUsername()) + "\","
+                                        + "\"name\": \"" + escapeJson(userDetails.getRealName()) + "\","
+                                        + "\"phoneNumber\": " + userDetails.getPhoneNumber() + ","
+                                        + "\"company\": \"" + escapeJson(userDetails.company()) + "\","
+                                        + "\"companyType\": \"" + escapeJson(userDetails.companyType()) + "\","
+                                        + "\"employeesNumber\": " + userDetails.employeesNumber() + ","
+                                        + "\"establishmentDate\": \"" + userDetails.establishmentDate() + "\","
+                                        + "\"companyHomepage\": \"" + escapeJson(userDetails.companyHomepage()) + "\","
+                                        + "\"companyId\": \"" + userDetails.companyPk() + "\","
+                                        + "\"memberId\": \"" + userDetails.getPk() + "\""
+                                        + "}";
+
                                 response.setStatus(HttpServletResponse.SC_OK);
                                 response.setCharacterEncoding("UTF-8");
                                 response.setContentType("application/json");
-                                response.getWriter().write("{\"message\": \"success\"}");
+                                response.getWriter().write(json);
+
                             }
                         })
                         .failureHandler(new AuthenticationFailureHandler() {

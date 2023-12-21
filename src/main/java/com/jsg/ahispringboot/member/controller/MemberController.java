@@ -85,7 +85,7 @@ public class MemberController {
     public CompanyDto company(@AuthenticationPrincipal CustomUserDetail customUserDetail){
         CompanyDto companyDto = CompanyDto
                 .builder()
-                .id(customUserDetail.getPk())
+                .companyId(customUserDetail.getPk())
                 .email(customUserDetail.getUsername())
                 .name(customUserDetail.getRealName())
                 .phoneNumber(customUserDetail.getPhoneNumber())
