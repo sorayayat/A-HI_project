@@ -4,7 +4,7 @@ import sendIcon from '../mainpage/Icons/Sent.png';
 import { useState } from 'react';
 import { callChatbot } from '../../apis/chatbotAPICalls';
 import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const ChatRoom = () => {
 
@@ -14,8 +14,10 @@ const ChatRoom = () => {
     const [selectedPrompt, setSelectedPrompt] = useState(null);
     const [messageList, setMessageList] = useState([]); // 메시지 목록
     const dispatch = useDispatch();
+    const messageEndRef = useRef(null);
+    const [chattingListHeight, setChattingListHeight] = useState('500px'); // chattingList의 초기 높이 설정
 
-
+    
     // ========================== 프롬프트 선택 ============================
    
     const startChat = () => {
@@ -27,8 +29,27 @@ const ChatRoom = () => {
     // =========================== 채팅 메세지 =============================
 
     const handleMessageChange = (e) => {
-        setMessage(e.target.value); // 입력값을 message 상태에 반영
+        setMessage(e.target.value); 
     }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+            sendMessage(); 
+        }
+    }
+
+
+    // 스크롤 항상 아래로 이동
+    const scrollToBottom = () => {
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+        setChattingListHeight(`${messageList.length * 20}px`); // 예시로 높이를 간단하게 계산
+    }, [messageList]);
+
 
 
     const sendMessage = () => {
@@ -84,18 +105,20 @@ const ChatRoom = () => {
                             )}
                         {/* 사용자가 프롬프트 선택 후 채팅을 진행할 경우 */}
                         {showChat && (
-                            <div className={styles.chattingList}>
+                            <div className={styles.chattingScrollContainer}>
+                                <div className={styles.chattingList}>
                                 {messageList.map((msg, index) => (
                                     <div key={index} className={msg.sender === '사용자' ? styles.userMessage : styles.chatbotMessage}>
-                                        {/* 실제 메시지 내용을 보여주는 부분 */}
-                                        <p className={styles.messageBubble}>{msg.content}</p>
+                                    <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
+                                        {msg.content}
+                                    </p>
                                     </div>
                                 ))}
+                                </div>
                             </div>
                         )}
 
                         
-
 
                         {/* 메세지 입력창 */}
                         <div className={styles.inputMessageArea}>
@@ -106,6 +129,7 @@ const ChatRoom = () => {
                                         placeholder='챗봇에게 이력서와 관련된 질문을 해보세요.'
                                         value={message}
                                         onChange={handleMessageChange}
+                                        onKeyDown={handleKeyDown}
                                     ></textarea>
                                     <button className={styles.messageSendBtn} onClick={sendMessage}>
                                         <img src={sendIcon} alt='sendIcon' style={{width: "30px", height: "35px"}}/>
