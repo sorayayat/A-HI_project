@@ -136,6 +136,30 @@ const JoinFormCompany = () => {
           </div>
           <span></span>
         </div>
+
+
+        {/* <div className={styles.inputContainer}>
+          <label htmlFor="phoneNumber" >전화번호</label>
+          <div className={styles.inputWithButton}>
+          <div className={styles.inputOnly}>
+          <input
+              type="number"
+              id="phoneNumber"
+              name="phoneNumber"
+              minLength={10}
+              maxLength={11}
+              onChange={handleChange} 
+              value={formData.phoneNumber}
+              required
+            />
+            </div>
+            <button className={styles.joinBtn}  type='button'>중복확인</button>
+          </div>
+          <span></span>
+        </div> */}
+
+
+
         <div className={styles.inputContainer}>
           <label htmlFor="company">회사명</label>
           <div className={styles.inputOnly}>

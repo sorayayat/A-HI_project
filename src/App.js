@@ -10,7 +10,9 @@ import FindForm from './pages/find/FindForm';
 import MemberUpdate from './pages/memberUpdate/MemberUpdate';
 import Withdrawal from './pages/withdrawal/Withdrawal';
 import Mypage from './pages/mypage/Mypage';
+import InspectionMain from './pages/inspection/InspectionMain';
 import Inspection from './pages/inspection/Inspection';
+import InspectionResume from './pages/inspection/InspectionResume';
 import CompanyList from './pages/company/CompanyList';
 import Interview from './pages/Interview/Interview';
 import CreateResume from './pages/createresume/CreateResume';
@@ -18,6 +20,7 @@ import ChatbotMain from './pages/chatbot/ChatbotMain';
 import CompanyRegist from './pages/company/CompanyRegist';
 import WriteInfo from './pages/company/WriteInfo';
 import JoinFormCompany from './pages/join/JoinFormCompany';
+import CompanyUpdate from './pages/memberUpdate/CompanyUpdate';
 
 function App() { 
 
@@ -39,12 +42,14 @@ function App() {
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/chatbot" element={<ChatbotMain/>} />
           <Route path="/joinFormCompany" element={<JoinFormCompany/>} />
-
+          <Route path='/companyUpdate' element={<CompanyUpdate/>}/>
 
 
           <Route path='/companyDetails' element={<CompanyDetails />} />
           <Route path='/recommendation' element={<Recommendation />} />
-          <Route path='/inspection' element={<Inspection/>}/>
+          <Route path='/inspection' element={<InspectionMain/>}/>
+          <Route path='/inspection/modify' element={<Inspection/>}/>
+          <Route path='/inspection/myResume' element={<InspectionResume/>}/>
           <Route path='/companyList' element={<CompanyList />} />
           
           <Route path='/interview' element={<Interview/>}/>

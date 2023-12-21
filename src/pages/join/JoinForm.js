@@ -125,13 +125,7 @@ const JoinForm = () => {
           <span></span>
         </div>
 
-        {/* <div className={styles.inputContainer}>
-          <label htmlFor="age">나이</label>
-          <div className={styles.inputOnly}>
-            <input type="number" id="age" min={1} max={110} />
-          </div>
-          <span></span>
-        </div> */}
+      
 
         <div className={styles.inputContainer}>
           <label htmlFor="phoneNumber">전화번호</label>
@@ -142,49 +136,28 @@ const JoinForm = () => {
         </div>
 
         {/* <div className={styles.inputContainer}>
-          <label htmlFor="address">주소</label>
+          <label htmlFor="phoneNumber" >전화번호</label>
+          <div className={styles.inputWithButton}>
           <div className={styles.inputOnly}>
-            <input type="text" id="address" />
-          </div>
-          <span></span>
-        </div>
-
-        <div className={styles.inputContainer}>
-          <label htmlFor="score">점수</label>
-          <div className={styles.inputOnly}>
-            <input type="text" id="score" />
+          <input
+              type="number"
+              id="phoneNumber"
+              name="phoneNumber"
+              minLength={10}
+              maxLength={11}
+              onChange={handleChange} 
+              value={formData.phoneNumber}
+              required
+            />
+            </div>
+            <button className={styles.joinBtn}  type='button'>중복확인</button>
           </div>
           <span></span>
         </div> */}
 
-{/* 
-        <div className={styles.radioContainer}>
-          <label>성별</label>
-          <div className={styles.radioButtons}>
-            <div>
-              남성
-              <input type="radio" name="gender" value="male" />
-            </div>
-            <div>
-              여성
-              <input type="radio" name="gender" value="female" />
-            </div>
-          </div>
-        </div>
 
-        <div className={styles.radioContainer}>
-          <label>구직여부</label>
-          <div className={styles.radioButtons}>
-            <div>
-              구직중
-              <input type="radio" name="jobStatus" value="yes" />
-            </div>
-            <div>
-              휴식중
-              <input type="radio" name="jobStatus" value="no" />
-            </div>
-          </div>
-        </div> */}
+
+      
         <div className={styles.inputContainer}>
             <button className={styles.joinBtn} type="submit">회원가입</button>
           <span></span>
