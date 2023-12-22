@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface WorkTypeRepository extends JpaRepository<WorkType, Integer> {
 
-    List<WorkType> findByPosting_PostingCode(Integer integer);
+
+    List<WorkType> findByPostingPostingCode(Integer postingCode);
 }

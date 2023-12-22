@@ -15,12 +15,24 @@ import java.sql.Date;
 public class CompanyEntity {
 
     @Id
+    @Column(name = "company_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companyId;
+
+    @Column(name = "company")
+
     private String company;
-    private String companyType;
+
+    @Column(name = "employees_number")
     private int employeesNumber;
+
+    @Column(name = "company_type")
+    private String companyType;
+
+    @Column(name = "establishment_date")
     private Date establishmentDate;
+
+    @Column(name = "company_homepage")
     private String companyHomepage;
 
   /*  @OneToOne(cascade = CascadeType.REMOVE)

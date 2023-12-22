@@ -28,6 +28,8 @@ public class QPosting extends EntityPathBase<Posting> {
 
     public final StringPath content = createString("content");
 
+    public final StringPath education = createString("education");
+
     public final StringPath endDate = createString("endDate");
 
     public final StringPath location = createString("location");
