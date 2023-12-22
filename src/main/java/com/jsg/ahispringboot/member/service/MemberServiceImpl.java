@@ -42,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean phoneNumberDuplicationCheck(Long phoneNumber) {
+    public boolean phoneNumberDuplicationCheck(String phoneNumber) {
         MemberEntity member = memberRepositoryImpl.findMember(null,phoneNumber);
         if(member!=null){
             return false;

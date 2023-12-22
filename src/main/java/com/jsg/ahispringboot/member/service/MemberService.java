@@ -15,7 +15,7 @@ public interface MemberService {
 
     void findPwd(MemberDto memberDto);
 
-    boolean phoneNumberDuplicationCheck(Long phoneNumber);
+    boolean phoneNumberDuplicationCheck(String phoneNumber);
 
     void memberInfoUpdate(Authentication authentication,MemberDto memberDto);
 

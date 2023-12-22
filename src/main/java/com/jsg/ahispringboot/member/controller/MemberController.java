@@ -27,19 +27,20 @@ public class MemberController {
         return true;
     }
     @GetMapping("/phoneNumber_duplication_check")
-    public boolean phoneNumberDuplicationCheck(@RequestParam Long phoneNumber) {
+    public boolean phoneNumberDuplicationCheck(@RequestParam String phoneNumber) {
         boolean result = memberServiceImpl.phoneNumberDuplicationCheck(phoneNumber);
         return result;
     }
     @PostMapping("/signup")
     public String memberSignup(@RequestBody MemberDto memberDto) {
-        memberServiceImpl.signup(memberDto);
+        log.info("전번={}",memberDto.getPhoneNumber().toString());
+         memberServiceImpl.signup(memberDto);
         return "";
     }
 
     @PostMapping("/signupCompany")
     public String companySignup(@RequestBody CompanyDto companyDto) {
-
+        log.info("전번={}",companyDto.getPhoneNumber().toString());
         memberServiceImpl.companySignup(companyDto);
         return "";
     }
