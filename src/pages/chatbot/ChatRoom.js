@@ -14,54 +14,57 @@ const ChatRoom = () => {
     const [selectedPrompt, setSelectedPrompt] = useState(null);
     const [messageList, setMessageList] = useState([]); // 메시지 목록
     const dispatch = useDispatch();
-    const messageEndRef = useRef(null);
     const [chattingListHeight, setChattingListHeight] = useState('500px'); // chattingList의 초기 높이 설정
+    const scrollRef = useRef(null);
 
-    
     // ========================== 프롬프트 선택 ============================
-   
+
     const startChat = () => {
-        setShowChat(true); 
+        setShowChat(true);
     };
 
 
 
     // =========================== 채팅 메세지 =============================
 
+
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messageList]);
+    
+    
+    // useEffect(() => {
+    //     console.log("after ================> ",messageList);
+    // }, [messageList]);
+
+
     const handleMessageChange = (e) => {
-        setMessage(e.target.value); 
+        setMessage(e.target.value);
     }
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); 
-            sendMessage(); 
+            e.preventDefault();
+            sendMessage();
         }
     }
 
 
-    // 스크롤 항상 아래로 이동
-    const scrollToBottom = () => {
-        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    useEffect(() => {
-        scrollToBottom();
-        setChattingListHeight(`${messageList.length * 20}px`); // 예시로 높이를 간단하게 계산
-    }, [messageList]);
-
 
 
     const sendMessage = () => {
-        dispatch(callChatbot({message: message}, (result) => {
+        dispatch(callChatbot({ message: message }, (result) => {
             const chatbotResponse = result.gptMessage;
             setMessage('');
+            console.log("before ===============> ",messageList)
             setMessageList([
                 ...messageList,
                 { sender: '사용자', content: message },
                 { sender: '챗봇', content: chatbotResponse },
             ]);
-
         }));
     }
 
@@ -81,7 +84,7 @@ const ChatRoom = () => {
                                     <div className={styles.prompt}>
                                         {/* 아이콘 */}
                                         <div className={styles.bubbleIcon}>
-                                            <img src={bubbleIcon} alt='bubbleIcon' style={{width: "40px", height: "45px"}}/>
+                                            <img src={bubbleIcon} alt='bubbleIcon' style={{ width: "40px", height: "45px" }} />
                                         </div>
                                         <div className={styles.promptTitle}>
                                             경력 유무에 따라 질문할 수 있어요
@@ -102,37 +105,38 @@ const ChatRoom = () => {
                                     </div>
                                 </div>
                             </div>
-                            )}
+                        )}
                         {/* 사용자가 프롬프트 선택 후 채팅을 진행할 경우 */}
                         {showChat && (
                             <div className={styles.chattingScrollContainer}>
-                                <div className={styles.chattingList}>
-                                {messageList.map((msg, index) => (
-                                    <div key={index} className={msg.sender === '사용자' ? styles.userMessage : styles.chatbotMessage}>
-                                    <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
-                                        {msg.content}
-                                    </p>
-                                    </div>
-                                ))}
+                                <div className={styles.chattingList} ref={scrollRef}>
+                                    {messageList.map((msg, index) => (
+                                        <div key={index} className={msg.sender === 
+                                        '사용자' ? styles.userMessage : styles.chatbotMessage}>
+                                            <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
+                                                {msg.content}
+                                            </p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         )}
 
-                        
+
 
                         {/* 메세지 입력창 */}
                         <div className={styles.inputMessageArea}>
                             <div className={styles.inputMessageBar}>
                                 <div className={styles.inputMessage}>
-                                    <textarea 
-                                        rows={1} 
+                                    <textarea
+                                        rows={1}
                                         placeholder='챗봇에게 이력서와 관련된 질문을 해보세요.'
                                         value={message}
                                         onChange={handleMessageChange}
                                         onKeyDown={handleKeyDown}
                                     ></textarea>
                                     <button className={styles.messageSendBtn} onClick={sendMessage}>
-                                        <img src={sendIcon} alt='sendIcon' style={{width: "30px", height: "35px"}}/>
+                                        <img src={sendIcon} alt='sendIcon' style={{ width: "30px", height: "35px" }} />
                                     </button>
                                 </div>
                             </div>
