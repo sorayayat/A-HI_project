@@ -23,6 +23,7 @@ import CompanyUpdate from './pages/memberUpdate/CompanyUpdate';
 import InspectionDetail from './pages/inspection/InspectionDetail';
 import InspectionMain from './pages/inspection/InspectionMain';
 
+import InterviewSpring from './pages/InterviewSpring/InterviewSpring';
 function App() { 
 
 
@@ -58,7 +59,7 @@ function App() {
           <Route path='/createResume' element={<CreateResume/>}/>
           <Route path='/companyList/companyRegist' element={<CompanyRegist/>}/>
           <Route path='/companyList/companyRegist/writeInfo' element={<WriteInfo/>}/>
-          
+          <Route path='/interviewSpring' element={<InterviewSpring/>}/>
           
 
         </Route>       

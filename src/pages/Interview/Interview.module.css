@@ -1,8 +1,3 @@
-/* Interview.module.css */
-
-.parent {
-    text-align: center;
-}
 
 /* General Styles */
 .container {
@@ -16,14 +11,14 @@
 .header {
     font-size: 2em;
     color: #3674EA;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Increased spacing */
     text-align: center;
 }
 
 .shoulder {
     font-size: 1em;
     color: black;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Increased spacing */
     text-align: center;
 }
 
@@ -31,8 +26,8 @@
 .searchBar {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
     align-items: center;
+    margin-bottom: 20px; /* Increased spacing */
 }
 
 .searchBox {
@@ -43,7 +38,7 @@
 }
 
 /* Button Styles */
-.blueButton {
+.blueButton, .actionButton {
     background-color: #3674EA;
     color: white;
     padding: 10px 20px;
@@ -51,71 +46,48 @@
     border-radius: 35px;
     cursor: pointer;
     font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 20px; /* Added margin-bottom */
 }
 
-.blueButton:hover {
-    background-color: #0056b3;
+
+.questionBoxWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align */
+    margin-bottom: 20px; /* Increased spacing */
 }
 
-.actionButton {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 0.8em;
-    margin: 10px;
+.questionBox {
+    width: 60%; /* Adjusted width */
+    padding: 15px;
+    border: 1px solid #dbe6fc;
+    background-color: #dbe6fc;
+    border-radius: 8px;
+    margin-bottom: 20px; /* Increased spacing */
 }
 
-.actionButton:hover {
-    background-color: #1e7e34;
+.answerBoxs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%; /* Adjusted width */
 }
 
-.question_box {
-
-        display: block;
-        position: relative;
-        width: 500px;
-        height: auto;
-        padding: 15px;
-        border: 1px solid #dbe6fc;
-        background-color: #dbe6fc;
-        border-radius: 8px;
-        box-sizing: content-box;
-               
-}
-
-.question_Text {
+.answerBoxs input {
+    width: 100%;
+    height: 50px;
+    padding: 5px 10px;
     font-size: 18px;
-    color: black;
-    white-space: pre-line;
-    text-align: center;
-}
-
-.answer_box{
-    display: block;
-        position: relative;
-        width: 500px;
-        height: auto;
-        padding: 15px;
-        border: 1px solid white;
-        background-color: white;
-        border-radius: 8px;
-        box-sizing: content-box;
-}
-
-
-/* Input and Label Style */
-.inputLabel {
-    display: block;
-    margin: 10px 0;
-    color: #666;
-}
-
-.inputField {
-    width: 60%;
-    padding: 8px;
-    border-radius: 5px;
     border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+/* Feedback Style */
+.feedback {
+    font-size: 1em;
+    color: #666;
+    text-align: center;
+    margin-top: 20px;
 }

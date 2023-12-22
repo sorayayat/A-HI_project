@@ -4,7 +4,9 @@ import { NavLink  } from 'react-router-dom';
 import { useSelector,useDispatch  } from 'react-redux';
 import styles from '../commons/Header.module.css';
 import {logout} from '../../pages/login/authActions';
+import { useNavigate } from 'react-router-dom';
 const Header = () => {
+    const navigate = useNavigate();
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
     const dispatch = useDispatch();
     const handleLogout = async () => {
@@ -13,6 +15,8 @@ const Header = () => {
             if (response.ok) {
                 dispatch(logout());
                 localStorage.setItem('isLoggedIn', 'false');
+                localStorage.removeItem('userInfo'); 
+                navigate('/');
             } else {
             }
         } catch (error) {

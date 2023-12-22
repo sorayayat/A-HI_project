@@ -1,0 +1,121 @@
+/* Interview.module.css */
+
+.parent {
+    text-align: center;
+}
+
+/* General Styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Header Style */
+.header {
+    font-size: 2em;
+    color: #3674EA;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.shoulder {
+    font-size: 1em;
+    color: black;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Search Bar Style */
+.searchBar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.searchBox {
+    width: 50%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Button Styles */
+.blueButton {
+    background-color: #3674EA;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.blueButton:hover {
+    background-color: #0056b3;
+}
+
+.actionButton {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.8em;
+    margin: 10px;
+}
+
+.actionButton:hover {
+    background-color: #1e7e34;
+}
+
+.question_box {
+
+        display: block;
+        position: relative;
+        width: 500px;
+        height: auto;
+        padding: 15px;
+        border: 1px solid #dbe6fc;
+        background-color: #dbe6fc;
+        border-radius: 8px;
+        box-sizing: content-box;
+               
+}
+
+.question_Text {
+    font-size: 18px;
+    color: black;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.answer_box{
+    display: block;
+        position: relative;
+        width: 500px;
+        height: auto;
+        padding: 15px;
+        border: 1px solid white;
+        background-color: white;
+        border-radius: 8px;
+        box-sizing: content-box;
+}
+
+
+/* Input and Label Style */
+.inputLabel {
+    display: block;
+    margin: 10px 0;
+    color: #666;
+}
+
+.inputField {
+    width: 60%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
