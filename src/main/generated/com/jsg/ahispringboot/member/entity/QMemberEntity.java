@@ -32,7 +32,7 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public final StringPath password = createString("password");
 
-    public final NumberPath<Long> phoneNumber = createNumber("phoneNumber", Long.class);
+    public final StringPath phoneNumber = createString("phoneNumber");
 
     public final EnumPath<com.jsg.ahispringboot.member.memberEnum.MemberRole> role = createEnum("role", com.jsg.ahispringboot.member.memberEnum.MemberRole.class);
 
