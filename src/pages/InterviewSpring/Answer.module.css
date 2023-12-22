@@ -1,0 +1,53 @@
+.answerContianer{
+    width: 100%;
+}
+.answerTitle {
+    font-size: 1.5em;
+    color: #3674EA;
+    margin-bottom: 15px;
+}
+
+.inputAnswer {
+    width: 80%;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.feedbackButton {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+.feedbackButton:hover {
+    background-color: #1e7e34;
+}
+
+
+
+.feedbackContainer {
+    text-align: center;
+}
+
+.inputAnswer {
+    width: 80%;
+    padding: 8px;
+    margin: 5px auto; /* 좌우 마진을 auto로 설정 */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    display: block; /* 블록 레벨 요소로 만들어 수평 중앙 정렬을 가능하게 함 */
+}
+
+.feedbackContainer p {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%; /* 필요에 따라 조정 */
+}
