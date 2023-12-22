@@ -28,14 +28,15 @@ const LoginForm = () => {
 
         axios.post(`/login`,formData.toString())
             .then(response => {
-              console.log(response.data.message);
-                if(response.data.message==='success'){
+
+              console.log(response.data.memberEntity);
+                if(response.data.memberEntity.password==='N'){
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('userInfo', JSON.stringify(response.data)); 
+                    alert("dsad");
                     dispatch(login());
                     navigate('/');
                 }
-                console.log(response.data);
             })
             .catch(error => {
                 if (error.response && error.response.status === 401) {
