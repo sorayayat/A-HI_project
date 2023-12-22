@@ -1,5 +1,5 @@
 import { get } from "react-scroll/modules/mixins/scroller";
-import { getResume, postAsk } from "../modules/inspectionModule";
+import { getResume, getResumelist, postAsk } from "../modules/inspectionModule";
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
@@ -26,12 +26,24 @@ export const callInspectionAskAPI = (form) =>{
 }
 
 export const callInspectionResumeAPI = () =>{
-    const requestURL = `${SB_PRE_URL}/getResume`;
+    const requestURL = `${SB_PRE_URL}/getResumeList`;
     return async(dispath,getState) =>{
         const result = await fetch(requestURL).then(resp => resp.json());
         if(result.status === 200)
         {
-            dispath(getResume(result));
+            dispath(getResumelist(result));
         }
     }
 }
+
+// export const callResumeDetailAPI = (resumeCode) =>{
+//     const requestURL = `${SB_PRE_URL}/getResume/${resumeCode}`;
+//     return async(dispath,getState) =>{
+//         console.log(resumeCode);
+//         const result = await fetch(requestURL).then(resp => resp.json());
+//         if(result.status === 200)
+//         {
+//             console.log("h2h2")
+//         }
+//     }
+// }
