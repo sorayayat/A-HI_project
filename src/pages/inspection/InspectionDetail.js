@@ -10,9 +10,10 @@ function InspectionDetail()
     const params = useParams();
 
 
-    useEffect(() =>{
-        dispach(callResumeDetailAPI(params.resumeCode);
-    },[])
+    // useEffect(() =>{
+    //     dispach(callResumeDetailAPI(params.resumeCode));
+
+    // },[])
 
     return(
         <div>

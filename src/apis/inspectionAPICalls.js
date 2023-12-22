@@ -36,14 +36,14 @@ export const callInspectionResumeAPI = () =>{
     }
 }
 
-export const callResumeDetailAPI = (resumeCode) =>{
-    const requestURL = `${SB_PRE_URL}/getResume/${resumeCode}`;
-    return async(dispath,getState) =>{
-        console.log(resumeCode);
-        const result = await fetch(requestURL).then(resp => resp.json());
-        if(result.status === 200)
-        {
-            console.log("h2h2")
-        }
-    }
-}
+// export const callResumeDetailAPI = (resumeCode) =>{
+//     const requestURL = `${SB_PRE_URL}/getResume/${resumeCode}`;
+//     return async(dispath,getState) =>{
+//         console.log(resumeCode);
+//         const result = await fetch(requestURL).then(resp => resp.json());
+//         if(result.status === 200)
+//         {
+//             console.log("h2h2")
+//         }
+//     }
+// }
