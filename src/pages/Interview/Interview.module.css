@@ -1,0 +1,93 @@
+
+/* General Styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Header Style */
+.header {
+    font-size: 2em;
+    color: #3674EA;
+    margin-bottom: 20px; /* Increased spacing */
+    text-align: center;
+}
+
+.shoulder {
+    font-size: 1em;
+    color: black;
+    margin-bottom: 20px; /* Increased spacing */
+    text-align: center;
+}
+
+/* Search Bar Style */
+.searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; /* Increased spacing */
+}
+
+.searchBox {
+    width: 50%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Button Styles */
+.blueButton, .actionButton {
+    background-color: #3674EA;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 20px; /* Added margin-bottom */
+}
+
+
+.questionBoxWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align */
+    margin-bottom: 20px; /* Increased spacing */
+}
+
+.questionBox {
+    width: 60%; /* Adjusted width */
+    padding: 15px;
+    border: 1px solid #dbe6fc;
+    background-color: #dbe6fc;
+    border-radius: 8px;
+    margin-bottom: 20px; /* Increased spacing */
+}
+
+.answerBoxs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%; /* Adjusted width */
+}
+
+.answerBoxs input {
+    width: 100%;
+    height: 50px;
+    padding: 5px 10px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+/* Feedback Style */
+.feedback {
+    font-size: 1em;
+    color: #666;
+    text-align: center;
+    margin-top: 20px;
+}

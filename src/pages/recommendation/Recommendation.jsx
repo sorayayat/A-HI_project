@@ -1,6 +1,7 @@
 import style from './Recommendation.module.css'
 import { useState } from 'react'
-import logo from './images/images.png'
+import logo from './images/KakaoTalk_20231218_121636945 (2).jpg'
+import {Link} from "react-router-dom"
 
 
 
@@ -64,7 +65,7 @@ function Recommendation() {
 
                 <h1 className={style.noResume}>이력서가 없으시다면?</h1>
 
-                <button className={style.resumeButton}>이력서 작성 바로가기</button>
+                <Link to="/createResume" className={style.resumeButton}>이력서 작성 바로가기</Link>
 
                 <h2 className={style.noResume}>AI로 이력서를 작성 해보세요!</h2>
             </div>

@@ -1,0 +1,141 @@
+.companyRegistBody {
+    /* background-color: aliceblue; */
+
+}
+
+
+
+
+.title {
+    /* margin-left: 20px; */
+    padding: 20px;
+}
+
+.detailsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    margin-left: 250px;
+    border: 1px solid rgba(0.1, 0.1, 0.1, 0.1);
+    height: auto;
+    background-color: white;
+    border-radius: 10px;
+    
+}
+
+#job {
+
+    margin-left: 20px;
+    margin-top: 5px;
+    width: 500px;
+}
+
+.careerCheckBox{
+    display: flex;
+    margin-left: 20px;
+    gap: 10px;
+}
+
+.addressButton{
+    margin-left: 20px;
+    width: 100px;
+    
+}
+
+.companyAddress{
+    display: flex;
+    flex-direction: column;
+}
+
+.detailAddress{
+    margin: 20px 20px;
+    border-radius: 5px;
+    border-color: 1px gray;
+    
+}
+
+.skillCheckBox{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.conditionCheckbox{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    width: 700px;
+}
+
+.nextButton {
+    margin-left: 1200px;
+    margin-bottom: 50px;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    /* text-decoration: none; */
+    cursor: pointer;
+    border: 2px solid #3498db;
+    background-color: #fff;
+    color: #3498db;
+    border-radius: 30px;
+    transition: background-color 0.5s, color 0.5s;
+    width: 100px;
+}
+
+.nextButton:hover {
+
+    background-color: #3498db;
+    color: #fff;
+
+}
+
+.postingTitle{
+    padding: 20px;
+}
+
+.postingTitleText {
+    width: 90%;
+    margin-left: 20px;
+    height: 40px;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.calendarContainer{
+    display: flex;
+    justify-content: space-between;
+}
+
+.endDate{
+    padding: 20px;
+}
+
+.customCalendar {
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+    /* 기타 필요한 스타일 속성을 추가할 수 있습니다. */
+  }
+
+.calendarValue{
+    height: 50px;
+    margin: auto;
+    border-radius: 10px;
+    border: 1px solid rgba(0.1, 0.1, 0.1, 0.1);
+    padding: 20px;
+    width: 110px;
+    height: 40px;
+    box-shadow: 2px 2px 5px 2px rgb(180, 179, 179);
+}
+
+
+

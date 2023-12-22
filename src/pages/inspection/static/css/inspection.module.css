@@ -1,0 +1,138 @@
+.background{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 20px;
+    background-color: rgba(208, 224, 255, 0.3);
+}
+
+.inspectionBackGround1
+{
+    width: 38%;
+    height: 100%;
+    margin-left: 50px;
+    margin-top: 40px;
+    background-color: rgb(208, 224, 255);
+    border: 1px solid rgba(60, 16, 147, 0.5);
+    margin-bottom: 50px;
+}
+
+.inspectionBackGround2
+{
+
+    width: 38%;
+    height: 100%;
+    margin-left: 50px;
+    margin-top: 40px;
+    background-color: rgb(208, 224, 255);
+}
+
+.textArae{
+    flex-direction: column;
+    margin-left: 23px;
+    margin-bottom: 25px;
+}
+
+.mainGuide{
+    margin-bottom: 0px;
+}
+
+.subGuide{
+    color: #757575;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    line-height: normal;
+    margin-left: 25px;
+}
+
+.introductionTitle{
+    width: 500px;
+    height: 50px;
+    font-size: 20px;
+    font-style: normal;
+    box-shadow:#757575;
+    margin-left: 25px;
+    border: 1px solid black;
+}
+
+.keyWord{
+    width: 500px;
+    height: 50px;
+    font-size: 20px;
+    font-style: normal;
+    box-shadow:#757575;
+    margin-left: 25px;
+    border: 1px solid black;
+}
+
+.content{
+    width: 500px;
+    height: 300px;
+    font-size: 15px;
+    font-style: normal;
+    box-shadow:#757575;
+    margin-left: 25px;
+    border: 1px solid black;
+    resize: none;
+}
+
+.checkBtn{
+    margin-left: 235px;
+    margin-bottom: 50px;
+    width: 100px;
+    height: 50px;
+}
+
+.line{
+    border: 1px solid black;
+    margin-left: 20px;
+    margin-right: 20px;
+    transform: rotate(180deg);
+}
+
+.resultTextArea{
+    width: 95%;
+    height: 650px;
+    margin-left: 14px;
+    resize: none;
+    border: none;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.resultBtn{
+    margin-left: 175px;
+}
+
+.saveBtn{
+    width: 100px;
+    height: 50px;
+    background-color: rgba(207, 231, 88, 0.7);
+    border-radius: 8px;
+    margin-right: 20px;
+    margin-bottom: 25px;
+}
+
+.saveBtn:hover{
+    outline-color: transparent;
+    outline-style:solid;
+    background-color: rgba(38, 57, 100, 0.7);
+    border: 3px solid rgb(207, 221, 228);
+}
+
+.cancellBtn{
+    width: 100px;
+    height: 50px;
+    background-color: rgba(207, 231, 88, 0.7);
+    border-radius: 8px;
+    margin-left: 20px;
+    margin-bottom: 25px;
+}
+
+.cancellBtn:hover{
+    outline-color: transparent;
+    outline-style:solid;
+    background-color: rgba(38, 57, 100, 0.7);
+    border: 3px solid rgb(207, 221, 228);
+}

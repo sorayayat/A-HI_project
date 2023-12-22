@@ -1,16 +1,16 @@
 import { combineReducers } from "redux";
-import persistReducer from "redux-persist/es/persistReducer";
-import storage from "redux-persist/lib/storage";
+import inspectionReducer from "./inspectionModule";
+import interviewReduer from "./interviewModule";
+import authReducer from "../pages/login/authReducer";
+import companyReducer from "./companyModules";
 
 const rootReducer = combineReducers({
-
-    
+    inspectionReducer,
+    interviewReduer,
+    auth: authReducer,
+    companyReducer,
 })
 
-const persistConfig = {
-    key: "root",
-    storage: storage
-};
 
-export default persistReducer(persistConfig, rootReducer)
+export default rootReducer
 

@@ -1,12 +1,12 @@
 .anmTopMargin {
-    height: 50px;
+    height: 65px;
 }
 
 .anmTitle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 35px;
+    margin-bottom: 8px;
 }
 
 .anmTitle h1 {
@@ -25,6 +25,7 @@
     border: 2px solid;
     border-radius: 5px;
     border-color: #cccccc;
+    cursor: pointer;
 }
 
 .afterBtn {
@@ -32,6 +33,14 @@
     border: 2px solid;
     border-radius: 5px;
     border-color: #cccccc;
+    cursor: pointer;
+}
+
+.beforeBtn:disabled,
+.afterBtn:disabled {
+    color: gray;
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 .anmList {
@@ -47,8 +56,7 @@
     height: 300px;
     display: flex;
     column-gap: 40px;
-    /* opacity: 1;
-    transform: translate3d(0px, 0px, 0px); */
+    
 }
 
 .slick {
@@ -76,4 +84,24 @@
     background-position: 50%;
     border-radius: 12px;
     text-decoration: none;
+}
+
+.jobThumbnail {
+    position: relative;
+    margin-bottom: 12px;
+    overflow: hidden;
+    padding-bottom: 67%;
+    background-size: cover;
+    background-position: 50%;
+    border-radius: 12px;
+}
+
+.jobTitle {
+    text-decoration: none;
+}
+
+a {
+    font-family: "Pretendard";
+    text-decoration: none;
+    color: black;
 }
