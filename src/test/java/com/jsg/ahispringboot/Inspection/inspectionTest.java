@@ -106,7 +106,7 @@ public class inspectionTest {
     @DisplayName("조인 테스트")
     public void 잘가져오나() {
         Long resumeCode = 1L;
-        Long userid = 1L;
+        Long userid = 3L;
         Resume resume = inspectionRepository.findResumeCode(resumeCode, userid);
         ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
         System.out.println("resumeDTO : " + resumeDTO);

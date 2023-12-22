@@ -22,11 +22,10 @@ import static com.jsg.ahispringboot.member.entity.QMemberEntity.memberEntity;
 public class MemberRepositoryImpl implements MemberRepository {
 
     private final EntityManager em;
-    private  final JPAQueryFactory query;
+    private final JPAQueryFactory query;
 
-
-    public MemberRepositoryImpl(EntityManager em){
-        this.em=em;
+    public MemberRepositoryImpl(EntityManager em) {
+        this.em = em;
         this.query = new JPAQueryFactory(em);
     }
 
@@ -36,12 +35,12 @@ public class MemberRepositoryImpl implements MemberRepository {
         em.persist(memberEntity);
     }
 
-    @Transactional(readOnly = true)   //이걸 옵셔널로 리턴주면 유니크가 아닌걸로 검색했을경우 사용못하고 값이 여러개니깐    list 로 주면 null 처리만 해주면 되고
-    public MemberEntity findMember(String memberEmail,Long phoneNumber) {
-       List<MemberEntity> memberEntities =query
+    @Transactional(readOnly = true) // 이걸 옵셔널로 리턴주면 유니크가 아닌걸로 검색했을경우 사용못하고 값이 여러개니깐 list 로 주면 null 처리만 해주면 되고
+    public MemberEntity findMember(String memberEmail, Long phoneNumber) {
+        List<MemberEntity> memberEntities = query
                 .select(memberEntity)
                 .from(memberEntity)
-                .where(memberEmail(memberEmail),phoneNumber(phoneNumber))
+                .where(memberEmail(memberEmail), phoneNumber(phoneNumber))
                 .fetch();
 
         if (memberEntities.isEmpty()) {
@@ -49,10 +48,8 @@ public class MemberRepositoryImpl implements MemberRepository {
             memberEntities.add(memberEntity1);
         }
 
-
         return memberEntities.get(0);
     }
-
 
     private BooleanExpression memberEmail(String email) {
         if (StringUtils.hasText(email)) {
@@ -61,18 +58,12 @@ public class MemberRepositoryImpl implements MemberRepository {
         return null;
     }
 
-
     private BooleanExpression phoneNumber(Long phoneNumber) {
         if (phoneNumber != null && phoneNumber != 0) {
             return memberEntity.phoneNumber.eq(phoneNumber);
         }
         return null;
     }
-
-
-
-
-
 
     @Transactional
     @Override
@@ -86,6 +77,7 @@ public class MemberRepositoryImpl implements MemberRepository {
         MemberEntity memberEntity1 = em.find(MemberEntity.class, member.getId());
         memberEntity1.setPassword(member.getPassword());
     }
+
     @Transactional
     @Override
     public UserDetails updateMember(MemberDto memberDto) {
@@ -94,6 +86,7 @@ public class MemberRepositoryImpl implements MemberRepository {
         memberEntity1.setPhoneNumber(memberDto.getPhoneNumber());
         return new CustomUserDetail(memberEntity1);
     }
+
     @Transactional
     @Override
     public UserDetails updateCompany(CompanyDto companyDto) {
@@ -105,6 +98,6 @@ public class MemberRepositoryImpl implements MemberRepository {
         memberEntity1.getCompanyEntity().setCompanyHomepage(companyDto.getCompanyHomepage());
         memberEntity1.getCompanyEntity().setEmployeesNumber(companyDto.getEmployeesNumber());
         memberEntity1.getCompanyEntity().setEstablishmentDate(companyDto.getEstablishmentDate());
-        return  new CustomUserDetail(memberEntity1);
+        return new CustomUserDetail(memberEntity1);
     }
 }

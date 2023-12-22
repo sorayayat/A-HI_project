@@ -16,6 +16,6 @@ public interface InspectionRepository extends JpaRepository<Resume, Long> {
     public List<Resume> FindById(Long memberId);
 
     @Query(value = "select r from Resume r join member m on r.member.id = m.id where r.resumeCode = :resumeCode and m.id = :memberId ")
-    public Resume findResumeCode(@Param("memberId") Long memberId, @Param("resumeCode") Long resumeCode);
+    public Resume findResumeCode(@Param("resumeCode") Long resumeCode, @Param("memberId") Long memberId);
 
 }

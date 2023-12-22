@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
@@ -42,5 +41,4 @@ public class Resume {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private MemberEntity member;
-    // private Long memberId;
 }
