@@ -1,15 +1,21 @@
 package com.jsg.ahispringboot.inspection.entity;
 
+import com.jsg.ahispringboot.member.entity.MemberEntity;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -33,6 +39,8 @@ public class Resume {
     @Column(name = "modify_date")
     private String modifyDate;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "member_id")
+    private MemberEntity member;
+    // private Long memberId;
 }
