@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface MemberRepository {
 
-    MemberEntity findMember(String memberEmail,Long phoneNumber);
+    MemberEntity findMember(String memberEmail,String phoneNumber);
 
     void signup(MemberEntity memberEntity);
 

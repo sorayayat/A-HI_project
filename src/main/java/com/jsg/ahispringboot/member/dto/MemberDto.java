@@ -19,7 +19,6 @@ public class MemberDto {
     private String email;
     private String name;
     private String password;
-    private Long phoneNumber;
-
+    private String phoneNumber;
     private String check;
 }

@@ -41,7 +41,7 @@ public class CustomUserDetail implements UserDetails {
         return memberEntity.getName();
     }
 
-    public Long getPhoneNumber(){
+    public String getPhoneNumber(){
         return memberEntity.getPhoneNumber();
     }
 

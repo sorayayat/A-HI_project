@@ -16,9 +16,10 @@ public class MemberEntity {
     private Long id;
 
     private String email;
+    @Column(name = "member_name")
     private String name;
     private String password;
-    private Long phoneNumber;
+    private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
