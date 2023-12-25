@@ -9,3 +9,4 @@ def getAPIkey():
 
 def getModel():
     return env('MODEL')
+
