@@ -37,7 +37,8 @@ public class InspectionController {
 
     @GetMapping("/getResume/{resumeCode}")
     public ResponseEntity<ResponseDTO> selectResume(@PathVariable("resumeCode") Long resumeCode) {
-        inspectionsService.selcetResumeDetall(resumeCode);
+        Long userCode = 1L;
+        inspectionsService.selcetResumeDetall(resumeCode , userCode);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공 bro", null));
     }
 

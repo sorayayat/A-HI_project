@@ -43,8 +43,9 @@ public class InspectionService {
 
     }
 
-    public void selcetResumeDetall(Long code) {
-
+    public void selcetResumeDetall(Long resumeCode , Long userCode) {
+        Resume resume = inspectionRepositroy.findResumeCode(resumeCode , userCode);
+        
     }
 
 }

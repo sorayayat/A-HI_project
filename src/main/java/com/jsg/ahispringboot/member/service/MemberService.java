@@ -19,7 +19,7 @@ public interface MemberService {
 
     void memberInfoUpdate(Authentication authentication,MemberDto memberDto);
 
-    void companyInfoUpdate(CompanyDto companyDto, Authentication authentication);
+    // void companyInfoUpdate(CompanyDto companyDto, Authentication authentication);
 
     void withdrawal(MemberDto memberDto);
 }

@@ -13,7 +13,7 @@ public interface MemberTransMapper {
     MemberTransMapper INSTANCE = Mappers.getMapper(MemberTransMapper.class);
 
     @Mapping(target = "role", ignore = true)
-    @Mapping(target = "companyEntity", ignore = true)
+    // @Mapping(target = "companyEntity", ignore = true)
     MemberEntity dtoToEntity(MemberDto memberDto);
 
     @Mapping(target = "check", ignore = true)
@@ -23,7 +23,7 @@ public interface MemberTransMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
-    @Mapping(target = "companyEntity", ignore = true)
+    // @Mapping(target = "companyEntity", ignore = true)
     MemberEntity cDtoToMemberEntity(CompanyDto companyDto);
 
 }

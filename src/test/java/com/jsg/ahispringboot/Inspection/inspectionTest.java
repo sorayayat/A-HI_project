@@ -1,6 +1,9 @@
 package com.jsg.ahispringboot.Inspection;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -12,9 +15,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
 import com.jsg.ahispringboot.inspection.entity.Resume;
@@ -106,10 +117,50 @@ public class inspectionTest {
     @DisplayName("조인 테스트")
     public void 잘가져오나() {
         Long resumeCode = 1L;
-        Long userid = 3L;
+        Long userid = 1L;
         Resume resume = inspectionRepository.findResumeCode(resumeCode, userid);
         ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
         System.out.println("resumeDTO : " + resumeDTO);
+    }
+
+    @Value("${fastapi.endpoint}")
+    private String endPoint;
+
+    @Test
+    @DisplayName("통신 테스트")
+    public void fastAPI_통신테스트(){
+        RestTemplate restTemplate = new RestTemplate();
+        Long resumeCode = 1L;
+        Long userid = 1L;
+        Resume resume = inspectionRepository.findResumeCode(resumeCode, userid);
+        ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
+        Path filePath = Paths.get("src/main/resources/static/resume/test1/test1 낭만넘치는 자기소개서.pdf");
+        try{
+            byte[] padData = Files.readAllBytes(filePath);
+            ByteArrayResource resource = new ByteArrayResource(padData){
+                @Override
+                public String getFilename() {
+                    String[] spits = resumeDTO.getResumePath().split("/");
+                    System.out.println(spits);
+                    String exe = spits[spits.length - 1];
+                    String title = exe.replace(".pdf", "");
+                    return title;
+                }
+            };
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            MultiValueMap<String , Object> body = new LinkedMultiValueMap<>();
+            body.add("file", resource);
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+            restTemplate.postForObject(endPoint+"/inspection/ReadResume", requestEntity, Void.class);
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
     }
 
 }

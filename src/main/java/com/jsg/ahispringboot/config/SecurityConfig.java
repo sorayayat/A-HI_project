@@ -72,7 +72,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                                     companyEntity.setEmployeesNumber(0);
                                     companyEntity.setCompanyType("no");
                                     companyEntity.setCompany("no");
-                                    userDetails.getMemberEntity().setCompanyEntity(companyEntity);
+                                    // userDetails.getMemberEntity().setCompanyEntity(companyEntity);
                                 }
                                 userDetails.getMemberEntity().setPassword("N");
 //
