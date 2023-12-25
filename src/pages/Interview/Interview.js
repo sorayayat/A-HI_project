@@ -18,7 +18,31 @@ const Interview = () => {
     const [answer, setAnswer] = useState('');
     const [AIanswer, setAIanswer] = useState('');
     const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(false);
 
+    // 토글 키 상태 관리
+    const [Toggled, setToggled] = useState(false);
+    const toggle = () => {
+        setToggled(!Toggled);
+    };
+
+    // 로딩 중을 표시해줌
+    const handleSearchAnnouncement = () => {
+        setIsLoading(true); // 로딩 시작
+        dispatch(callInterview({ searchQuery: searchQuery }, (result) => {
+            setquestion(result.question);
+            setIsLoading(false); // 로딩 종료
+        }));
+    };
+    
+    const handleSendAnswer = async () => {
+        setIsLoading(true); // 로딩 시작
+        dispatch(callInterviewAnswer({ answer: answer }, (sandresult) => {
+            setAIanswer(sandresult.AIanswer);
+            setIsLoading(false); // 로딩 종료
+        }));
+    };
+    
 
     // 가져온 json 문자열을 한줄 씩 자른다.
     const Lines = question.split('\n').map((line, index) => (
@@ -26,18 +50,19 @@ const Interview = () => {
     ));
 
 
-    const handleSearchAnnouncement = () => {
-        dispatch(callInterview({ searchQuery: searchQuery }, (result) => {
-            setquestion(result.question); // 상태 업데이트 함수 이름 수정
-        }));
-    }
+    // const handleSearchAnnouncement = () => {
+    //     dispatch(callInterview({ searchQuery: searchQuery }, (result) => {
+    //         setquestion(result.question); // 상태 업데이트 함수 이름 수정
+    //     }));
+    // }
 
-    const handleSendAnswer = async () => {
+    // const handleSendAnswer = async () => {
 
-        dispatch(callInterview({ answer: answer }, (sandresult) => {
-            setAIanswer(sandresult.AIanswer);
-        }));
-    }
+    //     dispatch(callInterview({ answer: answer }, (sandresult) => {
+    //         setAIanswer(sandresult.AIanswer);
+    //     }));
+    // }
+
 
     // 화면 작업은 return 내부에 작성한다.
     return (
@@ -67,22 +92,37 @@ const Interview = () => {
 
             {/* 질문창과 답변 창을 중앙으로 정렬 */}
             <div className={style.questionBoxWrapper}>
+                {question && (
+                    <div className={style.questionBox}>
+                        {Lines}
+                    </div>
+                )}
+                {/* 로딩 상태를 보여준다 */}
+                {isLoading &&
+                    <div className={style.lodingIndicator}>
+                        <div className={style.spinner}></div>
+                        <div className={style.load}>질문을 생성하고 있습니다</div>
+                    </div>
+                }
+                <div className={style.toggleBox}>
+                    <button className={style.answerblueButton} onClick={toggle}>
+                        {Toggled ? '닫기' : '답변'}
+                    </button>
+                    {Toggled && <div>
+                        <div className={style.answerBoxs}>
+                            <input type="text"
+                                value={answer}
+                                onChange={(e) => setAnswer(e.target.value)}
+                                autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
+                            <button className={style.actionButton} onClick={handleSendAnswer}>답변 하기</button>
 
-                <div className={style.questionBox}>
-                    {Lines}
+                        </div>
+                    </div>}
                 </div>
-
-                <div className={style.answerBoxs}>
-                    <input type="text"
-                        value={answer}
-                        onChange={(e) => setAnswer(e.target.value)}
-                        autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
-                    <button className={style.actionButton} onClick={handleSendAnswer}>답변 하기</button>
-                   
-                </div>
+                {AIanswer && (
                     <div className={style.questionBox}>
                         {AIanswer && <p>AI 피드백: {AIanswer}</p>}
-                    </div>
+                    </div>)}
             </div>
 
 
