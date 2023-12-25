@@ -8,16 +8,32 @@ import {Answer,Feedback} from './Answer';
 
 
 const InterviewSpring = () => {
-    const [answer,setAnswer] = useState('');
+    const [answer,setAnswer] = useState({
+        question1:'',
+        question2:'',
+        question3:'',
+        question4:'',
+        question5:'',
+        question6:'',
+
+    });
     const [searchQuery, setSearchQuery] = useState('');
     const handleChange = (e) => {
         setSearchQuery(e.target.value);
     };
 
 const handleSendPrompt= () =>{
-    axios.get(`./interview/gpt?prompt=${searchQuery}`)
+    axios.get(`./interview/gpt?queryString=${searchQuery}`)
     .then(response => {
-        setAnswer(response.data);
+       const responseData = response.data;
+       if(response.data.result==='success'){
+        setData(responseData);
+       }else{
+
+       }
+       
+       
+        // setAnswer(response.data);
     })
     .catch(error => {
       console.error('Error fetching data: ', error);
@@ -25,9 +41,17 @@ const handleSendPrompt= () =>{
     .finally(() => {
     });
 
-
 };
-
+const setData = (data)=>{
+    setAnswer({
+        question1:data.question1 ,
+        question2:data.question2 || '',
+        question3:data.question3 || '',
+        question4:data.question4 || '',
+        question5:data.question5 || '',
+        question6:data.question6 || '',
+    });
+}
 
     return (
         <>
@@ -48,7 +72,6 @@ const handleSendPrompt= () =>{
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100px', background: 'white', borderRadius: '70px' }}>
             <button className={style.blueButton} onClick={handleSendPrompt}>AI 면접 시작하기</button>
         </div>
-
        
             <div className={style.answerContainer}>
             {answer && <Answer answer={answer} />}
