@@ -2,7 +2,7 @@ from fastapi import APIRouter
 import openai
 from typing import List
 from pydantic import BaseModel
-from config.config import getAPIkey,getModel
+from configset.config import getAPIkey,getModel
 import os
 from .database import get_database
 
