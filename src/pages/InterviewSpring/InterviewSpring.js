@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import {Answer,Feedback} from './Answer';
-
+import LoadingModal from './LoadingModal';
 
 const InterviewSpring = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [answer,setAnswer] = useState({
         question1:'',
         question2:'',
@@ -23,6 +24,7 @@ const InterviewSpring = () => {
     };
 
 const handleSendPrompt= () =>{
+    setIsLoading(true);
     axios.get(`./interview/gpt?queryString=${searchQuery}`)
     .then(response => {
        const responseData = response.data;
@@ -39,6 +41,7 @@ const handleSendPrompt= () =>{
       console.error('Error fetching data: ', error);
     })
     .finally(() => {
+        setIsLoading(false); 
     });
 
 };
@@ -51,6 +54,7 @@ const setData = (data)=>{
         question5:data.question5 || '',
         question6:data.question6 || '',
     });
+    
 }
 
     return (
@@ -76,7 +80,7 @@ const setData = (data)=>{
             <div className={style.answerContainer}>
             {answer && <Answer answer={answer} />}
             </div>
-    
+            {isLoading && <LoadingModal />} 
         </>
     )
 }

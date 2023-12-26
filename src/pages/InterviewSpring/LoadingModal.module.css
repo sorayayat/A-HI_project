@@ -1,0 +1,29 @@
+.modalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.modalContent img {
+    width: 50%; /* 원하는 너비 설정 */
+    height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+    max-height: 300px; /* 최대 높이 제한 */
+    margin-right: 30px;
+}
