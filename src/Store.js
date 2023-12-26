@@ -1,21 +1,26 @@
-import { configureStore } from '@reduxjs/toolkit';
-import chatbotReducer from './modules/chatbotModules';
+import { applyMiddleware, legacy_createStore as createStore } from "redux";
+import { thunk } from "redux-thunk";
+import logger from "redux-logger";
+import { loadFromLocalStorage, saveToLocalStorage } from './pages/login/loginLocal';
+import rootReducer from "./modules";
 
-const persistedState = localStorage.getItem('reduxState')
-  ? JSON.parse(localStorage.getItem('reduxState'))
-  : {};
 
-const store = configureStore({
-  reducer: {
-    chatbot: chatbotReducer,
-  },
-  preloadedState: persistedState,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-});
+
+
+const persistedState = loadFromLocalStorage();
+const store = createStore (
+    rootReducer,
+    persistedState,    
+    applyMiddleware(thunk , logger)
+)
+    
+
 
 store.subscribe(() => {
-  localStorage.setItem('reduxState', JSON.stringify(store.getState())); 
+    saveToLocalStorage(store.getState());
 });
 
-export default store;
 
+
+
+export default store;
