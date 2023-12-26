@@ -37,7 +37,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Transactional(readOnly = true)   //이걸 옵셔널로 리턴주면 유니크가 아닌걸로 검색했을경우 사용못하고 값이 여러개니깐    list 로 주면 null 처리만 해주면 되고
-    public MemberEntity findMember(String memberEmail,Long phoneNumber) {
+    public MemberEntity findMember(String memberEmail,String phoneNumber) {
        List<MemberEntity> memberEntities =query
                 .select(memberEntity)
                 .from(memberEntity)
@@ -60,14 +60,19 @@ public class MemberRepositoryImpl implements MemberRepository {
         }
         return null;
     }
-
-
-    private BooleanExpression phoneNumber(Long phoneNumber) {
-        if (phoneNumber != null && phoneNumber != 0) {
+    private BooleanExpression phoneNumber(String phoneNumber) {
+        if (StringUtils.hasText(phoneNumber)) {
             return memberEntity.phoneNumber.eq(phoneNumber);
         }
         return null;
     }
+
+//    private BooleanExpression phoneNumber(Long phoneNumber) {
+//        if (phoneNumber != null && phoneNumber != 0) {
+//            return memberEntity.phoneNumber.eq(phoneNumber);
+//        }
+//        return null;
+//    }
 
 
 

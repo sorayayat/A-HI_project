@@ -1,5 +1,6 @@
 package com.jsg.ahispringboot.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsg.ahispringboot.member.entity.CompanyEntity;
 import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import com.jsg.ahispringboot.member.memberEnum.MemberRole;
@@ -34,7 +35,9 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
+
                 .allowedOrigins("http://localhost:3000", "http://localhost:8000")
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("Authorization", "Content-Type")
                 .exposedHeaders("Custom-Header")
@@ -64,32 +67,21 @@ public class SecurityConfig implements WebMvcConfigurer {
                                     companyEntity.setCompanyId(0L);
                                     companyEntity.setCompanyHomepage("no");
                                     java.util.Date utilDate = new java.util.Date();
-                                    java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                                    Date sqlDate = new Date(utilDate.getTime());
                                     companyEntity.setEstablishmentDate(sqlDate);
                                     companyEntity.setEmployeesNumber(0);
                                     companyEntity.setCompanyType("no");
                                     companyEntity.setCompany("no");
                                     userDetails.getMemberEntity().setCompanyEntity(companyEntity);
                                 }
-                                String json = "{"
-                                        + "\"message\": \"success\","
-                                        + "\"email\": \"" + escapeJson(userDetails.getUsername()) + "\","
-                                        + "\"name\": \"" + escapeJson(userDetails.getRealName()) + "\","
-                                        + "\"phoneNumber\": " + userDetails.getPhoneNumber() + ","
-                                        + "\"company\": \"" + escapeJson(userDetails.company()) + "\","
-                                        + "\"companyType\": \"" + escapeJson(userDetails.companyType()) + "\","
-                                        + "\"employeesNumber\": " + userDetails.employeesNumber() + ","
-                                        + "\"establishmentDate\": \"" + userDetails.establishmentDate() + "\","
-                                        + "\"companyHomepage\": \"" + escapeJson(userDetails.companyHomepage()) + "\","
-                                        + "\"companyId\": \"" + userDetails.companyPk() + "\","
-                                        + "\"memberId\": \"" + userDetails.getPk() + "\""
-                                        + "}";
-
+                                userDetails.getMemberEntity().setPassword("N");
+//
+                                ObjectMapper mapper = new ObjectMapper();
+                                String json = mapper.writeValueAsString(userDetails);
                                 response.setStatus(HttpServletResponse.SC_OK);
                                 response.setCharacterEncoding("UTF-8");
                                 response.setContentType("application/json");
                                 response.getWriter().write(json);
-
                             }
                         })
                         .failureHandler(new AuthenticationFailureHandler() {
