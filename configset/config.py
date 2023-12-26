@@ -6,3 +6,4 @@ def getAPIkey():
     return env('OPENAI_API_KEY')
 def getModel():
     return env('MODEL')
+
