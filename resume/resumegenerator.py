@@ -18,7 +18,7 @@ def generate_resume_content(data):
 
 def fill_template(template_path, output_path, context):
     # 템플릿 문서 호출
-    doc = Document(template_path)
+    doc =  Document(template_path)
     
     # 모든 단락을 순회하며 플레이스홀더를 실제 데이터로 교체
     for paragraph in doc.paragraphs:
