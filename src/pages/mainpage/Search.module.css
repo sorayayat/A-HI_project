@@ -1,14 +1,13 @@
 .searchLogo {
     display: flex;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
     margin-bottom: 35px;
 }
 
-
 .searchWrapper {
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     margin-top: 10px;
 }
 
@@ -25,6 +24,7 @@
     padding-left: 30px;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .searchBox {
@@ -40,4 +40,37 @@
 .faMagnifyingGlass {
     font-size: 1.3em;
     color: gray;
+}
+
+/* 드롭박스 디자인 */
+
+.searchResults {
+    position: absolute;
+    width: 782px; /* 드롭박스 너비 */
+    top: 65px; /* 검색창과의 간격 */
+    left: 19px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 20px 20px;
+    border: 4px solid #D9E5FB;
+    border-top: none;
+}
+
+.searchResultItem {
+    padding: 16px; /* 내부 여백 */
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.searchResultItem:hover {
+    background-color: #f5f5f5;
+}
+
+.searchResultItem:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
