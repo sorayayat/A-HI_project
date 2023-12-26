@@ -53,16 +53,6 @@ const ChatbotMain = () => {
         });
     };
 
-    // const updateChatRoomsMessages = (roomId, newMessage) => {
-    //     setChatRooms(chatRooms.map(room => {
-    //         if (room.id === roomId) {
-    //             return { ...room, messages: [...room.messages, newMessage] };
-    //         }
-    //         return room;
-    //     }));
-    // };
-
-
 
 
     return (

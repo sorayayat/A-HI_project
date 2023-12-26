@@ -14,7 +14,6 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
     const [showChat, setShowChat] = useState(false);
     const [selectedPrompt, setSelectedPrompt] = useState(null);
     const [messageList, setMessageList] = useState([]); // 메시지 목록
-    const dispatch = useDispatch();
     const scrollRef = useRef(null);
 
 
@@ -46,24 +45,9 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
             setMessageList(activeChatRoom.messages);
         }
     }, [activeChatRoom]);
-
-
-    // useEffect(() => {
-    //     if (activeChatRoom && activeChatRoom.messages) {
-    //         // activeChatRoom의 마지막 메시지와 messageList의 마지막 메시지 비교
-    //         const lastActiveMessage = activeChatRoom.messages.length > 0 ? activeChatRoom.messages[activeChatRoom.messages.length - 1] : null;
-    //         const lastMessageListMessage = messageList.length > 0 ? messageList[messageList.length - 1] : null;
-    
-    //         // 마지막 메시지가 다르면, 또는 메시지 배열이 비어있으면 messageList 업데이트
-    //         if (!lastMessageListMessage || (lastActiveMessage && lastActiveMessage.content !== lastMessageListMessage.content)) {
-    //             setMessageList(activeChatRoom.messages);
-    //         }
-    //     }
-    // }, [activeChatRoom]);
-    
+  
 
     
-
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
     }
