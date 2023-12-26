@@ -27,15 +27,11 @@ public class RecommendationService {
 
     public List<PostingDTO> selectPosting() {
 
-        List<Posting> postingList = postingRepository.findBySelectPosting();
-
-        System.out.println(postingList);
-
-
+        List<Posting> postingList = postingRepository.findAll();
 
         List<PostingDTO> postingDTO = postingList.stream().map(posting -> modelMapper.map(posting, PostingDTO.class)).collect(Collectors.toList());
 
-
+        System.out.println(postingDTO.get(0));
 
         return postingDTO;
     }

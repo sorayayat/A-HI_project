@@ -1,17 +1,18 @@
-package com.jsg.ahispringboot.member.dto;
+package com.jsg.ahispringboot.company.dto;
 
 import lombok.*;
-import org.mapstruct.control.NoComplexMapping;
 
 import java.sql.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@ToString
+public class CompanyDTO {
 
-public class CompanyDto {
     private Long companyId;
-    private  String email;
+    private String email;
     private String name;
     private String password;
     private Long phoneNumber;
@@ -20,5 +21,6 @@ public class CompanyDto {
     private int employeesNumber;
     private Date establishmentDate;
     private String companyHomepage;
+
 
 }

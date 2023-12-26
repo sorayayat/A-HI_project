@@ -12,7 +12,7 @@ import javax.naming.Name;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "posting")
 public class WorkType {
 
     @Id

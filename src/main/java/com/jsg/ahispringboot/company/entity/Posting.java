@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.naming.Name;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "posting")
@@ -53,6 +54,16 @@ public class Posting {
     @JoinColumn(name = "company_id", nullable = false)
     @JsonIgnore
     private CompanyEntity company;
+
+    @OneToMany(mappedBy = "posting")
+    List<PostingExperience> postingExperienceList;
+
+    @OneToMany(mappedBy = "posting")
+    List<WorkType> workTypeList;
+
+    @OneToMany(mappedBy = "posting")
+    List<Skill> skillList;
+
 
     @PrePersist
     public void prePersist() {
