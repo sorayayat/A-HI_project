@@ -4,11 +4,14 @@ from typing import List
 from pydantic import BaseModel
 from config.config import getAPIkey,getModel
 import os
+from .database import get_database
 
 
 CBrouter = APIRouter(prefix="/chatbot")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+db = get_database()
 
 
 OPENAI_API_KEY = getAPIkey()
@@ -16,9 +19,11 @@ openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
 
 
-class Message(BaseModel):
-    message: str
+class User(BaseModel):
+    email: str
+    roomId: str
     prompt: str
+    message: str
 
 
 def read_prompt_file(prompt_type: str) -> str:
@@ -41,8 +46,9 @@ def read_prompt_file(prompt_type: str) -> str:
         return "Default system message."
 
 
+
 @CBrouter.post("/")
-async def chatbot_endpoint(message: Message):
+async def chatbot_endpoint(message: User):
     user_message = message.message
     prompt_type = message.prompt
 
@@ -59,6 +65,21 @@ async def chatbot_endpoint(message: Message):
     )
 
     chatbot_response = gpt_response["choices"][0]["message"]["content"]
+
+
+    # MongoDB에 채팅 메시지 추가
+    await db.chatrooms.update_one(
+        {"email": message.email, "chatRoomId": message.roomId},
+        {
+            "$push": {
+                "messageList": {
+                    "userMessage": user_message,
+                    "chatbotResponse": chatbot_response
+                }
+            }
+        },
+        upsert=True  # 존재하지 않으면 새 문서 생성
+    )
 
     return {"gptMessage": chatbot_response}
 
