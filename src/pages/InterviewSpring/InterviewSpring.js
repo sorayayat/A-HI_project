@@ -24,14 +24,15 @@ const InterviewSpring = () => {
     };
 
 const handleSendPrompt= () =>{
-    setIsLoading(true);
+   
     axios.get(`./interview/gpt?queryString=${searchQuery}`)
     .then(response => {
        const responseData = response.data;
        if(response.data.result==='success'){
+        //setIsLoading(true);
         setData(responseData);
        }else{
-
+        alert('전개시 공고만 넣어주세요');
        }
        
        

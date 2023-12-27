@@ -14,14 +14,12 @@ const LoadingModal = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
-        // 1.5초마다 이미지를 바꾸는 로직
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => 
                 (prevIndex + 1) % loadingData.length // 다음 이미지 인덱스로 순환
             );
-        }, 1500);
+        }, 3000);
 
-        // 컴포넌트가 언마운트될 때 인터벌을 제거
         return () => clearInterval(interval);
     }, []);
 
