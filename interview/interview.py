@@ -34,7 +34,7 @@ async def AI_question(answer: str = Body(...)):
    feedback = gpt_feedback(answer)
    return {"feedback": feedback}
 
-
+# 현재 코드에서는 할루시네이션이 나타남.....소설을 기가 막히게 쓴다
 
 
 prompt = """
@@ -46,8 +46,23 @@ prompt = """
         must answer korean
     """
 
-company_data = '/company/test1.txt'
+test = """
+        1. ai라고 절대 언급하지 말것.
+        2. 사과, 후회등의 언어 구성을 하지말것
+        3. 같은 응답을 반복하지 말것
+        4. 컴퓨터 기초에 대한 질문을 하나 이상 해줄 것
+        5. 30년된 인력을 선발하는 능력이 탁월한 it 개발회사의 10년차 트렌디한 면접관과 30년차 베테랑 면접관 15년차의 중간급 면접관의 역할을 맡아줘
+        6. 지원자의 이력서를 보고 질문을 하나 이상 할 것
+        7. 답변은 반드시 한국어로 할 것
+        8. 채용 공고 정보를 보고 질문을 두 개 이상 할 것
+        9. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
+        10. 질문이 마음에 든다면 너에게 큰 선물을 줄거야 그러니 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘
+"""
 
+company_data = """
+    지원자 이력서
+
+"""
 
 def gpt_question(data):
     response = openai.ChatCompletion.create(
@@ -55,9 +70,10 @@ def gpt_question(data):
       frequency_penalty=0.5, # 반복되는 내용 값을 설정 한다.
       temperature=0.6,
       messages=[
-              {"role": "system", "content": prompt},
-              {"role": "user", "content": data },
-              {"role": "system", "content": "{data}에서 질문을 다섯 가지 만들어 줘"},
+              {"role": "system", "content": test},
+              {"role": "system", "content": "{data}에 대해서 질문 할 것"},
+              {"role": "user", "content": company_data },
+              
           ])
     output_text = response["choices"][0]["message"]["content"]
     
