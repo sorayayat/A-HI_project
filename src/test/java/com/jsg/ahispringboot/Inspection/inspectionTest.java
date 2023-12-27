@@ -133,7 +133,7 @@ public class inspectionTest {
     private String endPoint;
 
     @Test
-    @DisplayName("통신 테스트")
+    @DisplayName("통신 테스트"`)
     public void fastAPI_통신테스트() {
         Long beforeTime = System.currentTimeMillis();
         RestTemplate restTemplate = new RestTemplate();
