@@ -71,7 +71,7 @@ public class PostingController {
 
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        System.out.println("postingDTOJson" , postingDTOJson);
+        System.out.println("postingDTOJson" + postingDTOJson);
 
         HttpEntity<String> requestEntity = new HttpEntity<>(postingDTOJson, headers);
 
