@@ -1,7 +1,7 @@
 from fastapi import APIRouter , Request , UploadFile , File
 from PyPDF2 import PdfReader
 from openai import OpenAI
-from config.config import getAPIkey ,getModel
+from configset.config import getAPIkey ,getModel
 from typing import List
 from pydantic import BaseModel
 from inspection import inspectionPrompt
