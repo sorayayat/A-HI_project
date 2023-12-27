@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
@@ -21,13 +22,18 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
 import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
+import com.jsg.ahispringboot.inspection.dto.SelfIntroductionDTO;
 import com.jsg.ahispringboot.inspection.entity.Resume;
 import com.jsg.ahispringboot.inspection.repository.InspectionRepository;
 
@@ -128,16 +134,17 @@ public class inspectionTest {
 
     @Test
     @DisplayName("통신 테스트")
-    public void fastAPI_통신테스트(){
+    public void fastAPI_통신테스트() {
+        Long beforeTime = System.currentTimeMillis();
         RestTemplate restTemplate = new RestTemplate();
         Long resumeCode = 1L;
-        Long userid = 1L;
+        Long userid = 3L;
         Resume resume = inspectionRepository.findResumeCode(resumeCode, userid);
         ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
         Path filePath = Paths.get("src/main/resources/static/resume/test1/test1 낭만넘치는 자기소개서.pdf");
-        try{
+        try {
             byte[] padData = Files.readAllBytes(filePath);
-            ByteArrayResource resource = new ByteArrayResource(padData){
+            ByteArrayResource resource = new ByteArrayResource(padData) {
                 @Override
                 public String getFilename() {
                     String[] spits = resumeDTO.getResumePath().split("/");
@@ -150,15 +157,22 @@ public class inspectionTest {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-            MultiValueMap<String , Object> body = new LinkedMultiValueMap<>();
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("file", resource);
-
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-
-            restTemplate.postForObject(endPoint+"/inspection/ReadResume", requestEntity, Void.class);
-        }
-        catch(Exception e){
+            ResponseEntity<ReaderDTO> readerEntity = restTemplate.postForEntity(
+                    endPoint + "/inspection/ReadResume",
+                    requestEntity,
+                    ReaderDTO.class);
+            ReaderDTO reader = readerEntity.getBody();
+            System.out.println("reader : " + reader);
+            for (SelfIntroductionDTO s : reader.getSelfIntroductionDTO()) {
+                System.out.println("s : " + s);
+            }
+            Long afterTime = System.currentTimeMillis();
+            Long diffTime = (afterTime - beforeTime) / 1000;
+            System.out.println("실행 시간(sec) : " + diffTime);
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

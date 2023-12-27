@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
 import com.jsg.ahispringboot.inspection.entity.Resume;
 import com.jsg.ahispringboot.inspection.repository.InspectionRepository;
+import com.jsg.ahispringboot.inspection.utils.FileUtils;
+import com.jsg.ahispringboot.inspection.utils.FileUtilsImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,12 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 public class InspectionService {
 
     private final InspectionRepository inspectionRepositroy;
-    // private final InspectionMapper inspectionMapper;
     private final ModelMapper modelMapper;
+    private final FileUtils fileUtils;
 
-    public InspectionService(InspectionRepository inspectionRepositroy, ModelMapper modelMapper) {
+    public InspectionService(InspectionRepository inspectionRepositroy,
+            ModelMapper modelMapper,
+            FileUtilsImpl fileUtilsImpl) {
         this.inspectionRepositroy = inspectionRepositroy;
         this.modelMapper = modelMapper;
+        this.fileUtils = fileUtilsImpl;
     }
 
     public List<ResumeDTO> selectMemberResume(Long memberId) {
@@ -43,9 +49,11 @@ public class InspectionService {
 
     }
 
-    public void selcetResumeDetall(Long resumeCode , Long userCode) {
-        Resume resume = inspectionRepositroy.findResumeCode(resumeCode , userCode);
-        
+    public void selcetResumeDetall(Long resumeCode, Long userCode) {
+        Resume resume = inspectionRepositroy.findResumeCode(resumeCode, userCode);
+        ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
+        ByteArrayResource resource = fileUtils.FileToByteArray(resumeDTO.getResumePath());
+
     }
 
 }
