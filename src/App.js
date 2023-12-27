@@ -20,6 +20,7 @@ import CompanyRegist from './pages/company/CompanyRegist';
 import WriteInfo from './pages/company/WriteInfo';
 import JoinFormCompany from './pages/join/JoinFormCompany';
 import CompanyUpdate from './pages/memberUpdate/CompanyUpdate';
+import SearchPage from './pages/searchpage/SearchPage';
 import InspectionDetail from './pages/inspection/InspectionDetail';
 import InspectionMain from './pages/inspection/InspectionMain';
 
@@ -59,6 +60,7 @@ function App() {
           <Route path='/createResume' element={<CreateResume/>}/>
           <Route path='/companyList/companyRegist' element={<CompanyRegist/>}/>
           <Route path='/companyList/companyRegist/writeInfo' element={<WriteInfo/>}/>
+          <Route path='/SearchPage' element={<SearchPage/>}/>
           <Route path='/interviewSpring' element={<InterviewSpring/>}/>
           
 

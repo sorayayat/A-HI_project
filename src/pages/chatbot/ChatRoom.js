@@ -2,31 +2,33 @@ import styles from './ChatRoom.module.css';
 import bubbleIcon from '../mainpage/Icons/bubbleIcon.png';
 import sendIcon from '../mainpage/Icons/Sent.png';
 import { useState } from 'react';
-import { callChatbot } from '../../apis/chatbotAPICalls';
+// import { callChatbot } from '../../apis/chatbotAPICalls';
 import { useDispatch } from 'react-redux';
 import React, { useEffect, useRef } from 'react';
 
-const ChatRoom = () => {
+
+// 현재 활성화된 채팅방의 정보를 ChatbotMain으로부터 props로 받아야 합니다.
+const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
 
     const [message, setMessage] = useState('');
     const [showChat, setShowChat] = useState(false);
-    const [gptMessage, setGptMessage] = useState('');
     const [selectedPrompt, setSelectedPrompt] = useState(null);
     const [messageList, setMessageList] = useState([]); // 메시지 목록
-    const dispatch = useDispatch();
-    const [chattingListHeight, setChattingListHeight] = useState('500px'); // chattingList의 초기 높이 설정
     const scrollRef = useRef(null);
+
 
     // ========================== 프롬프트 선택 ============================
 
-    const startChat = () => {
+    const startChat = (promptType) => {
+        setSelectedPrompt(promptType);
         setShowChat(true);
     };
 
-
-
     // =========================== 채팅 메세지 =============================
 
+    useEffect(() => {
+        console.log("Updated messageList =============>", messageList);
+    }, [messageList]);
 
 
     useEffect(() => {
@@ -34,13 +36,18 @@ const ChatRoom = () => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messageList]);
-    
-    
-    // useEffect(() => {
-    //     console.log("after ================> ",messageList);
-    // }, [messageList]);
 
 
+    // activeChatRoom의 변경을 감지하고 messageList를 업데이트
+    useEffect(() => {
+        // activeChatRoom 변경 시 messageList를 해당 채팅방의 메시지 리스트로 설정
+        if (activeChatRoom && activeChatRoom.messages) {
+            setMessageList(activeChatRoom.messages);
+        }
+    }, [activeChatRoom]);
+  
+
+    
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
     }
@@ -54,20 +61,37 @@ const ChatRoom = () => {
 
 
 
+    const sendMessage = async () => {
+        if (activeChatRoom && activeChatRoom.id) {
 
-    const sendMessage = () => {
-        dispatch(callChatbot({ message: message }, (result) => {
-            const chatbotResponse = result.gptMessage;
-            setMessage('');
-            console.log("before ===============> ",messageList)
-            setMessageList([
-                ...messageList,
-                { sender: '사용자', content: message },
-                { sender: '챗봇', content: chatbotResponse },
-            ]);
-        }));
-    }
+            const newUserMessage = { sender: '사용자', content: message };
 
+            const payload = {
+                email: "user@example.com",  // 예시 이메일 주소
+                roomId: activeChatRoom.id,
+                prompt: selectedPrompt,
+                message: message
+            };
+    
+            const response = await fetch('http://localhost:8000/chatbot/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            const newChatbotMessage = { sender: '챗봇', content: data.gptMessage };
+
+                setMessage('');
+
+            setMessageList(prevMessages => [...prevMessages, newUserMessage, newChatbotMessage]);
+
+            // chatRooms 상태에 새 메시지 반영
+            updateChatRoomsMessages(activeChatRoom.id, newUserMessage);
+            updateChatRoomsMessages(activeChatRoom.id, newChatbotMessage);
+        }
+    };
 
 
 
@@ -111,7 +135,9 @@ const ChatRoom = () => {
                             <div className={styles.chattingScrollContainer}>
                                 <div className={styles.chattingList} ref={scrollRef}>
                                     {messageList.map((msg, index) => (
-                                        <div key={index} className={msg.sender === 
+                                        // console.log("msg.sender ==========================> ",msg.content),
+                                        // console.log("msg.sender ==========================> ",msg.sender==='사용자'),
+                                        <div key={`${msg.sender}-${msg.content}-${index}`} className={msg.sender === 
                                         '사용자' ? styles.userMessage : styles.chatbotMessage}>
                                             <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
                                                 {msg.content}
