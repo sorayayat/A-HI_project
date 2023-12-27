@@ -1,19 +1,26 @@
 package com.jsg.ahispringboot.company.controller;
 
-
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsg.ahispringboot.common.ResponseDTO;
 import com.jsg.ahispringboot.company.dto.PostingDTO;
 import com.jsg.ahispringboot.company.service.PostingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/posting")
@@ -51,7 +58,37 @@ public class PostingController {
         postingDTO.setEndDate(endDate);
         postingDTO.setClosingForm(closingForm);
 
-        postingService.registPosting(postingDTO, companyCode);
+        PostingDTO postingCompanyDTO = postingService.registPosting(postingDTO, companyCode);
+
+
+
+        // JSON 페이로드와 헤더를 갖는 요청 엔터티 생성
+        String postingDTOJson = convertPostingDTOToJson(postingCompanyDTO);
+
+        String fastApiEndpoint = "http://localhost:8000/posting/regist";
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        System.out.println("postingDTOJson" + postingDTOJson);
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(postingDTOJson, headers);
+
+        // RestTemplate을 사용하여 POST 요청 전송
+        ResponseEntity<ResponseDTO> responseEntity = new RestTemplate().exchange(
+                fastApiEndpoint,
+                HttpMethod.POST,
+                requestEntity,
+                ResponseDTO.class
+        );
+
+
+
+
+
+
+        
 
 
         return ResponseEntity.ok()
@@ -59,6 +96,7 @@ public class PostingController {
                         .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
                         .message("success")
                         .build());
+
 
     }
 
@@ -77,6 +115,19 @@ public class PostingController {
                         .data(map)
                         .message("success")
                         .build());
+    }
+
+    private String convertPostingDTOToJson(PostingDTO postingDTO) {
+        try {
+            // ObjectMapper 생성
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // PostingDTO 리스트를 JSON 문자열로 변환
+            return objectMapper.writeValueAsString(postingDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

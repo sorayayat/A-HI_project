@@ -40,9 +40,15 @@ public class QPosting extends EntityPathBase<Posting> {
 
     public final DateTimePath<java.time.LocalDateTime> postingDate = createDateTime("postingDate", java.time.LocalDateTime.class);
 
+    public final ListPath<PostingExperience, QPostingExperience> postingExperienceList = this.<PostingExperience, QPostingExperience>createList("postingExperienceList", PostingExperience.class, QPostingExperience.class, PathInits.DIRECT2);
+
     public final StringPath postingTitle = createString("postingTitle");
 
+    public final ListPath<Skill, QSkill> skillList = this.<Skill, QSkill>createList("skillList", Skill.class, QSkill.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> viewCount = createNumber("viewCount", Integer.class);
+
+    public final ListPath<WorkType, QWorkType> workTypeList = this.<WorkType, QWorkType>createList("workTypeList", WorkType.class, QWorkType.class, PathInits.DIRECT2);
 
     public QPosting(String variable) {
         this(Posting.class, forVariable(variable), INITS);

@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PostingExperienceRepository extends JpaRepository<PostingExperience, Integer> {
     List<PostingExperience> findByPosting(Posting posting);
+
+    List<PostingExperience> findByPostingPostingCode(Integer postingCode);
 }

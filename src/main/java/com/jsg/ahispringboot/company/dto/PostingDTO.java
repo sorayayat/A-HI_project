@@ -1,5 +1,6 @@
 package com.jsg.ahispringboot.company.dto;
 
+import com.jsg.ahispringboot.member.dto.CompanyDto;
 import lombok.*;
 
 import java.util.List;
@@ -37,10 +38,12 @@ public class PostingDTO {
 
     private String selectedSkills;
 
-    private List<WorkTypeDTO> workTypeDTOs;
+    private List<WorkTypeDTO> workTypeList;
 
-    private List<SkillDTO> skillDTOs;
+    private List<SkillDTO> skillList;
 
-    private List<PostingExperienceDTO> postingExperienceDTOS;
+    private List<PostingExperienceDTO> postingExperienceList;
+
+    private CompanyDTO company;
 }
 
