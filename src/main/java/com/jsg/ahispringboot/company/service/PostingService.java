@@ -33,7 +33,7 @@ public class PostingService {
 
 
     @Transactional
-    public void registPosting(PostingDTO postingDTO, Integer companyId) {
+    public PostingDTO registPosting(PostingDTO postingDTO, Integer companyId) {
 
         CompanyEntity company = companyRepository.findByCompanyId(companyId);
 
@@ -101,6 +101,24 @@ public class PostingService {
         }
 
 
+//        PostingDTO postingDTOs = modelMapper.map(posting, PostingDTO.class);
+//
+//        System.out.println(postingDTOs + "안녕");
+
+        List<WorkType> workType = workTypeRepository.findByPostingPostingCode(posting.getPostingCode());
+        List<PostingExperience> postingExperiencegs = postingExperienceRepository.findByPostingPostingCode(posting.getPostingCode());
+        List<Skill> skillList = skillRepository.findByPostingPostingCode(posting.getPostingCode());
+
+        posting.setWorkTypeList(workType);
+        posting.setPostingExperienceList(postingExperiencegs);
+        posting.setSkillList(skillList);
+
+        System.out.println(posting + "gg");
+
+
+
+
+        return modelMapper.map(posting, PostingDTO.class);
     }
 
     public Map<String, List> selectJobPosting() {
