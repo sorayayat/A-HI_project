@@ -182,7 +182,7 @@ async def chatbot_endpoint(message: User):
 #     file_name = os.path.join(BASE_DIR, file_map.get(prompt_type, ""))
 #     print(f"Trying to read file: {file_name}")
 
-#     # 파일이 존재하는지 확인하고 내용 읽기
+#     # 파일이 존재하는지 확인하고 내용 읽기..
 #     if os.path.exists(file_name):
 #         with open(file_name, "r", encoding="utf-8") as file:
 #             prompt_text = file.read()
