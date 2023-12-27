@@ -102,6 +102,7 @@ async def registCompany(posting: PostingDTO):
     
 
     encoded_fields = {
+       
         "postingTitle": model.encode(str(posting.postingTitle)),
         "postingDate": model.encode(str(posting.postingDate)),
         "endDate": model.encode(str(posting.endDate)),
@@ -150,15 +151,26 @@ async def registCompany(posting: PostingDTO):
     # ChromaDB에 데이터 저장
         collection_name = "posting" + str(postingCode)
         collection = client.create_collection(name=collection_name)
-
+        strPostingCode = str(postingCode)
         embeddings = encoded_fields
+        
+        for key, vector in embeddings.items():
+            print(f"Key: {key}, Type: {type(vector)}, Length: {len(vector)}")
+
+            # 벡터의 각 요소가 숫자인지 확인합니다.
+            if all(isinstance(x, (int, float)) for x in vector):
+                print(f"All elements in {key} are numbers.")
+            else:
+                print(f"Non-numeric element found in {key}.")
 
         data = {
-        "embeddings": [list(embedded_field) for embedded_field in encoded_fields.values()],
-        "documents": list(encoded_fields.keys()),
+        "embeddings": (encoded_fields.values()),
+        "documents": (encoded_fields.keys()),
         "metadatas": [{"source": "your_source"}] * len(encoded_fields),
-        "ids": [str(postingCode)]
+        "ids": [str(postingCode)],
         }
+        print(type([str(postingCode)]))
+        print(data)
 
         collection.add(data)
         
