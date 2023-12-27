@@ -11,7 +11,6 @@ openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
 
 
-# data = 'company/test1.txt'
 # 클라이언트에게서 받은 데이터 타입을 확인하기 위한 클래스
 class InterviewData(BaseModel):
     searchQuery : str
