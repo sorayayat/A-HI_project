@@ -3,18 +3,27 @@ import bubbleIcon from '../mainpage/Icons/bubbleIcon.png';
 import sendIcon from '../mainpage/Icons/Sent.png';
 import { useState } from 'react';
 // import { callChatbot } from '../../apis/chatbotAPICalls';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useRef } from 'react';
 
 
 // 현재 활성화된 채팅방의 정보를 ChatbotMain으로부터 props로 받아야 합니다.
 const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
 
+    const userEmail = useSelector(state => state.auth.email); // 사용자 이메일 가져오기
     const [message, setMessage] = useState('');
     const [showChat, setShowChat] = useState(false);
     const [selectedPrompt, setSelectedPrompt] = useState(null);
     const [messageList, setMessageList] = useState([]); // 메시지 목록
     const scrollRef = useRef(null);
+
+
+
+    // userEmail 상태가 변경될 때마다 콘솔에 출력
+    useEffect(() => {
+        console.log("현재 로그인한 사용자의 이메일 =========> ", userEmail);
+    }, [userEmail]);
+    
 
 
     // ========================== 프롬프트 선택 ============================
@@ -25,7 +34,7 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
     };
 
     // =========================== 채팅 메세지 =============================
-
+    
     useEffect(() => {
         console.log("Updated messageList =============>", messageList);
     }, [messageList]);
@@ -59,15 +68,66 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
         }
     }
 
+    
+    // =========================== 로그인된 유저의 채팅 메세지 불러오기 =============================
+
+    // 사용자가 새 채팅방을 만들고 페이지를 나가기 전까지 아무런 메시지를 보내지 않는다면, 해당 채팅방은 데이터베이스에 저장되지 않도록 수정
+    const fetchChatData = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/chatbot/chatrooms/${activeChatRoom.id}?email=${userEmail}`);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    setMessageList([]);
+                } else {
+                    throw new Error('채팅방 데이터를 가져오는 데 실패했습니다.');
+                }
+            } else {
+                const data = await response.json();
+                setMessageList(data.messageList || []);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        if (userEmail && activeChatRoom?.id) {
+            fetchChatData();
+        }
+    }, [userEmail, activeChatRoom?.id]);
+
+    // useEffect(() => {
+    //     // 채팅방 데이터를 가져오는 함수
+    //     const fetchChatData = async () => {
+    //         try {
+    //             // 채팅방 ID와 이메일을 사용하여 GET 요청을 보냅니다.
+    //             const response = await fetch(`http://localhost:8000/chatbot/chatrooms/${activeChatRoom.id}?email=${userEmail}`);
+    //             if (!response.ok) {
+    //                 throw new Error('채팅방 데이터를 가져오는 데 실패했습니다.');
+    //             }
+    //             const data = await response.json();
+    //             setMessageList(data.messageList || []);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    
+    //     if (userEmail && activeChatRoom?.id) {
+    //         fetchChatData();
+    //     }
+    // }, [userEmail, activeChatRoom?.id]); // userEmail과 activeChatRoom.id가 변경될 때마다 실행
+    
 
 
+    // 메세지 전송 함수
     const sendMessage = async () => {
         if (activeChatRoom && activeChatRoom.id) {
 
             const newUserMessage = { sender: '사용자', content: message };
 
             const payload = {
-                email: "user@example.com",  // 예시 이메일 주소
+                email: userEmail, 
                 roomId: activeChatRoom.id,
                 prompt: selectedPrompt,
                 message: message

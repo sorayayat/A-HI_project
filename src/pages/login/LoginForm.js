@@ -28,13 +28,16 @@ const LoginForm = () => {
 
         axios.post(`/login`,formData.toString())
             .then(response => {
-
               console.log(response.data.memberEntity);
                 if(response.data.memberEntity.password==='N'){
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('userInfo', JSON.stringify(response.data)); 
-                    alert("dsad");
-                    dispatch(login());
+
+                    // 여기에서 dispatch를 사용하여 사용자 정보를 저장
+                    dispatch(login({ email: response.data.memberEntity.email }));
+
+                    alert("로그인 성공");
+                    // dispatch(login());
                     navigate('/');
                 }
             })
