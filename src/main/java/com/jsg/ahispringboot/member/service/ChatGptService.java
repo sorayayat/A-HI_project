@@ -14,6 +14,7 @@ import com.jsg.ahispringboot.member.dto.ChatGptRequest;
 import com.jsg.ahispringboot.member.dto.ChatGptResponse;
 import com.jsg.ahispringboot.member.dto.GptResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,6 +31,7 @@ import static java.lang.Integer.parseInt;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class ChatGptService {
     @Value("${openai.model}")
     private String model;
@@ -51,6 +53,7 @@ public class ChatGptService {
     public String gptMake(String source,String prompt) {
         ChatGptRequest request = new ChatGptRequest(model, source, temperature, max_tokens);
         request.addSystemMessage(prompt);
+        log.info("source={}",source);
         ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
         return chatGptResponse.getChoices().get(0).getMessage().getContent();
     }
@@ -84,10 +87,10 @@ public class ChatGptService {
                     "5. 답변은 명확 하고 구체적 이며 추상적인 답변을 하지 말고 gpt가 가진 능력을 최대한 활용 할 것\n" +
                     "6. 주어진 질문은 면접 질문과 그에 대한 응답 이야 인력을 선발 하는 능력이 탁월한 it 회사의 평가와 분석 능력이 탁월 하고 객관적이고 공정 하며 직관력과 판단력이 뛰어난 23년차 하고 인사 담당 면접관의 관점에서 면접 질문에 대한 " +
                     " 응답을 분석하고 피드백을 해주는데 응답에서 잘한점과 개선이 필요한 부분을 알려 줘서 어떤식으로 개선하면 좋은지 알려주고 면접 질문에 대한 완벽한 정답을 생성해줘 \n" +
-                    "7. 면접 질문과 관련 없는 응답에 대해 지적하고 개선 방향을 제시할 것 이 부분을 신경써 줘   \n" +
                     "8. 답변은 반드시 존댓말과 한글로만 하면서 면접 예상 질문만 생성할 것 다른 설명 이나 피드백은 하지 말고 그냥 면접예상질문만 생성할것 \n" +
-                    "9. indexing은 json 형태로  goodjob:응답 에서 잘한 부분을 구체적으로 말해줘 improve:응답에서 별로인 부분을 구체적으로 지적해주고 어떤식으로 개선하면 좋을지 말해줘 perfect:질문에 대한 정답  " +
-                    " index:indexing번호 맨앞에는 result:success 이걸 꼭 넣어줘 데이터 가공 하려고 하는 거니깐 반드시 지켜줘";
+                    "9. indexing은 json 형태로  goodjob:응답 에서 잘한 부분을 구체적으로 말해줘 만약 면접과 관련 없는 응답을 했을때 면접과 관련이 없는 응답입니다 라는 늬앙스의 text를 생성해줘 improve:응답에서 별로인 부분을 구체적으로 지적해주고 어떤식으로 개선하면 좋을지 말해줘 만약 " +
+                    "면접과 관련이 없는 응답을 했다면 응답에서 어떤점을 개선해야 면접과 관련이 있는 응답이 되는지 text를 생성해줘 perfect:질문에 대한 정답 모범 답안을 생성해줘  " +
+                    " index:indexing번호 맨앞에는 result:success 이걸 꼭 넣어줘 데이터 가공 하려고 하는 거니깐 반드시 지켜줘 특히 면접과 관련이 없는 응답일 때 내가 지시한대로 지적하고 개선하라고 이야기해줘 Hallucination때문에 맘대로 정상적인 답변인거처럼 대답하지말고 이부분을 신경 써줄래";
             return feedback;
         }
     }
@@ -114,6 +117,7 @@ public class ChatGptService {
                     String requirements = "posting";
                     String prompt = promptMake(requirements);
                     String gptAnswer = gptMake(fullPosting,prompt);
+                    log.info("answer={}", gptAnswer);
                     String jsonGpt = transJson(gptAnswer);
                     return jsonGpt;
                 } else {  // 유효성은 통과했지만 db에 저장된 공고가 없는경우
@@ -202,11 +206,12 @@ public class ChatGptService {
 
 
     public String personAnswer(GptResult gptResult) throws JsonProcessingException {
-        String source = "면접 질문:"+gptResult.getResult()+"질문에 대한 응답:"+gptResult.getQuestion1()+"indexing번호:"+gptResult.getQuestion2();
+        String source = "면접 질문:"+gptResult.getQuestion1()+"질문에 대한 응답:"+gptResult.getResult()+"indexing번호:"+gptResult.getQuestion2();
         String requirements = "feedback";
         String prompt = promptMake(requirements);
         String gptAnswer = gptMake(source,prompt);
         String jsonGpt = transJson(gptAnswer);
+        log.info("answer={}", gptAnswer);
         return jsonGpt;
     }
 }
