@@ -5,109 +5,201 @@ import chromadb
 from chromadb.db.base import UniqueConstraintError
 from sentence_transformers import SentenceTransformer
 import openai
-from typing import List
+from typing import List, Optional
 from fastapi.responses import JSONResponse
 import requests
+from datetime import datetime
+from transformers import BertTokenizer
+
 
 
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
+client = chromadb.Client()
+
+
+from datetime import datetime
+
+def encode_field(value):
+    try:
+        # 텍스트 데이터 또는 날짜 데이터인 경우에만 임베딩 수행
+        if isinstance(value, str):
+            return model.encode(value)
+        elif isinstance(value, datetime):
+            # ISO 8601 형식의 문자열로 변환
+            iso_format = value.isoformat()
+            return model.encode(iso_format)
+        elif isinstance(value, list):
+            # 리스트인 경우 각 항목에 대해 임베딩 수행
+            return [model.encode(str(item)) for item in value]
+        elif isinstance(value, dict):
+            # 딕셔너리인 경우 각 값에 대해 임베딩 수행
+            return {key: model.encode(str(val)) for key, val in value.items()}
+        else:
+            return value  # None인 경우 그대로 반환
+    except Exception as e:
+        print(f"Error encoding field: {value}, {e}")
+        raise ValueError(f"Error encoding field: {value}, {e}")
+
+
+
 client = chromadb.PersistentClient()
 
+openai.api_key = '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'
 
-COrouter = APIRouter(prefix="/posting")
+POrouter = APIRouter(prefix="/posting")
 
-class CompanyRegistration(BaseModel):
-    postingTitle : str
-    location: str
+class WorkTypeDTO(BaseModel):
+    workCode: int
+    workConditions: str
+    postingCode: int
+
+class SkillDTO(BaseModel):
+    skillCode: int
+    skillName: str
+    postingCode: int
+
+class PostingExperienceDTO(BaseModel):
+    experienceCode: int
+    experienceLevel: str
+    postingCode: int
+
+class CompanyDTO(BaseModel):
+    companyId: int
+    email: Optional[str]
+    password: Optional[str]
+    phoneNumber: Optional[str]
+    company: str
+    companyType: str
+    employeesNumber: int
+    establishmentDate: datetime
+    companyHomepage: Optional[str]
+
+class PostingDTO(BaseModel):
+    postingCode: int
+    postingDate: str
+    endDate: str
     education: str
-    selectedCareer: List[str]
-    selectedConditions: List[str]
+    viewCount: int
+    location: str
     position: str
-    selectedSkills: List[str]
+    closingForm: str
     content: str
-    endDate : str
-    closingForm : str
+    postingTitle: str 
+    selectedCareer: Optional[str]
+    selectedConditions: Optional[str]
+    selectedSkills: Optional[str]
+    workTypeList: List[WorkTypeDTO]
+    skillList: List[SkillDTO]
+    postingExperienceList: List[PostingExperienceDTO]
+    company: CompanyDTO
 
-@COrouter.post("/regist/{companyCode}")
-async def registCompany(
-    companyCode : int,
-    postingTitle: str = Form(...),
-    location: str = Form(...),
-    education: str = Form(...),
-    selectedCareer: List[str] = Form(...),
-    selectedConditions: List[str] = Form(...),
-    position: str = Form(...),
-    selectedSkills: List[str] = Form(...),
-    content: str = Form(...),
-    endDate: str = Form(...),
-    closingForm: str = Form(...),
-    
-):
-    data = CompanyRegistration(
-        
-        
-        postingTitle = postingTitle,
-        location=location,
-        education=education,
-        selectedCareer=selectedCareer,
-        selectedConditions=selectedConditions,
-        position=position,
-        selectedSkills=selectedSkills,
-        content=content,
-        endDate = endDate,
-        closingForm = closingForm,
-        
-    )
 
-    print(companyCode)
+@POrouter.post("/regist")
+async def registCompany(posting: PostingDTO):
+    postingCode = posting.postingCode
 
-    print(data)
-    
     
 
-    # Spring Boot 엔드포인트 URL 정의
-    spring_boot_endpoint = "http://localhost:8001/posting/regist/{0}".format(companyCode)
+    encoded_fields = {
+       
+        "postingTitle": model.encode(str(posting.postingTitle)),
+        "postingDate": model.encode(str(posting.postingDate)),
+        "endDate": model.encode(str(posting.endDate)),
+        "education": model.encode(str(posting.education)),
+        "viewCount": model.encode(str(posting.viewCount)),
+        "location": model.encode(str(posting.location)),
+        "position": model.encode(str(posting.position)),
+        "closingForm": model.encode(str(posting.closingForm)),
+        "content": model.encode(str(posting.content)),
+        "workTypeList": [
+            {
+                "workCode": model.encode(str(work.workCode)),
+                "workConditions": model.encode(str(work.workConditions)),
+                "postingCode": model.encode(str(postingCode))
+            }
+            for work in posting.workTypeList
+        ],
+        "skillList": [
+            {
+                "skillCode": model.encode(str(skill.skillCode)),
+                "skillName": model.encode(str(skill.skillName)),
+                "postingCode": model.encode(str(postingCode))
+            }
+            for skill in posting.skillList
+        ],
+        "postingExperienceList": [
+            {
+                "experienceCode": model.encode(str(exp.experienceCode)),
+                "experienceLevel": model.encode(str(exp.experienceLevel)),
+                "postingCode": model.encode(str(postingCode))
+            }
+            for exp in posting.postingExperienceList
+        ],
+        "company": {
+            "companyId": model.encode(str(posting.company.companyId)),
+            "company": model.encode(str(posting.company.company)),
+            "companyType": model.encode(str(posting.company.companyType)),
+            "employeesNumber": model.encode(str(posting.company.employeesNumber)),
+            "establishmentDate": model.encode(str(posting.company.establishmentDate.strftime('%Y-%m-%d'))),
+            "companyHomepage": model.encode(str(posting.company.companyHomepage)),
+        }
+    }
+
 
     try:
-        # Spring Boot 애플리케이션으로 POST 요청 보내기
-        response = requests.post(spring_boot_endpoint, json=data.dict())
+    # ChromaDB에 데이터 저장
+        collection_name = "posting" + str(postingCode)
+        collection = client.create_collection(name=collection_name)
+        strPostingCode = str(postingCode)
+        embeddings = encoded_fields
+        
+        for key, vector in embeddings.items():
+            print(f"Key: {key}, Type: {type(vector)}, Length: {len(vector)}")
 
-        # 응답 확인
-        response.raise_for_status()
-        return JSONResponse(content={"message": "Success"}, status_code=200)
-    except requests.exceptions.RequestException as e:
-        # 오류 처리
-        raise HTTPException(status_code=500, detail=f"Failed to send data: {e}")
+            # 벡터의 각 요소가 숫자인지 확인합니다.
+            if all(isinstance(x, (int, float)) for x in vector):
+                print(f"All elements in {key} are numbers.")
+            else:
+                print(f"Non-numeric element found in {key}.")
+
+        data = {
+        "embeddings": (encoded_fields.values()),
+        "documents": (encoded_fields.keys()),
+        "metadatas": [{"source": "your_source"}] * len(encoded_fields),
+        "ids": [str(postingCode)],
+        }
+        print(type([str(postingCode)]))
+        print(data)
+
+        collection.add(data)
+        
+        print("데이터가 성공적으로 등록되었습니다.")
+    except Exception as e:
+        print(f"데이터 등록 중 오류 발생: {str(e)}")
+
+    return "gd"
+
+@POrouter.get("/get/{postingCode}")
+async def get_posting(postingCode: int):
+    try:
+        # ChromaDB에서 조회
+        collection_name = "posting{0}".format(postingCode)
+        collection = client.get_collection(name=collection_name)
+        result = collection.query(
+            query_texts=["java"],
+            n_results=3
+        )
+
+        if result:
+            # 결과 반환
+            print(result)
+            return JSONResponse(content=result, status_code=200)
+        else:
+            raise HTTPException(status_code=404, detail="Posting not found")
+    except Exception as e:
+        print(f"Error in get_posting: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 
-
-# try:
-#     answers = client.create_collection(name="answers")
-# except UniqueConstraintError:
-#     pass  # 이미 존재하면 무시
-
-# @COrouter.get("/list")
-# async def ask():
-#     text = "내가 가진 프로그래밍 기술은 java, python, react, javaScript, html, css 이고 제일 잘하는건 java야"
-#     embedding = model.encode(text, normalize_embeddings=True)
-#     img = './imgs/img.png'
-
-#     response = openai.ChatCompletion.create(
-#         model="gpt-4-vision-preview",
-#         temperature=0.1,
-#         messages=[
-#             {"role": "system", "content": "너는 면접관이야"},
-#             {
-#                 "type": "image",
-#                 "image": {
-#                     "img": img
-#                 }
-#             }
-#         ]
-#     )
-
-#     output_text = response["choices"][0]["message"]["content"]
-#     print(output_text)
-#     return {"output_text": output_text}
