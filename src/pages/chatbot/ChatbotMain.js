@@ -13,7 +13,7 @@ const ChatbotMain = () => {
     const [chatRooms, setChatRooms] = useState([]); // 채팅방 목록 상태
     const [activeChatRoomId, setActiveChatRoomId] = useState(null); // 현재 활성화된 채팅방 ID
     const [selectedChatRoom, setSelectedChatRoom] = useState(null);
-    const userEmail = useSelector(state => state.auth.email);
+    const userEmail = useSelector(state => state.sessionStorage.email);
     const dispatch = useDispatch();
 
     // 고유 ID 생성
