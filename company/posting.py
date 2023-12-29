@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 import requests
 from datetime import datetime
 from transformers import BertTokenizer
+import json
 
 
 
@@ -19,6 +20,11 @@ client = chromadb.Client()
 
 
 from datetime import datetime
+
+def datetime_serializer(obj):
+    if isinstance(obj, datetime):
+        return obj.strftime('%Y-%m-%d %H:%M:%S')
+    raise TypeError("Type not serializable")
 
 def encode_field(value):
     try:
@@ -99,97 +105,72 @@ class PostingDTO(BaseModel):
 async def registCompany(posting: PostingDTO):
     postingCode = posting.postingCode
 
+    company = posting.company
+
+    postingData = [posting.postingTitle , posting.postingDate , posting.endDate, posting.education,
+                    company.email , company.company, company.companyType, str(company.employeesNumber),
+                    company.establishmentDate]
     
 
-    encoded_fields = {
-       
-        "postingTitle": model.encode(str(posting.postingTitle)),
-        "postingDate": model.encode(str(posting.postingDate)),
-        "endDate": model.encode(str(posting.endDate)),
-        "education": model.encode(str(posting.education)),
-        "viewCount": model.encode(str(posting.viewCount)),
-        "location": model.encode(str(posting.location)),
-        "position": model.encode(str(posting.position)),
-        "closingForm": model.encode(str(posting.closingForm)),
-        "content": model.encode(str(posting.content)),
-        "workTypeList": [
-            {
-                "workCode": model.encode(str(work.workCode)),
-                "workConditions": model.encode(str(work.workConditions)),
-                "postingCode": model.encode(str(postingCode))
-            }
-            for work in posting.workTypeList
-        ],
-        "skillList": [
-            {
-                "skillCode": model.encode(str(skill.skillCode)),
-                "skillName": model.encode(str(skill.skillName)),
-                "postingCode": model.encode(str(postingCode))
-            }
-            for skill in posting.skillList
-        ],
-        "postingExperienceList": [
-            {
-                "experienceCode": model.encode(str(exp.experienceCode)),
-                "experienceLevel": model.encode(str(exp.experienceLevel)),
-                "postingCode": model.encode(str(postingCode))
-            }
-            for exp in posting.postingExperienceList
-        ],
-        "company": {
-            "companyId": model.encode(str(posting.company.companyId)),
-            "company": model.encode(str(posting.company.company)),
-            "companyType": model.encode(str(posting.company.companyType)),
-            "employeesNumber": model.encode(str(posting.company.employeesNumber)),
-            "establishmentDate": model.encode(str(posting.company.establishmentDate.strftime('%Y-%m-%d'))),
-            "companyHomepage": model.encode(str(posting.company.companyHomepage)),
-        }
-    }
+
+    for work_type in posting.workTypeList:
+        
+        postingData.append(work_type.workConditions)
 
 
-    try:
+    for skill in posting.skillList:
+        
+        postingData.append(skill.skillName)
+
+    
+    for exp in posting.postingExperienceList:
+        
+        postingData.append(exp.experienceLevel)
+
+
+    merged_string = " ".join(map(str, postingData))
+
+    embeddings = model.encode(merged_string)
+
+    
     # ChromaDB에 데이터 저장
-        collection_name = "posting" + str(postingCode)
-        collection = client.create_collection(name=collection_name)
-        strPostingCode = str(postingCode)
-        embeddings = encoded_fields
-        
-        for key, vector in embeddings.items():
-            print(f"Key: {key}, Type: {type(vector)}, Length: {len(vector)}")
+    collection_name = "posting"
 
-            # 벡터의 각 요소가 숫자인지 확인합니다.
-            if all(isinstance(x, (int, float)) for x in vector):
-                print(f"All elements in {key} are numbers.")
-            else:
-                print(f"Non-numeric element found in {key}.")
+    collection = client.get_collection(name=collection_name)
 
-        data = {
-        "embeddings": (encoded_fields.values()),
-        "documents": (encoded_fields.keys()),
-        "metadatas": [{"source": "your_source"}] * len(encoded_fields),
+    
+    
+    data = {
+        "embeddings": [embeddings.tolist()],
+        "documents": [merged_string],
         "ids": [str(postingCode)],
-        }
-        print(type([str(postingCode)]))
-        print(data)
+    }
+    
+    
+    collection.add(**data)
 
-        collection.add(data)
-        
-        print("데이터가 성공적으로 등록되었습니다.")
-    except Exception as e:
-        print(f"데이터 등록 중 오류 발생: {str(e)}")
+    print("됐냐?")
 
     return "gd"
 
-@POrouter.get("/get/{postingCode}")
-async def get_posting(postingCode: int):
+@POrouter.get("/get")
+async def get_posting():
+
+    
     try:
         # ChromaDB에서 조회
-        collection_name = "posting{0}".format(postingCode)
+        collection_name = "posting"
         collection = client.get_collection(name=collection_name)
+
+        query_text = "fuck"
+        query_embedding = model.encode(query_text)
+
         result = collection.query(
-            query_texts=["java"],
-            n_results=3
+            # query_texts=[model.encode("spring")],
+            query_embeddings=[query_embedding.tolist()],
+            n_results=5
         )
+
 
         if result:
             # 결과 반환
