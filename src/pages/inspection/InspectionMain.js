@@ -5,7 +5,6 @@ import modalStyle from './static/css/ResumeListModal.module.css'
 import logo from './static/image/logo.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { callInspectionResumeAPI, callResumeDetailAPI } from '../../apis/inspectionAPICalls.js';
-import { result } from 'lodash';
 
 
 function InspectionMain()
