@@ -18,11 +18,15 @@ const JoinFormCompany = () => {
     companyHomepage:"",
   });
   const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [isPhoneChecked, setIsPhoneChecked] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!isEmailChecked) {
       alert('이메일 중복 확인을 해주세요.');
+      return;
+    }else if(!isPhoneChecked){
+      alert('전화번호 중복 확인을 해주세요.');
       return;
     }
     if(formData.password!==formData.confirmPassword) {
@@ -38,7 +42,6 @@ const JoinFormCompany = () => {
 
     axios.post(`./api/signupCompany`,formData)
         .then(response => {
-          alert(response.data);
           navigate('/');
         })
         .catch(error => {
@@ -56,12 +59,11 @@ const JoinFormCompany = () => {
   const handleEmailCheck = () => {
     const emailInput = document.getElementById('email');
     if (emailInput.validity.valid) {
-
-
       axios.get(`./api/email_duplication_check?email=${formData.email}`)
           .then(response => {
-            setIsEmailChecked(response.data);
-            alert(response.data);
+            let result = (response.data)? "가입가능합니다":"이미 등록된 이메일 입니다.";
+            alert(result);
+            setIsEmailChecked(result);
           })
           .catch(error => {
             console.error('Error fetching data: ', error);
@@ -70,6 +72,28 @@ const JoinFormCompany = () => {
           });
     }else{
       alert('유효하지 않은 이메일 형식입니다.');
+    }
+
+
+  };
+
+  const handlePhoneCheck = () => {
+    const phoneNumber = document.getElementById('phoneNumber').value;
+
+    if (phoneNumber.length>=10) {
+      axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+          .then(response => {
+            let result = (response.data)? "가입가능합니다":"이미 등록된 번호입니다.";
+            alert(result);
+            setIsPhoneChecked(result);
+          })
+          .catch(error => {
+            console.error('Error fetching data: ', error);
+          })
+          .finally(() => {
+          });
+    }else{
+      alert('전화번호는 10자리 이상 입력해주세요.');
     }
 
 
@@ -83,6 +107,7 @@ const JoinFormCompany = () => {
     }else if (name === 'phoneNumber'){
       const sanitizedValue = value.replace(/[^0-9]/g, '');
       setFormData({ ...formData, [name]: sanitizedValue });
+      setIsPhoneChecked(false);
     }else{
       setFormData({ ...formData, [name]: value });
     }
@@ -104,7 +129,16 @@ const JoinFormCompany = () => {
           </div>
           <span></span>
         </div>
-
+        <div className={styles.inputContainer}>
+          <label htmlFor="phoneNumber" >전화번호</label>
+          <div className={styles.inputWithButton}>
+          <div className={styles.inputOnly}>
+          <input type="text" id="phoneNumber"  maxLength={11} name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
+            </div>
+            <button className={styles.joinBtn}  type='button' onClick={handlePhoneCheck}>중복확인</button>
+          </div>
+          <span></span>
+        </div> 
         <div className={styles.inputContainer}>
           <label htmlFor="password">비밀번호</label>
           <div className={styles.inputOnly}>
@@ -129,13 +163,6 @@ const JoinFormCompany = () => {
           <span></span>
         </div>
 
-        <div className={styles.inputContainer}>
-          <label htmlFor="phoneNumber">전화번호</label>
-          <div className={styles.inputOnly}>
-            <input type="number" id="phoneNumber" max="99999999999" name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
-          </div>
-          <span></span>
-        </div>
 
 
         {/* <div className={styles.inputContainer}>
