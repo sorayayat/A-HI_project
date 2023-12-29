@@ -2,10 +2,12 @@ from fastapi import APIRouter
 import openai
 from typing import List
 from pydantic import BaseModel
-from configset.config import getAPIkey,getModel
+from configset.config import getAPIkey, getModel
 import os
 from .database import get_database
-
+from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+from fastapi import Body
 
 CBrouter = APIRouter(prefix="/chatbot")
 
@@ -13,18 +15,15 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 db = get_database()
 
-
 OPENAI_API_KEY = getAPIkey()
 openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
-
 
 class User(BaseModel):
     email: str
     roomId: str
     prompt: str
     message: str
-
 
 def read_prompt_file(prompt_type: str) -> str:
     # 프롬프트 유형에 따라 파일명 매핑
@@ -47,15 +46,76 @@ def read_prompt_file(prompt_type: str) -> str:
 
 
 
+# 채팅 내용 조회 api
+@CBrouter.post("/userchatrooms")
+async def get_user_chatrooms(request_body: dict = Body(...)):
+    email = request_body.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="Email is required")
+
+    user_data = await db.chatrooms.find_one({"email": email})
+    
+    if user_data:
+        return user_data.get("chatroomList", [])
+    else:
+        print("User data not found")
+        return JSONResponse(content={"email": email, "chatroomList": []}, status_code=404)
+
+
+
+# mongoDB 데이터 저장 함수
+async def update_chatroom(email, roomId, user_message, chatbot_response):
+    user_data = await db.chatrooms.find_one({"email": email})
+
+    if user_data:
+        # 이미 해당 이메일에 대한 데이터가 있는 경우
+        chatroom_exists = False
+        for room in user_data.get("chatroomList", []):
+            if room["roomId"] == roomId:
+                # 해당 roomId가 이미 존재하는 경우
+                chatroom_exists = True
+                # 저장할 데이터 구조
+                room["messageList"].append({"sender": "사용자", "content": user_message})
+                room["messageList"].append({"sender": "챗봇", "content": chatbot_response})
+                break
+
+        if not chatroom_exists:
+            # 채팅방이 존재하지 않는 경우 새로운 채팅방 생성
+            user_data["chatroomList"].append({
+                "roomId": roomId,
+                "messageList": [
+                    {"sender": "사용자", "content": user_message},
+                    {"sender": "챗봇", "content": chatbot_response}
+                ]
+            })
+
+        # 업데이트된 데이터베이스 정보를 업데이트
+        await db.chatrooms.update_one({"email": email}, {"$set": user_data}, upsert=True)
+    else:
+        # 해당 이메일에 대한 데이터가 없는 경우 새로운 데이터 생성
+        new_user_data = {
+            "email": email,
+            "chatroomList": [
+                {
+                    "roomId": roomId,
+                    "messageList": [
+                        {"sender": "사용자", "content": user_message},
+                        {"sender": "챗봇", "content": chatbot_response}
+                    ]
+                }
+            ]
+        }
+        await db.chatrooms.insert_one(new_user_data)
+
+
+# gpt 응답 반환 api
 @CBrouter.post("/")
 async def chatbot_endpoint(message: User):
     user_message = message.message
     prompt_type = message.prompt
 
-    # 파일에서 시스템 메시지 읽기
     system_message = read_prompt_file(prompt_type)
 
-    # GPT API 호출
     gpt_response = openai.ChatCompletion.create(
         messages=[
             {"role": "system", "content": system_message},
@@ -66,19 +126,11 @@ async def chatbot_endpoint(message: User):
 
     chatbot_response = gpt_response["choices"][0]["message"]["content"]
 
-
-    # MongoDB에 채팅 메시지 추가
-    await db.chatrooms.update_one(
-        {"email": message.email, "chatRoomId": message.roomId},
-        {
-            "$push": {
-                "messageList": {
-                    "userMessage": user_message,
-                    "chatbotResponse": chatbot_response
-                }
-            }
-        },
-        upsert=True  # 존재하지 않으면 새 문서 생성
+    await update_chatroom(
+        email=message.email,
+        roomId=message.roomId,
+        user_message=user_message,
+        chatbot_response=chatbot_response
     )
 
     return {"gptMessage": chatbot_response}
