@@ -27,7 +27,7 @@ public class BeanConfig {
     }
 
     @Bean
-    FileUtilsImpl fileUtilsImpl(RestTemplate restTemplate) {
+    public FileUtilsImpl fileUtilsImpl (RestTemplate restTemplate) {
         return new FileUtilsImpl(restTemplate);
     }
 
