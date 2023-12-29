@@ -68,7 +68,6 @@ public class PostingController {
         String fastApiEndpoint = "http://localhost:8000/posting/regist";
 
         HttpHeaders headers = new HttpHeaders();
-
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         System.out.println("postingDTOJson" + postingDTOJson);
@@ -81,6 +80,7 @@ public class PostingController {
                 HttpMethod.POST,
                 requestEntity,
                 ResponseDTO.class
+
         );
 
 

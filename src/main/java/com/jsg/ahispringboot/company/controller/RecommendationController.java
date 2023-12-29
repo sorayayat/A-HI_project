@@ -17,8 +17,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-
-
 import javax.print.attribute.Attribute;
 import java.io.File;
 import java.util.List;
@@ -32,44 +30,40 @@ public class RecommendationController {
     private final RecommendationService recommendationService;
     private final RestTemplate restTemplate;
 
-    @PostMapping("/resume")
-    public ResponseEntity<ResponseDTO> resumeRecommendation(MultipartHttpServletRequest file) {
-
-        // 파일 정보 출력
-        System.out.println("file" + file);
-
-        // postingDTO 조회
-        List<PostingDTO> postingDTO = recommendationService.selectPosting();
-
-        // postingDTO를 JSON 문자열로 변환 (Jackson과 같은 라이브러리 필요)
-        String postingDTOJson = convertPostingDTOToJson(postingDTO);
-
-        System.out.println("postingDTOJson: " + postingDTOJson);
-
-        // 요청에 사용할 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // JSON 페이로드와 헤더를 갖는 요청 엔터티 생성
-        HttpEntity<String> requestEntity = new HttpEntity<>(postingDTOJson, headers);
-
-        // FastAPI 엔드포인트 URL 지정
-        String fastApiEndpoint = "http://localhost:8000/recommendation/resume";
-
-        // POST 요청 전송
-        ResponseEntity<ResponseDTO> responseEntity = restTemplate.postForEntity(
-                fastApiEndpoint,
-                requestEntity,
-                ResponseDTO.class
-        );
-
-        // 응답 생성 및 반환
-        return ResponseEntity.ok()
-                .body(ResponseDTO.builder()
-                        .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
-                        .message("success")
-                        .build());
-    }
+//    @PostMapping("/resume")
+//    public ResponseEntity<ResponseDTO> resumeRecommendation(MultipartHttpServletRequest file) {
+//
+//        // 파일 정보 출력
+//        System.out.println("file" + file);
+//
+//
+//
+//
+//
+//        // 요청에 사용할 헤더 설정
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//        // JSON 페이로드와 헤더를 갖는 요청 엔터티 생성
+//        HttpEntity<String> requestEntity = new HttpEntity<>(file, headers);
+//
+//        // FastAPI 엔드포인트 URL 지정
+//        String fastApiEndpoint = "http://localhost:8000/recommendation/resume";
+//
+//        // POST 요청 전송
+//        ResponseEntity<ResponseDTO> responseEntity = restTemplate.postForEntity(
+//                fastApiEndpoint,
+//                requestEntity,
+//                ResponseDTO.class
+//        );
+//
+//        // 응답 생성 및 반환
+//        return ResponseEntity.ok()
+//                .body(ResponseDTO.builder()
+//                        .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
+//                        .message("success")
+//                        .build());
+//    }
 
     // postingDTO를 JSON 문자열로 변환하는 메서드
     private String convertPostingDTOToJson(List<PostingDTO> postingDTO) {
