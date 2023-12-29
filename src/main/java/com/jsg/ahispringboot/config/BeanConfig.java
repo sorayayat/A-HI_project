@@ -23,11 +23,11 @@ public class BeanConfig {
 
     @Bean
     public FileUtils fileUtil(RestTemplate restTemplate) {
-        return new FileUtilsImpl(restTemplate);
+        return fileUtilsImpl(restTemplate);
     }
 
     @Bean
-    FileUtilsImpl fileUtilsImpl(RestTemplate restTemplate) {
+    public FileUtilsImpl fileUtilsImpl (RestTemplate restTemplate) {
         return new FileUtilsImpl(restTemplate);
     }
 
