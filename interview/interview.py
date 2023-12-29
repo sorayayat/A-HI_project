@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from configset.config import getAPIkey,getModel
 from typing import List
 
+
 Interview_router = APIRouter(prefix='/interview')
 
 OPENAI_API_KEY = getAPIkey()
@@ -62,14 +63,14 @@ company_data = """
 
 """
 
-def gpt_question(data):
+def gpt_question(company_data):
     response = openai.ChatCompletion.create(
       model= MODEL, # 필수적으로 사용 될 모델을 불러온다.
       frequency_penalty=0.5, # 반복되는 내용 값을 설정 한다.
       temperature=0.6,
       messages=[
               {"role": "system", "content": test},
-              {"role": "system", "content": "{data}에 대해서 질문 할 것"},
+           
               {"role": "user", "content": company_data },
               
           ])
@@ -85,7 +86,6 @@ def gpt_feedback():
       temperature=0.6,
       messages=[
           {"role": "system", "content": "너는 면접관이야"},
-        #   {"role": "system", "content": f"{a}에 대해 면접자의 대답을 들어줘"},
           {"role": "system", "content": "어떻게 말하면 더 좋을지 면접자에게 답해줘"},
           
       ]
