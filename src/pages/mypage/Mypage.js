@@ -6,7 +6,7 @@ const Mypage = () => {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    const storedData = localStorage.getItem('userInfo');
+    const storedData = sessionStorage.getItem('userInfo');
     console.log(storedData);
     const data=JSON.parse(storedData);
     console.log(data.name);

@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import styles from './LoginForm.module.css';
 import {  Link,useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { login } from './authActions';
 
 const LoginForm = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [loginData, setLoginData] = useState({
         username: '',
         password: ''
@@ -29,12 +26,11 @@ const LoginForm = () => {
         axios.post(`/login`,formData.toString())
             .then(response => {
 
-              console.log(response.data.memberEntity);
                 if(response.data.memberEntity.password==='N'){
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('userInfo', JSON.stringify(response.data)); 
-                    alert("dsad");
-                    dispatch(login());
+                    // localStorage.setItem('isLoggedIn', 'true');
+                    // localStorage.setItem('userInfo', JSON.stringify(response.data)); 
+                    sessionStorage.setItem('userInfo', JSON.stringify(response.data.memberEntity));
+                    console.log(JSON.stringify(response.data.memberEntity))
                     navigate('/');
                 }
             })

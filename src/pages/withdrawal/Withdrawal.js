@@ -2,11 +2,8 @@ import React , { useEffect, useState }from 'react';
 import styles from './withdrawal.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logout } from '../login/authActions';
 const Withdrawal = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -32,8 +29,8 @@ const Withdrawal = () => {
     alert(formData.password);
     axios.delete(`./api/member/withdrawal`, { data: formData })
     .then(response => {
-      localStorage.setItem('isLoggedIn', 'false');
-      dispatch(logout());
+      sessionStorage.setItem('isLoggedIn', 'false');
+      sessionStorage.removeItem('userInfo');
       alert('탈퇴');
       navigate('/');
     })

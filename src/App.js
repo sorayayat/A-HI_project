@@ -23,53 +23,70 @@ import CompanyUpdate from './pages/memberUpdate/CompanyUpdate';
 import SearchPage from './pages/searchpage/SearchPage';
 import InspectionDetail from './pages/inspection/InspectionDetail';
 import InspectionMain from './pages/inspection/InspectionMain';
-
 import InterviewSpring from './pages/InterviewSpring/InterviewSpring';
+import { ProtectedRoute } from './pages/login/ProtectedRoute';
 function App() { 
 
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Layout/>}>
-          {/* 메인 */}
-          <Route index element={<MainContents/>}/>
 
-          <Route path='/companyDetails' element={<CompanyDetails />} />
-          <Route path='/recommendation' element={<Recommendation />} />
-          <Route path="/loginForm" element={<LoginForm />} />
-          <Route path="/joinForm" element={<JoinForm />} />
-          <Route path="/findForm" element={<FindForm />} />
-          <Route path="/member_update" element={<MemberUpdate />} />
-          <Route path="/withdrawal" element={<Withdrawal />} />
-          <Route path="/mypage" element={<Mypage />} />
-          <Route path="/chatbot" element={<ChatbotMain/>} />
-          <Route path="/joinFormCompany" element={<JoinFormCompany/>} />
-          <Route path='/companyUpdate' element={<CompanyUpdate/>}/>
+return (
+  <BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Layout/>}>
+        {/* 메인 */}
+        <Route index element={<MainContents/>}/>
+
+        <Route path='/companyDetails' element={<CompanyDetails />} />
+        <Route path='/recommendation' element={<Recommendation />} />
+        <Route path="/loginForm" element={<LoginForm />} />
+        <Route path="/joinForm" element={<JoinForm />} />
+        <Route path="/findForm" element={<FindForm />} />
+        
+        <Route path="/chatbot" element={<ChatbotMain/>} />
+        <Route path="/joinFormCompany" element={<JoinFormCompany/>} />
 
 
-          <Route path='/companyDetails' element={<CompanyDetails />} />
-          <Route path='/recommendation' element={<Recommendation />} />
-          <Route path='/inspection' element={<InspectionMain/>}/>
-          <Route path='/inspection/modify' element={<Inspection/>}/>
-          <Route path='/inspection/myResume' element={<InspectionResume/>}/>
-          <Route path='/inspection/detail/:resumeCode' element={<InspectionDetail/>}/>
-          <Route path='/companyList' element={<CompanyList />} />
-          
-          <Route path='/interview' element={<Interview/>}/>
-          <Route path='/createResume' element={<CreateResume/>}/>
-          <Route path='/companyList/companyRegist' element={<CompanyRegist/>}/>
-          <Route path='/companyList/companyRegist/writeInfo' element={<WriteInfo/>}/>
-          <Route path='/SearchPage' element={<SearchPage/>}/>
-          <Route path='/interviewSpring' element={<InterviewSpring/>}/>
-          
+        <Route path='/companyDetails' element={<CompanyDetails />} />
+        <Route path='/recommendation' element={<Recommendation />} />
+        <Route path='/inspection' element={<InspectionMain/>}/>
+        <Route path='/inspection/modify' element={<Inspection/>}/>
+        <Route path='/inspection/myResume' element={<InspectionResume/>}/>
+        <Route path='/inspection/detail/:resumeCode' element={<InspectionDetail/>}/>
+        <Route path='/companyList' element={<CompanyList />} />
+        
+        <Route path='/interview' element={<Interview/>}/>
+        <Route path='/createResume' element={<CreateResume/>}/>
+        <Route path='/companyList/companyRegist' element={<CompanyRegist/>}/>
+        <Route path='/companyList/companyRegist/writeInfo' element={<WriteInfo/>}/>
+        <Route path='/SearchPage' element={<SearchPage/>}/>
+        <Route path='/interviewSpring' element={<InterviewSpring/>}/>
+        
+        
+        
+        <Route path='/withdrawal' element={
+        <ProtectedRoute>
+        <Withdrawal />
+        </ProtectedRoute>}/>
+        <Route path='/mypage' element={
+        <ProtectedRoute>
+        <Mypage />
+        </ProtectedRoute>}/>
+      <Route path='/member_update' element={
+          <ProtectedRoute roles={['ROLE_MEMBER']}>
+            <MemberUpdate />
+          </ProtectedRoute>
+        }/>
+        <Route path='/companyUpdate' element={
+          <ProtectedRoute roles={['ROLE_COMPANY']}>
+            <CompanyUpdate />
+          </ProtectedRoute>
+        }/>
+      </Route>       
+    </Routes>
+  </BrowserRouter>
 
-        </Route>       
-      </Routes>
-    </BrowserRouter>
 
-  
-  );
+);
 }
 
 export default App;
