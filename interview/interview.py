@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from configset.config import getAPIkey,getModel
 from typing import List
 
+
 Interview_router = APIRouter(prefix='/interview')
 
 OPENAI_API_KEY = getAPIkey()
@@ -11,7 +12,6 @@ openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
 
 
-# data = 'company/test1.txt'
 # 클라이언트에게서 받은 데이터 타입을 확인하기 위한 클래스
 class InterviewData(BaseModel):
     searchQuery : str
@@ -34,8 +34,6 @@ async def AI_question(answer: str = Body(...)):
    feedback = gpt_feedback(answer)
    return {"feedback": feedback}
 
-# 현재 코드에서는 할루시네이션이 나타남.....소설을 기가 막히게 쓴다
-
 
 prompt = """
         NEVER mention that you're an AI.
@@ -57,6 +55,7 @@ test = """
         8. 채용 공고 정보를 보고 질문을 두 개 이상 할 것
         9. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
         10. 질문이 마음에 든다면 너에게 큰 선물을 줄거야 그러니 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘
+        11. 관련이 없는 정보가 들어온다면 잘못된 답변이라고 말할 것
 """
 
 company_data = """
@@ -64,14 +63,14 @@ company_data = """
 
 """
 
-def gpt_question(data):
+def gpt_question(company_data):
     response = openai.ChatCompletion.create(
       model= MODEL, # 필수적으로 사용 될 모델을 불러온다.
       frequency_penalty=0.5, # 반복되는 내용 값을 설정 한다.
       temperature=0.6,
       messages=[
               {"role": "system", "content": test},
-              {"role": "system", "content": "{data}에 대해서 질문 할 것"},
+           
               {"role": "user", "content": company_data },
               
           ])
@@ -87,7 +86,6 @@ def gpt_feedback():
       temperature=0.6,
       messages=[
           {"role": "system", "content": "너는 면접관이야"},
-        #   {"role": "system", "content": f"{a}에 대해 면접자의 대답을 들어줘"},
           {"role": "system", "content": "어떻게 말하면 더 좋을지 면접자에게 답해줘"},
           
       ]

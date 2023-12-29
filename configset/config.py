@@ -7,3 +7,18 @@ def getAPIkey():
 def getModel():
     return env('MODEL')
 
+
+def getuser():
+    return env('USERNAME')
+
+def getpw():
+    return env('PASSWORD')
+
+def gethost():
+    return env('HOST')
+
+def getport():
+    return env('PORT')
+
+def getdbname():
+    return env('DBNAME')
