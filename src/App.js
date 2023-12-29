@@ -11,7 +11,6 @@ import MemberUpdate from './pages/memberUpdate/MemberUpdate';
 import Withdrawal from './pages/withdrawal/Withdrawal';
 import Mypage from './pages/mypage/Mypage';
 import Inspection from './pages/inspection/Inspection';
-import InspectionResume from './pages/inspection/InspectionResume';
 import CompanyList from './pages/company/CompanyList';
 import Interview from './pages/Interview/Interview';
 import CreateResume from './pages/createresume/CreateResume';
@@ -52,8 +51,7 @@ function App() {
           <Route path='/recommendation' element={<Recommendation />} />
           <Route path='/inspection' element={<InspectionMain/>}/>
           <Route path='/inspection/modify' element={<Inspection/>}/>
-          <Route path='/inspection/myResume' element={<InspectionResume/>}/>
-          <Route path='/inspection/detail/:resumeCode' element={<InspectionDetail/>}/>
+          <Route path='/inspection/detail' element={<InspectionDetail/>}/>
           <Route path='/companyList' element={<CompanyList />} />
           
           <Route path='/interview' element={<Interview/>}/>
