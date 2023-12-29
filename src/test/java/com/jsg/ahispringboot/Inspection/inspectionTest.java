@@ -29,8 +29,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
 import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.SelfIntroductionDTO;

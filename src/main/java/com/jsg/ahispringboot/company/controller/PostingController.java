@@ -81,6 +81,7 @@ public class PostingController {
                 HttpMethod.POST,
                 requestEntity,
                 ResponseDTO.class
+
         );
 
 
