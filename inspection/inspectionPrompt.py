@@ -1,5 +1,5 @@
 # from openai import OpenAI
-# from config.config import getAPIkey ,getModel
+# from configset.config import getAPIkey ,getModel
 # import openai
 # import re
 

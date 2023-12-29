@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, Path, HTTPException
 from interview.interview import Interview_router
 from fastapi.middleware.cors import CORSMiddleware
 # from inspection.inspection import ITrouter
@@ -9,7 +9,6 @@ from recommendation.recommendation import RErouter
 
 
 app = FastAPI()
-
 
 app.include_router(Interview_router)
 # app.include_router(ITrouter)
