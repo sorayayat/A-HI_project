@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { callPostingAPI, calltestAPI } from '../../apis/postingAPIAPICalls';
+import { callPostingAPI, calltestAPI } from '../../apis/postingAPICalls';
 
 function WriteInfo() {
 
