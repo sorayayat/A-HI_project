@@ -1,5 +1,6 @@
 import { get } from "react-scroll/modules/mixins/scroller";
 import { getResume, getResumelist, postAsk } from "../modules/inspectionModule";
+import { useNavigate } from "react-router";
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
@@ -36,14 +37,15 @@ export const callInspectionResumeAPI = () =>{
     }
 }
 
-// export const callResumeDetailAPI = (resumeCode) =>{
-//     const requestURL = `${SB_PRE_URL}/getResume/${resumeCode}`;
-//     return async(dispath,getState) =>{
-//         console.log(resumeCode);
-//         const result = await fetch(requestURL).then(resp => resp.json());
-//         if(result.status === 200)
-//         {
-//             console.log("h2h2")
-//         }
-//     }
-// }
+export const callResumeDetailAPI = (resumeCode) =>{
+    const requestURL = `${SB_PRE_URL}/getResume/${resumeCode}`;
+    console.log(resumeCode)
+    return async(dispath,getState) =>{
+        const result = await fetch(requestURL).then(resp => resp.json());
+        if(result.status === 200)
+        {
+            dispath(getResume(result));
+            return {status : 200}
+        }
+    }
+}

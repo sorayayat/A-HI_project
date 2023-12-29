@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router';
 import style from './static/css/inspectionMain.module.css'
 import modalStyle from './static/css/ResumeListModal.module.css'
 import logo from './static/image/logo.png'
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { callInspectionResumeAPI } from '../../apis/inspectionAPICalls.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { callInspectionResumeAPI, callResumeDetailAPI } from '../../apis/inspectionAPICalls.js';
 
 
 function InspectionMain()
@@ -38,19 +38,15 @@ function InspectionMain()
             setIsModalOpen(false);
           }
         };
-    
         document.addEventListener("mousedown", clickOutside);
         return () => {
           document.removeEventListener("mousedown", clickOutside);
         };
       }, [isModalOpen]);
 
-    useEffect( () => {
-        dispatch(callInspectionResumeAPI());
-    },isModalOpen == true)
-
     const openModal = () =>{
-        setIsModalOpen(true);
+        setIsModalOpen(true)
+        dispatch(callInspectionResumeAPI());
     }
 
     const closeModal = () =>{
@@ -59,8 +55,14 @@ function InspectionMain()
 
     const onClickResumeHandler = (code) =>{
         //여기서 현재 로그인한 계정인지 아닌지 체크하면 좋을듯
-        navigate(`/inspection/detail/${code}`);
+        dispatch(callResumeDetailAPI(code)).then((result) => {
+            console.log(result);
+            if(result.status === 200)
+                navigate("/inspection/detail")
+        })
+
     }
+
 
     console.log(resume?.data)
     return(
