@@ -5,7 +5,7 @@ from configset.config import getAPIkey ,getModel
 from typing import List
 from pydantic import BaseModel
 from inspection import inspectionPrompt
-import io, openai , json
+import io, openai , json , time
 
 ITrouter = APIRouter(prefix="/inspection")
 
@@ -66,12 +66,15 @@ async def ask(ask : Ask):
 
 @ITrouter.post("/ReadResume")
 async def readResume(file : UploadFile = File(...)):
+    print("시작")
+    start = time.time()
     contents = await file.read()
     buffer = io.BytesIO(contents) 
     pdf_reader = PdfReader(buffer)
     pageNumber = 0
     page = pdf_reader.pages[pageNumber]
     text = page.extract_text()
+    pdfEndTime = time.time() - start;
     
     pre_prompt1 = "1.Keep the original content without summarizing it;"
     pre_prompt2 = "2.Separate the content into key and value, distinguishing between title and content.;"
@@ -84,7 +87,9 @@ async def readResume(file : UploadFile = File(...)):
         answer = post_gap(system_content , text)
         strToJson = answer
         json_object = json.loads(strToJson)
+        gptEndTime = time.time() - start
     except :
         json_object = {"error" : "통신에러"}
-
+    # print("pdfEndTime : " + pdfEndTime)
+    # print("gptEndTime : " + gptEndTime)
     return json_object
