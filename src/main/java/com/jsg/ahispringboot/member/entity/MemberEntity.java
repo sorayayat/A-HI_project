@@ -16,15 +16,15 @@ public class MemberEntity {
     private Long id;
 
     private String email;
-    @Column(name = "member_name")
+    @Column(name = "name")
     private String name;
     private String password;
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "company_id")
-    private CompanyEntity companyEntity;
+    // @OneToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "company_id")
+    // private CompanyEntity companyEntity;
 
 }

@@ -1,9 +1,11 @@
 package com.jsg.ahispringboot.member.entity;
 
+import com.jsg.ahispringboot.company.entity.Posting;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "company")
@@ -12,6 +14,7 @@ import java.sql.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class CompanyEntity {
 
     @Id
@@ -34,6 +37,7 @@ public class CompanyEntity {
 
     @Column(name = "company_homepage")
     private String companyHomepage;
+
 
   /*  @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_id")

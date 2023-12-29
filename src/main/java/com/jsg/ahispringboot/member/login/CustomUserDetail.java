@@ -70,22 +70,22 @@ public class CustomUserDetail implements UserDetails {
         return true;
     }
 
-    public String company(){
-        return memberEntity.getCompanyEntity().getCompany();
-    }
-    public String companyType(){
-        return memberEntity.getCompanyEntity().getCompanyType();
-    }
-    public int employeesNumber(){
-        return memberEntity.getCompanyEntity().getEmployeesNumber();
-    }
-    public Date establishmentDate(){
-        return memberEntity.getCompanyEntity().getEstablishmentDate();
-    }
-    public String companyHomepage(){
-        return memberEntity.getCompanyEntity().getCompanyHomepage();
-    }
-    public Long companyPk(){
-        return memberEntity.getCompanyEntity().getCompanyId();
-    }
+    // public String company(){
+    //     return memberEntity.getCompanyEntity().getCompany();
+    // }
+    // public String companyType(){
+    //     return memberEntity.getCompanyEntity().getCompanyType();
+    // }
+    // public int employeesNumber(){
+    //     return memberEntity.getCompanyEntity().getEmployeesNumber();
+    // }
+    // public Date establishmentDate(){
+    //     return memberEntity.getCompanyEntity().getEstablishmentDate();
+    // }
+    // public String companyHomepage(){
+    //     return memberEntity.getCompanyEntity().getCompanyHomepage();
+    // }
+    // public Long companyPk(){
+    //     return memberEntity.getCompanyEntity().getCompanyId();
+    // }
 }

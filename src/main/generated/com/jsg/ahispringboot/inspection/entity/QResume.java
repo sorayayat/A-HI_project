@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,11 +18,13 @@ public class QResume extends EntityPathBase<Resume> {
 
     private static final long serialVersionUID = 1545329704L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QResume resume = new QResume("resume");
 
     public final StringPath createDate = createString("createDate");
 
-    public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
+    public final com.jsg.ahispringboot.member.entity.QMemberEntity member;
 
     public final StringPath modifyDate = createString("modifyDate");
 
@@ -30,15 +33,24 @@ public class QResume extends EntityPathBase<Resume> {
     public final StringPath resumePath = createString("resumePath");
 
     public QResume(String variable) {
-        super(Resume.class, forVariable(variable));
+        this(Resume.class, forVariable(variable), INITS);
     }
 
     public QResume(Path<? extends Resume> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QResume(PathMetadata metadata) {
-        super(Resume.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QResume(PathMetadata metadata, PathInits inits) {
+        this(Resume.class, metadata, inits);
+    }
+
+    public QResume(Class<? extends Resume> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.member = inits.isInitialized("member") ? new com.jsg.ahispringboot.member.entity.QMemberEntity(forProperty("member")) : null;
     }
 
 }
