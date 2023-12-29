@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jsg.ahispringboot.common.ResponseDTO;
+import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
 import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
 import com.jsg.ahispringboot.inspection.service.InspectionService;
 
@@ -29,7 +30,7 @@ public class InspectionController {
 
     @GetMapping("/getResumeList")
     public ResponseEntity<ResponseDTO> selectResume() {
-        Long code = 1L;
+        Long code = 3L;
         List<ResumeDTO> resume = inspectionsService.selectMemberResume(code);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공", resume));
@@ -37,9 +38,9 @@ public class InspectionController {
 
     @GetMapping("/getResume/{resumeCode}")
     public ResponseEntity<ResponseDTO> selectResume(@PathVariable("resumeCode") Long resumeCode) {
-        Long userCode = 1L;
-        inspectionsService.selcetResumeDetall(resumeCode , userCode);
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공 bro", null));
+        Long userCode = 3L;
+        ReaderDTO reader = inspectionsService.selcetResumeDetall(resumeCode, userCode);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공 bro", reader));
     }
 
 }
