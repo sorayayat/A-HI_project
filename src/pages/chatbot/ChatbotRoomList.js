@@ -2,9 +2,8 @@ import React from 'react';
 import styles from './ChatbotRoomList.module.css';
 
 
-// 채팅방 목록, 새 채팅방 생성 버튼 클릭 이벤트, 현재 선택된 채팅방의 상태를 ChatbotMain으로부터 props로 받아야 합니다.
 const ChatbotRoomList = ({ chatRooms, onNewChat, onSelectChatRoom, activeChatRoomId }) => {
-
+    console.log("ChatbotRoomList rendering with chatRooms : ", chatRooms);
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
             return text.substring(0, maxLength) + '...';
@@ -22,13 +21,17 @@ const ChatbotRoomList = ({ chatRooms, onNewChat, onSelectChatRoom, activeChatRoo
                 <div className={styles.roomListMenuSet}>
                     {chatRooms.map((room) => (
                         <div
-                            key={room.id}
-                            className={`${styles.roomLists} ${room.id === activeChatRoomId ? styles.activeRoom : ''}`}
-                            onClick={() => onSelectChatRoom(room.id)}
+                            key={room.roomId}
+                            className={`${styles.roomLists} ${room.roomId === activeChatRoomId ? styles.activeRoom : ''}`}
+                            onClick={() => onSelectChatRoom(room.roomId)}
                         >
                             <p className={styles.newOrExp}>{room.prompt || '신입'}</p>
                             {/* 채팅방의 마지막 메시지 또는 기본 텍스트 표시 */}
-                            <p>{room.messages.length > 0 ? truncateText(room.messages[room.messages.length - 1].content, 16) : '채팅을 시작해보세요.'}</p>
+                            <p>{
+                            Array.isArray(room.messageList) && room.messageList.length > 0 
+                            ? truncateText(room.messageList[room.messageList.length - 1].content, 16) 
+                            : '채팅을 시작해보세요.'
+                        }</p>
                         </div>
                     ))}
                 </div>

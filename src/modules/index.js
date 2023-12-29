@@ -13,12 +13,13 @@ const rootReducer = combineReducers({
     interviewReduer,
     auth: authReducer,
     companyReducer,
-    chatbotReducer : chatbotReducer
+    chatbotReducer
 })
 
 const persistConfig = {
     key: "root",
     storage: storage,
+    whitelist:  ["chatbotReducer"]
 };
 
 
