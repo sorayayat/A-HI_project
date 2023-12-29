@@ -19,5 +19,5 @@ public interface MemberRepository {
 
     UserDetails updateMember(MemberDto memberDto);
 
-    // UserDetails updateCompany(CompanyDto companyDto);
+     UserDetails updateCompany(CompanyDto companyDto);
 }
