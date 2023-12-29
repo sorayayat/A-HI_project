@@ -50,7 +50,7 @@ public class QResume extends EntityPathBase<Resume> {
 
     public QResume(Class<? extends Resume> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new com.jsg.ahispringboot.member.entity.QMemberEntity(forProperty("member")) : null;
+        this.member = inits.isInitialized("member") ? new com.jsg.ahispringboot.member.entity.QMemberEntity(forProperty("member"), inits.get("member")) : null;
     }
 
 }
