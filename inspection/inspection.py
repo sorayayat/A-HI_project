@@ -7,62 +7,62 @@ from pydantic import BaseModel
 from inspection import inspectionPrompt
 import io, openai , json , time
 
-# ITrouter = APIRouter(prefix="/inspection")
+ITrouter = APIRouter(prefix="/inspection")
 
-# client = OpenAI()
-# OPENAI_API_KEY = getAPIkey()
-# MODEL = getModel()
+client = OpenAI()
+OPENAI_API_KEY = getAPIkey()
+MODEL = getModel()
 
-# class Ask(BaseModel):
-#     introductionTitle : List[str]
-#     keyword : List[str]
-#     content : List[str]
-#     title : str
+class Ask(BaseModel):
+    introductionTitle : List[str]
+    keyword : List[str]
+    content : List[str]
+    title : str
 
-# class SelfIntroduction(BaseModel):
-#     title: str
-#     content: str
+class SelfIntroduction(BaseModel):
+    title: str
+    content: str
 
-# class PersonalInformation(BaseModel):
-#     name: str
-#     position: str
-#     dateOfBirth: str
-#     gender: str
-#     department: str
+class PersonalInformation(BaseModel):
+    name: str
+    position: str
+    dateOfBirth: str
+    gender: str
+    department: str
 
-# class ReaderDTO(BaseModel):
-#     PersonalInformation : PersonalInformation
-#     SelfIntroduction: List[SelfIntroduction]
+class ReaderDTO(BaseModel):
+    PersonalInformation : PersonalInformation
+    SelfIntroduction: List[SelfIntroduction]
 
 
 
-# def post_gap(system_content, user_content):
-#     try:
-#         openai.api_key = OPENAI_API_KEY
-#         response = client.chat.completions.create(
-#             model=MODEL,
-#             messages= [
-#                 {"role" : "system","content" : system_content},
-#                 {"role" : "user", "content" : user_content} 
-#             ],
-#             stop=None,
-#             temperature=0.5
-#         )
-#         answer = response.choices[0].message.content
-#         print("gpt 답변 : " + answer)
-#         return answer
-#     except Exception as e:
-#         resp ={
-#             "status" : e,
-#             "data" : "그냥 오류요 뭐요 다시 시도해보든가"
-#         }
-#         return {"resp" : resp}
+def post_gap(system_content, user_content):
+    try:
+        openai.api_key = OPENAI_API_KEY
+        response = client.chat.completions.create(
+            model=MODEL,
+            messages= [
+                {"role" : "system","content" : system_content},
+                {"role" : "user", "content" : user_content} 
+            ],
+            stop=None,
+            temperature=0.5
+        )
+        answer = response.choices[0].message.content
+        print("gpt 답변 : " + answer)
+        return answer
+    except Exception as e:
+        resp ={
+            "status" : e,
+            "data" : "그냥 오류요 뭐요 다시 시도해보든가"
+        }
+        return {"resp" : resp}
 
-# @ITrouter.post("/aks")
-# async def ask(ask : Ask):
-#     result = inspectionPrompt.create_prediction_prompt(ask)
-#     print(f"result : {result}")
-#     return {"status" : 200 , "result" : result}
+@ITrouter.post("/aks")
+async def ask(ask : Ask):
+    result = inspectionPrompt.create_prediction_prompt(ask)
+    print(f"result : {result}")
+    return {"status" : 200 , "result" : result}
 
 @ITrouter.post("/ReadResume")
 async def readResume(file : UploadFile = File(...)):
