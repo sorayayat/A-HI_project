@@ -70,7 +70,9 @@ const Search = () => {
         <>
             <div className={styles.searchLogo}>
                 <Link to="/">
-                    <img src={logoImage} style={{ width: "200px", height: "110px" }} alt="logoImage" />
+
+                    <img src={logoImage} style={{ width:"250px", height:"180px"}} alt="logoImage" />
+
                 </Link>
             </div>
             <div className={styles.searchWrapper}>
