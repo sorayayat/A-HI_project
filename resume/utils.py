@@ -1,4 +1,3 @@
-from docx import Document
 from typing import List
 from pydantic import BaseModel, EmailStr
 import openai
@@ -12,10 +11,12 @@ class ResumeData(BaseModel):
     job_title: str
     skills: List[str]
     experiences: List[str]
+    experiences_detail: List[str]
     projects: List[str]
+    projects_detail: List[str]
     educations: List[str]
+    educations_detail: List[str]
     awards_and_certifications: List[str]
-    
 
 def call_openai_gpt(messages, model="gpt-4", temperature=0.7, max_tokens=1000):
     openai.api_key = getAPIkey()
