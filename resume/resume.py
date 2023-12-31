@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr
-from .resumegenerator import generate_resume
+from .resumegenerator import generate_resume_content
 from .utils import ResumeData
 from motor.motor_asyncio import AsyncIOMotorClient
 from configset.config import getAPIkey, getModel
@@ -35,7 +35,7 @@ async def create_resume(data: ResumeData):
     if chat_response is None:
         raise HTTPException(status_code=500, detail="Error in generating resume content")
 
-    generated_resume_path = generate_resume(chat_response)
+    generated_resume_path = generate_resume_content(chat_response)
     return {"message": "Resume created successfully", "resume_path": generated_resume_path}
 
 def call_openai_gpt_to_generate_resume(resume_data):
