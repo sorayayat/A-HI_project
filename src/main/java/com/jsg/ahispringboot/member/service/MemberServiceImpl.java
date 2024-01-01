@@ -1,9 +1,13 @@
 package com.jsg.ahispringboot.member.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jsg.ahispringboot.company.entity.Posting;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.entity.CompanyEntity;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
+import com.jsg.ahispringboot.member.entity.PostingLike;
 import com.jsg.ahispringboot.member.mapper.MemberTransMapper;
 import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import com.jsg.ahispringboot.member.repository.MemberRepository;
@@ -11,14 +15,17 @@ import com.jsg.ahispringboot.member.repository.MemberRepositoryDataJpa;
 import com.jsg.ahispringboot.member.utils.MailSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import jakarta.servlet.http.HttpSession;
 
 
@@ -32,10 +39,11 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MailSend mailSend;
     private final HttpSession session;
+
     @Override
     public boolean emailDuplicationCheck(String email) {
-       MemberEntity member = memberRepositoryImpl.findMember(email,null);
-        if(member!=null){
+        MemberEntity member = memberRepositoryImpl.findMember(email, null);
+        if (member != null) {
             return false;
         }
         return true;
@@ -43,8 +51,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean phoneNumberDuplicationCheck(String phoneNumber) {
-        MemberEntity member = memberRepositoryImpl.findMember(null,phoneNumber);
-        if(member!=null){
+        MemberEntity member = memberRepositoryImpl.findMember(null, phoneNumber);
+        if (member != null) {
             return false;
         }
         return true;
@@ -71,25 +79,26 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDto findInfo(MemberDto memberDto) {
         MemberDto findDto;
-        if(memberDto!=null){
+        if (memberDto != null) {
             MemberEntity member = memberRepositoryImpl.findMember(memberDto.getEmail(), memberDto.getPhoneNumber());
             if (member != null) {
-                 findDto = MemberTransMapper.INSTANCE.entityToDto(member);
-             return findDto;
+                findDto = MemberTransMapper.INSTANCE.entityToDto(member);
+                return findDto;
             }
 
         }
         return null;
     }
+
     @Override
     public void findPwd(MemberDto memberDto) {
         MemberEntity member = memberRepositoryImpl.findMember(memberDto.getEmail(), memberDto.getPhoneNumber());
 
-        if(member!=null && member.getEmail().equals(memberDto.getEmail())) {
+        if (member != null && member.getEmail().equals(memberDto.getEmail())) {
             String uuid = UUID.randomUUID().toString();
             String newNotEncodePassword = uuid.substring(0, 14);
             String newPassword = passwordEncoder.encode(newNotEncodePassword);
-            mailSend.sendEmail(memberDto.getEmail(),"jsg 변경된 PASSWORD 입니다.",newNotEncodePassword);
+            mailSend.sendEmail(memberDto.getEmail(), "jsg 변경된 PASSWORD 입니다.", newNotEncodePassword);
             member.setPassword(newPassword);
             memberRepositoryImpl.updatePwd(member);
         }
@@ -105,18 +114,47 @@ public class MemberServiceImpl implements MemberService {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
-     @Override
-     public void companyInfoUpdate(CompanyDto companyDto, Authentication authentication) {
-          UserDetails userDetails=memberRepositoryImpl.updateCompany(companyDto);
-         Authentication newAuth =
-                 new UsernamePasswordAuthenticationToken
-                         (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
-         SecurityContextHolder.getContext().setAuthentication(newAuth);
-     }
+    @Override
+    public void companyInfoUpdate(CompanyDto companyDto, Authentication authentication) {
+        UserDetails userDetails = memberRepositoryImpl.updateCompany(companyDto);
+        Authentication newAuth =
+                new UsernamePasswordAuthenticationToken
+                        (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+    }
 
     @Override
     public void withdrawal(MemberDto memberDto) {
         memberRepositoryDataJpa.deleteById(memberDto.getId());
         session.invalidate();
+    }
+
+    @Override
+    public String myPage(Long memberId) {
+        List<PostingLike> postingLikes = memberRepositoryImpl.myPagePostingLike(memberId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        if (postingLikes != null && !postingLikes.isEmpty()) {
+            try {
+                List<String> postingsJson = postingLikes.stream()
+                        .map(postingLike -> {
+                            try {
+                                return objectMapper.writeValueAsString(postingLike.getPosting());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                return null;
+                            }
+                        })
+                        .collect(Collectors.toList());
+
+                return objectMapper.writeValueAsString(postingsJson);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Error converting to JSON";
+            }
+        } else {
+            return "no data";
+        }
     }
 }

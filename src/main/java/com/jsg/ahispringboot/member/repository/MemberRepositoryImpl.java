@@ -3,6 +3,7 @@ package com.jsg.ahispringboot.member.repository;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
+import com.jsg.ahispringboot.member.entity.PostingLike;
 import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -107,4 +108,12 @@ public class MemberRepositoryImpl implements MemberRepository {
          memberEntity1.getCompanyEntity().setEstablishmentDate(companyDto.getEstablishmentDate());
          return new CustomUserDetail(memberEntity1);
      }
+     @Transactional
+
+    public List<PostingLike> myPagePostingLike(Long memberId) {
+        return em.createQuery(
+                        "SELECT pl FROM PostingLike pl WHERE pl.memberEntity.id = :memberId", PostingLike.class)
+                .setParameter("memberId", memberId)
+                .getResultList();
+    }
 }

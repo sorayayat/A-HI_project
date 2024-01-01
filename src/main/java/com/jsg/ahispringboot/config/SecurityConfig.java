@@ -51,7 +51,10 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/in/member/**").authenticated()
+                        .requestMatchers(request -> {
+                            String[] pathSegments = request.getRequestURI().split("/");
+                            return pathSegments.length > 2 && "in".equals(pathSegments[2]);
+                        }).authenticated()
                         .requestMatchers("/in/member/**").hasRole("MEMBER")
                         .requestMatchers("/in/company/**").hasRole("COMPANY")
                 )

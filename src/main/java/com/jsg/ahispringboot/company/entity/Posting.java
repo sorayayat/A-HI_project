@@ -50,6 +50,9 @@ public class Posting {
     @Column(name = "education")
     private String education;
 
+
+
+
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     @JsonIgnore

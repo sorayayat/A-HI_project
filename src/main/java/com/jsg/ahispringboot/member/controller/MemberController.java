@@ -24,7 +24,7 @@ public class MemberController {
     @GetMapping("/email_duplication_check")
     public boolean emailDuplicationCheck(@RequestParam String email) throws IOException {
         boolean result = memberServiceImpl.emailDuplicationCheck(email);
-        return true;
+        return result;
     }
     @GetMapping("/phoneNumber_duplication_check")
     public boolean phoneNumberDuplicationCheck(@RequestParam String phoneNumber) {
@@ -107,6 +107,10 @@ public class MemberController {
         return true;
     }
 
-
+    @GetMapping("/in/member/myPage")
+    public String myPage(@RequestParam Long memberId){
+        String result = memberServiceImpl.myPage(memberId);
+        return result;
+    }
 
 }

@@ -22,4 +22,6 @@ public interface MemberService {
      void companyInfoUpdate(CompanyDto companyDto, Authentication authentication);
 
     void withdrawal(MemberDto memberDto);
+
+    String myPage(Long memberId);
 }
