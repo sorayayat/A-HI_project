@@ -16,8 +16,6 @@ import json
 
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
-client = chromadb.Client()
-
 
 from datetime import datetime
 
