@@ -1,10 +1,10 @@
-from fastapi import FastAPI, APIRouter, Body, File, Request, UploadFile, Depends, Form
+from fastapi import FastAPI, APIRouter, Body, File, Request, UploadFile, Depends, HTTPException
 import openai
 from pydantic import BaseModel
 from configset.config import getAPIkey,getModel
 from typing import List
 import pdfplumber
-
+from db.database import *
 
 Interview_router = APIRouter(prefix='/interview')
 
@@ -87,7 +87,7 @@ def gpt_question(test,user):
     print(output_text)
     return output_text
 
-print(gpt_question(test,user))
+# print(gpt_question(test,user))
 
 
 def gpt_feedback():

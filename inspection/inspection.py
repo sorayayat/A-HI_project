@@ -28,6 +28,7 @@ class Ask(BaseModel):
 class SelfIntroduction(BaseModel):
     title: str
     content: str
+    
 class SelfIntroduction(BaseModel):
     title: str
     content: str
