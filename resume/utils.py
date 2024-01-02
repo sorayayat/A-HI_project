@@ -18,12 +18,12 @@ class ResumeData(BaseModel):
     educations_detail: List[str]
     awards_and_certifications: List[str]
 
-def call_openai_gpt(messages, model="gpt-4", temperature=0.7, max_tokens=1000):
-    openai.api_key = getAPIkey()
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=messages,
-        temperature=temperature,
-        max_tokens=max_tokens
-    )
-    return response
+# def call_openai_gpt(messages, model="gpt-4", temperature=0.7, max_tokens=1000):
+#     openai.api_key = getAPIkey()
+#     response = openai.ChatCompletion.create(
+#         model=model,
+#         messages=messages,
+#         temperature=temperature,
+#         max_tokens=max_tokens
+#     )
+#     return response

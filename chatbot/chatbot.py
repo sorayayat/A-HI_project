@@ -8,6 +8,10 @@ from .database import get_database
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from fastapi import Body
+# from fastapi.responses import StreamingResponse
+# from fastapi import BackgroundTasks
+# import asyncio
+
 
 CBrouter = APIRouter(prefix="/chatbot")
 
@@ -129,8 +133,49 @@ async def delete_chatroom(request_data: dict = Body(...)):
 
 
 
+# streaming 수정중
+# async def generate_chatbot_responses(user_message, system_message, email, roomId):
+#     gpt_response = openai.ChatCompletion.create(
+#         messages=[
+#             {"role": "system", "content": system_message},
+#             {"role": "user", "content": user_message}
+#         ],
+#         model=MODEL,
+#         stream=True,
+#     )
 
-# gpt 응답 반환 api
+#     async for response in gpt_response:
+#         chatbot_response = response["choices"][0]["message"]["content"]
+#         await update_chatroom(
+#             email=email,
+#             roomId=roomId,
+#             user_message=user_message,
+#             chatbot_response=chatbot_response
+#         )
+#         yield chatbot_response
+
+
+# @CBrouter.post("/")
+# async def chatbot_endpoint(message: User, background_tasks: BackgroundTasks):
+#     user_message = message.message
+#     prompt_type = message.prompt
+#     email = message.email
+#     roomId = message.roomId
+
+#     system_message = read_prompt_file(prompt_type)
+
+#     background_tasks.add_task(
+#         StreamingResponse,
+#         generate_chatbot_responses(user_message, system_message, email, roomId),
+#         media_type="text/event-stream"
+#     )
+
+#     return {"message": "Streaming started"}
+
+
+
+
+
 @CBrouter.post("/")
 async def chatbot_endpoint(message: User):
     user_message = message.message
@@ -144,7 +189,7 @@ async def chatbot_endpoint(message: User):
             {"role": "user", "content": user_message}
         ],
         model=MODEL,
-        stream=True
+        # stream=True
     )
 
 
