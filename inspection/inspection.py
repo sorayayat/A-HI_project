@@ -9,7 +9,11 @@ import io, openai , json , time
 
 ITrouter = APIRouter(prefix="/inspection")
 
+<<<<<<< HEAD
 # client = OpenAI()
+=======
+# client = OpenAI() <- 라이브러리 1.0 이상부터 현재 팀에서 사용하는 버전은 0.28.0버전
+>>>>>>> a6360002194ea9e266d8b293d63a5f6236fc5f87
 OPENAI_API_KEY = getAPIkey()
 openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
@@ -35,6 +39,7 @@ class ReaderDTO(BaseModel):
     PersonalInformation : PersonalInformation
     SelfIntroduction: List[SelfIntroduction]
 
+<<<<<<< HEAD
 
 
 def post_gap(system_content, user_content):
@@ -65,6 +70,48 @@ async def ask(ask : Ask):
     print(f"result : {result}")
     return {"status" : 200 , "result" : result}
 
+=======
+# openAI 라이브러리 버전 1.0 이상에서만 작동함 
+#  openai.api_key = OPENAI_API_KEY
+#         response = client.chat.completions.create(
+#             model=MODEL,
+#             messages= [
+#                 {"role" : "system","content" : system_content},
+#                 {"role" : "user", "content" : user_content} 
+#             ],
+#             stop=None,
+#             temperature=0.5
+#         )
+
+def post_gap(system_content, user_content):
+    try:
+        openai.api_key = OPENAI_API_KEY
+        response = openai.ChatCompletion.create(
+            messages= [
+                {"role" : "system","content" : system_content},
+                {"role" : "user", "content" : user_content} 
+            ],
+            model=MODEL,
+            stop=None,
+            temperature=0.5
+        )
+        answer = response["choices"][0]["message"]["content"]
+        print("gpt 답변 : " + answer)
+        return answer
+    except Exception as e:
+        resp ={
+            "status" : e,
+            "data" : "그냥 오류요 뭐요 다시 시도해보든가"
+        }
+        return {"resp" : resp}
+
+@ITrouter.post("/aks")
+async def ask(ask : Ask):
+    result = inspectionPrompt.create_prediction_prompt(ask)
+    print(f"result : {result}")
+    return {"status" : 200 , "result" : result}
+
+>>>>>>> a6360002194ea9e266d8b293d63a5f6236fc5f87
 @ITrouter.post("/ReadResume")
 async def readResume(file : UploadFile = File(...)):
     print("시작")
@@ -87,6 +134,10 @@ async def readResume(file : UploadFile = File(...)):
     try :
         answer = post_gap(system_content , text)
         strToJson = answer
+<<<<<<< HEAD
+=======
+        print(answer)
+>>>>>>> a6360002194ea9e266d8b293d63a5f6236fc5f87
         json_object = json.loads(strToJson)
         gptEndTime = time.time() - start
     except :

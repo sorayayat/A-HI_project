@@ -1,53 +1,56 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr
-from typing import List
-from .resumegenerator import fill_template, generate_resume_content, save_resume_as_docx
-from configset.config import getAPIkey
+from .resumegenerator import generate_resume_content
+from .utils import ResumeData
+from motor.motor_asyncio import AsyncIOMotorClient
+from configset.config import getAPIkey, getModel
 
 import openai
 
-# OpenAI API 키 호출
+# OpenAI API 설정
 OPENAI_API_KEY = getAPIkey()
+OPENAI_MODEL = getModel()
 openai.api_key = OPENAI_API_KEY
+
+# MongoDB 설정
+MONGODB_URI = "mongodb://localhost:27017"
+DATABASE_NAME = "database_name"
+
+async def get_resume_data(name):
+    client = AsyncIOMotorClient(MONGODB_URI)
+    db = client[DATABASE_NAME]
+    resume_collection = db["resume_collection"]
+    resume_data = await resume_collection.find_one({"name": name})
+    return resume_data
 
 resume_router = APIRouter(prefix="/resume")
 
-class ResumeData(BaseModel):
-    name: str
-    phone_number: str
-    email: EmailStr
-    job_title: str
-    skills: List[str]
-    experiences: List[str]
-    projects: List[str]
-    educations: List[str]
-    awards_and_certifications: List[str]
-
 @resume_router.post("/create-resume/")
 async def create_resume(data: ResumeData):
-    # OpenAI와 연동하여 이력서 내용 생성
-    chat_response = generate_resume_content(data)
+    resume_data = await get_resume_data(data.name)
+    if not resume_data:
+        raise HTTPException(status_code=404, detail=f"Resume data not found for {data.name}")
+
+    chat_response = call_openai_gpt_to_generate_resume(resume_data)
     if chat_response is None:
         raise HTTPException(status_code=500, detail="Error in generating resume content")
 
-    # 이력서 내용을 context로 변환
-    context = {
-        'Name': data.name,
-        'Phone': data.phone_number,
-        'Email': data.email,
-        'JobTitle': data.job_title,
-        'Skills': ', '.join(data.skills),
-        'Experiences': ', '.join(data.experiences),
-        'Projects': ', '.join(data.projects),
-        'Education': ', '.join(data.educations),
-        'AwardsAndCertifications': ', '.join(data.awards_and_certifications),
+    generated_resume_path = generate_resume_content(chat_response)
+    return {"message": "Resume created successfully", "resume_path": generated_resume_path}
+
+def call_openai_gpt_to_generate_resume(resume_data):
+     # GPT와의 대화를 통해 이력서 내용 생성
+     context = {
+        'Name': resume_data.get("name"),
+        'Phone': resume_data.get("phone_number"),
+        'Email': resume_data.get("email"),
+        'JobTitle': resume_data.get("job_title"),
+        'Skills': ', '.join(resume_data.get("skills", [])),
+        'Experiences': ', '.join(resume_data.get("experiences", [])),
+        'ExperiencesDetail': ', '.join(resume_data.get("experiencesdetail", [])),
+        'Projects': ', '.join(resume_data.get("projects", [])),
+        'ProjectsDetail': ', '.join(resume_data.get("projectsdetail", [])),
+        'Education': ', '.join(resume_data.get("educations", [])),
+        'EducationDetail': ', '.join(resume_data.get("educationsdetail", [])),
+        'AwardsAndCertifications': ', '.join(resume_data.get("awards_and_certifications", [])),
     }
-
-    # 이력서 템플릿 파일과 출력 파일 경로 설정
-    template_path = 'tem/template.docx'  # 이력서 템플릿 파일 경로
-    output_path = f'{data.name}_resume.docx'  # 생성될 이력서 파일 이름
-
-    # fill_template 함수를 사용하여 이력서 문서 생성
-    fill_template(template_path, output_path, context)
-    
-    return {"message": "Resume created successfully", "file_path": output_path}
