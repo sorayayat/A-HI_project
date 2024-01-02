@@ -128,7 +128,7 @@ const JoinForm = () => {
           <label htmlFor="phoneNumber" >전화번호</label>
           <div className={styles.inputWithButton}>
           <div className={styles.inputOnly}>
-          <input type="text" id="phoneNumber"  maxLength={11} name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
+          <input type="text" id="phoneNumber"  maxLength={11} minLength={10} name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
             </div>
             <button className={styles.joinBtn}  type='button' onClick={handlePhoneCheck}>중복확인</button>
           </div>

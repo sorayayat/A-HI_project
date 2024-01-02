@@ -13,10 +13,12 @@ const JoinFormCompany = () => {
     phoneNumber:"",
     company:"",
     companyType:"",
-    employeesNumber:"",
+    employeesNumber:0,
     establishmentDate:"",
     companyHomepage:"",
+    logo: null,
   });
+  const [logoPreview, setLogoPreview] = useState("");
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const [isPhoneChecked, setIsPhoneChecked] = useState(false);
   const handleSubmit = (e) => {
@@ -40,22 +42,38 @@ const JoinFormCompany = () => {
       return;
     }
 
-    axios.post(`./api/signupCompany`,formData)
-        .then(response => {
-          navigate('/');
-        })
-        .catch(error => {
-          console.error('Error fetching data: ', error);
-        })
-        .finally(() => {
-        });
-
-
-
-
-
-
+    const data = new FormData();
+    for (const key in formData) {
+      if (key === 'logo' && !formData[key]) continue; 
+      data.append(key, formData[key]);
+  }
+    axios.post(`./api/signupCompany`, data)
+      .then((response) => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      })
+      .finally(() => {
+        //...
+      });
   };
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        if (file.type.substr(0, 5) === "image") {
+            setFormData({ ...formData, logo: file });
+            setLogoPreview(URL.createObjectURL(file));
+        } else {
+            alert("양식에 맞는 이미지 파일을 올려주세요.");
+            e.target.value = ""; // input 필드 초기화
+        }
+    } else {
+        // 이미지 파일이 선택되지 않은 경우
+        setFormData({ ...formData, logo: null });
+        setLogoPreview(null);
+    }
+};
   const handleEmailCheck = () => {
     const emailInput = document.getElementById('email');
     if (emailInput.validity.valid) {
@@ -100,8 +118,10 @@ const JoinFormCompany = () => {
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "email") {
+    if (name === "employeesNumber") {
+      const sanitizedValue = value.replace(/[^0-9]/g, '');
+      setFormData({ ...formData, [name]: sanitizedValue });
+  } else if (name === "email") {
       setIsEmailChecked(false);
       setFormData({ ...formData, [name]: value });
     }else if (name === 'phoneNumber'){
@@ -133,7 +153,7 @@ const JoinFormCompany = () => {
           <label htmlFor="phoneNumber" >전화번호</label>
           <div className={styles.inputWithButton}>
           <div className={styles.inputOnly}>
-          <input type="text" id="phoneNumber"  maxLength={11} name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
+          <input type="text" id="phoneNumber"  maxLength={11} min={10} name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
             </div>
             <button className={styles.joinBtn}  type='button' onClick={handlePhoneCheck}>중복확인</button>
           </div>
@@ -163,7 +183,7 @@ const JoinFormCompany = () => {
           <span></span>
         </div>
 
-
+        
 
         {/* <div className={styles.inputContainer}>
           <label htmlFor="phoneNumber" >전화번호</label>
@@ -214,14 +234,15 @@ const JoinFormCompany = () => {
 <div className={styles.inputContainer}>
           <label htmlFor="employeesNumber ">직원수</label>
           <div className={styles.inputOnly}>
-            <input type="number" id="employeesNumber" max="99999999999" name='employeesNumber' value={formData.employeesNumber} required onChange={handleChange} placeholder='몇명의 직원이 근무중인가요?'/>
+            <input type="number" id="employeesNumber"  min="1"  name='employeesNumber' value={formData.employeesNumber} required onChange={handleChange} placeholder='몇명의 직원이 근무중인가요?'/>
           </div>
           <span></span>
         </div>
         <div className={styles.inputContainer}>
           <label htmlFor="establishmentDate">설립일</label>
           <div className={styles.inputOnly}>
-            <input type="date" id="establishmentDate" name="establishmentDate" value={formData.establishmentDate} required onChange={handleChange} className={styles.establishmentDate}/>
+            <input type="date" id="establishmentDate" name="establishmentDate"  min="1602-01-01" 
+  max={new Date().toISOString().split("T")[0]}  value={formData.establishmentDate} required onChange={handleChange} className={styles.establishmentDate}/>
           </div>
           <span></span>
         </div>
@@ -232,6 +253,13 @@ const JoinFormCompany = () => {
             <input type="text" id="companyHomepage" name="companyHomepage" value={formData.companyHomepage} required onChange={handleChange}/>
           </div>
           <span></span>
+        </div>
+        <div className={styles.inputContainer}>
+          <label htmlFor="logo">회사로고</label>
+          <div className={styles.inputOnly}>
+            <input type="file" id="logo" onChange={handleLogoChange}  accept="image/*" />
+          </div>
+          {logoPreview && <img src={logoPreview} alt="Logo Preview" className={styles.logoPreview} />}
         </div>
 
         <div className={styles.inputContainer}>
