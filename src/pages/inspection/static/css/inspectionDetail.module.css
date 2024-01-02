@@ -1,0 +1,114 @@
+.detailBackGround{
+    width: 100%;
+    height: 100%;
+}
+
+.resumeBack{
+    width: 60%;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    position:relative;
+    top: 30%;
+    left: 20%;
+    border: 1px solid black;
+}
+
+.personalInformation{
+    border-radius: 8px;
+    border: 1px solid black;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.personalText{
+    flex: 0 0 calc(50% - 20px );
+    margin: 10px;
+    font-size: 18px;
+}
+
+.selfIntroduction{
+    border-radius: 8px;
+    border: 1px solid black;
+    padding: 20px;
+}
+
+.Line{
+    border-bottom: 1px solid gray;
+    margin: 30px auto;
+    width: 100%;
+}
+
+.resumeTitle{
+    text-align: center;
+}
+
+.modiftBtn1{
+  color: white; 
+  padding: 5px 15px;
+  display: inline-block;
+  position: absolute;
+  top: 50%; 
+  left: 90%; 
+  transform: translate(-50%, -50%);
+  background-color: #7d7b7b;
+  border: 1px solid rgba(0,0,0,0.21);
+  border-bottom-color: rgba(0,0,0,0.34);
+  text-shadow:0 1px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+              0 2px 0 -1px rgba(0,0,0,0.13), 
+              0 3px 0 -1px rgba(0,0,0,0.08), 
+              0 3px 13px -1px rgba(0,0,0,0.21);
+
+}
+.modiftBtn1:active{
+    border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+}
+.modiftBtn1:hover{
+    background-color: rgb(151, 151, 151);
+}
+
+.modiftBtn2{
+    color: white; 
+    padding: 5px 15px;
+    display: inline-block;
+    position: absolute;
+    top: 10%; 
+    left: 93%; 
+    transform: translate(-50%, -50%);
+    background-color: #7d7b7b;
+    border: 1px solid rgba(0,0,0,0.21);
+    border-bottom-color: rgba(0,0,0,0.34);
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+                0 2px 0 -1px rgba(0,0,0,0.13), 
+                0 3px 0 -1px rgba(0,0,0,0.08), 
+                0 3px 13px -1px rgba(0,0,0,0.21);
+  
+  }
+  .modiftBtn2:active{
+      border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+  }
+  .modiftBtn2:hover{
+      background-color: rgb(151, 151, 151);
+  }
+
+.selfTitleBoder{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%; 
+}
+
+.selfInfo{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%; 
+}
+

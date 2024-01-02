@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { callInterview } from '../../apis/interviewAPICalls'
 import { callInterviewAnswer } from '../../apis/interviewAPIanswerCall'
+import { handleAction } from "redux-actions";
 
 
 // 수정 사항
@@ -13,11 +14,42 @@ import { callInterviewAnswer } from '../../apis/interviewAPIanswerCall'
 
 const Interview = () => {
 
+
     const [searchQuery, setSearchQuery] = useState('');
     const [question, setquestion] = useState('');
     const [answer, setAnswer] = useState('');
     const [AIanswer, setAIanswer] = useState('');
     const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(false);
+
+    // 토글 키 상태 관리
+    const [Toggled, setToggled] = useState(false);
+    const toggle = () => {
+        setToggled(!Toggled);
+    };
+
+    // 로딩 중을 표시해줌
+    const handleSearchAnnouncement = () => {
+        setIsLoading(true); // 로딩 시작
+        dispatch(callInterview({ searchQuery: searchQuery }, (result) => {
+            setquestion(result.question);
+            setIsLoading(false); // 로딩 종료
+        }));
+    };
+
+    const handleSendAnswer = async () => {
+        setIsLoading(true); // 로딩 시작
+        dispatch(callInterviewAnswer({ answer: answer }, (sandresult) => {
+            setAIanswer(sandresult.AIanswer);
+            setIsLoading(false); // 로딩 종료
+        }));
+    };
+
+    const [isToggled, setIsToggled] = useState(false);
+
+    const handleToggle = () => {
+        setIsToggled(!isToggled);
+    };
 
 
     // 가져온 json 문자열을 한줄 씩 자른다.
@@ -25,19 +57,6 @@ const Interview = () => {
         <p key={index}>{line}</p>
     ));
 
-
-    const handleSearchAnnouncement = () => {
-        dispatch(callInterview({ searchQuery: searchQuery }, (result) => {
-            setquestion(result.question); // 상태 업데이트 함수 이름 수정
-        }));
-    }
-
-    const handleSendAnswer = async () => {
-
-        dispatch(callInterview({ answer: answer }, (sandresult) => {
-            setAIanswer(sandresult.AIanswer);
-        }));
-    }
 
     // 화면 작업은 return 내부에 작성한다.
     return (
@@ -67,24 +86,40 @@ const Interview = () => {
 
             {/* 질문창과 답변 창을 중앙으로 정렬 */}
             <div className={style.questionBoxWrapper}>
-
-                <div className={style.questionBox}>
-                    {Lines}
-                </div>
-
-                <div className={style.answerBoxs}>
-                    <input type="text"
-                        value={answer}
-                        onChange={(e) => setAnswer(e.target.value)}
-                        autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
-                    <button className={style.actionButton} onClick={handleSendAnswer}>답변 하기</button>
-                   
-                </div>
-                    <div className={style.questionBox}>
-                        {AIanswer && <p>AI 피드백: {AIanswer}</p>}
+                {/* 로딩 상태를 보여준다 */}
+                {isLoading &&
+                    <div className={style.lodingIndicator}>
+                        <div className={style.spinner}></div>
+                        <div className={style.load}>질문을 생성하고 있습니다</div>
                     </div>
-            </div>
+                }
 
+                {question && (
+                    <div className={style.questionBox}>
+                        {Lines}
+
+                        {/* 토글 버튼 */}
+                        <button onClick={handleToggle} className={style.toggle}>
+                            {isToggled ? '▲' : '▼'}
+                        </button>
+
+                        {/* 토글된 상태에 따라 답변란 표시 */}
+                        {isToggled && (
+                            <div className={style.answerBoxs}>
+                                <input type="text"
+                                    value={answer}
+                                    onChange={(e) => setAnswer(e.target.value)}
+                                    autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
+                                <button className={style.actionButton} onClick={handleSendAnswer}>답변 하기</button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+            {AIanswer && (
+                <div className={style.questionBox}>
+                    {AIanswer && <p>AI 피드백: {AIanswer}</p>}
+                </div>)}
 
         </>
     )

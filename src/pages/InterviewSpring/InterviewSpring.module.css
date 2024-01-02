@@ -119,3 +119,12 @@
     border-radius: 5px;
     border: 1px solid #ddd;
 }
+
+.answerContainer {
+    display: flex;
+    width: 70%;
+    justify-content: center;
+    margin: 0 auto; /* 좌우 마진을 자동으로 설정해 중앙 정렬 */
+    border-radius: 20px;
+    padding: 3%;
+}

@@ -1,0 +1,97 @@
+.answerContianer{
+    width: 100%;
+}
+.answerTitle {
+    font-size: 1.5em;
+    color: #3674EA;
+    margin-bottom: 15px;
+}
+
+.inputAnswer {
+    width: 60%;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.feedbackButton {
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+    width: 90%; /* 버튼의 너비 고정 */
+    min-height: 40px; /* 최소 높이 설정 */
+    height: auto; /* 버튼 높이 자동 조절 */
+    white-space: normal; /* 텍스트가 필요에 따라 여러 줄로 나뉘도록 설정 */
+    overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+}
+
+.feedbackButton:hover {
+    background-color: #3674EA;
+    color: white;
+}
+
+
+
+.feedbackContainer {
+    text-align: center;
+}
+
+.inputAnswer {
+    width: 100%;
+    padding: 8px;
+    margin: 5px auto; /* 좌우 마진을 auto로 설정 */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    display: block; /* 블록 레벨 요소로 만들어 수평 중앙 정렬을 가능하게 함 */
+}
+
+.feedbackContainer p {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%; /* 필요에 따라 조정 */
+}
+.submitButton {
+    padding: 10px 20px; /* 패딩 조절 */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    text-align: center;
+    background-color: #3674EA; /* 배경색 */
+    color: white; /* 글자색 */
+}
+
+.submitButton:hover {
+    background-color: #0056b3; /* 호버 시 배경색 변경 */
+}
+.textAreaContainer {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.submitButtonContainer {
+    padding: 10px 0; /* 상하 패딩 */
+    margin-top: 10px;
+    width: auto;
+}
+
+.submitButton {
+    white-space: nowrap;
+    margin-top: 0; /* 상단 마진 제거 */
+}
+.textAreaContainer {
+    width: 100%;
+    display: flex; /* flexbox 사용 */
+    flex-direction: column; /* 컨테이너 내 요소들을 세로 방향으로 정렬 */
+    align-items: flex-end; /* 요소들을 컨테이너의 오른쪽 끝에 정렬 */
+}

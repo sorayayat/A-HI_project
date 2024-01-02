@@ -52,6 +52,11 @@ const MemberUpdate = () => {
   const handleSubmit = (e) => {
     axios.put(`./api/member/info_update`,formData)
     .then(response => {
+      const updatedUserInfo = {
+        ...JSON.parse(sessionStorage.getItem('userInfo')),
+        ...formData
+      };
+      sessionStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
       alert('정보수정완료');
       navigate('/');
     })

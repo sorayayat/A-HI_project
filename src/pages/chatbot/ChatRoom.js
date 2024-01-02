@@ -2,31 +2,40 @@ import styles from './ChatRoom.module.css';
 import bubbleIcon from '../mainpage/Icons/bubbleIcon.png';
 import sendIcon from '../mainpage/Icons/Sent.png';
 import { useState } from 'react';
-import { callChatbot } from '../../apis/chatbotAPICalls';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import React, { useEffect, useRef } from 'react';
 
-const ChatRoom = () => {
 
+const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
+
+    const userEmail = useSelector(state => state.auth.email); 
     const [message, setMessage] = useState('');
     const [showChat, setShowChat] = useState(false);
-    const [gptMessage, setGptMessage] = useState('');
     const [selectedPrompt, setSelectedPrompt] = useState(null);
-    const [messageList, setMessageList] = useState([]); // 메시지 목록
-    const dispatch = useDispatch();
-    const [chattingListHeight, setChattingListHeight] = useState('500px'); // chattingList의 초기 높이 설정
+    const [messageList, setMessageList] = useState([]); 
     const scrollRef = useRef(null);
+
+
+
+    // userEmail 상태가 변경될 때마다 콘솔에 출력
+    useEffect(() => {
+        console.log("현재 로그인한 사용자의 이메일 =========> ", userEmail);
+    }, [userEmail]);
+    
+
 
     // ========================== 프롬프트 선택 ============================
 
-    const startChat = () => {
+    const startChat = (promptType) => {
+        setSelectedPrompt(promptType);
         setShowChat(true);
     };
 
-
-
     // =========================== 채팅 메세지 =============================
-
+    
+    useEffect(() => {
+        console.log("Updated messageList =============>", messageList);
+    }, [messageList]);
 
 
     useEffect(() => {
@@ -34,11 +43,20 @@ const ChatRoom = () => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messageList]);
+
+
+
+    // activeChatRoom prop의 변경을 감지하고 이를 바탕으로 화면에 채팅 내용을 표시
+    useEffect(() => {
+        console.log("activeChatRoom ===========> ",activeChatRoom)
+        if (activeChatRoom && activeChatRoom.messageList) {
+            console.log("activeChatRoom.messages =============> ", activeChatRoom.messageList)
+            setMessageList(activeChatRoom.messageList);
+            setShowChat(true);
+        }
+    }, [activeChatRoom]);
     
-    
-    // useEffect(() => {
-    //     console.log("after ================> ",messageList);
-    // }, [messageList]);
+
 
 
     const handleMessageChange = (e) => {
@@ -52,21 +70,42 @@ const ChatRoom = () => {
         }
     }
 
+    
+
+    // 메세지 전송 함수
+    const sendMessage = async () => {
+        if (activeChatRoom && activeChatRoom.id) {
+
+            const newUserMessage = { sender: '사용자', content: message };
+
+            const payload = {
+                email: userEmail, 
+                roomId: activeChatRoom.id,
+                prompt: selectedPrompt,
+                message: message
+            };
+    
+            const response = await fetch('http://localhost:8000/chatbot/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            const newChatbotMessage = { sender: '챗봇', content: data.gptMessage };
+
+                setMessage('');
+
+            setMessageList(prevMessages => [...prevMessages, newUserMessage, newChatbotMessage]);
+
+             // 새 메시지를 chatRooms 상태에 반영
+            updateChatRoomsMessages(activeChatRoom.roomId, newUserMessage);
+            updateChatRoomsMessages(activeChatRoom.roomId, newChatbotMessage);
+        }
+    };
 
 
-
-    const sendMessage = () => {
-        dispatch(callChatbot({ message: message }, (result) => {
-            const chatbotResponse = result.gptMessage;
-            setMessage('');
-            console.log("before ===============> ",messageList)
-            setMessageList([
-                ...messageList,
-                { sender: '사용자', content: message },
-                { sender: '챗봇', content: chatbotResponse },
-            ]);
-        }));
-    }
 
 
 
@@ -110,8 +149,8 @@ const ChatRoom = () => {
                         {showChat && (
                             <div className={styles.chattingScrollContainer}>
                                 <div className={styles.chattingList} ref={scrollRef}>
-                                    {messageList.map((msg, index) => (
-                                        <div key={index} className={msg.sender === 
+                                    {activeChatRoom.messageList.map((msg, index) => (
+                                        <div key={`${msg.sender}-${msg.content}-${index}`} className={msg.sender === 
                                         '사용자' ? styles.userMessage : styles.chatbotMessage}>
                                             <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
                                                 {msg.content}
@@ -120,6 +159,7 @@ const ChatRoom = () => {
                                     ))}
                                 </div>
                             </div>
+                            
                         )}
 
 

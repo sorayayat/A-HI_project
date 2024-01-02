@@ -3,9 +3,9 @@ import { LOGIN, LOGOUT } from './authActions';
 
 const initialState = {
     isLoggedIn: false,
+    email: "",
     // companyId: "",
     // memberId:"",
-    // email:"",
     // name:"",
     // phoneNumber:"",
     // company:"",
@@ -20,12 +20,14 @@ const authReducer = (state = initialState, action) => {
         case LOGIN:
             return {
                 ...state,
-                isLoggedIn: true
+                isLoggedIn: true,
+                email: action.payload.email,
             };
         case LOGOUT:
             return {
                 ...state,
-                isLoggedIn: false
+                isLoggedIn: false,
+                email: "",
             };
         default:
             return state;

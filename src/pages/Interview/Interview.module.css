@@ -1,4 +1,3 @@
-
 /* General Styles */
 .container {
     display: flex;
@@ -11,14 +10,16 @@
 .header {
     font-size: 2em;
     color: #3674EA;
-    margin-bottom: 20px; /* Increased spacing */
+    margin-bottom: 20px;
+    /* Increased spacing */
     text-align: center;
 }
 
 .shoulder {
     font-size: 1em;
     color: black;
-    margin-bottom: 20px; /* Increased spacing */
+    margin-bottom: 20px;
+    /* Increased spacing */
     text-align: center;
 }
 
@@ -27,7 +28,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px; /* Increased spacing */
+    margin-bottom: 20px;
+    /* Increased spacing */
 }
 
 .searchBox {
@@ -47,42 +49,90 @@
     cursor: pointer;
     font-size: 1em;
     margin-top: 10px;
-    margin-bottom: 20px; /* Added margin-bottom */
+    margin-bottom: 20px;
+    /* Added margin-bottom */
 }
 
 
 .questionBoxWrapper {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center align */
-    margin-bottom: 20px; /* Increased spacing */
+    align-items: center;
+    /* Center align */
+    margin-bottom: 20px;
+    /* Increased spacing */
 }
 
 .questionBox {
-    width: 60%; /* Adjusted width */
+    position: relative;
+    width: 60%;
+    /* Adjusted width */
     padding: 15px;
     border: 1px solid #dbe6fc;
     background-color: #dbe6fc;
     border-radius: 8px;
-    margin-bottom: 20px; /* Increased spacing */
+    margin-bottom: 20px;
+    /* Increased spacing */
+    font-size: 25px;
 }
+
+.toggle {
+    position: absolute;
+    right: 1px;
+    top: 5px;
+    background-color: transparent; /* 임시 배경색 */
+    color: black; /* 텍스트 색상 */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    z-index: 1000; /* z-index 추가 */
+}
+
 
 .answerBoxs {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 60%; /* Adjusted width */
+    width: 60%;
+    /* Adjusted width */
 }
 
-.answerBoxs input {
+/* .answerBoxs input {
+    position: relative;
     width: 100%;
     height: 50px;
     padding: 5px 10px;
-    font-size: 18px;
+    font-size: 25px;
     border: 1px solid #ddd;
     border-radius: 5px;
     outline: none;
-}
+} */
+
+.answerBoxs {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+  }
+  
+  .answerBoxs input {
+    position: relative;
+    flex-grow: 1; /* 남은 공간을 채움 */
+    height: 50px;
+    padding: 5px 10px;
+    font-size: 25px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+  }
+  
+  .answerBoxs button {
+    margin-left: 10px; /* 버튼과 입력창 사이의 간격 */
+    /* 필요에 따라 추가 스타일링 */
+  }
+  
+
 
 /* Feedback Style */
 .feedback {
@@ -90,4 +140,60 @@
     color: #666;
     text-align: center;
     margin-top: 20px;
+}
+
+.answerblueButton {
+    background-color: #3674EA;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+}
+
+
+/* 로딩 아이콘을 보여준다 */
+
+.loadingIndicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    /* 화면에 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    /* 반투명 배경 */
+    z-index: 9999;
+    /* 다른 요소들 위에 표시 */
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid blue;
+    /* 상단 색상 지정 */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.load {
+    font-size: 25px;
 }

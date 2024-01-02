@@ -85,3 +85,8 @@ p {
     font-size: 14px;
     color: rgb(104, 104, 104);
 }
+
+
+.activeRoom:hover {
+    background-color: #bfd1f5;
+}
