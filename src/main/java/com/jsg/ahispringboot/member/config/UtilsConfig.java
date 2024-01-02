@@ -1,5 +1,6 @@
 package com.jsg.ahispringboot.member.config;
 
+import com.jsg.ahispringboot.member.utils.FileProcess;
 import com.jsg.ahispringboot.member.utils.MailSend;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,5 +18,10 @@ public class UtilsConfig {
     @Bean
     public MailSend mailSend() {
         return new MailSend(mailSender);
+    }
+
+    @Bean
+    public FileProcess fileProcess(){
+        return new FileProcess();
     }
 }

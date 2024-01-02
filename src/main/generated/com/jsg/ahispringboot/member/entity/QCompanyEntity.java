@@ -34,7 +34,7 @@ public class QCompanyEntity extends EntityPathBase<CompanyEntity> {
 
     public final DatePath<java.sql.Date> establishmentDate = createDate("establishmentDate", java.sql.Date.class);
 
-    public final QMemberEntity memberEntity;
+    public final QLogoEntity logoEntity;
 
     public QCompanyEntity(String variable) {
         this(CompanyEntity.class, forVariable(variable), INITS);
@@ -54,7 +54,7 @@ public class QCompanyEntity extends EntityPathBase<CompanyEntity> {
 
     public QCompanyEntity(Class<? extends CompanyEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.memberEntity = inits.isInitialized("memberEntity") ? new QMemberEntity(forProperty("memberEntity"), inits.get("memberEntity")) : null;
+        this.logoEntity = inits.isInitialized("logoEntity") ? new QLogoEntity(forProperty("logoEntity")) : null;
     }
 
 }

@@ -2,6 +2,8 @@ package com.jsg.ahispringboot.member.repository;
 
 import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
+import com.jsg.ahispringboot.member.entity.CompanyEntity;
+import com.jsg.ahispringboot.member.entity.LogoEntity;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
 import com.jsg.ahispringboot.member.entity.PostingLike;
 import com.jsg.ahispringboot.member.login.CustomUserDetail;
@@ -98,7 +100,8 @@ public class MemberRepositoryImpl implements MemberRepository {
      @Transactional
      @Override
      public UserDetails updateCompany(CompanyDto companyDto) {
-         MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getCompanyId());
+         MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getMemberId());
+         log.info("dtoId={},findEn={}",companyDto.getCompanyId(),memberEntity1.getId());
          memberEntity1.setName(companyDto.getName());
          memberEntity1.setPhoneNumber(companyDto.getPhoneNumber());
          memberEntity1.getCompanyEntity().setCompany(companyDto.getCompany());
@@ -108,12 +111,25 @@ public class MemberRepositoryImpl implements MemberRepository {
          memberEntity1.getCompanyEntity().setEstablishmentDate(companyDto.getEstablishmentDate());
          return new CustomUserDetail(memberEntity1);
      }
-     @Transactional
-
+     @Transactional(readOnly = true)
     public List<PostingLike> myPagePostingLike(Long memberId) {
         return em.createQuery(
                         "SELECT pl FROM PostingLike pl WHERE pl.memberEntity.id = :memberId", PostingLike.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public LogoEntity findLogo(Long companyId) {
+        CompanyEntity companyEntity = em.find(CompanyEntity.class, companyId);
+        return companyEntity.getLogoEntity();
+    }
+    @Transactional
+    @Override
+    public void updateLogo(LogoEntity logoEntity) {
+        LogoEntity logoEntity1 = em.find(LogoEntity.class, logoEntity.getLogoId());
+        logoEntity1.setOriginalName(logoEntity.getOriginalName());
+        logoEntity1.setServerName(logoEntity.getServerName());
     }
 }

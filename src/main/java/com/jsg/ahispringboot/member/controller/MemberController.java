@@ -4,11 +4,13 @@ import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import com.jsg.ahispringboot.member.service.MemberService;
+import com.jsg.ahispringboot.member.utils.FileProcess;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -21,8 +23,9 @@ public class MemberController {
     private final MemberService memberServiceImpl;
 
 
+
     @GetMapping("/email_duplication_check")
-    public boolean emailDuplicationCheck(@RequestParam String email) throws IOException {
+    public boolean emailDuplicationCheck(@RequestParam String email) {
         boolean result = memberServiceImpl.emailDuplicationCheck(email);
         return result;
     }
@@ -38,11 +41,10 @@ public class MemberController {
     }
 
     @PostMapping("/signupCompany")
-    public String companySignup(@RequestBody CompanyDto companyDto) {
-        memberServiceImpl.companySignup(companyDto);
+    public String companySignup(@ModelAttribute CompanyDto companyDto,@RequestParam(required = false) MultipartFile logo) {
+        memberServiceImpl.companySignup(companyDto,logo);
         return "";
     }
-
 
     @PostMapping("/find_info")
     public MemberDto findInfo(@RequestBody MemberDto memberDto) {
@@ -82,9 +84,11 @@ public class MemberController {
     }
      @GetMapping("/member/infoCompany")
      public CompanyDto company(@AuthenticationPrincipal CustomUserDetail customUserDetail){
+         String logo = memberServiceImpl.findLogo(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyId());
          CompanyDto companyDto = CompanyDto
                  .builder()
-                 .companyId(customUserDetail.getPk())
+                 .memberId(customUserDetail.getPk())
+                 .companyId(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyId())
                  .email(customUserDetail.getUsername())
                  .name(customUserDetail.getRealName())
                  .phoneNumber(customUserDetail.getPhoneNumber())
@@ -93,13 +97,14 @@ public class MemberController {
                  .employeesNumber(customUserDetail.getMemberEntity().getCompanyEntity().getEmployeesNumber())
                  .establishmentDate(customUserDetail.getMemberEntity().getCompanyEntity().getEstablishmentDate())
                  .companyHomepage(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyHomepage())
+                 .logoServer(logo)
                  .build();
          return companyDto;
      }
     @PutMapping("/member/company_info_update")
-     public void companyInfoUpdate(@RequestBody CompanyDto companyDto,Authentication authentication){
-        memberServiceImpl.companyInfoUpdate(companyDto, authentication);
-
+     public void companyInfoUpdate(@ModelAttribute CompanyDto companyDto,Authentication authentication,@RequestParam(required = false) MultipartFile logo){
+        log.info("com={},mem={}",companyDto.getCompanyId(),companyDto.getMemberId());
+        memberServiceImpl.companyInfoUpdate(companyDto, authentication,logo);
      }
     @DeleteMapping("/member/withdrawal")
     public boolean withdrawal(@RequestBody MemberDto memberDto){

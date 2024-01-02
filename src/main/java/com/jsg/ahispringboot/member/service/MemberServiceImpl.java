@@ -2,19 +2,19 @@ package com.jsg.ahispringboot.member.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.jsg.ahispringboot.company.entity.Posting;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
-import com.jsg.ahispringboot.member.entity.CompanyEntity;
-import com.jsg.ahispringboot.member.entity.MemberEntity;
-import com.jsg.ahispringboot.member.entity.PostingLike;
+import com.jsg.ahispringboot.member.entity.*;
 import com.jsg.ahispringboot.member.mapper.MemberTransMapper;
 import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import com.jsg.ahispringboot.member.repository.MemberRepository;
 import com.jsg.ahispringboot.member.repository.MemberRepositoryDataJpa;
+import com.jsg.ahispringboot.member.utils.FileProcess;
 import com.jsg.ahispringboot.member.utils.MailSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
@@ -39,7 +40,10 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MailSend mailSend;
     private final HttpSession session;
-
+    private final FileProcess fileProcess;
+    private final ModelMapper modelMapper;
+    @Value("${app.file-storage.directory}")
+    private String fileStoragePath;
     @Override
     public boolean emailDuplicationCheck(String email) {
         MemberEntity member = memberRepositoryImpl.findMember(email, null);
@@ -67,13 +71,29 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void companySignup(CompanyDto companyDto) {
+    public void companySignup(CompanyDto companyDto, MultipartFile logo) {
+        LogoEntity logoEntity;
+        if(logo!=null){
+            logoEntity = fileProcess.fileSave(logo);
+        }else {
+            logoEntity = LogoEntity
+                    .builder()
+                    .path(fileStoragePath)
+                    .originalName("등록된 사진이 없습니다.")
+                    .serverName("default.jpg")
+                    .build();
+        }
+        MemberEntity memberEntity = setCompany(companyDto);
+        memberEntity.getCompanyEntity().setLogoEntity(logoEntity);
+        memberRepositoryImpl.companySignup(memberEntity);
+    }
+    public MemberEntity setCompany(CompanyDto companyDto){
         CompanyEntity companyEntity = MemberTransMapper.INSTANCE.cDtoToEntity(companyDto);
         MemberEntity memberEntity = MemberTransMapper.INSTANCE.cDtoToMemberEntity(companyDto);
         memberEntity.setPassword(passwordEncoder.encode(memberEntity.getPassword()));
         memberEntity.setRole(MemberRole.ROLE_COMPANY);
-        // memberEntity.setCompanyEntity(companyEntity);
-        memberRepositoryImpl.companySignup(memberEntity);
+        memberEntity.setCompanyEntity(companyEntity);
+        return memberEntity;
     }
 
     @Override
@@ -115,7 +135,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void companyInfoUpdate(CompanyDto companyDto, Authentication authentication) {
+    public void companyInfoUpdate(CompanyDto companyDto, Authentication authentication, MultipartFile logo) {
+        if(logo!=null){
+            LogoEntity oldLogo = memberRepositoryImpl.findLogo(companyDto.getCompanyId());
+            LogoEntity logoEntity = fileProcess.fileDelete(logo, oldLogo);
+            memberRepositoryImpl.updateLogo(logoEntity);
+        }
         UserDetails userDetails = memberRepositoryImpl.updateCompany(companyDto);
         Authentication newAuth =
                 new UsernamePasswordAuthenticationToken
@@ -134,12 +159,12 @@ public class MemberServiceImpl implements MemberService {
         List<PostingLike> postingLikes = memberRepositoryImpl.myPagePostingLike(memberId);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-
         if (postingLikes != null && !postingLikes.isEmpty()) {
             try {
                 List<String> postingsJson = postingLikes.stream()
                         .map(postingLike -> {
                             try {
+                                log.info("post={}",objectMapper.writeValueAsString(postingLike.getPosting()));
                                 return objectMapper.writeValueAsString(postingLike.getPosting());
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -156,5 +181,11 @@ public class MemberServiceImpl implements MemberService {
         } else {
             return "no data";
         }
+    }
+
+    @Override
+    public String findLogo(Long companyId) {
+        LogoEntity logo = memberRepositoryImpl.findLogo(companyId);
+        return logo.getServerName();
     }
 }

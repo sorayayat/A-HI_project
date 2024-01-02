@@ -5,6 +5,7 @@ import com.jsg.ahispringboot.company.entity.PostingExperience;
 import com.jsg.ahispringboot.company.entity.Skill;
 import com.jsg.ahispringboot.company.entity.WorkType;
 import com.jsg.ahispringboot.member.entity.CompanyEntity;
+import com.jsg.ahispringboot.member.entity.LogoEntity;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
 import com.jsg.ahispringboot.member.entity.PostingLike;
 import com.jsg.ahispringboot.member.memberEnum.MemberRole;
@@ -28,74 +29,21 @@ public class AhiSpringbootApplicationTests {
     @Autowired
     private EntityManager entityManager;
     @Autowired
-    private  PasswordEncoder passwordEncoder;
+    private  PasswordEncoder BCryptPasswordEncoder;
 
 
     @Test
     @Transactional
     @Commit
-    public void testCreateRandomMembers() {
+    public void insertTestData2() {
         for (int i = 0; i < 100; i++) {
-            MemberEntity member = createRandomMember();
-            entityManager.persist(member);
-        }
-    }
-
-    private MemberEntity createRandomMember() {
-        Random random = new Random();
-        MemberEntity member = new MemberEntity();
-        member.setEmail(randomString(new String[]{"John", "Jane", "Alice", "Bob", "Charlie"})
-                + "@" + randomString(new String[]{"example.com", "test.com", "demo.org"}));
-        member.setName(randomString(new String[]{"John", "Jane", "Alice", "Bob", "Charlie"}));
-        member.setPassword(passwordEncoder.encode("password"));
-        member.setPhoneNumber("123-456-" + String.format("%04d", random.nextInt(10000)));
-        member.setRole(MemberRole.ROLE_MEMBER); // Assuming 'ROLE_MEMBER' is a valid enum constant
-
-        // Assuming CompanyEntity is set up similarly
-        // member.setCompanyEntity(createRandomCompany());
-
-        return member;
-    }
-
-    private String randomString(String[] array) {
-        Random random = new Random();
-        return array[random.nextInt(array.length)];
-    }
-    @Test
-    @Transactional
-    @Commit
-    public void createDummyCompanies() {
-        for (int i = 0; i < 100; i++) {
-            CompanyEntity company = createDummyCompany();
+            LogoEntity logo = createAndPersistLogo(i);
+            CompanyEntity company = createCompany(i, logo);
             entityManager.persist(company);
-        }
-    }
-
-    private CompanyEntity createDummyCompany() {
-        Random random = new Random();
-
-        CompanyEntity company = new CompanyEntity();
-        company.setCompany("회사" + random.nextInt(1000));
-        company.setEmployeesNumber(random.nextInt(5000) + 1);
-        company.setCompanyType("IT");
-        company.setEstablishmentDate(new Date(System.currentTimeMillis()));
-        company.setCompanyHomepage("http://www.company" + random.nextInt(1000) + ".com");
-
-        // 임의의 MemberEntity 객체를 생성하거나 설정하세요.
-        // 예: company.setMemberEntity(createDummyMember());
-
-        return company;
-    }
-
-
-    @Test
-    @Transactional
-    @Commit
-    public void createDummyPostings() {
-        for (int i = 0; i < 100; i++) {
-            Posting posting = createDummyPosting();
+            MemberEntity member = createMember(i, company);
+            entityManager.persist(member);
+            Posting posting = createPosting(i, company);
             entityManager.persist(posting);
-
             List<PostingExperience> experiences = createDummyPostingExperiences(posting);
             experiences.forEach(entityManager::persist);
 
@@ -107,25 +55,6 @@ public class AhiSpringbootApplicationTests {
         }
     }
 
-    private Posting createDummyPosting() {
-        Posting posting = new Posting();
-        posting.setPostingDate(LocalDateTime.now());
-        posting.setEndDate("2024-12-31");
-        posting.setViewCount(new Random().nextInt(1000));
-        posting.setLocation("서울");
-        posting.setPosition("개발자");
-        posting.setClosingForm("온라인 지원");
-        posting.setContent("IT 기업에서 개발자를 채용합니다.");
-        posting.setPostingTitle("개발자 채용 공고");
-        posting.setEducation("대학교 졸업 이상");
-
-        // 새로운 CompanyEntity 객체 생성 및 할당
-        CompanyEntity company = createDummyCompany(); // 이미 정의된 createDummyCompany 메소드 사용
-        entityManager.persist(company); // 새로 생성된 CompanyEntity를 먼저 영속화
-        posting.setCompany(company); // Posting 객체에 CompanyEntity 할당
-
-        return posting;
-    }
 
     private List<PostingExperience> createDummyPostingExperiences(Posting posting) {
         List<PostingExperience> experiences = new ArrayList<>();
@@ -181,4 +110,58 @@ public class AhiSpringbootApplicationTests {
     }
 
 
+
+    private LogoEntity createAndPersistLogo(int index) {
+        String[] imageNames = {"jingjing.jpg", "loading1.jpg", "loading2.jpg", "loading3.jpg"};
+        String imageName = imageNames[new Random().nextInt(imageNames.length)];
+        String imagePath = "E:\\hi28\\AHI-SPRINGBOOT\\logoimg\\" + imageName;
+
+        LogoEntity logo = new LogoEntity();
+        logo.setOriginalName(imageName);
+        logo.setServerName(imageName);
+        logo.setPath(imagePath);
+        entityManager.persist(logo);
+        return logo;
+    }
+
+    private CompanyEntity createCompany(int index, LogoEntity logo) {
+        CompanyEntity company = new CompanyEntity();
+        company.setCompany("Company " + index);
+        company.setEmployeesNumber(new Random().nextInt(1000));
+        company.setCompanyType("Type " + index);
+        company.setEstablishmentDate(new Date(System.currentTimeMillis()));
+        company.setCompanyHomepage("https://homepage" + index + ".com");
+        company.setLogoEntity(logo);
+        return company;
+    }
+
+    private MemberEntity createMember(int index, CompanyEntity company) {
+        MemberEntity member = new MemberEntity();
+        member.setEmail("user" + index + "@example.com");
+        member.setName("User " + index);
+        member.setPassword(BCryptPasswordEncoder.encode("password"));
+        member.setPhoneNumber("010-1234-" + String.format("%04d", index));
+        member.setRole(MemberRole.ROLE_COMPANY);
+        member.setCompanyEntity(company);
+        return member;
+    }
+
+    private Posting createPosting(int index, CompanyEntity company) {
+        Posting posting = new Posting();
+        posting.setPostingDate(LocalDateTime.now());
+        posting.setEndDate("2024-12-31");
+        posting.setViewCount(new Random().nextInt(1000));
+        posting.setLocation("서울");
+        posting.setPosition("개발자");
+        posting.setClosingForm("온라인 지원");
+        posting.setContent("IT 기업에서 개발자를 채용합니다.");
+        posting.setPostingTitle("개발자 채용 공고 " + index);
+        posting.setEducation("대학교 졸업 이상");
+        posting.setCompany(company);
+
+        // 추가 엔티티 생성 및 저장 (생략)
+        // ...
+
+        return posting;
+    }
 }
