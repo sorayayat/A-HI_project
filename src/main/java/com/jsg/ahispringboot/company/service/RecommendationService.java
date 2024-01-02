@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,4 +36,32 @@ public class RecommendationService {
 
         return postingDTO;
     }
+
+    public List<PostingDTO> matchingIdsPosting(List<Integer> matchingIds) {
+
+
+        List<Posting> postingList = null;
+
+        List<PostingDTO> postingDTOList = new ArrayList<>();
+
+        for (int i = 0; i < matchingIds.size(); i++) {
+
+            postingList = postingRepository.findBymatchingIds(matchingIds.get(i));
+
+            List<PostingDTO> mappedDTOList   = postingList.stream().map(posting -> modelMapper.map(posting, PostingDTO.class)).collect(Collectors.toList());
+
+            postingDTOList.addAll(mappedDTOList);
+
+        }
+
+        System.out.println(postingDTOList);
+
+
+
+
+
+        return postingDTOList;
+    }
+
+
 }

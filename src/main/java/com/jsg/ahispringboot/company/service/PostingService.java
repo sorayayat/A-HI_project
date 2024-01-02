@@ -3,12 +3,10 @@ package com.jsg.ahispringboot.company.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsg.ahispringboot.company.dto.PostingDTO;
-import com.jsg.ahispringboot.company.dto.PostingExperienceDTO;
-import com.jsg.ahispringboot.company.dto.SkillDTO;
-import com.jsg.ahispringboot.company.dto.WorkTypeDTO;
 import com.jsg.ahispringboot.company.entity.*;
 import com.jsg.ahispringboot.company.repository.*;
 import com.jsg.ahispringboot.member.entity.CompanyEntity;
+import com.jsg.ahispringboot.member.entity.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,6 +28,8 @@ public class PostingService {
     private final SkillRepository skillRepository;
     private final PostingExperienceRepository postingExperienceRepository;
     private final ModelMapper modelMapper;
+    private final PostingLikeRepository postingLikeRepository;
+    private final MemberRepository2 memberRepository2;
 
 
     @Transactional
@@ -98,6 +98,8 @@ public class PostingService {
         } catch (IOException e) {
             e.printStackTrace();
 
+            return null;
+
         }
 
 
@@ -113,6 +115,8 @@ public class PostingService {
         posting.setPostingExperienceList(postingExperiencegs);
         posting.setSkillList(skillList);
 
+
+
         System.out.println(posting + "gg");
 
 
@@ -121,35 +125,101 @@ public class PostingService {
         return modelMapper.map(posting, PostingDTO.class);
     }
 
-    public Map<String, List> selectJobPosting() {
+    public List<PostingDTO> selectJobPosting() {
 
-        Map<String, List> map = new HashMap<>();
 
         List<Posting> postingList = postingRepository.findAll();
 
-        List<PostingDTO> postingDTOList = postingList.stream()
-                .map(posting -> modelMapper.map(posting, PostingDTO.class))
-                .collect(Collectors.toList());
+        List<PostingDTO> postingDTO = postingList.stream().map(posting -> modelMapper.map(posting, PostingDTO.class)).collect(Collectors.toList());
 
 
-        List<WorkType> workTypeList = workTypeRepository.findAll();
-        List<WorkTypeDTO> workTypeDTOS = workTypeList.stream().map( workType -> modelMapper.map(workType , WorkTypeDTO.class)).collect(Collectors.toList());
-
-        List<Skill> skillList = skillRepository.findAll();
-        List<SkillDTO> skillDTOS = skillList.stream().map( skill -> modelMapper.map(skill , SkillDTO.class)).collect(Collectors.toList());
-
-        List<PostingExperience> postingExperienceList = postingExperienceRepository.findAll();
-        List<PostingExperienceDTO> postingExperienceDTOS = postingExperienceList.stream().map( postingExperience -> modelMapper.map(postingExperience, PostingExperienceDTO.class)).collect(Collectors.toList());
-
-        map.put("postingList" , postingDTOList);
-        map.put("workTypeList", workTypeDTOS);
-        map.put("skillList", skillDTOS);
-        map.put("postingExperienceList" , postingExperienceDTOS);
 
 
-        return map;
+//        Map<String, List> map = new HashMap<>();
+//
+//        List<Posting> postingList = postingRepository.findAll();
+//
+//        List<PostingDTO> postingDTOList = postingList.stream()
+//                .map(posting -> modelMapper.map(posting, PostingDTO.class))
+//                .collect(Collectors.toList());
+//
+//
+//        List<WorkType> workTypeList = workTypeRepository.findAll();
+//        List<WorkTypeDTO> workTypeDTOS = workTypeList.stream().map( workType -> modelMapper.map(workType , WorkTypeDTO.class)).collect(Collectors.toList());
+//
+//        List<Skill> skillList = skillRepository.findAll();
+//        List<SkillDTO> skillDTOS = skillList.stream().map( skill -> modelMapper.map(skill , SkillDTO.class)).collect(Collectors.toList());
+//
+//        List<PostingExperience> postingExperienceList = postingExperienceRepository.findAll();
+//        List<PostingExperienceDTO> postingExperienceDTOS = postingExperienceList.stream().map( postingExperience -> modelMapper.map(postingExperience, PostingExperienceDTO.class)).collect(Collectors.toList());
+//
+//        map.put("postingList" , postingDTOList);
+//        map.put("workTypeList", workTypeDTOS);
+//        map.put("skillList", skillDTOS);
+//        map.put("postingExperienceList" , postingExperienceDTOS);
+
+
+        return postingDTO;
     }
 
 
+    @Transactional
+    public boolean updatePostingLike(PostingDTO postingDTO, Long memberCode) {
+
+
+        Integer postingCode = postingDTO.getPostingCode();
+        MemberEntity member = memberRepository2.findById(memberCode);
+        Posting posting = postingRepository.findByPostingCode(postingCode);
+
+        // 이미 존재하는지 확인
+        Optional<PostingLike> existingPostingLike = postingLikeRepository.findByMemberEntityIdAndPostingPostingCode(memberCode, postingCode);
+
+        boolean result = false;
+
+        if (existingPostingLike.isPresent()) {
+            // 이미 존재하면 삭제
+            postingLikeRepository.delete(existingPostingLike.get());
+        } else {
+            // 존재하지 않으면 새로 저장
+            PostingLike postingLike = new PostingLike();
+            postingLike.setMemberEntity(member);
+            postingLike.setPosting(posting);
+            postingLikeRepository.save(postingLike);
+            result = true;
+
+            return result;
+        }
+
+        System.out.println(existingPostingLike+ "gdgd");
+
+        return result;
+    }
+
+
+    public boolean getPostingLike(PostingDTO postingDTO, Long memberCode) {
+
+        Integer postingCode = postingDTO.getPostingCode();
+        MemberEntity member = memberRepository2.findById(memberCode);
+        Posting posting = postingRepository.findByPostingCode(postingCode);
+
+        // 이미 존재하는지 확인
+        Optional<PostingLike> existingPostingLike = postingLikeRepository.findByMemberEntityIdAndPostingPostingCode(memberCode, postingCode);
+
+        boolean result = false;
+
+        if (existingPostingLike.isPresent()) {
+            // 이미 존재하면 삭제
+
+            result = false;
+
+
+        } else {
+            // 존재하지 않으면 새로 저장
+
+            result = true;
+
+        }
+        return result;
+    }
 
 }

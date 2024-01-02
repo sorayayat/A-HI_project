@@ -94,6 +94,11 @@ public class MemberRepositoryImpl implements MemberRepository {
         return new CustomUserDetail(memberEntity1);
     }
 
+    @Override
+    public MemberEntity finByMemberEntityId(Long memberCode) {
+        return null;
+    }
+
     // @Transactional
     // @Override
     // public UserDetails updateCompany(CompanyDto companyDto) {
