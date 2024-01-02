@@ -9,8 +9,8 @@ import pdfplumber
 Interview_router = APIRouter(prefix='/interview')
 
 OPENAI_API_KEY = getAPIkey()
-openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
+openai.api_key = OPENAI_API_KEY
 
 
 # 클라이언트에게서 받은 데이터 타입을 확인하기 위한 클래스
