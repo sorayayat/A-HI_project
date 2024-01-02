@@ -3,6 +3,7 @@ import ChatbotRoomList from "./ChatbotRoomList";
 import ChatRoom from "./ChatRoom";
 import styles from './ChatbotMain.module.css';
 import { addChatRoomData } from '../../modules/chatbotModules';
+import { deleteChatRoom } from '../../modules/chatbotModules';
 import { useDispatch, useSelector } from 'react-redux';
 import bubbleIcon from '../mainpage/Icons/bubbleIcon.png';
 
@@ -13,8 +14,9 @@ const ChatbotMain = () => {
     const [chatRooms, setChatRooms] = useState([]); // 채팅방 목록 상태
     const [activeChatRoomId, setActiveChatRoomId] = useState(null); // 현재 활성화된 채팅방 ID
     const [selectedChatRoom, setSelectedChatRoom] = useState(null);
-    const userEmail = useSelector(state => state.auth.email);
     const [selectedPrompt, setSelectedPrompt] = useState(null);
+    const userEmail = useSelector(state => state.auth.email);
+    const chatroomListFromStore = useSelector(state => state.chatbotReducer.chatroomList);
     const dispatch = useDispatch();
 
     // 고유 ID 생성
@@ -168,7 +170,7 @@ const ChatbotMain = () => {
 
 
     // 채팅방 삭제
-    const deleteChatRoom = async (email, roomId) => {
+    const handleDeleteChatRoom = async (email, roomId) => {
         try {
             const response = await fetch(`http://localhost:8000/chatbot/deleteChatRoom`, {
                 method: 'POST',
@@ -189,6 +191,9 @@ const ChatbotMain = () => {
     };
 
 
+    useEffect(() => {
+        setChatRooms(chatroomListFromStore);
+      }, [chatroomListFromStore]);
 
 
     return (
@@ -203,7 +208,7 @@ const ChatbotMain = () => {
                         onSelectChatRoom={handleSelectChatRoom}
                         activeChatRoomId={activeChatRoomId}
                         selectedPrompt={selectedPrompt}
-                        onDeleteChatRoom={(roomId) => deleteChatRoom(userEmail, roomId)}
+                        onDeleteChatRoom={(roomId) => handleDeleteChatRoom(userEmail, roomId)}
                     />
                 </div>
 
