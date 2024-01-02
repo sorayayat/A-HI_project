@@ -63,7 +63,7 @@ async def get_user_chatrooms(request_body: dict = Body(...)):
 
 
 
-# mongoDB 데이터 저장 함수
+# mongoDB 데이터 저장
 async def update_chatroom(email, roomId, user_message, chatbot_response):
     user_data = await db.chatrooms.find_one({"email": email})
 
@@ -108,6 +108,28 @@ async def update_chatroom(email, roomId, user_message, chatbot_response):
         await db.chatrooms.insert_one(new_user_data)
 
 
+
+# 채팅방 삭제 api
+@CBrouter.post("/deleteChatRoom")
+async def delete_chatroom(request_data: dict = Body(...)):
+    email = request_data.get("email")
+    room_id = request_data.get("roomId")
+
+    # db에서 사용자의 도큐먼트 찾기
+    user_data = await db.chatrooms.find_one({"email": email})
+
+    if user_data:
+        # 해당 사용자 채팅방 목록에서 특정 roomId를 가진 채팅방 찾아서 삭제
+        new_chatroom_list = [room for room in user_data["chatroomList"] if room["roomId"] != room_id]
+        await db.chatrooms.update_one({"email": email}, {"$set": {"chatroomList": new_chatroom_list}})
+        return {"detail": "채팅방 삭제 성공"}
+    else:
+        raise HTTPException(status_code=404, detail="유저가 존재하지 않습니다")
+
+
+
+
+
 # gpt 응답 반환 api
 @CBrouter.post("/")
 async def chatbot_endpoint(message: User):
@@ -122,10 +144,11 @@ async def chatbot_endpoint(message: User):
             {"role": "user", "content": user_message}
         ],
         model=MODEL,
+        stream=True
     )
 
-    chatbot_response = gpt_response["choices"][0]["message"]["content"]
 
+    chatbot_response = gpt_response["choices"][0]["message"]["content"]
     await update_chatroom(
         email=message.email,
         roomId=message.roomId,
