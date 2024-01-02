@@ -35,7 +35,7 @@ function App() {
           {/* 메인 */}
           <Route index element={<MainContents/>}/>
 
-          <Route path='/companyDetails' element={<CompanyDetails />} />
+          <Route path='/companyDetails/:postingCode' element={<CompanyDetails />} />
           <Route path='/recommendation' element={<Recommendation />} />
           <Route path="/loginForm" element={<LoginForm />} />
           <Route path="/joinForm" element={<JoinForm />} />

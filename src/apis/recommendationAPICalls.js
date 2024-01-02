@@ -25,6 +25,10 @@ export const callRecommendationResume = ({ file }) => {
             
         }).then(response => response.json());
 
+        console.log(result.response.data , "gdgd");
+
+    
+
         
         dispatch({ type: POST_RECOMMENDATION, payload: result });
 

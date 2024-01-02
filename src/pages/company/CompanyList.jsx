@@ -1,16 +1,21 @@
 import style from './CompanyList.module.css'
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { callSelectJobListing } from '../../apis/postingAPICalls'
 import { useDispatch, useSelector } from 'react-redux';
 
 function Apply() {
 
     const dispatch = useDispatch();
-    const posting = useSelector(state => state.companyReducer);
-    const postingList = posting.data;
+    const posting = useSelector(state => state.companyReducer.getJoblist);
+    const postingList = posting?.data;
+    const navigate = useNavigate();
+    
 
-    console.log(postingList, "gdgd");
+    // console.log(postingList, "gdgd");
+
+    // postingCode를 내림차순으로 정렬하는 함수
+    const sortByPostingCode = (a, b) => b.postingCode - a.postingCode;
 
 
     useEffect(() => {
@@ -20,11 +25,20 @@ function Apply() {
         dispatch(callSelectJobListing({
             companyCode: 1
         }))
-
+        
         return () => {
             document.body.classList.remove(style.companyListBody);
         };
     }, []);
+
+    const onClickPostingHandler = (posting) => {
+
+        const url = `/companyDetails/${posting.postingCode}`
+        console.log(posting , "posting");
+        
+        navigate(url, {state: {posting}});
+
+    }
 
 
 
@@ -41,8 +55,8 @@ function Apply() {
                                 공고 등록
                             </Link>
                         </div>
-                        {postingList.postingList.map((posting, index) => (
-                            <div key={index} className={style.companyDetails}>
+                        {postingList?.sort(sortByPostingCode).map((posting, index) => (
+                            <div key={index} className={style.companyDetails} onClick={() => onClickPostingHandler(posting, index)}>
                                 <div className={style.companyTitle}>
                                     <div><strong>{posting.postingTitle}</strong></div>
                                     <div>{posting.endDate}</div>
