@@ -30,7 +30,6 @@ const LoginForm = () => {
                     // localStorage.setItem('isLoggedIn', 'true');
                     // localStorage.setItem('userInfo', JSON.stringify(response.data)); 
                     sessionStorage.setItem('userInfo', JSON.stringify(response.data.memberEntity));
-                    console.log(JSON.stringify(response.data.memberEntity))
                     navigate('/');
                 }
             })
@@ -62,6 +61,7 @@ const LoginForm = () => {
         <div className={styles.links}>
         <Link to="/findForm">ID/PW찾기</Link>
           <Link to="/joinForm">회원가입</Link>
+          <Link to="/joinFormCompany">비즈니스 회원가입</Link>
         </div>
       </div>
         </form>

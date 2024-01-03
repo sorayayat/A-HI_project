@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 const CompanyUpdate = () => {
   const navigate = useNavigate();
   const [logoPreview, setLogoPreview] = useState("");
+  const [isPhoneChecked, setIsPhoneChecked] = useState(true);
+  const [originalNumber, setOriginalNumber] = useState("");
   const [formData, setFormData] = useState({
     memberId: "",
     email: "",
@@ -24,6 +26,7 @@ const CompanyUpdate = () => {
     const fetchUserInfo = async () => {
       const response = await axios.get('/api/member/infoCompany');
       const data = response.data;
+      setOriginalNumber(data.phoneNumber);
       setFormData({
         email: data.email,
         name: data.name,
@@ -44,9 +47,25 @@ const CompanyUpdate = () => {
   }, []);
 
   const handlePhoneNumberCheck = () => {
-      axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    if(formData.phoneNumber===originalNumber){
+      setIsPhoneChecked(true);
+      alert("기존 전화번호입니다.");
+      return;
+    }
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 12) {
+      alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
+      return;
+    }
+    
+    axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
-            alert(response.data);
+            if(response.data===true) {
+              alert("등록 가능한 번호 입니다.");
+              setIsPhoneChecked(true);
+            }else{
+              alert("기 등록된 번호 입니다.")
+              setIsPhoneChecked(false);
+            }
           })
           .catch(error => {
             console.error('Error fetching data: ', error);
@@ -63,9 +82,17 @@ const CompanyUpdate = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    if (name === 'phoneNumber'){
+      const sanitizedValue = value.replace(/[^0-9]/g, '');
+      setIsPhoneChecked(false);
+      setFormData({ ...formData, [name]: sanitizedValue });
+    }else{
+      setFormData({ ...formData, [name]: value });
+    }
 
+
+    
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -78,7 +105,17 @@ const CompanyUpdate = () => {
     if (formData.logo instanceof File) {
       data.append('logo', formData.logo);
     }
-  
+    if(formData.phoneNumber===originalNumber){
+      setIsPhoneChecked(true);
+    }
+    if(!isPhoneChecked){
+        alert("전화번호 중복확인을 해주세요.");
+        return;
+    }
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 12) {
+      alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
+      return;
+    }
     axios.put(`/api/member/company_info_update`, data)
     .then(response => {
       const updatedUserInfo = {

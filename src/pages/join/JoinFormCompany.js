@@ -47,9 +47,9 @@ const JoinFormCompany = () => {
       if (key === 'logo' && !formData[key]) continue; 
       data.append(key, formData[key]);
   }
+  alert("회원가입을 환영합니다. 가입하신 이메일로 인증메일을 보냈으니 확인해주시기 바랍니다. 잠시 기다려주시면 감사하겠습니다");
     axios.post(`./api/signupCompany`, data)
       .then((response) => {
-        alert(response.data);
         navigate("/");
       })
       .catch((error) => {
