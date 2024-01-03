@@ -8,6 +8,7 @@ from .database import get_database
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from fastapi import Body
+from ..main import wsConnection
 
 CBrouter = APIRouter(prefix="/chatbot")
 
@@ -132,10 +133,37 @@ async def chatbot_endpoint(message: User):
         user_message=user_message,
         chatbot_response=chatbot_response
     )
+    
+     # 데이터 완성도 확인
+    if check_data_complete(message.email, message.roomId):
+        # 특정 클라이언트의 웹소켓 연결 찾기
+        websocket = find_websocket_connection(message.email)
+        if websocket:
+            await wsConnection.send_message("데이터 수집 완료. 이력서를 생성할 수 있습니다.", websocket)
 
     return {"gptMessage": chatbot_response}
 
 
+async def check_data_complete(email: str, roomId: str) -> bool:
+    chatroom_data = await db.chatrooms.find_one({"email": email, "roomId": roomId})
+    if chatroom_data:
+        job_title_collected = False
+        skills_collected = False
 
+        for message in chatroom_data.get("messageList", []):
+            # 메시지 내용을 분석하여 필요한 정보가 있는지 확인
+            if "job_title" in message["content"]:
+                job_title_collected = True
+            if "skills" in message["content"]:
+                skills_collected = True
+            
+            # 모든 필요 정보가 수집되었는지 확인
+            if job_title_collected and skills_collected:
+                return True
 
+    return False
 
+def find_websocket_connection(email: str):
+    # 여기에 클라이언트 ID에 해당하는 웹소켓 연결 찾는 로직 구현
+    # 예: manager의 active_connections를 검사
+    return None  # 예시
