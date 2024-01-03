@@ -3,6 +3,7 @@ package com.jsg.ahispringboot.member.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
+import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.entity.*;
 import com.jsg.ahispringboot.member.mapper.MemberTransMapper;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -63,15 +65,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void signup(MemberDto memberDto) {
+    public Long signup(MemberDto memberDto) {
         MemberEntity memberEntity = MemberTransMapper.INSTANCE.dtoToEntity(memberDto);
         memberEntity.setPassword(passwordEncoder.encode(memberEntity.getPassword()));
-        memberEntity.setRole(MemberRole.ROLE_MEMBER);
-        memberRepositoryImpl.signup(memberEntity);
+        memberEntity.setRole(MemberRole.ROLE_GUEST);
+        MemberEntity signup = memberRepositoryImpl.signup(memberEntity);
+        signup.setRole(MemberRole.ROLE_MEMBER);
+        confirmMailSend(signup);
+        return signup.getId();
     }
 
     @Override
-    public void companySignup(CompanyDto companyDto, MultipartFile logo) {
+    public Long companySignup(CompanyDto companyDto, MultipartFile logo) {
         LogoEntity logoEntity;
         if(logo!=null){
             logoEntity = fileProcess.fileSave(logo);
@@ -85,7 +90,10 @@ public class MemberServiceImpl implements MemberService {
         }
         MemberEntity memberEntity = setCompany(companyDto);
         memberEntity.getCompanyEntity().setLogoEntity(logoEntity);
-        memberRepositoryImpl.companySignup(memberEntity);
+        MemberEntity memberEntity1 = memberRepositoryImpl.companySignup(memberEntity);
+        memberEntity1.setRole(MemberRole.ROLE_COMPANY);
+        confirmMailSend(memberEntity1);
+        return memberEntity1.getId();
     }
     public MemberEntity setCompany(CompanyDto companyDto){
         CompanyEntity companyEntity = MemberTransMapper.INSTANCE.cDtoToEntity(companyDto);
@@ -187,5 +195,60 @@ public class MemberServiceImpl implements MemberService {
     public String findLogo(Long companyId) {
         LogoEntity logo = memberRepositoryImpl.findLogo(companyId);
         return logo.getServerName();
+    }
+
+    @Override
+    public boolean beforeChangePwd(MemberDto memberDto) {
+        Optional<MemberEntity> byId = memberRepositoryDataJpa.findById(memberDto.getId());
+        if(byId.isPresent()){
+            String dbPwd=byId.get().getPassword();
+            boolean matches = passwordEncoder.matches(memberDto.getPassword(), dbPwd);
+            return matches;
+        }else
+            return false;
+    }
+
+    @Override
+    public boolean changePwd(MemberDto memberDto) {
+        Optional<MemberEntity> byId = memberRepositoryDataJpa.findById(memberDto.getId());
+        if(byId.isPresent()){
+            memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+            MemberEntity memberEntity = MemberTransMapper.INSTANCE.dtoToEntity(memberDto);
+            memberRepositoryImpl.updatePwd(memberEntity);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void confirmMailSend(MemberEntity memberEntity) {
+        String token = memberEntity.getRole().toString()+UUID.randomUUID().toString();
+        String verificationUrl = "http://localhost:3000/verify?token=" + token;
+            ConfirmTokenEntity confirmTokenEntity =ConfirmTokenEntity.builder()
+                .memberEntity(memberEntity)
+                .token(token)
+                .build();
+            confirmTokenEntity.getMemberEntity().setRole(MemberRole.ROLE_GUEST);
+        memberRepositoryImpl.confirmSave(confirmTokenEntity);
+        mailSend.sendEmail(memberEntity.getEmail(),"jsg 인증 메일입니다. ",verificationUrl = "http://localhost:3000/verify?token=" + token+"&id="+memberEntity.getId());
+    }
+
+    @Override
+    public boolean confirmCheck(ConfirmTokenDto confirmTokenDto) {
+        MemberEntity memberEntity = new MemberEntity();
+        memberEntity.setId(confirmTokenDto.getId());
+        ConfirmTokenEntity confirmTokenEntity=ConfirmTokenEntity.builder()
+                .token(confirmTokenDto.getToken())
+                .memberEntity(memberEntity)
+                .build();
+        boolean result = memberRepositoryImpl.confirmDelete(confirmTokenEntity);
+        if(!result) return false;
+        if (confirmTokenDto.getToken().contains("MEMBER"))
+            memberEntity.setRole(MemberRole.ROLE_MEMBER);
+        else if(confirmTokenDto.getToken().contains("COMPANY"))
+            memberEntity.setRole(MemberRole.ROLE_COMPANY);
+        memberRepositoryImpl.roleUpdate(memberEntity);
+        return true;
+
     }
 }

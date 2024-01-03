@@ -2,8 +2,7 @@ package com.jsg.ahispringboot.member.entity;
 
 import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "member")

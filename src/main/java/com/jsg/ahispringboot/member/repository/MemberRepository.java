@@ -1,7 +1,9 @@
 package com.jsg.ahispringboot.member.repository;
 
 import com.jsg.ahispringboot.member.dto.CompanyDto;
+import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
+import com.jsg.ahispringboot.member.entity.ConfirmTokenEntity;
 import com.jsg.ahispringboot.member.entity.LogoEntity;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
 import com.jsg.ahispringboot.member.entity.PostingLike;
@@ -14,9 +16,9 @@ public interface MemberRepository {
 
     MemberEntity findMember(String memberEmail,String phoneNumber);
 
-    void signup(MemberEntity memberEntity);
+    MemberEntity signup(MemberEntity memberEntity);
 
-    void companySignup(MemberEntity memberEntity);
+    MemberEntity companySignup(MemberEntity memberEntity);
 
 
     void updatePwd(MemberEntity member);
@@ -30,4 +32,10 @@ public interface MemberRepository {
     LogoEntity findLogo(Long companyId);
 
     void updateLogo(LogoEntity logoEntity);
+
+    void confirmSave(ConfirmTokenEntity confirmTokenEntity);
+
+    boolean confirmDelete(ConfirmTokenEntity confirmTokenEntity);
+
+    void roleUpdate(MemberEntity memberEntity);
 }

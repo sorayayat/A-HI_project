@@ -1,11 +1,9 @@
 package com.jsg.ahispringboot.member.repository;
 
 import com.jsg.ahispringboot.member.dto.CompanyDto;
+import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
-import com.jsg.ahispringboot.member.entity.CompanyEntity;
-import com.jsg.ahispringboot.member.entity.LogoEntity;
-import com.jsg.ahispringboot.member.entity.MemberEntity;
-import com.jsg.ahispringboot.member.entity.PostingLike;
+import com.jsg.ahispringboot.member.entity.*;
 import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,8 +32,10 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Transactional
     @Override
-    public void signup(MemberEntity memberEntity) {
-        em.persist(memberEntity);
+    public MemberEntity signup(MemberEntity memberEntity) {
+        MemberEntity memberEntity1 = memberEntity;
+        em.persist(memberEntity1);
+       return memberEntity1;
     }
 
     @Transactional(readOnly = true) // 이걸 옵셔널로 리턴주면 유니크가 아닌걸로 검색했을경우 사용못하고 값이 여러개니깐 list 로 주면 null 처리만 해주면 되고
@@ -77,8 +77,10 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Transactional
     @Override
-    public void companySignup(MemberEntity memberEntity) {
-        em.persist(memberEntity);
+    public MemberEntity companySignup(MemberEntity memberEntity) {
+        MemberEntity memberEntity1 = memberEntity;
+        em.persist(memberEntity1);
+        return memberEntity1;
     }
 
     @Transactional
@@ -131,5 +133,29 @@ public class MemberRepositoryImpl implements MemberRepository {
         LogoEntity logoEntity1 = em.find(LogoEntity.class, logoEntity.getLogoId());
         logoEntity1.setOriginalName(logoEntity.getOriginalName());
         logoEntity1.setServerName(logoEntity.getServerName());
+    }
+
+    @Transactional
+    @Override
+    public void confirmSave(ConfirmTokenEntity confirmTokenEntity) {
+        em.persist(confirmTokenEntity);
+    }
+    @Transactional
+    @Override
+    public boolean confirmDelete(ConfirmTokenEntity confirmTokenEntity) {
+        ConfirmTokenEntity confirmTokenEntity1 = em.find(ConfirmTokenEntity.class, confirmTokenEntity.getMemberEntity().getId());
+        if(confirmTokenEntity.getToken().equals(confirmTokenEntity1.getToken())){
+            em.remove(confirmTokenEntity1);
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+    @Transactional
+    @Override
+    public void roleUpdate(MemberEntity memberEntity) {
+        MemberEntity memberEntity1 = em.find(MemberEntity.class, memberEntity.getId());
+        memberEntity1.setRole(memberEntity.getRole());
     }
 }

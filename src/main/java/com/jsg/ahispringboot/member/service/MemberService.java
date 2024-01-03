@@ -1,16 +1,18 @@
 package com.jsg.ahispringboot.member.service;
 
 import com.jsg.ahispringboot.member.dto.CompanyDto;
+import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
+import com.jsg.ahispringboot.member.entity.MemberEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
     boolean emailDuplicationCheck(String email);
 
-    void signup(MemberDto memberDto);
+    Long signup(MemberDto memberDto);
 
-    void companySignup(CompanyDto companyDto, MultipartFile logo);
+    Long companySignup(CompanyDto companyDto, MultipartFile logo);
 
     MemberDto findInfo(MemberDto memberDto);
 
@@ -27,4 +29,12 @@ public interface MemberService {
     String myPage(Long memberId);
 
     String findLogo(Long companyId);
+
+    boolean beforeChangePwd(MemberDto memberDto);
+
+    boolean changePwd(MemberDto memberDto);
+
+    void confirmMailSend(MemberEntity memberEntity);
+
+    boolean confirmCheck(ConfirmTokenDto confirmTokenDto);
 }
