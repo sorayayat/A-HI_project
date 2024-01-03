@@ -1,16 +1,6 @@
 export const ADD_MESSAGE_TO_CHATROOM = 'CHATROOM/ADD_MESSAGE_TO_CHATROOM';
-
-export const addMessageToChatRoom = (roomId, message) => ({
-  type: ADD_MESSAGE_TO_CHATROOM,
-  payload: { roomId, message },
-});
-
 export const ADD_CHATROOM_DATA = 'CHATROOM/ADD_CHATROOM_DATA';
-
-export const addChatRoomData = (chatRooms) => ({
-  type: ADD_CHATROOM_DATA,
-  payload: { chatRooms },
-});
+export const DELETE_CHATROOM = 'CHATROOM/DELETE_CHATROOM';
 
 
 const initialState = {
@@ -18,6 +8,26 @@ const initialState = {
   email: '',
   chatroomList: [],
 };
+
+
+export const addMessageToChatRoom = (roomId, message) => ({
+  type: ADD_MESSAGE_TO_CHATROOM,
+  payload: { roomId, message },
+});
+
+
+
+export const addChatRoomData = (chatRooms) => ({
+  type: ADD_CHATROOM_DATA,
+  payload: { chatRooms },
+});
+
+
+export const deleteChatRoom = (roomId) => ({
+  type: DELETE_CHATROOM,
+  payload: { roomId },
+});
+
 
 
 const chatbotReducer = (state = initialState, action) => {
@@ -63,9 +73,16 @@ const chatbotReducer = (state = initialState, action) => {
       chatroomList: chatRooms,
     };
 
+    case DELETE_CHATROOM:
+      return {
+        ...state,
+        chatroomList: state.chatroomList.filter(room => room.roomId !== action.payload.roomId),
+      };
+
     default:
       return state;
   }
+
 };
 
 export default chatbotReducer;

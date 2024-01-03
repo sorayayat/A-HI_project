@@ -1,17 +1,15 @@
 import styles from './ChatRoom.module.css';
-import bubbleIcon from '../mainpage/Icons/bubbleIcon.png';
 import sendIcon from '../mainpage/Icons/Sent.png';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import React, { useEffect, useRef } from 'react';
 
 
-const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
+const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, setSelectedPrompt }) => {
 
     const userEmail = useSelector(state => state.auth.email); 
     const [message, setMessage] = useState('');
-    const [showChat, setShowChat] = useState(false);
-    const [selectedPrompt, setSelectedPrompt] = useState(null);
+    // const [showChat, setShowChat] = useState(false);
     const [messageList, setMessageList] = useState([]); 
     const scrollRef = useRef(null);
 
@@ -22,14 +20,6 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
         console.log("현재 로그인한 사용자의 이메일 =========> ", userEmail);
     }, [userEmail]);
     
-
-
-    // ========================== 프롬프트 선택 ============================
-
-    const startChat = (promptType) => {
-        setSelectedPrompt(promptType);
-        setShowChat(true);
-    };
 
     // =========================== 채팅 메세지 =============================
     
@@ -52,7 +42,6 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
         if (activeChatRoom && activeChatRoom.messageList) {
             console.log("activeChatRoom.messages =============> ", activeChatRoom.messageList)
             setMessageList(activeChatRoom.messageList);
-            setShowChat(true);
         }
     }, [activeChatRoom]);
     
@@ -74,16 +63,18 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
 
     // 메세지 전송 함수
     const sendMessage = async () => {
-        if (activeChatRoom && activeChatRoom.id) {
+        if (activeChatRoom) {
 
             const newUserMessage = { sender: '사용자', content: message };
 
             const payload = {
                 email: userEmail, 
-                roomId: activeChatRoom.id,
+                roomId: activeChatRoom.roomId,
                 prompt: selectedPrompt,
                 message: message
             };
+
+            console.log("PAYLOAD ===================> " ,payload)
     
             const response = await fetch('http://localhost:8000/chatbot/', {
                 method: 'POST',
@@ -107,62 +98,26 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages }) => {
 
 
 
-
-
-
     return (
         <>
             {/* ChatbotMain에서 받아온 사용자 메세지와 챗봇 답변 props로 받아와서 화면에 보여줌 */}
             <div className={styles.messageListWrapper}>
                 <div className={styles.messageList}>
                     <div className={styles.messageContainer}>
-                        {/* 사용자가 프롬프트 선택하기 전 */}
-                        {!showChat && (
-                            <div className={styles.messageItemScreen}>
-                                <div className={styles.promptSelect}>
-                                    <div className={styles.prompt}>
-                                        {/* 아이콘 */}
-                                        <div className={styles.bubbleIcon}>
-                                            <img src={bubbleIcon} alt='bubbleIcon' style={{ width: "40px", height: "45px" }} />
-                                        </div>
-                                        <div className={styles.promptTitle}>
-                                            경력 유무에 따라 질문할 수 있어요
-                                        </div>
-                                        <div className={styles.titleBoxMarjin}></div>
-                                        <div className={styles.promptBox}>
-                                            <div className={styles.promptBox1} onClick={() => startChat('신입')}>
-                                                <div className={styles.box1Text}>
-                                                    <p>경력이 없는 <b>신입</b>이에요</p>
-                                                </div>
-                                            </div>
-                                            <div className={styles.promptBox2} onClick={() => startChat('경력직')}>
-                                                <div className={styles.box2Text}>
-                                                    <p>이직을 원하는 <b>경력직</b>이에요</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
                         {/* 사용자가 프롬프트 선택 후 채팅을 진행할 경우 */}
-                        {showChat && (
-                            <div className={styles.chattingScrollContainer}>
-                                <div className={styles.chattingList} ref={scrollRef}>
-                                    {activeChatRoom.messageList.map((msg, index) => (
-                                        <div key={`${msg.sender}-${msg.content}-${index}`} className={msg.sender === 
-                                        '사용자' ? styles.userMessage : styles.chatbotMessage}>
+                        <div className={styles.chattingScrollContainer}>
+                            <div className={styles.chattingList} ref={scrollRef}>
+                                {activeChatRoom && Array.isArray(activeChatRoom.messageList) && 
+                                    activeChatRoom.messageList.map((msg, index) => (
+                                        <div key={`${msg.sender}-${msg.content}-${index}`} className={msg.sender === '사용자' ? styles.userMessage : styles.chatbotMessage}>
                                             <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
                                                 {msg.content}
                                             </p>
                                         </div>
-                                    ))}
-                                </div>
+                                ))}
                             </div>
-                            
-                        )}
-
-
+                        </div>
+                        
 
                         {/* 메세지 입력창 */}
                         <div className={styles.inputMessageArea}>
