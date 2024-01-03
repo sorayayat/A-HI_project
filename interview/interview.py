@@ -36,15 +36,15 @@ async def AI_question(answer: str = Body(...)):
    return {"feedback": feedback}
 
 # 이력서 경로 저장
-PDF_FILE_PATH = '/Users/baesola/dev/AHI-FASTAPI/imgs/test.pdf'
+# PDF_FILE_PATH = '/Users/baesola/dev/AHI-FASTAPI/imgs/test.pdf'
 
 # lid open함수로 파일 읽기
-pdf = pdfplumber.open(PDF_FILE_PATH)
-pages = pdf.pages
-user = ""
-for page in pages:
-    sub = page.extract_text()
-    user += sub
+# pdf = pdfplumber.open(PDF_FILE_PATH)
+# pages = pdf.pages
+# user = ""
+# for page in pages:
+#     sub = page.extract_text()
+#     user += sub
 
 
 prompt = """

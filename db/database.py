@@ -35,10 +35,10 @@ Base = declarative_base()
 
 some_table = Table("member",metadata_obj,autoload_with=engine)
 
-stmt = select(some_table)
-datas = db.execute(stmt)
-for data in datas:
-    print(data)
+# stmt = select(some_table)
+# datas = db.execute(stmt)
+# for data in datas:
+#     print(data)
 
 
 
