@@ -6,6 +6,7 @@ from company.posting import POrouter
 from chatbot.chatbot import CBrouter
 from resume.resume import resume_router
 from recommendation.recommendation import RErouter
+from recommendation.likePosting import LIrouter
 
 
 app = FastAPI()
@@ -17,6 +18,8 @@ app.include_router(POrouter)
 app.include_router(CBrouter)
 app.include_router(resume_router)
 app.include_router(RErouter)
+app.include_router(LIrouter)
+
 
 
 app.add_middleware(
