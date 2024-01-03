@@ -60,15 +60,35 @@ def create_chatbot_router(wsConnection):
         user_data = await db.chatrooms.find_one({"email": email})
         
         if user_data:
-            return user_data.get("chatroomList", [])
+            chatrooms = user_data.get("chatroomList", [])
+            # 각 채팅방에 프롬프트 정보 추가
+            for room in chatrooms:
+                room['prompt'] = room.get('prompt', 'Default prompt')  # 프롬프트가 없을 경우 디폴트 값 추가
+
+            return chatrooms
         else:
             print("User data not found")
             return JSONResponse(content={"email": email, "chatroomList": []}, status_code=404)
+        
+
+    # @CBrouter.post("/userchatrooms")
+    # async def get_user_chatrooms(request_body: dict = Body(...)):
+    #     email = request_body.get("email")
+    #     if not email:
+    #         raise HTTPException(status_code=400, detail="Email is required")
+
+    #     user_data = await db.chatrooms.find_one({"email": email})
+        
+    #     if user_data:
+    #         return user_data.get("chatroomList", [])
+    #     else:
+    #         print("User data not found")
+    #         return JSONResponse(content={"email": email, "chatroomList": []}, status_code=404)
 
 
 
     # mongoDB 데이터 저장
-    async def update_chatroom(email, roomId, user_message, chatbot_response):
+    async def update_chatroom(email, roomId, user_message, prompt, chatbot_response):
         user_data = await db.chatrooms.find_one({"email": email})
 
         if user_data:
@@ -81,6 +101,7 @@ def create_chatbot_router(wsConnection):
                     # 저장할 데이터 구조
                     room["messageList"].append({"sender": "사용자", "content": user_message})
                     room["messageList"].append({"sender": "챗봇", "content": chatbot_response})
+                    room["prompt"] = prompt
                     break
 
             if not chatroom_exists:
@@ -90,7 +111,8 @@ def create_chatbot_router(wsConnection):
                     "messageList": [
                         {"sender": "사용자", "content": user_message},
                         {"sender": "챗봇", "content": chatbot_response}
-                    ]
+                    ],
+                    "prompt": prompt
                 })
 
             # 업데이트된 데이터베이스 정보를 업데이트
@@ -105,7 +127,8 @@ def create_chatbot_router(wsConnection):
                         "messageList": [
                             {"sender": "사용자", "content": user_message},
                             {"sender": "챗봇", "content": chatbot_response}
-                        ]
+                        ],
+                        "prompt": prompt
                     }
                 ]
             }
@@ -156,6 +179,7 @@ def create_chatbot_router(wsConnection):
             email=message.email,
             roomId=message.roomId,
             user_message=user_message,
+            prompt=message.prompt,
             chatbot_response=chatbot_response
         )
 
