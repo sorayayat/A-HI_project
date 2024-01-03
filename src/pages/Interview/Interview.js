@@ -6,27 +6,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { callInterview } from '../../apis/interviewAPICalls'
 import { callInterviewAnswer } from '../../apis/interviewAPIanswerCall'
-import { handleAction } from "redux-actions";
-
-
-// 수정 사항
-// 폰트 수정하기 
 
 const Interview = () => {
 
-
     const [searchQuery, setSearchQuery] = useState('');
     const [question, setquestion] = useState('');
-    const [answer, setAnswer] = useState('');
+    const [answer, setAnswer] = useState({});
     const [AIanswer, setAIanswer] = useState('');
-    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
-
-    // 토글 키 상태 관리
-    const [Toggled, setToggled] = useState(false);
-    const toggle = () => {
-        setToggled(!Toggled);
-    };
+    const [isToggled, setIsToggled] = useState({});
+    const dispatch = useDispatch();
 
     // 로딩 중을 표시해줌
     const handleSearchAnnouncement = () => {
@@ -44,18 +33,20 @@ const Interview = () => {
             setIsLoading(false); // 로딩 종료
         }));
     };
-
-    const [isToggled, setIsToggled] = useState(false);
-
-    const handleToggle = () => {
-        setIsToggled(!isToggled);
+    
+    
+    const handleAnswerChange = (index, value) => {
+        setAnswer(prev => ({ ...prev, [index]: value }));
     };
 
-
-    // 가져온 json 문자열을 한줄 씩 자른다.
-    const Lines = question.split('\n').map((line, index) => (
-        <p key={index}>{line}</p>
-    ));
+    const handleToggle = (index) => {
+        setIsToggled(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }));
+    };
+    const questions = question.split('\n').filter(q => q.trim() !== '');
+   
 
 
     // 화면 작업은 return 내부에 작성한다.
@@ -71,7 +62,7 @@ const Interview = () => {
             <div className={SearchBarStyle.searchWrapper}>
                 <div className={SearchBarStyle.searchBar}>
                     <FontAwesomeIcon icon={faMagnifyingGlass} className={SearchBarStyle.faMagnifyingGlass} style={{ cursor: 'pointer' }} />
-                    <input type="search" className={SearchBarStyle.searchBox} autoComplete='off' placeholder="채용 공고 링크를 입력하세요"
+                    <input type="search" className={SearchBarStyle.searchBox} autoComplete='off' placeholder="공고 코드를 입력하세요"
                         value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}>
                     </input>
                 </div>
@@ -94,27 +85,26 @@ const Interview = () => {
                     </div>
                 }
 
-                {question && (
+                {questions.map((q, index) => (
                     <div className={style.questionBox}>
-                        {Lines}
-
+                        <p>{q}</p>
                         {/* 토글 버튼 */}
-                        <button onClick={handleToggle} className={style.toggle}>
-                            {isToggled ? '▲' : '▼'}
+                        <button onClick={() => handleToggle(index)} className={style.toggle}>
+                            {isToggled[index]? '▲' : '▼'}
                         </button>
 
                         {/* 토글된 상태에 따라 답변란 표시 */}
-                        {isToggled && (
+                        {isToggled[index] && (
                             <div className={style.answerBoxs}>
                                 <input type="text"
-                                    value={answer}
-                                    onChange={(e) => setAnswer(e.target.value)}
+                                    value={answer[index] || ''}
+                                    onChange={(e) => setAnswer(index, e.target.value)}
                                     autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
                                 <button className={style.actionButton} onClick={handleSendAnswer}>답변 하기</button>
                             </div>
                         )}
                     </div>
-                )}
+                ))}
             </div>
             {AIanswer && (
                 <div className={style.questionBox}>
