@@ -9,7 +9,7 @@ const CompanyUpdate = () => {
     email: "",
     name: "",
     phoneNumber: "",
-    id:"",
+    companyId:"",
     company:"",
     companyType:"",
     employeesNumber:"",
@@ -25,7 +25,7 @@ const CompanyUpdate = () => {
         email: data.email,
         name: data.name,
         phoneNumber: data.phoneNumber,
-        id:data.id,
+        companyId:data.companyId,
         company:data.company,
         companyType:data.companyType,
         employeesNumber:data.employeesNumber,
@@ -60,8 +60,13 @@ const CompanyUpdate = () => {
     setFormData({ ...formData, [name]: value });
   };
   const handleSubmit = (e) => {
-    axios.put(`./api/member/company_info_update`,formData)
+    axios.put(`/api/member/company_info_update`,formData)
     .then(response => {
+      const updatedUserInfo = {
+        ...JSON.parse(sessionStorage.getItem('userInfo')),
+        ...formData
+      };
+      sessionStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
       alert('정보수정완료');
       navigate('/');
     })

@@ -1,6 +1,7 @@
 .messageListWrapper {
     width: calc(100vW - 300px);
     min-width: 400px; 
+    position: relative;
 }
 
 .messageList {
@@ -75,6 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 
@@ -105,10 +107,14 @@
 
 .inputMessageArea {
     width: 100%;
-    padding: 0px 20px 40px;
+    padding: 20px 20px 40px;
     background: white;
     display: flex;
     justify-content: center;
+    position: sticky; /* 스크롤 시 고정 */
+    bottom: 0; /* 화면 하단에 고정 */
+    z-index: 1; /* 다른 요소 위에 배치 */
+      
 }
 
 .inputMessageBar {
@@ -138,11 +144,13 @@
     resize: none;
     white-space: pre-wrap; /* 줄 바꿈 유지 */
     overflow-y: hidden;
+    color: rgb(59, 63, 78);
 }
 
 .inputMessage textarea::placeholder {
     color:rgb(176, 176, 176);
   }
+
 
 .messageSendBtn {
     border: none;
@@ -150,3 +158,66 @@
     padding-top: 13px;
     padding-left: 18px;
 }
+
+
+
+/* ========================== 채팅창 메세지, 말풍선 디자인 ========================== */
+
+/* 수정된 클래스명에 대한 CSS */
+.userMessage {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+  }
+  
+  .chatbotMessage {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 40px;
+  }
+  
+  .userMessage .messageBubble {
+    background-color: #007aff;
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 10px 15px;
+    /* max-width: 75%; */
+    text-align: left !important;
+    line-height: 180%;
+  }
+  
+  .chatbotMessage .messageBubble {
+    background-color: rgb(242, 247, 255);
+    border-radius: 10px;
+    padding: 10px 15px;
+    /* max-width: 75%; */
+    text-align: left !important;
+    line-height: 180%;
+    color: rgb(59, 63, 78);
+  }
+
+  .chattingScrollContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(100% - 60px);
+  }
+
+
+  .chattingList {
+    height: calc(100% - 90px); /* 기존 높이에서 입력창 높이만큼 뺌 */
+    width: 100%;
+    max-height: calc(100vh - 140px); /* 채팅창 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤바 표시 */
+    margin: 0px auto;
+    max-width: 750px;
+    padding-top: 30px;
+    background: white;
+    scrollbar-width: none; /* Firefox에 적용되는 속성 */
+    -ms-overflow-style: none; /* IE/Edge에 적용되는 속성 */
+  }
+  
+  .chattingList::-webkit-scrollbar {
+    display: none; /* Webkit 기반 브라우저에 적용되는 속성 */
+  }
+

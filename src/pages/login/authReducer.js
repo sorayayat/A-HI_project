@@ -2,7 +2,17 @@
 import { LOGIN, LOGOUT } from './authActions';
 
 const initialState = {
-    isLoggedIn: false
+    isLoggedIn: false,
+    email: "",
+    // companyId: "",
+    // memberId:"",
+    // name:"",
+    // phoneNumber:"",
+    // company:"",
+    // companyType:"",
+    // employeesNumber:"",
+    // establishmentDate:"",
+    // companyHomepage:"",
 };
 
 const authReducer = (state = initialState, action) => {
@@ -10,12 +20,14 @@ const authReducer = (state = initialState, action) => {
         case LOGIN:
             return {
                 ...state,
-                isLoggedIn: true
+                isLoggedIn: true,
+                email: action.payload.email,
             };
         case LOGOUT:
             return {
                 ...state,
-                isLoggedIn: false
+                isLoggedIn: false,
+                email: "",
             };
         default:
             return state;

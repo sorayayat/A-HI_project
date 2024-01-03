@@ -1,7 +1,10 @@
 import style from './Recommendation.module.css'
-import { useState } from 'react'
-import logo from './images/다운로드.png'
+import { useState , useEffect } from 'react'
+import logo from './images/KakaoTalk_20231218_121636945 (2).jpg'
 import {Link} from "react-router-dom"
+import { useDispatch } from 'react-redux';
+import { callRecommendationResume } from '../../apis/recommendation.APICalls';
+
 
 
 
@@ -9,9 +12,10 @@ function Recommendation() {
 
 
     const [dragging, setDragging] = useState(false);
-    const [file, setfile] = useState([]);
-    const [droppedFiles, setDroppedFiles] = useState([]);
-
+    const [file, setfile] = useState();
+    const [droppedFiles, setDroppedFiles] = useState();
+    const dispatch = useDispatch();
+    
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -19,7 +23,7 @@ function Recommendation() {
 
         const files = Array.from(e.dataTransfer.files)
 
-        setfile(prevFile => ([...prevFile, ...files]));
+        setfile(files);
 
 
         console.log('asd',e.dataTransfer.files);
@@ -27,9 +31,26 @@ function Recommendation() {
         const fileNames = files.map(file => file.name);
         console.log('드롭한 파일:', fileNames);
 
-        setDroppedFiles(prevFiles => [...prevFiles, ...fileNames]); // 이전 파일 목록에 새 파일 추가
+        setDroppedFiles(fileNames); // 이전 파일 목록에 새 파일 추가
 
     };
+
+    const onClickRecommendationHandler = () => {
+
+        const formData = new FormData();
+
+        console.log("gd" , file[0]);
+
+        formData.append("file" , file[0])
+
+        dispatch(callRecommendationResume({
+
+            file : formData
+
+        }))
+    }
+
+    
 
     return (
         <>
@@ -61,7 +82,7 @@ function Recommendation() {
                                 </div>
                 </div>
 
-                <button className={style.recommendationButton}>공고 추천하기</button>
+                <button className={style.recommendationButton} onClick={onClickRecommendationHandler}>공고 추천하기</button>
 
                 <h1 className={style.noResume}>이력서가 없으시다면?</h1>
 

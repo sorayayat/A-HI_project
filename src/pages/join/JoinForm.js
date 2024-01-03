@@ -30,7 +30,6 @@ const JoinForm = () => {
       alert("비밀번호와 비밀번호 확인은 11자리 이상 이어야 합니다.");
       return;
     }
-
     axios.post(`./api/signup`,formData)
         .then(response => {
           alert(response.data);
@@ -76,10 +75,10 @@ const JoinForm = () => {
     if (name === "email") {
       setIsEmailChecked(false);
       setFormData({ ...formData, [name]: value });
-    }else if (name === 'phoneNumber'){
+    }/* else if (name === 'phoneNumber'){
       const sanitizedValue = value.replace(/[^0-9]/g, '');
       setFormData({ ...formData, [name]: sanitizedValue });
-    }else{
+    } */else{
       setFormData({ ...formData, [name]: value });
     }
   };
@@ -100,7 +99,6 @@ const JoinForm = () => {
           </div>
           <span></span>
         </div>
-
         <div className={styles.inputContainer}>
           <label htmlFor="password">비밀번호</label>
           <div className={styles.inputOnly}>
@@ -130,7 +128,7 @@ const JoinForm = () => {
         <div className={styles.inputContainer}>
           <label htmlFor="phoneNumber">전화번호</label>
           <div className={styles.inputOnly}>
-            <input type="number" id="phoneNumber" max="99999999999" name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
+            <input type="text" id="phoneNumber" max="99999999999" name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
           </div>
           <span></span>
         </div>
