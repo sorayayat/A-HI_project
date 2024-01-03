@@ -26,17 +26,22 @@ const Withdrawal = () => {
   }, []);
 
   const handleSubmit = (e) => {
-    alert(formData.password);
-    axios.delete(`./api/member/withdrawal`, { data: formData })
-    .then(response => {
-      sessionStorage.setItem('isLoggedIn', 'false');
-      sessionStorage.removeItem('userInfo');
-      alert('탈퇴');
-      navigate('/');
-    })
-    .catch(error => {
-      console.error('Error fetching data: ', error);
-    })
+    e.preventDefault(); 
+    const isConfirmed = window.confirm("정말로 탈퇴하시겠습니까?");
+  
+    if (isConfirmed) {
+  
+      axios.delete(`./api/member/withdrawal`, { data: formData })
+      .then(response => {
+        sessionStorage.setItem('isLoggedIn', 'false');
+        sessionStorage.removeItem('userInfo');
+        alert('탈퇴 처리 되었습니다.');
+        navigate('/');
+      })
+      .catch(error => {
+        console.error('Error fetching data: ', error);
+      });
+    }
   };
 
   const handleChange = (e) => {

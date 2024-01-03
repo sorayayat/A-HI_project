@@ -24,6 +24,8 @@ import InspectionDetail from './pages/inspection/InspectionDetail';
 import InspectionMain from './pages/inspection/InspectionMain';
 import InterviewSpring from './pages/InterviewSpring/InterviewSpring';
 import { ProtectedRoute } from './pages/login/ProtectedRoute';
+import ChangePwd from './pages/changePwd/ChangePwd';
+import Verify from './pages/verify/Verify';
 function App() { 
 
 
@@ -59,11 +61,16 @@ return (
         <Route path='/SearchPage' element={<SearchPage/>}/>
         <Route path='/interviewSpring' element={<InterviewSpring/>}/>
         
-        
+        <Route path='/verify' element={<Verify/>}/>
         
         <Route path='/withdrawal' element={
         <ProtectedRoute>
         <Withdrawal />
+        </ProtectedRoute>}/>
+         
+        <Route path='/changePwd' element={
+        <ProtectedRoute>
+          <ChangePwd/>
         </ProtectedRoute>}/>
         <Route path='/mypage' element={
         <ProtectedRoute>

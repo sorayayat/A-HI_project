@@ -49,6 +49,7 @@ const JoinFormCompany = () => {
   }
     axios.post(`./api/signupCompany`, data)
       .then((response) => {
+        alert(response.data);
         navigate("/");
       })
       .catch((error) => {

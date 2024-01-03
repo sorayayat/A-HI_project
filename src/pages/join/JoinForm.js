@@ -37,6 +37,7 @@ const JoinForm = () => {
     }
     axios.post(`./api/signup`,formData)
         .then(response => {
+          alert(response.data);
           navigate('/');
         })
         .catch(error => {

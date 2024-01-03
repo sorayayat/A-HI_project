@@ -36,10 +36,8 @@ const LoginForm = () => {
             })
             .catch(error => {
                 if (error.response && error.response.status === 401) {
-                    // 서버에서 보낸 실패 메시지 사용
                     alert(error.response.data.message);
                 } else {
-                    // 기타 에러 처리
                     console.error('로그인 요청 에러: ', error);
                 }
             })
