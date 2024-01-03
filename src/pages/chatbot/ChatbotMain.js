@@ -6,7 +6,7 @@ import { addChatRoomData } from '../../modules/chatbotModules';
 import { deleteChatRoom } from '../../modules/chatbotModules';
 import { useDispatch, useSelector } from 'react-redux';
 import bubbleIcon from '../mainpage/Icons/bubbleIcon.png';
-
+import { setPrompt } from '../../modules/chatbotModules';
 
 const ChatbotMain = () => {
 
@@ -15,9 +15,19 @@ const ChatbotMain = () => {
     const [activeChatRoomId, setActiveChatRoomId] = useState(null); // 현재 활성화된 채팅방 ID
     const [selectedChatRoom, setSelectedChatRoom] = useState(null);
     const [selectedPrompt, setSelectedPrompt] = useState(null);
-    const userEmail = useSelector(state => state.auth.email);
+    const [userEmail, setUserEmail] = useState('');  
     const chatroomListFromStore = useSelector(state => state.chatbotReducer.chatroomList);
     const dispatch = useDispatch();
+
+    
+    // 사용자 이메일 가져옴
+    useEffect(() => {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        if (userInfo && userInfo.email) {
+            setUserEmail(userInfo.email);
+        }
+    }, []);
+
 
     // 고유 ID 생성
     const generateUniqueID = () => {
@@ -27,13 +37,17 @@ const ChatbotMain = () => {
 
     // 새 채팅방 생성
     const handleNewChat = () => {
-        if (selectedPrompt) {
+        if (selectedPrompt !== null) { // selectedPrompt가 null이 아닐 때만 실행
             const newChatRoomId = generateUniqueID();
             const newChatRoom = {
                 roomId: newChatRoomId, 
                 messageList: [],
                 prompt: selectedPrompt
             };
+    
+            dispatch(addChatRoomData([...chatRooms, newChatRoom]));
+            dispatch(setPrompt(newChatRoomId, selectedPrompt));
+    
             setChatRooms([...chatRooms, newChatRoom]);
             setActiveChatRoomId(newChatRoomId);
         } else {
@@ -41,6 +55,26 @@ const ChatbotMain = () => {
             console.log("프롬프트 먼저 선택해주세요");
         }
     };
+    
+    // const handleNewChat = () => {
+    //     if (selectedPrompt) {
+    //         const newChatRoomId = generateUniqueID();
+    //         const newChatRoom = {
+    //             roomId: newChatRoomId, 
+    //             messageList: [],
+    //             prompt: selectedPrompt
+    //         };
+
+    //         dispatch(addChatRoomData([...chatRooms, newChatRoom]));
+    //         dispatch(setPrompt(newChatRoomId, selectedPrompt));
+
+    //         setChatRooms([...chatRooms, newChatRoom]);
+    //         setActiveChatRoomId(newChatRoomId);
+    //     } else {
+    //         // 프롬프트를 선택하지 않았을 경우 액션을 취하지 않음
+    //         console.log("프롬프트 먼저 선택해주세요");
+    //     }
+    // };
 
     // selectedPrompt가 변경될 때 새 채팅방 생성
     useEffect(() => {

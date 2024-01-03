@@ -1,6 +1,7 @@
 export const ADD_MESSAGE_TO_CHATROOM = 'CHATROOM/ADD_MESSAGE_TO_CHATROOM';
 export const ADD_CHATROOM_DATA = 'CHATROOM/ADD_CHATROOM_DATA';
 export const DELETE_CHATROOM = 'CHATROOM/DELETE_CHATROOM';
+export const SET_PROMPT = 'CHATROOM/SET_PROMPT';
 
 
 const initialState = {
@@ -28,6 +29,10 @@ export const deleteChatRoom = (roomId) => ({
   payload: { roomId },
 });
 
+export const setPrompt = (roomId, prompt) => ({
+  type: SET_PROMPT,
+  payload: { roomId, prompt },
+});
 
 
 const chatbotReducer = (state = initialState, action) => {
@@ -66,6 +71,7 @@ const chatbotReducer = (state = initialState, action) => {
       console.log('Updated State:', updatedState); // 업데이트된 상태 확인
       return updatedState;
 
+
     case ADD_CHATROOM_DATA:
     const { chatRooms } = action.payload;
     return {
@@ -78,6 +84,21 @@ const chatbotReducer = (state = initialState, action) => {
         ...state,
         chatroomList: state.chatroomList.filter(room => room.roomId !== action.payload.roomId),
       };
+
+
+
+
+
+      case SET_PROMPT:
+        const { roomId: promptRoomId, prompt } = action.payload;
+        return {
+          ...state,
+          chatroomList: state.chatroomList.map(room =>
+            room.roomId === promptRoomId ? { ...room, prompt } : room
+          ),
+        };
+    
+
 
     default:
       return state;

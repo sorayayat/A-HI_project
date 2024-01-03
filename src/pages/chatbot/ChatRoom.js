@@ -7,13 +7,27 @@ import React, { useEffect, useRef } from 'react';
 
 const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, setSelectedPrompt }) => {
 
-    const userEmail = useSelector(state => state.auth.email); 
+    const [userEmail, setUserEmail] = useState('');  
     const [message, setMessage] = useState('');
     // const [showChat, setShowChat] = useState(false);
     const [messageList, setMessageList] = useState([]); 
     const scrollRef = useRef(null);
     const websocket = useRef(null);
     const [showResumeButton, setShowResumeButton] = useState(false);
+
+
+
+    useEffect(() => {
+        console.log("@@@@@@@@@@@@@@@@@@ selectedPrompt ===================> ", selectedPrompt)
+    },[activeChatRoom])
+
+    // 사용자 이메일 가져옴
+    useEffect(() => {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        if (userInfo && userInfo.email) {
+            setUserEmail(userInfo.email);
+        }
+    }, []);
 
 
     // 채팅 시작 시 웹소켓 연결
