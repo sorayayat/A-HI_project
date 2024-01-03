@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { callRecommendationResume } from '../../apis/recommendationAPICalls';
 import RecommendationModal from './RecommendationModal';
 import { postRecommendation } from '../../modules/recommendationModules';
+import { LoadingSpiner } from '../../other/LoadingSpiner';
+import Swal from 'sweetalert2';
+
 
 
 
@@ -27,14 +30,14 @@ function Recommendation() {
 
     const selectPostingData = selectPosting?.response?.data
 
-    console.log(selectPostingData, "sadasd");
-
-
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    
 
 
 
     const handleDrop = (e) => {
+
         e.preventDefault();
         setDragging(true);
 
@@ -54,6 +57,14 @@ function Recommendation() {
 
     const onClickRecommendationHandler = () => {
 
+        if(file === undefined) {
+            Swal.fire({
+                icon:'info',
+                text: '파일 넣으셈',
+            })
+        }
+        else{
+
         const formData = new FormData();
 
         console.log("gd", file[0]);
@@ -70,6 +81,9 @@ function Recommendation() {
 
 
         setIsModalOpen(true)
+        }
+
+        
 
 
     }

@@ -4,8 +4,8 @@ import style from './Interview.module.css';
 import SearchBarStyle from '../mainpage/Search.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { callInterview } from '../../apis/interviewAPICalls'
-import { callInterviewAnswer } from '../../apis/interviewAPIanswerCall'
+import { callInterview } from '../../apis/interviewAPICalls';
+import { callInterviewAnswer } from '../../apis/interviewAPIanswerCall';
 
 
 // 수정 사항

@@ -16,7 +16,7 @@ function CompanyDetails() {
     const [isLiked, setIsLiked] = useState(null);
     
     const earlyPostingLike = useSelector(state => state.companyReducer.getLike);
-    // const postingLike = useSelector(state => state.companyReducer.putUpdalike);
+    const postingLike = useSelector(state => state.companyReducer.putUpdalike);
 
     
 
@@ -34,12 +34,13 @@ function CompanyDetails() {
         width: "100%",
         height: "auto",
         marginTop: "30px",
+        boxShadow: "1px 5px 20px rgba(0, 0, 0, 0.1)"
     }
 
 
     useEffect(() => {
         document.body.classList.add(style.companyDetailsBody);
-
+        window.scrollTo(0, 0)
         dispatch(callGetLikeState({
             memberCode: 3,
             postingCode: posting.postingCode
@@ -48,7 +49,7 @@ function CompanyDetails() {
         return () => {
             document.body.classList.remove(style.companyDetailsBody);
         };
-    }, [earlyPostingLike]);
+    }, [postingLike]);
 
 
     const onClickPostingScrapHandler = () => {
@@ -105,7 +106,7 @@ function CompanyDetails() {
                     </div>
                 </div>
 
-                <button className={style.sendButton} onClick={onClickPostingScrapHandler}>{isLiked ? '★' : '☆'}  스크랩</button>
+                <button className={isLiked? style.sendButton : style.clickButton} onClick={onClickPostingScrapHandler} >{isLiked ? '☆' : '★'}  스크랩</button>
 
                 <div id="details" className={style.detailsContainer}>
                     <div className={style.details}>
@@ -132,7 +133,7 @@ function CompanyDetails() {
                         <div>설립일 : {posting.company.establishmentDate}</div>
                         <div>대표 이름 :{posting.company.name}</div>
                         <div>기업 페이지: <a href={posting.company.companyHomepage} target="_blank" rel="noopener noreferrer">{posting.company.companyHomepage}</a></div>
-                        <div></div>
+                        <div>상세 주소 :{posting.location}</div>
                     </div>
                 </div>
             </div>
