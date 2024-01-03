@@ -15,11 +15,15 @@ const SearchPage = () => {
   // 임시 데이터
   const [searchResults, setSearchResults] = useState([
     // 가상의 검색 결과 데이터
-    { id: 1, title: `${searchQuery}`, description: "누가 DB 연결 좀 해 줘" },
-    { id: 2, title: `${searchQuery}`, description: "누가 DB 연결 좀 해 줘" },
-    { id: 3, title: `${searchQuery}`, description: "누가 DB 연결 좀 해 줘" },
-    { id: 4, title: `${searchQuery}`, description: "누가 DB 연결 좀 해 줘" },
-    { id: 5, title: `${searchQuery}`, description: "누가 DB 연결 좀 해 줘" },
+    { id: 1, title: `${searchQuery}1`, description: "I don't want a lot for Christmas" },
+    { id: 2, title: `${searchQuery}2`, description: "There is just one thing I need" },
+    { id: 3, title: `${searchQuery}3`, description: "I don't care about the presents underneath the Christmas tree" },
+    { id: 4, title: `${searchQuery}4`, description: "I just want you for my own" },
+    { id: 5, title: `${searchQuery}5`, description: "More than you could ever know" },
+    { id: 6, title: `${searchQuery}6`, description: "Make my wish come true" },
+    { id: 7, title: `${searchQuery}7`, description: "All I want for Christmas is you" },
+    { id: 8, title: `${searchQuery}8`, description: "Yeah" },
+    
   ]);
 
 
@@ -42,17 +46,19 @@ const SearchPage = () => {
 
 
   return (
-
     <div className={styles.searchResultContainer}>
-      <h1><span className={styles.searchQuery}>{`'${searchQuery}'`}</span>{'의 기업 및 공고 검색 결과입니다.'} </h1>
-      {searchResults.map(result => (
-        <div key={result.id} className={styles.resultCard}>
-          <h3 className={styles.resultTitle}>{result.title}</h3>
-          <p className={styles.resultDescription}>{result.description}</p>
-        </div>
-      ))}
+      <div className={styles.titleContainer}>
+        <h1><span className={styles.searchQuery}>{`'${searchQuery}'`}</span>{'의 기업 및 공고 검색 결과입니다.'}</h1>
+      </div>
+      <div className={styles.cardContainer}>
+        {searchResults.map(result => (
+          <div key={result.id} className={styles.resultCard}>
+            <h3 className={styles.resultTitle}>{result.title}</h3>
+            <p className={styles.resultDescription}>{result.description}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
-
 export default SearchPage;
