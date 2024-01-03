@@ -144,6 +144,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public boolean confirmDelete(ConfirmTokenEntity confirmTokenEntity) {
         ConfirmTokenEntity confirmTokenEntity1 = em.find(ConfirmTokenEntity.class, confirmTokenEntity.getMemberEntity().getId());
+        if(confirmTokenEntity1==null) return false;
         if(confirmTokenEntity.getToken().equals(confirmTokenEntity1.getToken())){
             em.remove(confirmTokenEntity1);
             return true;

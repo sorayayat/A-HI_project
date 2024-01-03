@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -96,6 +97,10 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                                 response.setCharacterEncoding("UTF-8");
                                 response.setContentType("application/json");
+
+                                if (exception instanceof DisabledException)
+                                    response.getWriter().write("{\"message\": \"로그인 실패 발송된 이메일을 확인 해주세요.\"}");
+                                else
                                 response.getWriter().write("{\"message\": \"로그인 실패 이메일,비밀번호를 확인 해주세요.\"}");
                             }
                         }))

@@ -126,7 +126,7 @@ public class MemberServiceImpl implements MemberService {
             String uuid = UUID.randomUUID().toString();
             String newNotEncodePassword = uuid.substring(0, 14);
             String newPassword = passwordEncoder.encode(newNotEncodePassword);
-            mailSend.sendEmail(memberDto.getEmail(), "jsg 변경된 PASSWORD 입니다.", newNotEncodePassword);
+            mailSend.sendNewPwd(memberDto.getEmail(), "jsg 변경된 PASSWORD 입니다.", newNotEncodePassword);
             member.setPassword(newPassword);
             memberRepositoryImpl.updatePwd(member);
         }
@@ -230,7 +230,7 @@ public class MemberServiceImpl implements MemberService {
                 .build();
             confirmTokenEntity.getMemberEntity().setRole(MemberRole.ROLE_GUEST);
         memberRepositoryImpl.confirmSave(confirmTokenEntity);
-        mailSend.sendEmail(memberEntity.getEmail(),"jsg 인증 메일입니다. ",verificationUrl = "http://localhost:3000/verify?token=" + token+"&id="+memberEntity.getId());
+        mailSend.sendEmail(memberEntity.getEmail(),"jsg 가입인증 메일입니다. ",verificationUrl = "http://localhost:3000/verify?token=" + token+"&id="+memberEntity.getId());
     }
 
     @Override
