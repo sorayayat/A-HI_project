@@ -17,8 +17,8 @@ class ResumeData(BaseModel):
     experiences_detail: List[str]
     projects: List[str]
     projects_detail: List[str]
-    educations: List[str]
-    educations_detail: List[str]
+    educations: str
+    educations_detail: str
     awards_and_certifications: List[str]
 
 # OpenAI API 설정
