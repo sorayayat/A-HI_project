@@ -1,13 +1,15 @@
 .companyDetailsBody {
-    background-color: #f0eeee;
+    background-color: white;
     margin: 0;
-    padding: 0; 
+    padding: 0;
 }
 
 .mainContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    
+
 }
 
 .companyInfoContainer {
@@ -16,9 +18,14 @@
     flex-wrap: wrap;
     width: 1000px;
     height: 300px;
-    border-top: 2px solid;
+    border: 1px solid rgba(0.1, 0.1, 0.1, 0.2);
     margin-top: 100px;
     background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 1px 5px 20px rgba(0, 0, 0, 0.1);
+
+
+
 }
 
 .companyInfo {
@@ -31,19 +38,23 @@
 .titleText2 {
     flex: 1;
     margin-left: 20px;
-    
+
 }
 
 .titleText3 {
     flex: 1;
-    
+
 }
 
 .titleText1 {
-    padding-left: 20px;
+    padding: 25px;
     border-bottom: 1px solid rgba(0.1, 0.1, 0.1, 0.1);
     height: 40px;
-    
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    font-weight: 600;
+
 }
 
 
@@ -65,23 +76,50 @@
     transition: background-color 0.5s, color 0.5s;
 }
 
-.sendButton:hover{
+.clickButton {
+
+    margin-top: 50px;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    /* text-decoration: none; */
+    cursor: pointer;
+    border: 2px solid #3498db;
+    border-radius: 30px;
+    transition: background-color 0.5s, color 0.5s;
 
     background-color: #3498db;
     color: #fff;
 
 }
 
-.details{
+
+
+
+.sendButton:hover {
+
+    background-color: #3498db;
+    color: #fff;
+
+}
+
+.details {
     width: 1000px;
     height: auto;
     background-color: #fff;
-    min-height: 500px;
-    margin-top: 50px;
     
+    margin-top: 50px;
+    font-size: 30px;
+    font-weight: 800;
+
+
 }
+
 .details>p {
     padding: 20px;
+    border-bottom: 1px solid rgba(0.1, 0.1, 0.1, 1);
 }
 
 .companyProfileContainer {
@@ -91,6 +129,8 @@
     margin-top: 30px;
     height: auto;
     min-height: 300px;
+
+
 }
 
 
@@ -99,7 +139,7 @@
     left: 0;
     top: 30%;
     transform: translateY(-50%);
-    background-color: #333; 
+    background-color: #3498db;
     padding: 17px;
     display: flex;
     flex-direction: column;
@@ -110,26 +150,43 @@
 }
 
 .navItem {
-    color: white; 
+    color: white;
     text-decoration: none;
     font-size: 20px;
-    margin-bottom: 10px; 
-  }
-  
-  .navItem:hover {
+    margin-bottom: 10px;
+}
+
+.navItem:hover {
     text-decoration: underline;
-  }
+}
+
+.companyInfomation {
+
+    border-bottom: 1px solid rgba(0.1, 0.1, 0.1, 1);
+}
 
 .companyInfomation>p {
-    
+
     padding-left: 20px;
     padding-top: 8px;
+    font-size: 30px;
+    font-weight: 800;
+    padding: 20px;
 }
 
 .companyProfileContainer {
     margin-bottom: 100px;
 }
 
+.companyInfoDetails {
 
+    width: 958px;
+    border: 1px solid rgba(0.1, 0.1, 0.1, 0.2);
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 1px 5px 20px rgba(0, 0, 0, 0.1);
 
-
+}
