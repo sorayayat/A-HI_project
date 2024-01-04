@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsg.ahispringboot.common.ResponseDTO;
 import com.jsg.ahispringboot.company.dto.PostingDTO;
+import com.jsg.ahispringboot.company.entity.PostingLike;
 import com.jsg.ahispringboot.company.service.PostingService;
+import com.jsg.ahispringboot.member.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -84,12 +86,7 @@ public class PostingController {
 
         );
 
-
-
-
-
-
-        
+        System.out.println(responseEntity + "확인" );
 
 
         return ResponseEntity.ok()
@@ -105,18 +102,60 @@ public class PostingController {
     public ResponseEntity<ResponseDTO> selectJobPosting() {
 
 
-        Map<String, List> map = postingService.selectJobPosting();
+        List<PostingDTO> postingDTOList = postingService.selectJobPosting();
 
-        System.out.println("확인" +  map.get("skillList"));
+
 
 
         return ResponseEntity.ok()
                 .body(ResponseDTO.builder()
                         .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
-                        .data(map)
+                        .data(postingDTOList)
                         .message("success")
                         .build());
     }
+
+
+
+    @PutMapping("updateLike/{memberCode}")
+    public ResponseEntity<ResponseDTO> updatePostingLike(@RequestBody PostingDTO postingDTO, @PathVariable Long memberCode ) {
+
+
+        boolean result =  postingService.updatePostingLike(postingDTO, memberCode);
+
+
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                        .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
+                        .message("success")
+                        .data(result)
+                        .build());
+
+    }
+
+    @PostMapping("getLike/{memberCode}")
+    public ResponseEntity<ResponseDTO> getPostingLike(@RequestBody PostingDTO postingDTO, @PathVariable Long memberCode) {
+
+        boolean result = postingService.getPostingLike(postingDTO, memberCode);
+
+        System.out.println(result + "제발제발");
+
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                        .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
+                        .message("success")
+                        .data(result)
+                        .build());
+    }
+
+
+
+
+
+
+
+
+
 
     private String convertPostingDTOToJson(PostingDTO postingDTO) {
         try {

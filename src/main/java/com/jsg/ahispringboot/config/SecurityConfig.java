@@ -51,8 +51,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/api/member/**").authenticated()
-
+                        .requestMatchers("/in/member/**").authenticated()
+                        .requestMatchers("/in/member/**").hasRole("MEMBER")
+                        .requestMatchers("/in/company/**").hasRole("COMPANY")
                 )
                 .formLogin((form) -> form.loginPage("/api/loginForm")
                         .loginProcessingUrl("/login")

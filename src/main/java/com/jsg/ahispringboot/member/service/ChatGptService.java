@@ -32,7 +32,8 @@ import static java.lang.Integer.parseInt;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class ChatGptService {
+public class
+ ChatGptService {
     @Value("${openai.model}")
     private String model;
     @Value("${openai.url}")

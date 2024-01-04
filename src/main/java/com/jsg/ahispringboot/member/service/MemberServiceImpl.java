@@ -105,14 +105,14 @@ public class MemberServiceImpl implements MemberService {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
-    // @Override
-    // public void companyInfoUpdate(CompanyDto companyDto, Authentication authentication) {
-    //     // UserDetails userDetails=memberRepositoryImpl.updateCompany(companyDto);
-    //     Authentication newAuth =
-    //             new UsernamePasswordAuthenticationToken
-    //                     (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
-    //     SecurityContextHolder.getContext().setAuthentication(newAuth);
-    // }
+     @Override
+     public void companyInfoUpdate(CompanyDto companyDto, Authentication authentication) {
+          UserDetails userDetails=memberRepositoryImpl.updateCompany(companyDto);
+         Authentication newAuth =
+                 new UsernamePasswordAuthenticationToken
+                         (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
+         SecurityContextHolder.getContext().setAuthentication(newAuth);
+     }
 
     @Override
     public void withdrawal(MemberDto memberDto) {
