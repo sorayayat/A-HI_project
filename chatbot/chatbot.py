@@ -181,6 +181,10 @@ def create_chatbot_router(wsConnection):
             prompt=message.prompt,
             chatbot_response=chatbot_response
         )
+        
+        print("check_data_complete 호출 전")
+        print("message.email ==============> ", message.email)
+        print("message.roomId ==============> ", message.roomId)
 
         # 데이터 완성도 확인
         if check_data_complete(message.email, message.roomId):
@@ -195,19 +199,50 @@ def create_chatbot_router(wsConnection):
 
     async def check_data_complete(email: str, roomId: str) -> bool:
         chatroom_data = await db.chatrooms.find_one({"email": email, "roomId": roomId})
+        print("check_data_complete 호출 ..........")
         if chatroom_data:
+                name_collected = False
+                phone_number_collected = False
+                email_collected = False
                 job_title_collected = False
                 skills_collected = False
+                experiences_collected = False
+                experiences_detail_collected = False
+                projects_collected = False
+                projects_detail_collected = False
+                educations_collected = False
+                educations_detail_collected = False
+                awards_and_certifications_collected = False
 
                 for message in chatroom_data.get("messageList", []):
                     # 메시지 내용을 분석하여 필요한 정보가 있는지 확인
-                    if "job_title" in message["content"]:
+                    if "name" in message["content"]: # 이름
+                        name_collected = True
+                    if "phone_number" in message["content"]: # 폰번호
+                        phone_number_collected = True
+                    if "email" in message["content"]: # 이메일 
+                        email_collected = True
+                    if "job_title" in message["content"]: # 프론트 / 백 str
                         job_title_collected = True
-                    if "skills" in message["content"]:
-                        skills_collected = True
+                    if "skills" in message["content"]: # 기술스택 List[str]
+                        skills_collected = True 
+                    if "experiences" in message["content"]: # 경력 List[str]
+                        experiences_collected = True
+                    if "experiences_detail" in message["content"]: # 경력 상세 List[str]
+                        experiences_detail_collected = True
+                    if "projects" in message["content"]: # 프로젝트 경험 List[str]
+                        projects_collected = True
+                    if "projects_detail" in message["content"]: # 프로젝트 상세 List[str]
+                        projects_detail_collected = True
+                    if "educations" in message["content"]: # 학력 str
+                        educations_collected = True
+                    if "educations_detail" in message["content"]: # 학력 상세 str
+                        educations_detail_collected = True
+                    if "awards_and_certifications" in message["content"]: # 수상경력 List[str]
+                        awards_and_certifications_collected = True
                     
                     # 모든 필요 정보가 수집되었는지 확인
-                    if job_title_collected and skills_collected:
+                    if job_title_collected and skills_collected and name_collected and phone_number_collected and email_collected and experiences_collected and experiences_detail_collected and projects_collected and projects_detail_collected and educations_collected and educations_detail_collected and awards_and_certifications_collected:
                         return True
 
         return False
@@ -217,4 +252,3 @@ def create_chatbot_router(wsConnection):
         return wsConnection.active_connections.get(email) 
 
     return CBrouter
-
