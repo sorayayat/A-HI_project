@@ -71,20 +71,6 @@ def create_chatbot_router(wsConnection):
             return JSONResponse(content={"email": email, "chatroomList": []}, status_code=404)
         
 
-    # @CBrouter.post("/userchatrooms")
-    # async def get_user_chatrooms(request_body: dict = Body(...)):
-    #     email = request_body.get("email")
-    #     if not email:
-    #         raise HTTPException(status_code=400, detail="Email is required")
-
-    #     user_data = await db.chatrooms.find_one({"email": email})
-        
-    #     if user_data:
-    #         return user_data.get("chatroomList", [])
-    #     else:
-    #         print("User data not found")
-    #         return JSONResponse(content={"email": email, "chatroomList": []}, status_code=404)
-
 
 
     # mongoDB 데이터 저장
@@ -157,13 +143,23 @@ def create_chatbot_router(wsConnection):
 
 
 
+    previous_system_content = {}  # 이전 대화의 시스템 콘텐츠 저장
+
+
 
     @CBrouter.post("/")
     async def chatbot_endpoint(message: User):
         user_message = message.message
         prompt_type = message.prompt
 
-        system_message = read_prompt_file(prompt_type)
+        system_message = previous_system_content.get(message.email, "")
+
+        if not system_message:
+            # 이전 대화가 없는 경우 파일에서 프롬프트 읽어오기
+            system_message = read_prompt_file(prompt_type)
+
+        print(f"Previous system content for {message.email}: {system_message}")
+
 
         gpt_response = openai.ChatCompletion.create(
             messages=[
@@ -173,8 +169,11 @@ def create_chatbot_router(wsConnection):
             model=MODEL,
         )
 
-
         chatbot_response = gpt_response["choices"][0]["message"]["content"]
+
+        # 이전 대화의 시스템 콘텐츠 업데이트
+        previous_system_content[message.email] = f"{system_message}\nQ:{user_message}\nA:{chatbot_response}"
+
         await update_chatroom(
             email=message.email,
             roomId=message.roomId,
@@ -185,11 +184,10 @@ def create_chatbot_router(wsConnection):
 
         # 데이터 완성도 확인
         if check_data_complete(message.email, message.roomId):
-            # 특정 클라이언트의 웹소켓 연결 찾기, 웹소켓 메세지 보내기
+            # 웹소켓 연결 찾아 메시지 보내기
             websocket = find_websocket_connection(message.email)
             if websocket:
                 await wsConnection.send_message("데이터 수집 완료. 이력서를 생성할 수 있습니다.", websocket)
-
 
         return {"gptMessage": chatbot_response}
 
@@ -219,3 +217,5 @@ def create_chatbot_router(wsConnection):
         return wsConnection.active_connections.get(email) 
 
     return CBrouter
+
+
