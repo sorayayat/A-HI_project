@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,8 +19,15 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.jsg.ahispringboot.inspection.dto.AnswerDTO;
+import com.jsg.ahispringboot.inspection.dto.ModifyResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
+import com.jsg.ahispringboot.inspection.dto.SelfIntroductionDTO;
 
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.internal.http.HttpMethod;
+
+@Slf4j
 public class FileUtilsImpl implements FileUtils {
 
     @Value("${fastapi.endpoint}")
@@ -52,9 +62,19 @@ public class FileUtilsImpl implements FileUtils {
         }
     }
 
-    public HttpEntity<MultiValueMap<String, Object>> Createbody(ByteArrayResource resource, String bodyKey) {
+    public HttpEntity<MultiValueMap<String, Object>> FileCreatebody(ByteArrayResource resource, String bodyKey) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add(bodyKey, resource);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        return requestEntity;
+    }
+
+    public HttpEntity<MultiValueMap<String, Object>> ListCreatebody(ModifyResumeDTO resource,
+            String bodyKey) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add(bodyKey, resource);
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
@@ -67,12 +87,28 @@ public class FileUtilsImpl implements FileUtils {
                     endPoint + "/inspection/ReadResume",
                     requestEntity,
                     ReaderDTO.class);
-            ReaderDTO reader = responseEntity.getBody();
-            return reader;
+            ReaderDTO result = responseEntity.getBody();
+            return result;
         } catch (Exception e) {
             System.out.println("에러요");
             return null;
         }
 
+    }
+
+    public AnswerDTO ModifyJsonData(String endPoing,
+            HttpEntity<MultiValueMap<String, Object>> requestEntity) {
+        try {
+            ResponseEntity<AnswerDTO> responseEntity = restTemplate.postForEntity(
+                    endPoint + "/inspection/modify",
+                    requestEntity,
+                    AnswerDTO.class);
+            AnswerDTO modifyResumeDTO = responseEntity.getBody();
+            log.info("AnswerDTO : {}", modifyResumeDTO);
+            return modifyResumeDTO;
+        } catch (Exception e) {
+            System.out.println("에러요");
+            return null;
+        }
     }
 }

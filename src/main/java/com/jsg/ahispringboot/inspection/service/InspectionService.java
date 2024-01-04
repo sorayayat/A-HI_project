@@ -10,6 +10,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 
+import com.jsg.ahispringboot.inspection.dto.AnswerDTO;
+import com.jsg.ahispringboot.inspection.dto.ModifyResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
 import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.SelfIntroductionDTO;
@@ -57,13 +59,14 @@ public class InspectionService {
     }
 
     public ReaderDTO selcetResumeDetall(Long resumeCode, Long userCode) {
-        
+
         Long beforeTime = System.currentTimeMillis();
+        String ReadEndPoint = endPoint;
         Resume resume = inspectionRepositroy.findResumeCode(resumeCode, userCode);
         ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
         ByteArrayResource resource = fileUtils.FileToByteArray(resumeDTO.getResumePath());
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = fileUtils.Createbody(resource, "file");
-        ReaderDTO reader = fileUtils.GetJsonData(endPoint, requestEntity);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = fileUtils.FileCreatebody(resource, "file");
+        ReaderDTO reader = fileUtils.GetJsonData(ReadEndPoint, requestEntity);
         Long afterTime = System.currentTimeMillis();
         Long diffTime = (afterTime - beforeTime) / 1000;
         log.info("실행 시간(sec) : " + diffTime);
@@ -73,6 +76,20 @@ public class InspectionService {
         log.info("reader : {}", reader.getPersonalInformationDTO());
         return reader;
 
+    }
+
+    public AnswerDTO modifyResume(ModifyResumeDTO modifyResumeDTO) {
+
+        Long beforeTime = System.currentTimeMillis();
+        String modifyEndPoint = endPoint;
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = fileUtils.ListCreatebody(modifyResumeDTO, "modify");
+        AnswerDTO modifyResume = fileUtils.ModifyJsonData(modifyEndPoint, httpEntity);
+        log.info("modifyEndPoint : {}", modifyResume);
+        Long afterTime = System.currentTimeMillis();
+        Long diffTime = (afterTime - beforeTime) / 1000;
+        log.info("소요시간 : {}", diffTime);
+
+        return modifyResume;
     }
 
 }
