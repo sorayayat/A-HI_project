@@ -33,8 +33,8 @@ const Interview = () => {
             setIsLoading(false); // 로딩 종료
         }));
     };
-    
-    
+
+
     const handleAnswerChange = (index, value) => {
         setAnswer(prev => ({ ...prev, [index]: value }));
     };
@@ -46,7 +46,7 @@ const Interview = () => {
         }));
     };
     const questions = question.split('\n').filter(q => q.trim() !== '');
-   
+
 
 
     // 화면 작업은 return 내부에 작성한다.
@@ -90,7 +90,7 @@ const Interview = () => {
                         <p>{q}</p>
                         {/* 토글 버튼 */}
                         <button onClick={() => handleToggle(index)} className={style.toggle}>
-                            {isToggled[index]? '▲' : '▼'}
+                            {isToggled[index] ? '▲' : '▼'}
                         </button>
 
                         {/* 토글된 상태에 따라 답변란 표시 */}
@@ -98,18 +98,18 @@ const Interview = () => {
                             <div className={style.answerBoxs}>
                                 <input type="text"
                                     value={answer[index] || ''}
-                                    onChange={(e) => setAnswer(index, e.target.value)}
+                                    onChange={(e) => handleAnswerChange(index, e.target.value,)}
                                     autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
                                 <button className={style.actionButton} onClick={handleSendAnswer}>답변 하기</button>
+                                {AIanswer && (
+                                    <div className={style.questionBox}>
+                                        {AIanswer && <p>AI 피드백: {AIanswer}</p>}
+                                    </div>)}
                             </div>
                         )}
                     </div>
                 ))}
             </div>
-            {AIanswer && (
-                <div className={style.questionBox}>
-                    {AIanswer && <p>AI 피드백: {AIanswer}</p>}
-                </div>)}
 
         </>
     )
