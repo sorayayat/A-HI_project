@@ -28,19 +28,32 @@ db = SessionLocal()
 
 # 5. db에서 데이터 조회를 해서 skill 정보를 리턴한다.
 
-# def findPosting(findCode):
-#     SkillTable = Table("skill", metadata_obj, autoload_with=engine)
+def findPosting(findCode):
+    SkillTable = Table("skill", metadata_obj, autoload_with=engine)
 
-#     skill_stmt = select(SkillTable).where(SkillTable.c.posting_code == findCode)
-#     results = db.execute(skill_stmt).fetchall()
+    skill_stmt = select(SkillTable).where(SkillTable.c.posting_code == findCode)
+    results = db.execute(skill_stmt).fetchall()
 
-#     skill_names = []
-#     for result in results:
-#         skill_names.append(result.skill_name)
+    skill_names = []
+    for result in results:
+        skill_names.append(result.skill_name)
 
-#     db.close()
-#     return skill_names
+    db.close()
+    return skill_names
 
+# user의 이력서 정보를 가져온다
+def findResume(userData):
+    FileTBL = Table("file", metadata_obj, autoload_with=engine)
+
+    file_stmt = select(FileTBL).where(FileTBL.c.posting_code == userData)
+    results = db.execute(file_stmt).fetchall()
+
+    file_names = []
+    for result in results:
+        file_names.append(result.file_names)
+
+    db.close()
+    return file_names
 
 # # 조회
 # stmt = select(some_table)

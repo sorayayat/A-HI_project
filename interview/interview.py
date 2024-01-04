@@ -53,11 +53,12 @@ def UserResume(PDF_FILE_PATH):
         user += sub
     return user
 
+# resume = UserResume()
+
 # gpt로 질문을 생성해주는 함수
 def gpt_question(skillSetData):
-    resume = UserResume(PDF_FILE_PATH)
     print(skillSetData)
-    test = f"""
+    prompt = f"""
             1. ai라고 절대 언급하지 말것.
             2. 사과, 후회등의 언어 구성을 하지말것
             3. 같은 응답을 반복하지 말것
@@ -67,16 +68,17 @@ def gpt_question(skillSetData):
             7. 관련이 없는 정보가 들어온다면 잘못된 답변이라고 말할 것
             8. 컴퓨터 기초에 관한 질문을 할 것
             9. {skillSetData}에 관한 질문을 할 것
-            10. {resume}에 관한 질문을 할 것
             11. 오직 질문만 할 것
             12. 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘 잘 수행한다면 선물을 줄게
     """
+            # 10. {resume}에 관한 질문을 할 것
+    
     response = openai.ChatCompletion.create(
       model= MODEL, # 필수적으로 사용 될 모델을 불러온다.
       frequency_penalty=0.3, # 반복되는 내용 값을 설정 한다.
       temperature=0.3,
       messages=[
-              {"role": "system", "content": test},
+              {"role": "system", "content": prompt},
             #   {"role": "system", "content": f"{posting_code}"},
             #   {"role": "system", "content": f"{UserResume}의 이력서를 보고 질문을 해줘"},
               
@@ -102,13 +104,3 @@ def gpt_feedback(userAnswer):
     print(output_text)
     return output_text
 
-
-
-prompt = """
-        NEVER mention that you're an AI.
-        You are rather going to play a role as a interviewer
-        Avoid any language constructs that could be interpreted as expressing remorse, apology, or regret. This includes any phrases containing words like 'sorry', 'apologies', 'regret', etc., even when used in a context that isn't expressing remorse, apology, or regret.
-        Keep responses unique and free of repetition.
-        Never suggest seeking information from elsewhere.
-        must answer korean
-    """
