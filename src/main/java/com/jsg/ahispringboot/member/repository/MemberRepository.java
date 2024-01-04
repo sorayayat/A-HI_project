@@ -1,12 +1,11 @@
 package com.jsg.ahispringboot.member.repository;
 
+import com.jsg.ahispringboot.company.entity.PostingLike;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
-import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.entity.ConfirmTokenEntity;
 import com.jsg.ahispringboot.member.entity.LogoEntity;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
-import com.jsg.ahispringboot.member.entity.PostingLike;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -27,6 +26,7 @@ public interface MemberRepository {
 
     UserDetails updateCompany(CompanyDto companyDto);
 
+
     List<PostingLike> myPagePostingLike(Long memberId);
 
     LogoEntity findLogo(Long companyId);
@@ -40,4 +40,7 @@ public interface MemberRepository {
     void roleUpdate(MemberEntity memberEntity);
 
     List<Object[]> countPostLike();
+
+
+
 }

@@ -51,7 +51,6 @@ public class Posting {
     private String education;
 
 
-
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private CompanyEntity company;

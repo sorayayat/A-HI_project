@@ -1,5 +1,6 @@
 package com.jsg.ahispringboot.member.repository;
 
+import com.jsg.ahispringboot.company.entity.PostingLike;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
@@ -104,7 +105,6 @@ public class MemberRepositoryImpl implements MemberRepository {
      @Override
      public UserDetails updateCompany(CompanyDto companyDto) {
          MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getMemberId());
-         log.info("dtoId={},findEn={}",companyDto.getCompanyId(),memberEntity1.getId());
          memberEntity1.setName(companyDto.getName());
          memberEntity1.setPhoneNumber(companyDto.getPhoneNumber());
          memberEntity1.getCompanyEntity().setCompany(companyDto.getCompany());
@@ -176,4 +176,19 @@ public class MemberRepositoryImpl implements MemberRepository {
 
         return results;
     }
+
+
+// @Transactional
+    // @Override
+    // public UserDetails updateCompany(CompanyDto companyDto) {
+    //     MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getCompanyId());
+    //     memberEntity1.setName(companyDto.getName());
+    //     memberEntity1.setPhoneNumber(companyDto.getPhoneNumber());
+    //     memberEntity1.getCompanyEntity().setCompany(companyDto.getCompany());
+    //     memberEntity1.getCompanyEntity().setCompanyType(companyDto.getCompanyType());
+    //     memberEntity1.getCompanyEntity().setCompanyHomepage(companyDto.getCompanyHomepage());
+    //     memberEntity1.getCompanyEntity().setEmployeesNumber(companyDto.getEmployeesNumber());
+    //     memberEntity1.getCompanyEntity().setEstablishmentDate(companyDto.getEstablishmentDate());
+    //     return new CustomUserDetail(memberEntity1);
+    // }
 }

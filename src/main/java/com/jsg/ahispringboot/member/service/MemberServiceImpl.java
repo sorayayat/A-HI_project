@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jsg.ahispringboot.company.entity.Posting;
+import com.jsg.ahispringboot.company.entity.PostingLike;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;

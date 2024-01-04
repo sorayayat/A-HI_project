@@ -1,4 +1,4 @@
-package com.jsg.ahispringboot.member.entity;
+package com.jsg.ahispringboot.company.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LikeId implements Serializable {
+
     private Long memberEntity;
     private Integer posting;
 

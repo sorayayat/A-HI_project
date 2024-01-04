@@ -7,7 +7,6 @@ import com.jsg.ahispringboot.company.entity.WorkType;
 import com.jsg.ahispringboot.member.entity.CompanyEntity;
 import com.jsg.ahispringboot.member.entity.LogoEntity;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
-import com.jsg.ahispringboot.member.entity.PostingLike;
 import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

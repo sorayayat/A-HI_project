@@ -4,10 +4,12 @@ import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Entity
 @Table(name = "member")
 @Getter
 @Setter
+@ToString
 public class MemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +24,8 @@ public class MemberEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-     @OneToOne(cascade = CascadeType.ALL)
-     @JoinColumn(name = "company_id")
-     private CompanyEntity companyEntity;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
+    private CompanyEntity companyEntity;
 
 }

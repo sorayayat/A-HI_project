@@ -4,11 +4,8 @@ import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
-import com.jsg.ahispringboot.member.entity.PostingLike;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface MemberService {
     boolean emailDuplicationCheck(String email);

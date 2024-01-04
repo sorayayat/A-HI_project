@@ -45,5 +45,7 @@ public class PostingDTO {
     private List<PostingExperienceDTO> postingExperienceList;
 
     private CompanyDTO company;
+
+    private String postingLike;
 }
 
