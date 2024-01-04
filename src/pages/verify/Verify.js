@@ -25,7 +25,14 @@ const Verify = () => {
     const verifyToken = (token, id) => {
       axios.put(`/api/confirmCheck`, { token, id })
         .then(response => {
-            alert(response.data);
+           if(response.data===true){
+            setTimeout(() => {
+              navigate("/loginForm");
+            }, 2000); 
+           }else{
+            alert("이메일 인증에 실패 했습니다.");
+           }
+
         })
         .catch(error => {
             if (error.response && error.response.status === 401) {
@@ -42,7 +49,6 @@ const Verify = () => {
     return (
         <div className={styles.loginFormContainer}>
         <h2>메일이 인증되었습니다.</h2>
-        {/* 나머지 컴포넌트 내용 */}
         </div>
     );
 };
