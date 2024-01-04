@@ -94,17 +94,23 @@ public class MemberRepositoryImpl implements MemberRepository {
         return new CustomUserDetail(memberEntity1);
     }
 
-     @Transactional
-     @Override
-     public UserDetails updateCompany(CompanyDto companyDto) {
-         MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getCompanyId());
-         memberEntity1.setName(companyDto.getName());
-         memberEntity1.setPhoneNumber(companyDto.getPhoneNumber());
-         memberEntity1.getCompanyEntity().setCompany(companyDto.getCompany());
-         memberEntity1.getCompanyEntity().setCompanyType(companyDto.getCompanyType());
-         memberEntity1.getCompanyEntity().setCompanyHomepage(companyDto.getCompanyHomepage());
-         memberEntity1.getCompanyEntity().setEmployeesNumber(companyDto.getEmployeesNumber());
-         memberEntity1.getCompanyEntity().setEstablishmentDate(companyDto.getEstablishmentDate());
-         return new CustomUserDetail(memberEntity1);
-     }
+
+    @Override
+    public MemberEntity finByMemberEntityId(Long memberCode) {
+        return null;
+    }
+
+    // @Transactional
+    // @Override
+    // public UserDetails updateCompany(CompanyDto companyDto) {
+    //     MemberEntity memberEntity1 = em.find(MemberEntity.class, companyDto.getCompanyId());
+    //     memberEntity1.setName(companyDto.getName());
+    //     memberEntity1.setPhoneNumber(companyDto.getPhoneNumber());
+    //     memberEntity1.getCompanyEntity().setCompany(companyDto.getCompany());
+    //     memberEntity1.getCompanyEntity().setCompanyType(companyDto.getCompanyType());
+    //     memberEntity1.getCompanyEntity().setCompanyHomepage(companyDto.getCompanyHomepage());
+    //     memberEntity1.getCompanyEntity().setEmployeesNumber(companyDto.getEmployeesNumber());
+    //     memberEntity1.getCompanyEntity().setEstablishmentDate(companyDto.getEstablishmentDate());
+    //     return new CustomUserDetail(memberEntity1);
+    // }
 }

@@ -19,5 +19,8 @@ public interface MemberRepository {
 
     UserDetails updateMember(MemberDto memberDto);
 
-     UserDetails updateCompany(CompanyDto companyDto);
+    MemberEntity finByMemberEntityId(Long memberCode);
+
+
+    // UserDetails updateCompany(CompanyDto companyDto);
 }
