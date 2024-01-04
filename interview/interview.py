@@ -55,7 +55,7 @@ def UserResume(PDF_FILE_PATH):
 
 # gpt로 질문을 생성해주는 함수
 def gpt_question(skillSetData):
-    resume = UserResume()
+    resume = UserResume(PDF_FILE_PATH)
     print(skillSetData)
     test = f"""
             1. ai라고 절대 언급하지 말것.
