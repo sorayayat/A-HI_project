@@ -39,8 +39,10 @@ public class CompanyEntity {
     private String companyHomepage;
 
 
-  /*  @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "member_id")
-    private MemberEntity memberEntity;
-*/
+    //    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "member_id")
+//    private MemberEntity memberEntity;
+    @OneToOne(cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "logo_id", referencedColumnName = "logo_id")
+    private LogoEntity logoEntity;
 }

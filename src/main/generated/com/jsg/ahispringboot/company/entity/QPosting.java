@@ -68,7 +68,7 @@ public class QPosting extends EntityPathBase<Posting> {
 
     public QPosting(Class<? extends Posting> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.company = inits.isInitialized("company") ? new com.jsg.ahispringboot.member.entity.QCompanyEntity(forProperty("company")) : null;
+        this.company = inits.isInitialized("company") ? new com.jsg.ahispringboot.member.entity.QCompanyEntity(forProperty("company"), inits.get("company")) : null;
     }
 
 }

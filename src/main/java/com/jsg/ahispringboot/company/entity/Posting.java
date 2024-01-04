@@ -53,7 +53,6 @@ public class Posting {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    @JsonIgnore
     private CompanyEntity company;
 
     @OneToMany(mappedBy = "posting")

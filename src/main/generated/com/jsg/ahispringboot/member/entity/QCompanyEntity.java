@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.querydsl.core.types.Path;
 public class QCompanyEntity extends EntityPathBase<CompanyEntity> {
 
     private static final long serialVersionUID = -33261569L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QCompanyEntity companyEntity = new QCompanyEntity("companyEntity");
 
@@ -31,16 +34,27 @@ public class QCompanyEntity extends EntityPathBase<CompanyEntity> {
 
     public final DatePath<java.sql.Date> establishmentDate = createDate("establishmentDate", java.sql.Date.class);
 
+    public final QLogoEntity logoEntity;
+
     public QCompanyEntity(String variable) {
-        super(CompanyEntity.class, forVariable(variable));
+        this(CompanyEntity.class, forVariable(variable), INITS);
     }
 
     public QCompanyEntity(Path<? extends CompanyEntity> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QCompanyEntity(PathMetadata metadata) {
-        super(CompanyEntity.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QCompanyEntity(PathMetadata metadata, PathInits inits) {
+        this(CompanyEntity.class, metadata, inits);
+    }
+
+    public QCompanyEntity(Class<? extends CompanyEntity> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.logoEntity = inits.isInitialized("logoEntity") ? new QLogoEntity(forProperty("logoEntity")) : null;
     }
 
 }
