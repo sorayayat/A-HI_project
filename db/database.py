@@ -27,21 +27,20 @@ db = SessionLocal()
 # Base = declarative_base()
 
 # 5. db에서 데이터 조회를 해서 skill 정보를 리턴한다.
-def findPosting(findCode):
-    SkillTable = Table("skill", metadata_obj, autoload_with=engine)
 
-    # posting_code에 해당하는 skill 레코드 조회
-    skill_stmt = select(SkillTable).where(SkillTable.c.posting_code == findCode)
-    skill_result = db.execute(skill_stmt).fetchone()
+# def findPosting(findCode):
+#     SkillTable = Table("skill", metadata_obj, autoload_with=engine)
 
-    if skill_result:
-        # skill_code 반환
-        skill_name = skill_result.skill_name
-        db.close()
-        return skill_name
-    else:
-        db.close()
-        return '정보 없음'
+#     skill_stmt = select(SkillTable).where(SkillTable.c.posting_code == findCode)
+#     results = db.execute(skill_stmt).fetchall()
+
+#     skill_names = []
+#     for result in results:
+#         skill_names.append(result.skill_name)
+
+#     db.close()
+#     return skill_names
+
 
 # # 조회
 # stmt = select(some_table)

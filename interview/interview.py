@@ -16,6 +16,9 @@ openai.api_key = OPENAI_API_KEY
 class InterviewData(BaseModel):
     searchQuery : str
 
+class AnswerData(BaseModel):
+    answer : str
+
 
 # 클라이언트에서 정보를 받아서 모델에 질문을 생성한다.
 @Interview_router.post('/makequestion')
@@ -32,8 +35,9 @@ async def AIiterview(searchQuery: InterviewData):
 
 # 사용자에 답변을 받아서 피드백 해준다
 @Interview_router.get('/sendAnswer')
-async def AI_question(answer: str = Body(...)):
-   feedback = gpt_feedback(answer)
+async def AI_question(answer: AnswerData):
+   userAnswer = str(answer)
+   feedback = gpt_feedback(userAnswer)
    return {"feedback": feedback}
 
 # 이력서 경로 저장
@@ -51,7 +55,8 @@ def UserResume(PDF_FILE_PATH):
 
 # gpt로 질문을 생성해주는 함수
 def gpt_question(skillSetData):
-
+    resume = UserResume(PDF_FILE_PATH)
+    print(skillSetData)
     test = f"""
             1. ai라고 절대 언급하지 말것.
             2. 사과, 후회등의 언어 구성을 하지말것
@@ -60,9 +65,11 @@ def gpt_question(skillSetData):
             5. 답변은 반드시 한국어로 할 것
             6. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
             7. 관련이 없는 정보가 들어온다면 잘못된 답변이라고 말할 것
-            8. 컴퓨터 기초에서 1-2개, {skillSetData}에서 1-2개 정도의 질문을 해줘
-            9. 관련 없는 질문은 하지 않을 것!!!
-            10. 질문이 마음에 든다면 너에게 100$ 줄거야 그러니 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘
+            8. 컴퓨터 기초에 관한 질문을 할 것
+            9. {skillSetData}에 관한 질문을 할 것
+            10. {resume}에 관한 질문을 할 것
+            11. 오직 질문만 할 것
+            12. 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘 잘 수행한다면 선물을 줄게
     """
     response = openai.ChatCompletion.create(
       model= MODEL, # 필수적으로 사용 될 모델을 불러온다.
@@ -80,16 +87,22 @@ def gpt_question(skillSetData):
     return output_text
 
 
-def gpt_feedback():
-   response = openai.ChatCompletion.create(
+def gpt_feedback(userAnswer):
+    response = openai.ChatCompletion.create(
       model=MODEL,
-      temperature=0.6,
+      frequency_penalty=0.3, # 반복되는 내용 값을 설정 한다.
+      temperature=0.3,
       messages=[
-          {"role": "system", "content": "너는 면접관이야"},
-          {"role": "system", "content": "어떻게 말하면 더 좋을지 면접자에게 답해줘"},
+          {"role": "system", "content": "질문과 질문에 대한 답을 듣고 더 나은 답변을 피드백 해줘"},
           
       ]
    )
+    output_text = response["choices"][0]["message"]["content"]
+    
+    print(output_text)
+    return output_text
+
+
 
 prompt = """
         NEVER mention that you're an AI.
