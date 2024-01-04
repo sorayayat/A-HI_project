@@ -5,13 +5,14 @@ import companyReducer from "./companyModules";
 import chatbotReducer from "./chatbotModules";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
-
+import recommendationReducer from "./recommendationModules";
 
 const rootReducer = combineReducers({
     inspectionReducer,
     interviewReduer,
     companyReducer,
-    chatbotReducer
+    chatbotReducer,
+    recommendationReducer,
 })
 
 const persistConfig = {
