@@ -1,10 +1,13 @@
 package com.jsg.ahispringboot.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jsg.ahispringboot.company.entity.Posting;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
+import com.jsg.ahispringboot.member.dto.PostingInfoDTO;
 import com.jsg.ahispringboot.member.entity.*;
 import com.jsg.ahispringboot.member.mapper.MemberTransMapper;
 import com.jsg.ahispringboot.member.memberEnum.MemberRole;
@@ -250,5 +253,26 @@ public class MemberServiceImpl implements MemberService {
         memberRepositoryImpl.roleUpdate(memberEntity);
         return true;
 
+    }
+
+    @Override
+    public String countPostLike() {
+        List<Object[]> results = memberRepositoryImpl.countPostLike();
+        List<PostingInfoDTO> postingLikesDTOs = results.stream()
+                .map(result -> new PostingInfoDTO((Posting) result[0], (Long) result[1]))
+                .collect(Collectors.toList());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String json;
+        try {
+            json = objectMapper.writeValueAsString(postingLikesDTOs);
+            return json;
+        } catch (Exception e) {
+            // JSON 변환 중 발생한 예외 처리
+            e.printStackTrace();
+            json = "[]"; // 또는 적절한 오류 메시지 또는 핸들링
+        }
+        return json;
     }
 }

@@ -141,5 +141,11 @@ public class MemberController {
         boolean result = memberServiceImpl.changePwd(memberDto);
         return result;
     }
+    @GetMapping("/rank/post")
+    public String rankPost(){
+        String result = memberServiceImpl.countPostLike();
+        log.info("rs={}",result);
+        return result;
+    }
 
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface MemberRepository {
 
-    MemberEntity findMember(String memberEmail,String phoneNumber);
+    MemberEntity findMember(String memberEmail, String phoneNumber);
 
     MemberEntity signup(MemberEntity memberEntity);
 
@@ -25,7 +25,7 @@ public interface MemberRepository {
 
     UserDetails updateMember(MemberDto memberDto);
 
-     UserDetails updateCompany(CompanyDto companyDto);
+    UserDetails updateCompany(CompanyDto companyDto);
 
     List<PostingLike> myPagePostingLike(Long memberId);
 
@@ -38,4 +38,6 @@ public interface MemberRepository {
     boolean confirmDelete(ConfirmTokenEntity confirmTokenEntity);
 
     void roleUpdate(MemberEntity memberEntity);
+
+    List<Object[]> countPostLike();
 }

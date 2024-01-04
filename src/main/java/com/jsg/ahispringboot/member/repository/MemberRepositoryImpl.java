@@ -8,6 +8,7 @@ import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
@@ -158,5 +159,20 @@ public class MemberRepositoryImpl implements MemberRepository {
     public void roleUpdate(MemberEntity memberEntity) {
         MemberEntity memberEntity1 = em.find(MemberEntity.class, memberEntity.getId());
         memberEntity1.setRole(memberEntity.getRole());
+    }
+    @Override
+    @Transactional
+    public List<Object[]> countPostLike(){
+        TypedQuery<Object[]> query = em.createQuery(
+                "SELECT e.posting, COUNT(e) FROM PostingLike e GROUP BY e.posting ORDER BY COUNT(e) DESC",
+                Object[].class);
+
+        query.setFirstResult(0);
+        query.setMaxResults(10);
+
+        List<Object[]> results = query.getResultList();
+
+
+        return results;
     }
 }

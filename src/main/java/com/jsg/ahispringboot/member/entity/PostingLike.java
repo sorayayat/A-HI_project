@@ -4,11 +4,13 @@ import com.jsg.ahispringboot.company.entity.Posting;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @IdClass(LikeId.class)
 @Table(name = "posting_like")
-@Data
+@Getter
+@Setter
 public class PostingLike {
     @Id
     @ManyToOne
