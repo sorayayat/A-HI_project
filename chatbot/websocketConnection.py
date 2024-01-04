@@ -1,16 +1,19 @@
 from fastapi import WebSocket
-from typing import List
+from typing import Dict
 
-class WebsocketConnection:
+class WebSocketConnection:
     def __init__(self):
-        self.active_connections: List[WebSocket] = []
+        self.active_connections: Dict[str, WebSocket] = {}
 
-    async def connect(self, websocket: WebSocket):
+    async def connect(self, websocket: WebSocket, email: str):
         await websocket.accept()
-        self.active_connections.append(websocket)
+        self.active_connections[email] = websocket
 
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+    def disconnect(self, email: str):
+        if email in self.active_connections:
+            del self.active_connections[email]
 
-    async def send_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
+    async def send_message(self, message: str, email: str):
+        if email in self.active_connections:
+            websocket = self.active_connections[email]
+            await websocket.send_text(message)

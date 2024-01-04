@@ -26,9 +26,11 @@ OPENAI_API_KEY = getAPIkey()
 OPENAI_MODEL = getModel()
 openai.api_key = OPENAI_API_KEY
 
+
 # MongoDB 설정
 MONGODB_URI = "mongodb://localhost:27017"
 DATABASE_NAME = "database_name"
+
 
 # 이력서 데이터를 MongoDB에서 가져오는 비동기 함수
 async def get_resume_data(name):
@@ -58,3 +60,4 @@ async def create_resume(data: ResumeData):
     # 생성된 이력서 내용을 파일로 저장하고 저장된 파일 경로를 반환
     generated_resume_path = generate_resume_content(chat_response)
     return {"message": "이력서가 성공적으로 생성되었습니다.", "resume_path": generated_resume_path}
+
