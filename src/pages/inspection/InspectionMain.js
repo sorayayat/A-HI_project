@@ -64,7 +64,6 @@ function InspectionMain()
     }
 
 
-    console.log(resume?.data)
     return(
     <div>
         <div>

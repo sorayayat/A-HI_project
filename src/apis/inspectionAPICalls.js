@@ -1,6 +1,5 @@
-import { get } from "react-scroll/modules/mixins/scroller";
-import { getResume, getResumelist, postAsk } from "../modules/inspectionModule";
-import { useNavigate } from "react-router";
+import { getResume, getResumelist, postAsk, postModify } from "../modules/inspectionModule";
+import { json, useNavigate } from "react-router";
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
@@ -39,7 +38,7 @@ export const callInspectionResumeAPI = () =>{
 
 export const callResumeDetailAPI = (resumeCode) =>{
     const requestURL = `${SB_PRE_URL}/getResume/${resumeCode}`;
-    console.log(resumeCode)
+    console.log(resumeCode);
     return async(dispath,getState) =>{
         const result = await fetch(requestURL).then(resp => resp.json());
         if(result.status === 200)
@@ -48,4 +47,25 @@ export const callResumeDetailAPI = (resumeCode) =>{
             return {status : 200}
         }
     }
+}
+
+export const callModifyResumeAPI = (form , index) => {
+    const requestURL = `${SB_PRE_URL}/modifyResume`;
+    console.log(index)
+    console.log(index.index)
+    return async(dispath , getState) =>{
+        const result = await fetch(requestURL,{
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json"
+            },
+            body : JSON.stringify(form)
+        }).then(resp => resp.json());
+        if(result.status === 200){
+            result.data = Object.assign({}, result.data,{"index" : index.index});
+            dispath(postModify(result));
+            return {status : 200}
+        }
+    }
+    
 }

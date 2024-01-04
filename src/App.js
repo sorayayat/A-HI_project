@@ -24,6 +24,7 @@ import InspectionDetail from './pages/inspection/InspectionDetail';
 import InspectionMain from './pages/inspection/InspectionMain';
 import InterviewSpring from './pages/InterviewSpring/InterviewSpring';
 import { ProtectedRoute } from './pages/login/ProtectedRoute';
+import InspectionChoice from './pages/inspection/InspectionChoice';
 function App() { 
 
 
@@ -49,7 +50,8 @@ return (
         <Route path='/recommendation' element={<Recommendation />} />
         <Route path='/inspection' element={<InspectionMain/>}/>
         <Route path='/inspection/modify' element={<Inspection/>}/>
-        <Route path='/inspection/detail/:resumeCode' element={<InspectionDetail/>}/>
+        <Route path='/inspection/detail' element={<InspectionDetail/>}/>
+        <Route path='/inspection/choice' element={<InspectionChoice/>}/>
         <Route path='/companyList' element={<CompanyList />} />
         
         <Route path='/interview' element={<Interview/>}/>
