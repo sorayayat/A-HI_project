@@ -70,12 +70,13 @@ function App() {
           <Route path="/interviewSpring" element={<InterviewSpring />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/rank" element={<RankModal />} /> path="/withdrawal"
-          element=
-          {
-            <ProtectedRoute>
-              <Withdrawal />
-            </ProtectedRoute>
-          }
+          <Route
+            element={
+              <ProtectedRoute>
+                <Withdrawal />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/changePwd"
             element={
