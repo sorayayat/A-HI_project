@@ -44,7 +44,7 @@ public class QPostingLike extends EntityPathBase<PostingLike> {
 
     public QPostingLike(Class<? extends PostingLike> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.memberEntity = inits.isInitialized("memberEntity") ? new com.jsg.ahispringboot.member.entity.QMemberEntity(forProperty("memberEntity")) : null;
+        this.memberEntity = inits.isInitialized("memberEntity") ? new com.jsg.ahispringboot.member.entity.QMemberEntity(forProperty("memberEntity"), inits.get("memberEntity")) : null;
         this.posting = inits.isInitialized("posting") ? new QPosting(forProperty("posting"), inits.get("posting")) : null;
     }
 

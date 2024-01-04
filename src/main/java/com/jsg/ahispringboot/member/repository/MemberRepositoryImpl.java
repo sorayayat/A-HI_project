@@ -100,6 +100,11 @@ public class MemberRepositoryImpl implements MemberRepository {
         return null;
     }
 
+    @Override
+    public UserDetails updateCompany(CompanyDto companyDto) {
+        return null;
+    }
+
     // @Transactional
     // @Override
     // public UserDetails updateCompany(CompanyDto companyDto) {
