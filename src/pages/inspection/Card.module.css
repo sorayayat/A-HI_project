@@ -1,0 +1,53 @@
+/* NO CHANGE 주석 달린 부분 제외하고 수정하셔도 됩니다 */
+/* 물론 기본틀이 크게 훼손되지 않는 범위 내에서!! */
+/* 해당 부분 수정 필요 시 저 또는 다희 님에게 컨펌 요청 */
+/* 야근 수당은 맛있는 간식으로 받겠습니다 */
+
+.container {
+  display: flex;
+  flex-direction: row; /* 가로 방향으로 내용을 나열*/
+  justify-content: flex-start; /* 컨텐츠를 왼쪽에서부터 정렬 */
+  align-items: flex-start; /* 컨텐츠를 위쪽에서부터 정렬 */
+  margin: auto; /* NEVER CHANGE */
+  max-width: 900px; /* NO CHANGE */
+  height: 900px; /* NO CHANGE */
+  background-color: #ffffff; /* NO CHANGE */
+  color: #333; /* NO CHANGE */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* NO CHANGE */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  position: relative; /* NO CHANGE */ /* 내부 요소를 절대 위치로 배치*/
+  color: #043d68; /* NO CHANGE */
+  font-size: 19px;
+}
+
+.contentArea {
+  /* 전체 NO CHANGE */
+  padding: 40px;
+  width: 300px;
+  height: 900px;
+  background-color: #e9f5fe; /* 하늘색 배경 */
+  position: absolute; /* 절대 위치 */
+  right: 0;
+  top: 0;
+}
+
+.content {
+  padding: 40px;
+  text-align: left;
+  margin-right: 350px; /* NO CHANGE */ /* 겹치지 않도록 */
+}
+
+.text {
+  margin: 20px; /* 모든 방향에 마진 */
+  margin-top: 20px;
+}
+
+.title {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 30px;
+  color: #043d68;
+}
