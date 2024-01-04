@@ -19,6 +19,7 @@ public class LogoEntity {
     private Long logoId;
     private String originalName;
     private String serverName;
+    @Column(name = "logo_path")
     private String path;
 
 }
