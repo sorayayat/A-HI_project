@@ -5,22 +5,28 @@ import { useNavigate } from 'react-router-dom';
 
 const CompanyUpdate = () => {
   const navigate = useNavigate();
+  const [logoPreview, setLogoPreview] = useState("");
+  const [isPhoneChecked, setIsPhoneChecked] = useState(true);
+  const [originalNumber, setOriginalNumber] = useState("");
   const [formData, setFormData] = useState({
+    memberId: "",
     email: "",
     name: "",
     phoneNumber: "",
     companyId:"",
     company:"",
     companyType:"",
-    employeesNumber:"",
+    employeesNumber:0,
     establishmentDate:"",
     companyHomepage:"",
+    logo: null,
   });
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       const response = await axios.get('/api/member/infoCompany');
       const data = response.data;
+      setOriginalNumber(data.phoneNumber);
       setFormData({
         email: data.email,
         name: data.name,
@@ -31,16 +37,35 @@ const CompanyUpdate = () => {
         employeesNumber:data.employeesNumber,
         establishmentDate:data.establishmentDate,
         companyHomepage:data.companyHomepage,
+        logo: response.data.logo,
+        memberId:response.data.memberId,
       });
+      setLogoPreview(`http://localhost:8001/logoimg/`+response.data.logoServer);
     };
 
     fetchUserInfo();
   }, []);
 
   const handlePhoneNumberCheck = () => {
-      axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    if(formData.phoneNumber===originalNumber){
+      setIsPhoneChecked(true);
+      alert("기존 전화번호입니다.");
+      return;
+    }
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 12) {
+      alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
+      return;
+    }
+    
+    axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
-            alert(response.data);
+            if(response.data===true) {
+              alert("등록 가능한 번호 입니다.");
+              setIsPhoneChecked(true);
+            }else{
+              alert("기 등록된 번호 입니다.")
+              setIsPhoneChecked(false);
+            }
           })
           .catch(error => {
             console.error('Error fetching data: ', error);
@@ -57,10 +82,41 @@ const CompanyUpdate = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === 'phoneNumber'){
+      const sanitizedValue = value.replace(/[^0-9]/g, '');
+      setIsPhoneChecked(false);
+      setFormData({ ...formData, [name]: sanitizedValue });
+    }else{
+      setFormData({ ...formData, [name]: value });
+    }
+
+
+    
   };
+
   const handleSubmit = (e) => {
-    axios.put(`/api/member/company_info_update`,formData)
+    e.preventDefault();
+    const data = new FormData();
+    for (const key in formData) {
+      if (key !== 'logo') {
+        data.append(key, formData[key]);
+      }
+    }
+    if (formData.logo instanceof File) {
+      data.append('logo', formData.logo);
+    }
+    if(formData.phoneNumber===originalNumber){
+      setIsPhoneChecked(true);
+    }
+    if(!isPhoneChecked){
+        alert("전화번호 중복확인을 해주세요.");
+        return;
+    }
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 12) {
+      alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
+      return;
+    }
+    axios.put(`/api/member/company_info_update`, data)
     .then(response => {
       const updatedUserInfo = {
         ...JSON.parse(sessionStorage.getItem('userInfo')),
@@ -77,7 +133,22 @@ const CompanyUpdate = () => {
 
 
 
-
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        if (file.type.substr(0, 5) === "image") {
+            setFormData({ ...formData, logo: file });
+            setLogoPreview(URL.createObjectURL(file));
+        } else {
+            alert("양식에 맞는 이미지 파일을 올려주세요.");
+            e.target.value = ""; // input 필드 초기화
+        }
+    } else {
+        // 이미지 파일이 선택되지 않은 경우
+        setFormData({ ...formData, logo: null });
+        setLogoPreview(null);
+    }
+};
 
 
 
@@ -115,7 +186,7 @@ const CompanyUpdate = () => {
           <div className={styles.inputWithButton}>
           <div className={styles.inputOnly}>
           <input
-              type="number"
+              type="text"
               id="phoneNumber"
               name="phoneNumber"
               minLength={10}
@@ -156,14 +227,15 @@ const CompanyUpdate = () => {
 <div className={styles.inputContainer}>
           <label htmlFor="employeesNumber ">직원수</label>
           <div className={styles.inputOnly}>
-            <input type="number" id="employeesNumber" max="99999999999" name='employeesNumber' value={formData.employeesNumber} required onChange={handleChange} placeholder='몇명의 직원이 근무중인가요?'/>
+            <input type="number" id="employeesNumber" min="1"  name='employeesNumber' value={formData.employeesNumber} required onChange={handleChange} placeholder='몇명의 직원이 근무중인가요?'/>
           </div>
           <span></span>
         </div>
         <div className={styles.inputContainer}>
           <label htmlFor="establishmentDate">설립일</label>
           <div className={styles.inputOnly}>
-            <input type="date" id="establishmentDate" name="establishmentDate" value={formData.establishmentDate} required onChange={handleChange} className={styles.establishmentDate}/>
+            <input type="date" id="establishmentDate" name="establishmentDate" min="1602-01-01" 
+  max={new Date().toISOString().split("T")[0]}  value={formData.establishmentDate} required onChange={handleChange} className={styles.establishmentDate}/>
           </div>
           <span></span>
         </div>
@@ -175,7 +247,14 @@ const CompanyUpdate = () => {
           </div>
           <span></span>
         </div>
-
+        <div className={styles.inputContainer}>
+          <label htmlFor="logo">회사로고</label>
+          <div className={styles.inputOnly}>
+            <input type="file" id="logo" onChange={handleLogoChange} accept="image/*" />
+          </div>
+          {logoPreview && <img src={logoPreview} alt="Logo Preview" className={styles.logoPreview} />}
+           
+        </div>
 
 
 

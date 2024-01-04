@@ -129,3 +129,10 @@
     box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
     border-color: #3674EA;
   }
+  .logoPreview {
+    max-width: 100%; /* Ensures large images are not oversized */
+    max-height: 100px; /* Fixed height for consistent display */
+    object-fit: contain; /* Ensures small images are properly displayed */
+    margin-top: 10px;
+  }
+  
