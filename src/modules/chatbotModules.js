@@ -1,3 +1,4 @@
+export const CLEAR_CHATROOM_DATA = 'CHATROOM/CLEAR_CHATROOM_DATA';
 export const ADD_MESSAGE_TO_CHATROOM = 'CHATROOM/ADD_MESSAGE_TO_CHATROOM';
 export const ADD_CHATROOM_DATA = 'CHATROOM/ADD_CHATROOM_DATA';
 export const DELETE_CHATROOM = 'CHATROOM/DELETE_CHATROOM';
@@ -9,6 +10,12 @@ const initialState = {
   email: '',
   chatroomList: [],
 };
+
+
+// 채팅방 데이터 초기화 액션 생성자
+export const clearChatRoomData = () => ({
+  type: CLEAR_CHATROOM_DATA,
+});
 
 
 export const addMessageToChatRoom = (roomId, message) => ({
@@ -41,6 +48,13 @@ const chatbotReducer = (state = initialState, action) => {
   console.log('Current State:', state); 
 
   switch (action.type) {
+
+    case CLEAR_CHATROOM_DATA:
+      return {
+        ...state,
+        chatroomList: [],
+      };
+
     case ADD_MESSAGE_TO_CHATROOM:
       const { roomId, message } = action.payload;
       console.log('chatroomList:', state.chatroomList); 

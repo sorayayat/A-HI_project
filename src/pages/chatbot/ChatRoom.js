@@ -18,6 +18,9 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
 
 
     useEffect(() => {
+        if (activeChatRoom && activeChatRoom.prompt) {
+            setSelectedPrompt(activeChatRoom.prompt);
+        }
         console.log("@@@@@@@@@@@@@@@@@@ selectedPrompt ===================> ", selectedPrompt)
     },[activeChatRoom])
 

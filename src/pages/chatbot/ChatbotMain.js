@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import bubbleIcon from '../mainpage/Icons/bubbleIcon.png';
 import { setPrompt } from '../../modules/chatbotModules';
 
+
 const ChatbotMain = () => {
 
     // 채팅방 관련 상태관리
@@ -15,18 +16,22 @@ const ChatbotMain = () => {
     const [activeChatRoomId, setActiveChatRoomId] = useState(null); // 현재 활성화된 채팅방 ID
     const [selectedChatRoom, setSelectedChatRoom] = useState(null);
     const [selectedPrompt, setSelectedPrompt] = useState(null);
-    const [userEmail, setUserEmail] = useState('');  
+    const [userEmail, setUserEmail] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);  
     const chatroomListFromStore = useSelector(state => state.chatbotReducer.chatroomList);
     const dispatch = useDispatch();
 
-    
-    // 사용자 이메일 가져옴
+
+
     useEffect(() => {
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         if (userInfo && userInfo.email) {
+            setIsLoggedIn(true);
             setUserEmail(userInfo.email);
+            fetchAllChatRooms(userInfo.email); // 사용자 이메일로 채팅방 데이터 불러오기
         }
     }, []);
+    
 
 
     // 고유 ID 생성
@@ -36,11 +41,11 @@ const ChatbotMain = () => {
     
 
     // 새 채팅방 생성
-    const handleNewChat = () => {
-        if (selectedPrompt !== null) { // selectedPrompt가 null이 아닐 때만 실행
+    const createNewChatRoom = () => {
+        if (selectedPrompt) {
             const newChatRoomId = generateUniqueID();
             const newChatRoom = {
-                roomId: newChatRoomId, 
+                roomId: newChatRoomId,
                 messageList: [],
                 prompt: selectedPrompt
             };
@@ -51,44 +56,32 @@ const ChatbotMain = () => {
             setChatRooms([...chatRooms, newChatRoom]);
             setActiveChatRoomId(newChatRoomId);
         } else {
-            // 프롬프트를 선택하지 않았을 경우 액션을 취하지 않음
-            console.log("프롬프트 먼저 선택해주세요");
+            console.log("프롬프트를 선택해주세요.");
         }
     };
     
-    // const handleNewChat = () => {
-    //     if (selectedPrompt) {
-    //         const newChatRoomId = generateUniqueID();
-    //         const newChatRoom = {
-    //             roomId: newChatRoomId, 
-    //             messageList: [],
-    //             prompt: selectedPrompt
-    //         };
+    
 
-    //         dispatch(addChatRoomData([...chatRooms, newChatRoom]));
-    //         dispatch(setPrompt(newChatRoomId, selectedPrompt));
+// newChatButton 누르면 프롬프트 선택화면으로 이동
+const handleNewChatButtonClick = () => {
+    setSelectedPrompt(null); // 프롬프트 상태 초기화
+    setActiveChatRoomId(null); // 활성화된 채팅방 ID 초기화
+    setSelectedChatRoom(null); // 선택된 채팅방 상태 초기화
+};
 
-    //         setChatRooms([...chatRooms, newChatRoom]);
-    //         setActiveChatRoomId(newChatRoomId);
-    //     } else {
-    //         // 프롬프트를 선택하지 않았을 경우 액션을 취하지 않음
-    //         console.log("프롬프트 먼저 선택해주세요");
-    //     }
-    // };
 
-    // selectedPrompt가 변경될 때 새 채팅방 생성
+    // 프롬프트 선택 로직
+    const handlePromptSelection = (prompt) => {
+        setSelectedPrompt(prompt);
+        // createNewChatRoom(); // 새 채팅방 생성
+    };
+
+
     useEffect(() => {
         if (selectedPrompt) {
-            handleNewChat();
+            createNewChatRoom();
         }
     }, [selectedPrompt]);
-
-
-    // newChatButton 누르면 프롬프트 초기화
-    const handleNewChatButtonClick = () => {
-        setSelectedPrompt(null); // 프롬프트 선택 상태 초기화
-        setActiveChatRoomId(null); // 활성화된 채팅방 ID 초기화
-    };
 
 
     // 프롬프트 선택화면 함수
@@ -109,12 +102,12 @@ const ChatbotMain = () => {
                                             </div>
                                             <div className={styles.titleBoxMarjin}></div>
                                             <div className={styles.promptBox}>
-                                                <div className={styles.promptBox1} onClick={() => setSelectedPrompt('신입')}>
+                                                <div className={styles.promptBox1} onClick={() => handlePromptSelection('신입')}>
                                                     <div className={styles.box1Text}>
                                                         <p>경력이 없는 <b>신입</b>이에요</p>
                                                     </div>
                                                 </div>
-                                                <div className={styles.promptBox2} onClick={() => setSelectedPrompt('경력직')}>
+                                                <div className={styles.promptBox2} onClick={() => handlePromptSelection('경력직')}>
                                                     <div className={styles.box2Text}>
                                                         <p>이직을 원하는 <b>경력직</b>이에요</p>
                                                     </div>
@@ -153,7 +146,7 @@ const ChatbotMain = () => {
     
     
     // 로그인된 사용자의 모든 채팅방 데이터 불러오기
-        const fetchAllChatRooms = async () => {
+        const fetchAllChatRooms = async (userEmail) => {
             try {
                 const response = await fetch(`http://localhost:8000/chatbot/userchatrooms`, {
                     method: 'POST',
@@ -176,20 +169,28 @@ const ChatbotMain = () => {
         };
     
     
-        useEffect(() => {
-            if (userEmail) {
-                fetchAllChatRooms();
-            }
-        }, [userEmail]);
-        
         
     // 채팅방 선택했을때 활성화된 채팅방으로 상태값 변경
+    // const handleSelectChatRoom = (roomId) => {
+    //     const foundRoom = chatRooms.find(room => room.roomId === roomId);
+    //     setActiveChatRoomId(roomId); // 활성화된 채팅방 ID 설정
+    //     setSelectedChatRoom(foundRoom); // 선택된 채팅방 설정
+    
+    //     if (foundRoom) {
+    //         // 이미 존재하는 채팅방이면 해당 채팅방의 프롬프트를 가져와서 설정
+    //         const roomPrompt = foundRoom.prompt || null;
+    //         setSelectedPrompt(roomPrompt);
+    //     }
+    // };
+
     const handleSelectChatRoom = (roomId) => {
         const foundRoom = chatRooms.find(room => room.roomId === roomId);
-        setActiveChatRoomId(roomId); // 선택된 채팅방 ID로 상태 업데이트
-        setSelectedChatRoom(foundRoom); // 선택된 채팅방으로 상태 업데이트
-        setSelectedPrompt(foundRoom.prompt); // 선택된 채팅방의 prompt로 selectedPrompt 업데이트
+        setActiveChatRoomId(roomId); // 활성화된 채팅방 ID 설정
+        setSelectedChatRoom(foundRoom); // 선택된 채팅방 설정
     };
+
+
+
 
     // activeChatRoomId가 변경될 때 해당 ID에 해당하는 채팅방을 찾음
     useEffect(() => {
