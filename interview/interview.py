@@ -1,15 +1,16 @@
-from fastapi import FastAPI, APIRouter, Body, File, Request, UploadFile, Depends, Form
+from fastapi import FastAPI, APIRouter, Body, File, Request, UploadFile, Depends, HTTPException
 import openai
 from pydantic import BaseModel
 from configset.config import getAPIkey,getModel
 from typing import List
-
+import pdfplumber
+from db.database import *
 
 Interview_router = APIRouter(prefix='/interview')
 
 OPENAI_API_KEY = getAPIkey()
-openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
+openai.api_key = OPENAI_API_KEY
 
 
 # 클라이언트에게서 받은 데이터 타입을 확인하기 위한 클래스
@@ -33,6 +34,17 @@ async def AIiterview(searchQuery: InterviewData):
 async def AI_question(answer: str = Body(...)):
    feedback = gpt_feedback(answer)
    return {"feedback": feedback}
+
+# 이력서 경로 저장
+# PDF_FILE_PATH = '/Users/baesola/dev/AHI-FASTAPI/imgs/test.pdf'
+
+# lid open함수로 파일 읽기
+# pdf = pdfplumber.open(PDF_FILE_PATH)
+# pages = pdf.pages
+# user = ""
+# for page in pages:
+#     sub = page.extract_text()
+#     user += sub
 
 
 prompt = """
@@ -58,26 +70,24 @@ test = """
         11. 관련이 없는 정보가 들어온다면 잘못된 답변이라고 말할 것
 """
 
-company_data = """
-    지원자 이력서
 
-"""
-
-def gpt_question(company_data):
+def gpt_question(test,user):
     response = openai.ChatCompletion.create(
       model= MODEL, # 필수적으로 사용 될 모델을 불러온다.
       frequency_penalty=0.5, # 반복되는 내용 값을 설정 한다.
       temperature=0.6,
       messages=[
               {"role": "system", "content": test},
-           
-              {"role": "user", "content": company_data },
-              
+              {"role": "system", "content": f"{user}의 이력서를 보고 질문해줘"},
+              {"role": "user", "content": user },
+               
           ])
     output_text = response["choices"][0]["message"]["content"]
     
+    print(output_text)
     return output_text
 
+# print(gpt_question(test,user))
 
 
 def gpt_feedback():
