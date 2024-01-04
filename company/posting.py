@@ -16,7 +16,7 @@ import json
 
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
-# client = chromadb.HttpClient(host="13.125.242.46", port=8005)
+
 # client = chromadb.PersistentClient(path="C:\dev\jgsProject\chromaDB")
 
 

@@ -20,7 +20,7 @@ import json
 MODEL = getModel()
 
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
-client = chromadb.PersistentClient(path="C:\dev\jgsProject\chromaDB")
+# client = chromadb.PersistentClient(path="C:\dev\jgsProject\chromaDB")
 
 LIrouter = APIRouter(prefix="/likePosting")
 
