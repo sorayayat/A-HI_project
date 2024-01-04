@@ -16,6 +16,9 @@ import json
 
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
+# client = chromadb.HttpClient(host="13.125.242.46", port=8005)
+client = chromadb.PersistentClient(path="C:\dev\jgsProject\chromaDB")
+
 
 from datetime import datetime
 
@@ -47,7 +50,6 @@ def encode_field(value):
 
 
 
-client = chromadb.PersistentClient()
 
 openai.api_key = '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'
 
@@ -105,7 +107,7 @@ async def registCompany(posting: PostingDTO):
 
     company = posting.company
 
-    postingData = [posting.postingTitle , posting.postingDate , posting.endDate, posting.education,
+    postingData = [posting.content , posting.postingTitle , posting.postingDate , posting.endDate, posting.education,
                     company.email , company.company, company.companyType, str(company.employeesNumber),
                     company.establishmentDate]
     
@@ -128,13 +130,21 @@ async def registCompany(posting: PostingDTO):
 
     merged_string = " ".join(map(str, postingData))
 
+    print(merged_string)
+
     embeddings = model.encode(merged_string)
 
     
     # ChromaDB에 데이터 저장
     collection_name = "posting"
 
-    collection = client.get_collection(name=collection_name)
+    try:
+        # 컬렉션이 이미 존재하면 가져오기
+        collection = client.create_collection(name=collection_name)
+    except UniqueConstraintError:
+        collection = client.get_collection(name=collection_name)
+
+    
 
     
     
@@ -149,7 +159,7 @@ async def registCompany(posting: PostingDTO):
 
     print("됐냐?")
 
-    return "gd"
+    return JSONResponse(content={"message": "success"}, status_code=200)
 
 @POrouter.get("/get")
 async def get_posting():
@@ -160,13 +170,13 @@ async def get_posting():
         collection_name = "posting"
         collection = client.get_collection(name=collection_name)
 
-        query_text = "fuck"
+        query_text = "SageMaker, ML Studio, Google Cloud의 AI Platform(Vertext AI, Dialogflow, app builder) "
         query_embedding = model.encode(query_text)
 
         result = collection.query(
             # query_texts=[model.encode("spring")],
             query_embeddings=[query_embedding.tolist()],
-            n_results=5
+            n_results=2
         )
 
 
