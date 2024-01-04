@@ -71,7 +71,7 @@ def generate_resume(resume_data):
 # 필요한 작업을 수행하도록 구현하십시오.
 # 예시로 파일에 저장하고 파일 경로를 반환하도록 작성합니다.
 def generate_resume_content(chat_response):
-    generated_resume_path = 'path_to_generated_resume.docx'  # 예시 경로, 실제 경로로 변경해야 합니다.
+    generated_resume_path = 'path_to_generated_resume.docx'  # 예시 경로
 
     # chat_response를 이력서 내용으로 사용하고 파일로 저장
     with open(generated_resume_path, 'w', encoding='utf-8') as file:
