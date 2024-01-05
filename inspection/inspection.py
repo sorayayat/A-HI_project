@@ -1,11 +1,15 @@
 from fastapi import APIRouter , Request , UploadFile , File
-from PyPDF2 import PdfReader
+from fastapi.responses import StreamingResponse , Response
+from PyPDF2 import PdfReader , PdfFileReader
 # from openai import OpenAI
 from configset.config import getAPIkey ,getModel
 from typing import List
 from pydantic import BaseModel
 from inspection import inspectionPrompt
-import io, openai , json , time
+from PIL import Image
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+import io, openai , json , time , datetime
 
 ITrouter = APIRouter(prefix="/inspection")
 
@@ -95,7 +99,9 @@ async def readResume(file : UploadFile = File(...)):
     pageNumber = 0
     page = pdf_reader.pages[pageNumber]
     text = page.extract_text()
-    pdfEndTime = time.time() - start;
+    pSec = (time.time() - start)
+    pdfEndTime = str(datetime.timedelta(seconds=pSec)).split(".")
+    pdfEndTime = pdfEndTime[0]
     
     pre_prompt1 = "1.Keep the original content without summarizing it;"
     pre_prompt2 = "2.Separate the content into key and value, distinguishing between title and content.;"
@@ -109,7 +115,9 @@ async def readResume(file : UploadFile = File(...)):
         strToJson = answer
         print(answer)
         json_object = json.loads(strToJson)
-        gptEndTime = time.time() - start
+        gptSec = (time.time() - start) 
+        gptEndTime = str(datetime.timedelta(seconds=gptSec)).split(".")
+        gptEndTime = gptEndTime[0]
     except :
         json_object = {"error" : "통신에러"}
     print("pdfEndTime : ", pdfEndTime)
@@ -141,11 +149,35 @@ async def modify(modifyResume : RequestEntity):
         strToJson = answer
         print(strToJson)
         json_object = json.loads(strToJson)
-        gptEndTime = (time.time() - start) / 1000
-        print("실행 시간(sec) : ", gptEndTime)
+        gptSec = (time.time() - start) 
+        gptEndTime = str(datetime.timedelta(seconds=gptSec)).split(".")
+        gptEndTime = gptEndTime[0]
+        print("gptEndTime : ", gptEndTime)
     except :
         json_object = {"error" : "통신에러"}
     return json_object
+
+
+@ITrouter.post("/modifyResume")
+async def ImageToPdf(file : UploadFile=File(...)):
+    try :
+        contents = await file.read()
+        buffer = io.BytesIO(contents) 
+        pil_image = Image.open(buffer)
+        print(pil_image.mode) 
+        pdf_bytes = io.BytesIO()
+        pil_image.save(pdf_bytes, format='PDF')
+        print(pil_image.mode) 
+        pdf_bytes.seek(0) 
+
+        return Response(content=pdf_bytes.getvalue(), media_type="application/pdf")
+    except Exception as e :
+        print(str(e))
+        return 
+
+
+
+
 
 
  
