@@ -12,7 +12,6 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     // const [showChat, setShowChat] = useState(false);
     const [messageList, setMessageList] = useState([]); 
     const scrollRef = useRef(null);
-    const websocket = useRef(null);
     const [showResumeButton, setShowResumeButton] = useState(false);
 
 
@@ -24,6 +23,7 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
         console.log("@@@@@@@@@@@@@@@@@@ selectedPrompt ===================> ", selectedPrompt)
     },[activeChatRoom])
 
+
     // 사용자 이메일 가져옴
     useEffect(() => {
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
@@ -31,41 +31,6 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
             setUserEmail(userInfo.email);
         }
     }, []);
-
-
-    // 채팅 시작 시 웹소켓 연결
-    useEffect(() => {
-        if (activeChatRoom && activeChatRoom.roomId) {
-            const roomId = activeChatRoom.roomId;
-                websocket.current = new WebSocket(`ws://localhost:8000/ws/${roomId}`);
-
-                websocket.current.onopen = () => {
-                    console.log('[useEffect] WebSocket 연결... ');
-                };
-
-                websocket.current.onmessage = (event) => {
-                    console.log('메시지 수신 =============> ', event.data);
-                    if (event.data === "데이터 수집 완료. 이력서를 생성할 수 있습니다.") {
-                        setShowResumeButton(true);
-                    }
-                };
-                
-                websocket.current.onclose = () => {
-                    console.log('WebSocket Disconnected');
-                };
-            
-                websocket.current.onerror = (error) => {
-                    console.error('WebSocket Error:', error);
-                };
-
-                return () => {
-                    websocket.current.close();
-                };
-            }
-        }, [activeChatRoom]);
-
-
-
 
 
 

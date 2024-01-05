@@ -4,6 +4,7 @@ import ChatRoom from "./ChatRoom";
 import styles from './ChatbotMain.module.css';
 import { addChatRoomData } from '../../modules/chatbotModules';
 import { deleteChatRoom } from '../../modules/chatbotModules';
+import { clearChatRoomData } from '../../modules/chatbotModules';
 import { useDispatch, useSelector } from 'react-redux';
 import bubbleIcon from '../mainpage/Icons/bubbleIcon.png';
 import { setPrompt } from '../../modules/chatbotModules';
@@ -62,12 +63,12 @@ const ChatbotMain = () => {
     
     
 
-// newChatButton 누르면 프롬프트 선택화면으로 이동
-const handleNewChatButtonClick = () => {
-    setSelectedPrompt(null); // 프롬프트 상태 초기화
-    setActiveChatRoomId(null); // 활성화된 채팅방 ID 초기화
-    setSelectedChatRoom(null); // 선택된 채팅방 상태 초기화
-};
+    // newChatButton 누르면 프롬프트 선택화면으로 이동
+    const handleNewChatButtonClick = () => {
+        setSelectedPrompt(null); // 프롬프트 상태 초기화
+        setActiveChatRoomId(null); // 활성화된 채팅방 ID 초기화
+        setSelectedChatRoom(null); // 선택된 채팅방 상태 초기화
+    };
 
 
     // 프롬프트 선택 로직
@@ -124,7 +125,19 @@ const handleNewChatButtonClick = () => {
     } 
 
 
-
+    useEffect(() => {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        if (userInfo && userInfo.email) {
+            setIsLoggedIn(true);
+            setUserEmail(userInfo.email);
+            fetchAllChatRooms(userInfo.email); // 사용자 이메일로 채팅방 데이터 불러오기
+        } else {
+            setIsLoggedIn(false);
+            setUserEmail('');
+            setChatRooms([]); // 로그인하지 않은 경우 채팅방 데이터 초기화
+            dispatch(clearChatRoomData()); // Redux 스토어의 채팅방 데이터도 초기화
+        }
+    }, [sessionStorage.getItem('userInfo')]); 
 
 
 

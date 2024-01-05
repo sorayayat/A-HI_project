@@ -24,8 +24,9 @@ import InspectionDetail from './pages/inspection/InspectionDetail';
 import InspectionMain from './pages/inspection/InspectionMain';
 import InterviewSpring from './pages/InterviewSpring/InterviewSpring';
 import { ProtectedRoute } from './pages/login/ProtectedRoute';
-function App() { 
 
+
+function App() { 
 
 
 return (
