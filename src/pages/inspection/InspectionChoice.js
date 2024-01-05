@@ -29,9 +29,8 @@ function InspectionChoice(){
             const formData = new FormData();
             canvas.toBlob((blob) =>{
                 if(blob !== null){
-                    saveAs(blob,"result.png");
                     formData.append("resumeCode" , resume.data.resumeCode);
-                    formData.append("image", blob);
+                    formData.append("image", blob , "test.png");
 
                     dispatch(callImageToPdfAPI(formData));
                 }     

@@ -73,14 +73,14 @@ export const callModifyResumeAPI = (form , index) => {
     return async(dispath , getState) =>{
         console.log(form.get("resumeCode"))
         console.log(form.get("image"))
-        // const result = await fetch(requestURL,{
-        //     method : "POST",
-        //     headers : {
-        //         "Content-Type" : "multipart/form-data"
-        //     },
-        //     body : form
-        // }).then(resp => resp.json());
-        // return {status : result.status}
+        const result = await fetch(requestURL,{
+            method : "POST",
+            headers : {
+                "Content-Type" : "multipart/form-data"
+            },
+            body : form
+        }).then(resp => resp.json());
+        return {status : result.status}
     }
     
 }
