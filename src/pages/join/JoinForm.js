@@ -13,26 +13,31 @@ const JoinForm = () => {
     phoneNumber:"",
   });
   const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [isPhoneChecked, setIsPhoneChecked] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!isEmailChecked) {
       alert('이메일 중복 확인을 해주세요.');
       return;
+    }else if(!isPhoneChecked){
+      alert('전화번호 중복 확인을 해주세요.');
+      return;
     }
+
     if(formData.password!==formData.confirmPassword) {
       alert('비밀번호와 비밀번호확인은 같은 값이어야 합니다.');
       return;
-    }else if (formData.phoneNumber.length < 10) {
-      alert("전화번호는 최소 10자리 이상 이어야 합니다.");
+    }else  if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 12) {
+      alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     } else if (formData.password.length <10 || formData.confirmPassword.length <10){
       alert("비밀번호와 비밀번호 확인은 11자리 이상 이어야 합니다.");
       return;
     }
+    alert("회원가입을 환영합니다. 가입하신 이메일로 인증메일을 보냈으니 확인해주시기 바랍니다. 잠시 기다려주시면 감사하겠습니다");
     axios.post(`./api/signup`,formData)
         .then(response => {
-          alert(response.data);
           navigate('/');
         })
         .catch(error => {
@@ -51,12 +56,11 @@ const JoinForm = () => {
     const emailInput = document.getElementById('email');
 
     if (emailInput.validity.valid) {
-
-
       axios.get(`./api/email_duplication_check?email=${formData.email}`)
           .then(response => {
-            setIsEmailChecked(response.data);
-            alert(response.data);
+            let result = (response.data)? "가입가능합니다":"기 등록된 이메일 입니다.";
+            alert(result);
+            setIsEmailChecked(result);
           })
           .catch(error => {
             console.error('Error fetching data: ', error);
@@ -67,6 +71,29 @@ const JoinForm = () => {
       alert('유효하지 않은 이메일 형식입니다.');
     }
 
+  };
+  const handlePhoneCheck = () => {
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 12) {
+      alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
+      return;
+    }
+    if (phoneNumber.length>=10) {
+      axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+          .then(response => {
+            let result = (response.data)? "가입가능합니다":"이미 등록된 번호입니다.";
+            alert(result);
+            setIsPhoneChecked(result);
+          })
+          .catch(error => {
+            console.error('Error fetching data: ', error);
+          })
+          .finally(() => {
+          });
+    }else{
+      alert('전화번호는 10자리 이상 입력해주세요.');
+    }
+
 
   };
   const handleChange = (e) => {
@@ -75,10 +102,11 @@ const JoinForm = () => {
     if (name === "email") {
       setIsEmailChecked(false);
       setFormData({ ...formData, [name]: value });
-    }/* else if (name === 'phoneNumber'){
+    } else if (name === 'phoneNumber'){
       const sanitizedValue = value.replace(/[^0-9]/g, '');
+      setIsPhoneChecked(false);
       setFormData({ ...formData, [name]: sanitizedValue });
-    } */else{
+    } else{
       setFormData({ ...formData, [name]: value });
     }
   };
@@ -99,6 +127,17 @@ const JoinForm = () => {
           </div>
           <span></span>
         </div>
+        
+        <div className={styles.inputContainer}>
+          <label htmlFor="phoneNumber" >전화번호</label>
+          <div className={styles.inputWithButton}>
+          <div className={styles.inputOnly}>
+          <input type="text" id="phoneNumber"  maxLength={11} minLength={10} name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
+            </div>
+            <button className={styles.joinBtn}  type='button' onClick={handlePhoneCheck}>중복확인</button>
+          </div>
+          <span></span>
+        </div> 
         <div className={styles.inputContainer}>
           <label htmlFor="password">비밀번호</label>
           <div className={styles.inputOnly}>
@@ -125,33 +164,14 @@ const JoinForm = () => {
 
       
 
-        <div className={styles.inputContainer}>
+        {/* <div className={styles.inputContainer}>
           <label htmlFor="phoneNumber">전화번호</label>
           <div className={styles.inputOnly}>
             <input type="text" id="phoneNumber" max="99999999999" name='phoneNumber' value={formData.phoneNumber} required onChange={handleChange} placeholder='-를 빼고 입력해주세요.'/>
           </div>
           <span></span>
-        </div>
-
-        {/* <div className={styles.inputContainer}>
-          <label htmlFor="phoneNumber" >전화번호</label>
-          <div className={styles.inputWithButton}>
-          <div className={styles.inputOnly}>
-          <input
-              type="number"
-              id="phoneNumber"
-              name="phoneNumber"
-              minLength={10}
-              maxLength={11}
-              onChange={handleChange} 
-              value={formData.phoneNumber}
-              required
-            />
-            </div>
-            <button className={styles.joinBtn}  type='button'>중복확인</button>
-          </div>
-          <span></span>
         </div> */}
+
 
 
 

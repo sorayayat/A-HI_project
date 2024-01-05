@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 const MemberUpdate = () => {
   const navigate = useNavigate();
+  const [isPhoneChecked, setIsPhoneChecked] = useState(true);
+  const [originalNumber, setOriginalNumber] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -16,6 +18,7 @@ const MemberUpdate = () => {
     const fetchUserInfo = async () => {
       const response = await axios.get('/api/member/info');
       const data = response.data;
+      setOriginalNumber(data.phoneNumber);
       setFormData({
         email: data.email,
         name: data.name,
@@ -28,8 +31,24 @@ const MemberUpdate = () => {
   }, []);
 
   const handlePhoneNumberCheck = () => {
-      axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    if(formData.phoneNumber===originalNumber){
+      setIsPhoneChecked(true);
+      alert("기존 전화번호입니다.");
+      return;
+    }
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 12) {
+      alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
+      return;
+    }
+    axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
+            if(response.data===true) {
+              alert("등록 가능한 번호 입니다.");
+              setIsPhoneChecked(true);
+            }else{
+              alert("기 등록된 번호 입니다.")
+              setIsPhoneChecked(false);
+            }
             
           })
           .catch(error => {
@@ -47,9 +66,31 @@ const MemberUpdate = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === 'phoneNumber'){
+      const sanitizedValue = value.replace(/[^0-9]/g, '');
+      setIsPhoneChecked(false);
+      setFormData({ ...formData, [name]: sanitizedValue });
+    }else{
+      setFormData({ ...formData, [name]: value });
+    }
+
+
+    
   };
   const handleSubmit = (e) => {
+    e.preventDefault();
+    if(formData.phoneNumber===originalNumber){
+      setIsPhoneChecked(true);
+    }
+    if(!isPhoneChecked){
+        alert("전화번호 중복확인을 해주세요.");
+        return;
+    }
+
+    if (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 12) {
+      alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
+      return;
+    }
     axios.put(`./api/member/info_update`,formData)
     .then(response => {
       const updatedUserInfo = {
@@ -98,20 +139,23 @@ const MemberUpdate = () => {
         </div>
 
         <div className={styles.inputContainer}>
-          <label htmlFor="phoneNumber">전화번호</label>
+          <label htmlFor="phoneNumber" >전화번호</label>
+          <div className={styles.inputWithButton}>
           <div className={styles.inputOnly}>
-            <input
-              type="number"
+          <input
+              type="text"
               id="phoneNumber"
               name="phoneNumber"
               minLength={10}
               maxLength={11}
-              onChange={handleChange} // onChange 이벤트 핸들러 수정
+              onChange={handleChange} 
               value={formData.phoneNumber}
               required
             />
-            <button onClick={handlePhoneNumberCheck}>중복확인</button>
+            </div>
+            <button className={styles.joinBtn} onClick={handlePhoneNumberCheck}  type='button'>중복확인</button>
           </div>
+          <span></span>
         </div>
 
         <div className={styles.inputContainer}>

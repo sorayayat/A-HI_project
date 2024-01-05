@@ -1,0 +1,81 @@
+/* CSS */
+.findFormContainer {
+    margin-top: 10vh;
+    width: 20vw;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10vh;
+
+  }
+  .findInput {
+    flex: 2; /* 수정된 부분: 버튼이 차지하는 공간을 포함하여 input이 남은 공간을 차지하도록 수정 */
+    border-radius: 5px;
+    outline: none;
+    transition: box-shadow 0.3s;
+  
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #b3c9f1;
+    margin-top: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s; /* 포커스 트랜지션 추가 */
+  }
+  
+  .findInput:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
+  }
+  .findBtn {
+    flex: 1; /* 수정된 부분: 버튼이 차지하는 공간을 포함하여 남은 공간을 차지하도록 수정 */
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    background-color: #3674EA;
+    color: #fff;
+  }
+  
+  .findBtn:hover {
+    background-color: #D0E0FF;
+  }
+
+  .inputWithButton {
+    display: flex;
+    align-items: baseline; 
+    gap: 10px;
+    margin-bottom: 5vh;
+  }
+  .links {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .links a {
+    margin-bottom: 10px;
+    color: #3674EA;
+    text-decoration: none;
+  }
+  
+  .links a:hover {
+    text-decoration: underline;
+    color: #4682B4;
+  }
+  .changeBtn {
+    width: 100%;
+    padding: 10px;
+    background-color: #3674EA;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px; /* 버튼과 입력 필드 간격 30px로 조정 */
+  }
+  .changeBtn:hover {
+    background-color: #D0E0FF;
+  }

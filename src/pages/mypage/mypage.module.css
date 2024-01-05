@@ -18,7 +18,7 @@
     height: 50vh;
   }
   .myContainer div {
-    background-color: aquamarine;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     height: 50%;
     margin: 0 10px 0 10px; /* 수정된 부분 */
     border-radius: 10px;
@@ -27,6 +27,7 @@
     display: flex;
     justify-content: center;
     align-content: center;
+    padding: 10px;
 }
 .myContainer div img{
   border-radius: 10px;
@@ -34,4 +35,29 @@
   max-height: 95%;  
   display: block;    
   margin: auto;      
+}
+/* mypage.module.css */
+
+.myContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.postingItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 아이템들을 컨테이너의 왼쪽으로 정렬 */
+  text-align: left; /* 텍스트를 왼쪽으로 정렬 */
+  margin: 0 10px;
+  flex: 0 0 20%;
+  /* 기타 필요한 스타일링 추가 */
+}
+
+
+.postingDetail {
+  display: inline-block;
+  margin-right: 10px; /* 요소 간 간격 조정 */
+  text-align: left; 
+  /* 필요에 따라 추가 스타일링 */
 }
