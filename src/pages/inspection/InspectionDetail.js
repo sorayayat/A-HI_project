@@ -41,7 +41,7 @@ function InspectionDetail()
                         <ModifyModal setModifyIsModalOpen={setIsModalOpen}
                                      modifyIsModalOpen={isModalOpen} 
                                      modifyInfo={modifySelf[0]}
-                                     modifyIndex={{number}} />
+                                     modifyIndex={number.index} />
                     </div>
                 }
                 <div className={style.resumeBack}>

@@ -43,6 +43,7 @@ export const callResumeDetailAPI = (resumeCode) =>{
         const result = await fetch(requestURL).then(resp => resp.json());
         if(result.status === 200)
         {
+            result.data = Object.assign({}, result.data,{"resumeCode" : resumeCode});
             dispath(getResume(result));
             return {status : 200}
         }
@@ -52,7 +53,6 @@ export const callResumeDetailAPI = (resumeCode) =>{
 export const callModifyResumeAPI = (form , index) => {
     const requestURL = `${SB_PRE_URL}/modifyResume`;
     console.log(index)
-    console.log(index.index)
     return async(dispath , getState) =>{
         const result = await fetch(requestURL,{
             method : "POST",
@@ -62,10 +62,25 @@ export const callModifyResumeAPI = (form , index) => {
             body : JSON.stringify(form)
         }).then(resp => resp.json());
         if(result.status === 200){
-            result.data = Object.assign({}, result.data,{"index" : index.index});
+            result.data = Object.assign({}, result.data,{"index" : index});
             dispath(postModify(result));
             return {status : 200}
         }
+    }
+}
+ export const callImageToPdfAPI = (form) =>{
+    const requestURL = `${SB_PRE_URL}/saveResume`;
+    return async(dispath , getState) =>{
+        console.log(form.get("resumeCode"))
+        console.log(form.get("image"))
+        // const result = await fetch(requestURL,{
+        //     method : "POST",
+        //     headers : {
+        //         "Content-Type" : "multipart/form-data"
+        //     },
+        //     body : form
+        // }).then(resp => resp.json());
+        // return {status : result.status}
     }
     
 }
