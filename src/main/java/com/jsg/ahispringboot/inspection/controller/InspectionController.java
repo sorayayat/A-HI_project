@@ -1,6 +1,7 @@
 package com.jsg.ahispringboot.inspection.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jsg.ahispringboot.common.ResponseDTO;
@@ -56,6 +58,19 @@ public class InspectionController {
         AnswerDTO modifyResume = inspectionsService.modifyResume(modifyResumeDTO);
         log.info("Controller : {} ", modifyResume);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "통신완료", modifyResume));
+    }
+
+    @PostMapping("/saveResume")
+    public ResponseEntity<ResponseDTO> postMethodName(@RequestParam("resumeCode") String resumeCode,
+            @RequestParam("image") MultipartFile image) {
+
+        log.info("resumeCode : {}", resumeCode);
+        log.info("image : {}", image.getName());
+        log.info("image : {}", image.getOriginalFilename());
+        log.info("image : {}", image.getSize());
+        log.info("image : {}", image.getContentType());
+        Map<String, Object> pdf = inspectionsService.imageToPdf(resumeCode, image);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 저장하였습니다.", pdf));
     }
 
 }

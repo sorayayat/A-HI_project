@@ -1,6 +1,9 @@
 package com.jsg.ahispringboot.inspection.utils;
 
 import java.io.IOException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jsg.ahispringboot.inspection.dto.AnswerDTO;
 import com.jsg.ahispringboot.inspection.dto.ModifyResumeDTO;
@@ -62,6 +67,20 @@ public class FileUtilsImpl implements FileUtils {
         }
     }
 
+    public ByteArrayResource UploadFileToByteArray(MultipartFile file, String title) {
+        try {
+            return new ByteArrayResource(file.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return title;
+                }
+            };
+        } catch (Exception e) {
+            System.err.println(e);
+            return null;
+        }
+    }
+
     public HttpEntity<MultiValueMap<String, Object>> FileCreatebody(ByteArrayResource resource, String bodyKey) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -81,6 +100,14 @@ public class FileUtilsImpl implements FileUtils {
         return requestEntity;
     }
 
+    public HttpEntity<MultiValueMap<String, Object>> UploadFileCreatebody(ByteArrayResource resource, String bodyKey) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add(bodyKey, resource);
+        return new HttpEntity<>(body, headers);
+    }
+
     public ReaderDTO GetJsonData(String endPoing, HttpEntity<MultiValueMap<String, Object>> requestEntity) {
         try {
             ResponseEntity<ReaderDTO> responseEntity = restTemplate.postForEntity(
@@ -98,17 +125,70 @@ public class FileUtilsImpl implements FileUtils {
 
     public AnswerDTO ModifyJsonData(String endPoing,
             HttpEntity<MultiValueMap<String, Object>> requestEntity) {
+
         try {
             ResponseEntity<AnswerDTO> responseEntity = restTemplate.postForEntity(
                     endPoint + "/inspection/modify",
                     requestEntity,
                     AnswerDTO.class);
             AnswerDTO modifyResumeDTO = responseEntity.getBody();
-            log.info("AnswerDTO : {}", modifyResumeDTO);
             return modifyResumeDTO;
         } catch (Exception e) {
             System.out.println("에러요");
             return null;
         }
+    }
+
+    public byte[] getPdf(String endPoint, HttpEntity<MultiValueMap<String, Object>> requestEntity) {
+        try {
+            ResponseEntity<byte[]> responseEntity = restTemplate.postForEntity(
+                    endPoint + "/inspection/modifyResume",
+                    requestEntity,
+                    byte[].class);
+            return responseEntity.getBody();
+        } catch (Exception e) {
+            // log.info("Exception : {}", e);
+            return null;
+        }
+    }
+
+    public String getTitle(String path) {
+        String[] spits = path.split("/");
+        String exe = spits[spits.length - 1];
+        String title = exe.replace(".pdf", "");
+        return title;
+    }
+
+    public String SavePdf(byte[] resource, String name, String title) {
+        String path = staticPath + "resume/" + name + "/" + title + "-수정본" + ".pdf";
+        try {
+            File file = new File(path);
+
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdir();
+            } else if (file.exists()) {
+                File[] files = file.listFiles(new FilenameFilter() {
+                    public boolean accept(File dir, String name) {
+                        return name.contains(title);
+                    }
+                });
+                String newPath = staticPath + "resume/" + name + "/" + title + "-수정본" + files.length + 1 + ".pdf";
+                File newFile = new File(newPath);
+                try (FileOutputStream fos = new FileOutputStream(newFile)) {
+
+                    fos.write(resource);
+                }
+            } else {
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    fos.write(resource);
+                }
+            }
+
+        } catch (Exception e) {
+            log.info("[SavePdf] 에러 : {}", e);
+        }
+
+        return path;
+
     }
 }

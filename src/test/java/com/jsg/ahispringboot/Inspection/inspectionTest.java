@@ -76,7 +76,6 @@ public class inspectionTest {
             String newDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
             r.setResumePath(path);
             r.setCreateDate(newDate);
-            r.setModifyDate(newDate);
             r.getMember().setId(1L);
             ResumeDTOs.add(r);
         }
