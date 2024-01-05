@@ -6,6 +6,7 @@ from typing import List
 import pdfplumber
 from db.database import *
 
+
 Interview_router = APIRouter(prefix='/interview')
 
 OPENAI_API_KEY = getAPIkey()
@@ -23,10 +24,11 @@ class AnswerData(BaseModel):
 # 클라이언트에서 정보를 받아서 모델에 질문을 생성한다.
 @Interview_router.post('/makequestion')
 async def AIiterview(searchQuery: InterviewData):
-    # json 형태로 들어온다, 매개값으로 넘기기 위해서 캐스팅(형변환) 해준다
-    posting_code = str(searchQuery)
+    # json 형태로 들어온다, 매개값으로 넘기기 위해서 캐스팅(형변환) 해준다 json -> str -> int
+    search_Code_str = searchQuery.searchQuery
+    search_Code = int(search_Code_str)
     # 클라이언트에서 전달받은 공고 번호로 db에서 로직을 실행하고 값을 저장 (기술 스택이 담긴다)
-    skillSetData = findPosting(posting_code)
+    skillSetData = findPosting(search_Code)
     # 함수를 호출하고 리턴 값은 question에 저장
     question = gpt_question(skillSetData)
     # question은 openai API에서 json으로 넘겨주기 때문에 바로 클라이언트에게 넘겨준다.
@@ -36,7 +38,7 @@ async def AIiterview(searchQuery: InterviewData):
 # 사용자에 답변을 받아서 피드백 해준다
 @Interview_router.get('/sendAnswer')
 async def AI_question(answer: AnswerData):
-   userAnswer = str(answer)
+   userAnswer = answer.answer
    feedback = gpt_feedback(userAnswer)
    return {"feedback": feedback}
 
@@ -53,11 +55,10 @@ def UserResume(PDF_FILE_PATH):
         user += sub
     return user
 
-# resume = UserResume()
+
 
 # gpt로 질문을 생성해주는 함수
 def gpt_question(skillSetData):
-    print(skillSetData)
     prompt = f"""
             1. ai라고 절대 언급하지 말것.
             2. 사과, 후회등의 언어 구성을 하지말것
@@ -66,8 +67,8 @@ def gpt_question(skillSetData):
             5. 답변은 반드시 한국어로 할 것
             6. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
             7. 관련이 없는 정보가 들어온다면 잘못된 답변이라고 말할 것
-            8. 컴퓨터 기초에 관한 질문을 할 것
-            9. {skillSetData}에 관한 질문을 할 것
+            8. 컴퓨터 사이언스에 관한 질문을 할 것
+            9. {skillSetData}에 관한 질문 두가지 할 것
             11. 오직 질문만 할 것
             12. 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘 잘 수행한다면 선물을 줄게
     """
@@ -90,12 +91,24 @@ def gpt_question(skillSetData):
 
 
 def gpt_feedback(userAnswer):
+    Answerprompt = f"""
+            1. ai라고 절대 언급하지 말것.
+            2. 사과, 후회등의 언어 구성을 하지말것
+            3. 같은 응답을 반복하지 말것
+            4. 인재를 선발하는 능력이 탁월한 it 개발회사의 베테랑 면접관의 역할을 맡아줘
+            5. 답변은 반드시 한국어로 할 것
+            6. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
+            7. 관련이 없는 정보가 들어온다면 잘못된 답변이라고 말할 것
+            8. "{userAnswer}을 듣고 피드백을 해줄 것"
+            9. 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘 잘 수행한다면 선물을 줄게
+    """
     response = openai.ChatCompletion.create(
       model=MODEL,
       frequency_penalty=0.3, # 반복되는 내용 값을 설정 한다.
       temperature=0.3,
       messages=[
-          {"role": "system", "content": "질문과 질문에 대한 답을 듣고 더 나은 답변을 피드백 해줘"},
+          {"role": "system", "content": Answerprompt},
+          {"role": "system", "content": f"{userAnswer} 대한 답을 듣고 더 나은 답변을 피드백 해줘"},
           
       ]
    )
