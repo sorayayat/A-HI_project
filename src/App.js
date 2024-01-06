@@ -27,6 +27,7 @@ import { ProtectedRoute } from './pages/login/ProtectedRoute';
 import ChangePwd from './pages/changePwd/ChangePwd';
 import Verify from './pages/verify/Verify';
 import RankModal from './pages/InterviewSpring/RankModal';
+import PostingLike from './pages/potingLike/PostinLike';
 function App() { 
 
 
@@ -40,7 +41,7 @@ return (
 
         <Route path='/companyDetails/:postingCode' element={<CompanyDetails />} />
         <Route path='/recommendation' element={<Recommendation />} />
-        <Route path="/loginForm" element={<LoginForm />} />
+       
         <Route path="/joinForm" element={<JoinForm />} />
         <Route path="/findForm" element={<FindForm />} />
         
@@ -64,29 +65,15 @@ return (
         
         <Route path='/verify' element={<Verify/>}/>
         <Route path='/rank' element={<RankModal/>}/>
-        <Route path='/withdrawal' element={
-        <ProtectedRoute>
-        <Withdrawal />
-        </ProtectedRoute>}/>
-         
-        <Route path='/changePwd' element={
-        <ProtectedRoute>
-          <ChangePwd/>
-        </ProtectedRoute>}/>
-        <Route path='/mypage' element={
-        <ProtectedRoute>
+        
+        <Route path="/loginForm" element={<LoginForm />} />
+        
+        <Route path='/mypage/*' element={
+      <ProtectedRoute>
         <Mypage />
-        </ProtectedRoute>}/>
-      <Route path='/member_update' element={
-          <ProtectedRoute roles={['ROLE_MEMBER']}>
-            <MemberUpdate />
-          </ProtectedRoute>
-        }/>
-        <Route path='/companyUpdate' element={
-          <ProtectedRoute roles={['ROLE_COMPANY']}>
-            <CompanyUpdate />
-          </ProtectedRoute>
-        }/>
+      </ProtectedRoute>
+    }/>
+        
       </Route>       
     </Routes>
   </BrowserRouter>

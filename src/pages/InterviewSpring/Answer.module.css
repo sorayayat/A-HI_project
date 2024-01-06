@@ -16,6 +16,8 @@
 }
 
 .feedbackButton {
+    box-sizing: border-box;
+    background-color: white;
     color: black;
     padding: 10px 20px;
     border: none;
@@ -24,7 +26,6 @@
     font-size: 1em;
     margin-top: 10px;
     text-align: left; /* 텍스트 왼쪽 정렬 */
-    width: 90%; /* 버튼의 너비 고정 */
     min-height: 40px; /* 최소 높이 설정 */
     height: auto; /* 버튼 높이 자동 조절 */
     white-space: normal; /* 텍스트가 필요에 따라 여러 줄로 나뉘도록 설정 */
@@ -32,8 +33,7 @@
 }
 
 .feedbackButton:hover {
-    background-color: #3674EA;
-    color: white;
+    background-color: #fafafa;
 }
 
 
@@ -43,13 +43,29 @@
 }
 
 .inputAnswer {
+    resize: none; /* Textarea 크기 조절 비활성화 */
     width: 100%;
     padding: 8px;
-    margin: 5px auto; /* 좌우 마진을 auto로 설정 */
+    margin: 5px auto;
     border-radius: 5px;
     border: 1px solid #ccc;
-    display: block; /* 블록 레벨 요소로 만들어 수평 중앙 정렬을 가능하게 함 */
+    display: block;
+    height: 150px; /* 고정 높이 설정 */
+    box-sizing: border-box;
 }
+
+.inputAnswer {
+    width: 100%; /* 부모 컨테이너의 전체 너비로 설정 */
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none; /* Textarea 크기 조절 비활성화 */
+    display: block;
+    height: 150px; /* 고정 높이 설정 */
+    box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+}
+
 
 .feedbackContainer p {
     text-align: left;
@@ -83,6 +99,7 @@
     padding: 10px 0; /* 상하 패딩 */
     margin-top: 10px;
     width: auto;
+    align-self: flex-end; 
 }
 
 .submitButton {
@@ -95,3 +112,42 @@
     flex-direction: column; /* 컨테이너 내 요소들을 세로 방향으로 정렬 */
     align-items: flex-end; /* 요소들을 컨테이너의 오른쪽 끝에 정렬 */
 }
+.feedbackSection {
+    background-color: #f0f0f0; /* 배경색 */
+    border-radius: 5px;
+    box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+    width: 100%; /* 부모 컨테이너의 전체 너비로 설정 */
+    padding: 10px; /* 패딩 조정 */
+    margin-bottom: 10px; /* 마진 조정 */
+}
+
+.feedbackTitle {
+    font-weight: bold;
+    color: #3674EA;
+}
+
+.feedbackContent {
+    margin-top: 5px;
+    text-align: left;
+}
+.inputAnswer, .feedbackButton, .feedbackSection {
+    width: 100%; /* 가로 길이를 100%로 설정하여 컨테이너에 맞춤 */
+    resize: none; /* Textarea 크기 조절 비활성화 */
+}
+.hidden {
+    display: none;
+}
+.feedbackButton, .textAreaContainer, .feedbackSection {
+    box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+    width: 100%; /* 부모 컨테이너의 전체 너비를 차지 */
+    padding: 10px; /* 일관된 패딩 적용 */
+    margin-bottom: 10px; /* 일관된 마진 적용 */
+}
+
+.feedbackContainer {
+    max-width: 90%; /* 원하는 최대 너비로 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    width: 100%;
+}
+
+

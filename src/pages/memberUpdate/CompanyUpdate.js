@@ -24,7 +24,7 @@ const CompanyUpdate = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await axios.get('/api/member/infoCompany');
+      const response = await axios.get('/api/in/member/infoCompany');
       const data = response.data;
       setOriginalNumber(data.phoneNumber);
       setFormData({
@@ -116,7 +116,7 @@ const CompanyUpdate = () => {
       alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     }
-    axios.put(`/api/member/company_info_update`, data)
+    axios.put(`/api/in/member/company_info_update`, data)
     .then(response => {
       const updatedUserInfo = {
         ...JSON.parse(sessionStorage.getItem('userInfo')),

@@ -16,7 +16,7 @@ const MemberUpdate = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await axios.get('/api/member/info');
+      const response = await axios.get('/api/in/member/info');
       const data = response.data;
       setOriginalNumber(data.phoneNumber);
       setFormData({
@@ -40,7 +40,7 @@ const MemberUpdate = () => {
       alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     }
-    axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    axios.get(`/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
             if(response.data===true) {
               alert("등록 가능한 번호 입니다.");
@@ -91,7 +91,7 @@ const MemberUpdate = () => {
       alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     }
-    axios.put(`./api/member/info_update`,formData)
+    axios.put(`/api/in/member/info_update`,formData)
     .then(response => {
       const updatedUserInfo = {
         ...JSON.parse(sessionStorage.getItem('userInfo')),

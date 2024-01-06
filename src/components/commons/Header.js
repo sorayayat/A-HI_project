@@ -31,12 +31,19 @@ const Header = () => {
                     <div className={styles.asideMenu}>
                         <div className={styles.asideMenuList}>
                         {userInfo  ? (
+                            <>
                                 <NavLink className={styles.loginOrLogout} onClick={handleLogout}>로그아웃</NavLink>
+                                {' | '}
+                                <NavLink to="/mypage" className={styles.mypage}> 마이페이지 </NavLink>
+                                </>
                             ) : (
+                                <>
                                 <NavLink to="/loginForm" className={styles.loginOrLogout}>로그인</NavLink>
+                                {' | '}
+                                <NavLink to="/joinForm" className={styles.loginOrLogout}>회원가입</NavLink> 
+                                </>
                             )}
-                            {' | '}
-                            <NavLink to="/mypage" className={styles.mypage}> 마이페이지 </NavLink>
+                           
                         </div>
                     </div>
                 </div>
