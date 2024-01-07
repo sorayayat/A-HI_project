@@ -215,13 +215,24 @@ async def chatbot_endpoint(message: User):
     chatbot_response = gpt_response["choices"][0]["message"]["content"]
 
 
+    # 변경된 부분: 여기서 extract_and_prepare_resume_data 함수를 호출하여 이력서 데이터를 추출하고 사용자에게 보여줄 응답을 준비함
+    resume_data, user_visible_response = extract_and_prepare_resume_data(chatbot_response, message.email, message.roomId)
+
+
     # 이전 대화 내용 업데이트
-    updated_chat = f"사용자: {user_message}\n챗봇: {chatbot_response}"
+    # 챗봇 응답을 업데이트
+    # 변경 전: 모든 대화에 원래의 챗봇 응답을 사용
+    # 변경 후: 마지막 대화에서만 사용자에게 보여줄 응답으로 업데이트
+    updated_chat = f"사용자: {user_message}\n챗봇: {user_visible_response if resume_data else chatbot_response}"
     previous_system_content[(message.email, message.roomId)] = full_prompt + f"\n{updated_chat}"
     print("============================== Updated previous_system_content ============================== \n", previous_system_content[(message.email, message.roomId)])
 
-    # 챗봇 마지막 응답에서 이력서용 데이터 추출
-    resume_data = extract_resume_data(message.email, message.roomId)
+    # 수정전코드
+    # updated_chat = f"사용자: {user_message}\n챗봇: {chatbot_response}"
+    # previous_system_content[(message.email, message.roomId)] = full_prompt + f"\n{updated_chat}"
+
+    # 챗봇 마지막 응답에서 이력서용 데이터 추출 후 사용자에게 보여줄 메세지 준비
+    # resume_data, user_visible_response = extract_and_prepare_resume_data(chatbot_response, message.email, message.roomId)
 
     # send_reresume_data(resume_data)
 
@@ -241,6 +252,7 @@ async def chatbot_endpoint(message: User):
 
 # 챗봇의 마지막 응답에서  이력서 데이터 뽑아오기
 def extract_resume_data(email, room_id):
+    print("extract_resume_data 호출됨...")
     try:
         # previous_system_content에서 대화 내용을 가져옴
         chat_content = previous_system_content.get((email, room_id), "")
@@ -268,6 +280,23 @@ def extract_resume_data(email, room_id):
         print(f"이력서 데이터 가져오기 실패: {e}")
 
     return None
+
+
+# 챗봇 응답 {}부분 사용자에게는 텍스트로 보이도록  
+def extract_and_prepare_resume_data(chatbot_response, email, room_id):
+
+    print("extract_and_prepare_resume_data 호출됨...")
+
+    # 마지막 응답에서 이력서 데이터 추출
+    resume_data = extract_resume_data(email, room_id)
+
+    # 사용자에게 보여줄 응답 메시지
+    if resume_data:
+        user_visible_response = "수고하셨습니다. 이력서에 필요한 데이터 수집을 완료했습니다! 이력서를 생성하려면 아래 버튼을 눌러주세요."
+    else:
+        user_visible_response = chatbot_response  # JSON 데이터가 없으면 기존 응답을 사용
+
+    return resume_data, user_visible_response
 
 
 
