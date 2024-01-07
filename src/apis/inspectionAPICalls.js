@@ -52,7 +52,7 @@ export const callResumeDetailAPI = (resumeCode) =>{
 
 export const callModifyResumeAPI = (form , index) => {
     const requestURL = `${SB_PRE_URL}/modifyResume`;
-    console.log(index)
+    console.log(form)
     return async(dispath , getState) =>{
         const result = await fetch(requestURL,{
             method : "POST",
@@ -62,6 +62,7 @@ export const callModifyResumeAPI = (form , index) => {
             body : JSON.stringify(form)
         }).then(resp => resp.json());
         if(result.status === 200){
+            console.log(result)
             result.data = Object.assign({}, result.data,{"index" : index});
             dispath(postModify(result));
             return {status : 200}

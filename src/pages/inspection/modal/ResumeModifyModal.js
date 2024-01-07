@@ -6,7 +6,7 @@ import { callModifyResumeAPI } from "../../../apis/inspectionAPICalls";
 import { useNavigate } from "react-router";
 
 
-function ResumeModifyModal({ setModifyIsModalOpen , modifyIsModalOpen , modifyInfo  , modifyIndex}){
+function ResumeModifyModal({ setModifyIsModalOpen , modifyIsModalOpen , selfIntroduction  , modifyIndex}){
 
     const ref = useRef();
     const dispatch = useDispatch();
@@ -26,9 +26,7 @@ function ResumeModifyModal({ setModifyIsModalOpen , modifyIsModalOpen , modifyIn
         }});
 
     useEffect(() =>{
-        console.log(modifyIndex);
         setType("modify");  
-
     },[]);
 
     useEffect(() => {
@@ -61,33 +59,40 @@ function ResumeModifyModal({ setModifyIsModalOpen , modifyIsModalOpen , modifyIn
                     icon : 'error',
                     title : "수정내역 미입력"
                 });
-                console.log("1");
             }
             else if(!form.eligibility){
                 Toast.fire({
                     icon : 'error',
                     title : "지원자격 미입력"
                 });
-                console.log("2");
             }
             else if(!form.skill){
                 Toast.fire({
                     icon : 'error',
                     title : "기술스택 미입력"
                 });
-                console.log("3");
             }
             else{
-                setUpdateForm({
-                    ...form,
-                    "type" : type,
-                    "selfIntroduction" : modifyInfo.SelfIntroduction
-                });
+                if(modifyIndex !== 99){
+                    setUpdateForm({
+                        ...form,
+                        "type" : type,
+                        selfIntroduction : [selfIntroduction]
+                    });
+                }
+                else{
+                    setUpdateForm({
+                        ...form,
+                        "type" : type,
+                        selfIntroduction : selfIntroduction
+                    });
+                }
             }
         }
-
+    
     useEffect(() =>{
         if(updateForm?.direction){
+            console.log("updateForm : " , updateForm)
             dispatch(callModifyResumeAPI(updateForm , modifyIndex)).then((result) => {
                 console.log(result)
                 if(result.status === 200){

@@ -16,15 +16,17 @@ function InspectionDetail()
     const onClickHandler = (SelfIntroduction , index) =>{
         if( !isModalOpen )
             setIsModalOpen(true);
-        setModifySelf([{
-            SelfIntroduction : SelfIntroduction
-        }]);
+        setModifySelf(SelfIntroduction);
+
         setNumber({
             "index" : index
         });
     }
 
-    console.log(number);
+    useEffect(() =>{
+        console.log("modifySelf : " ,modifySelf)
+    },[modifySelf])
+
     useEffect(() =>{
         if(!isModalOpen)
             setModifySelf(undefined);
@@ -40,7 +42,7 @@ function InspectionDetail()
                     <div>
                         <ModifyModal setModifyIsModalOpen={setIsModalOpen}
                                      modifyIsModalOpen={isModalOpen} 
-                                     modifyInfo={modifySelf[0]}
+                                     selfIntroduction={modifySelf}
                                      modifyIndex={number.index} />
                     </div>
                 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "./static/css/inspectionDetail.module.css";
 import btnStyle from "./static/css/ResumeModifyModal.module.css";
@@ -12,17 +12,35 @@ function InspectionChoice(){
 
     const modify = useSelector((state) => state.inspectionReducer.modify);
     const resume = useSelector((state) => state.inspectionReducer.resume);
-    const newResume = useSelector((state) => state.inspectionReducer.newResume);
+    const newResume = useSelector((state) => state.inspectionReducer.newResume); 
+    const [modifySelf , setModifySelf] = useState({});
+    const [btn , setBtn] = useState(false); 
     const divRef = useRef();
     const dispatch = useDispatch();
 
 
     useEffect(() =>{
-        console.log(modify);
-    },[])
+        if(modify.data.index !== 99){
+            console.log(modify.data.SelfIntroduction);
+            const upData = resume.data.SelfIntroduction.map((state , index) =>{
+                if(index === modify.data.index){
+                    return{
+                        ...state,
+                        content : modify?.data?.SelfIntroduction.content,
+                        title : modify?.data?.SelfIntroduction.title
+                    };
+                }
+            });
+            setModifySelf(upData);
+        }
+        setModifySelf(resume?.data?.SelfIntroduction);
+        console.log(modifySelf)
+
+    },[modify])
+
 
     useEffect(() =>{
-        if(newResume?.data){
+        if(newResume?.data && newResume?.status === 200 && btn == true){
             const byteCharacters = atob(newResume.data.pdf);
             const byteNumbers = new Array(byteCharacters.length);
             for(let i = 0; i < byteCharacters.length;i++){
@@ -30,7 +48,8 @@ function InspectionChoice(){
             }
             const byteArray = new Uint8Array(byteNumbers);
             const blob = new Blob([byteArray],{ type: "application/pdf" });
-           saveAs(blob,newResume.data.title + ".pdf");
+            saveAs(blob,newResume.data.title + ".pdf");
+            setBtn(false);
         }
     },[newResume])
 
@@ -49,8 +68,7 @@ function InspectionChoice(){
                     dispatch(callImageToPdfAPI(formData));
                 }     
             })
-
-
+            setBtn(true);
         }
         catch(error){
             console.error("Error converting div to image:", error);
