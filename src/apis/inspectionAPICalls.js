@@ -1,4 +1,4 @@
-import { getResume, getResumelist, postAsk, postModify } from "../modules/inspectionModule";
+import { getResume, getResumelist, postAsk, postModify, postNew } from "../modules/inspectionModule";
 import { json, useNavigate } from "react-router";
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
@@ -71,16 +71,16 @@ export const callModifyResumeAPI = (form , index) => {
  export const callImageToPdfAPI = (form) =>{
     const requestURL = `${SB_PRE_URL}/saveResume`;
     return async(dispath , getState) =>{
-        console.log(form.get("resumeCode"))
-        console.log(form.get("image"))
         const result = await fetch(requestURL,{
-            method : "POST",
-            headers : {
-                "Content-Type" : "multipart/form-data"
-            },
+            method : 'POST',
+            // headers : {
+            //     "Content-Type" : "multipart/form-data"
+            // },
             body : form
         }).then(resp => resp.json());
-        return {status : result.status}
+        if(result.status === 200){
+           dispath(postNew(result));
+        }
     }
     
 }

@@ -12,6 +12,7 @@ function InspectionChoice(){
 
     const modify = useSelector((state) => state.inspectionReducer.modify);
     const resume = useSelector((state) => state.inspectionReducer.resume);
+    const newResume = useSelector((state) => state.inspectionReducer.newResume);
     const divRef = useRef();
     const dispatch = useDispatch();
 
@@ -19,6 +20,19 @@ function InspectionChoice(){
     useEffect(() =>{
         console.log(modify);
     },[])
+
+    useEffect(() =>{
+        if(newResume?.data){
+            const byteCharacters = atob(newResume.data.pdf);
+            const byteNumbers = new Array(byteCharacters.length);
+            for(let i = 0; i < byteCharacters.length;i++){
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray],{ type: "application/pdf" });
+           saveAs(blob,newResume.data.title + ".pdf");
+        }
+    },[newResume])
 
     const saveBtnHandler = async () =>{
         if(!divRef.current) return;
@@ -42,7 +56,6 @@ function InspectionChoice(){
             console.error("Error converting div to image:", error);
         }
     }
-
 
     return(
         <>
