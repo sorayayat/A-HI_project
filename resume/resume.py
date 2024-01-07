@@ -11,6 +11,7 @@ from configset.config import getAPIkey, getModel
 resume_router = APIRouter(prefix="/resume")
 
 # 이력서 데이터를 입력받을 Pydantic 모델
+
 class ResumeData(BaseModel):
     name: str
     phone_number: str
@@ -25,15 +26,13 @@ class ResumeData(BaseModel):
     educations_detail: str
     awards_and_certifications: List[str]
 
+
 # OpenAI API 설정
 OPENAI_API_KEY = getAPIkey()
 OPENAI_MODEL = getModel()
 openai.api_key = OPENAI_API_KEY
 
 
-# # MongoDB 설정
-# MONGODB_URI = "mongodb://localhost:27017"
-# DATABASE_NAME = "database_name"
 
 async def get_resume_data(file: UploadFile):
     contents = await file.read()

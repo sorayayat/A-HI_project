@@ -138,3 +138,24 @@ def generate_resume_content(resume_data):
     
 
     return output_path_pdf  # PDF 파일 경로 반환
+
+
+# 이력서 템플릿을 채우고 저장하는 함수
+def fill_template(template_path, output_path, context):
+    try:
+        doc = Document(template_path)
+
+        for paragraph in doc.paragraphs:
+            replace_text_in_paragraph(paragraph, context)
+
+        for table in doc.tables:
+            for row in table.rows:
+                for cell in row.cells:
+                    for paragraph in cell.paragraphs:
+                        replace_text_in_paragraph(paragraph, context)
+
+        doc.save(output_path)
+        print("Document created successfully. File path:", output_path)
+    except Exception as e:
+        print(f"Error: {e}")
+
