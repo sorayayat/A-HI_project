@@ -15,7 +15,6 @@ const Withdrawal = () => {
     const fetchUserInfo = async () => {
       const response = await axios.get('/api/in/member/info');
       const data = response.data;
-      console.log(data);
       setFormData({
         email: data.email,
         id:data.id,
@@ -31,7 +30,7 @@ const Withdrawal = () => {
   
     if (isConfirmed) {
   
-      axios.delete(`./api/in/member/withdrawal`, { data: formData })
+      axios.delete(`/api/in/member/withdrawal`, { data: formData })
       .then(response => {
         sessionStorage.setItem('isLoggedIn', 'false');
         sessionStorage.removeItem('userInfo');

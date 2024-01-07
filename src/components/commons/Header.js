@@ -3,6 +3,7 @@ import React from 'react';
 import { NavLink  } from 'react-router-dom';
 import styles from '../commons/Header.module.css';
 import { useNavigate } from 'react-router-dom';
+import logonav from './logonav.png';
 const Header = () => {
     const navigate = useNavigate();
     const userInfo = sessionStorage.getItem('userInfo');
@@ -28,6 +29,7 @@ const Header = () => {
         <>
             <div className={styles.headerWrapper}>
                 <div className={styles.headerMenu}>
+                <NavLink to="/" > <img src={logonav} alt='paperIcon' style={{width: "85px"}}/> </NavLink>
                     <div className={styles.asideMenu}>
                         <div className={styles.asideMenuList}>
                         {userInfo  ? (

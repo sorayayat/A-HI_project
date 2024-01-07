@@ -26,6 +26,7 @@ const CompanyUpdate = () => {
     const fetchUserInfo = async () => {
       const response = await axios.get('/api/in/member/infoCompany');
       const data = response.data;
+      console.log(data);
       setOriginalNumber(data.phoneNumber);
       setFormData({
         email: data.email,
@@ -57,7 +58,7 @@ const CompanyUpdate = () => {
       return;
     }
     
-    axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    axios.get(`/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
             if(response.data===true) {
               alert("등록 가능한 번호 입니다.");

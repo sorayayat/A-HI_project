@@ -74,4 +74,25 @@
   .marginDiv {
     margin-right: 10px; /* 원하는 간격 크기로 조절 */
   }
+  .btn {
+    margin-left: 3%;
+    margin-right: 3%;
+    padding: 10px 15px;
+    background-color: #3674EA;
+    color: white;
+    border: none;
+    border-radius: 10%; /* 원형 버튼 */
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px; /* 버튼의 너비 */
+    height: 40px; /* 버튼의 높이 */
+  }
+  
+  .btn:hover {
+    background-color: #4682B4; /* 호버 시 배경색 변경 */
+  }
   

@@ -64,7 +64,6 @@ export const Answer = ({ answer }) => {
         <div className={style.feedbackContainer}>
         <div className={style.answerContainer}>
         <div className={style.feedbackContainer}>
-            <h3>면접예상질문</h3>
             {[...Array(6)].map((_, i) => {
                 const questionKey = `question${i + 1}`;
                 const questionText = answer[questionKey];

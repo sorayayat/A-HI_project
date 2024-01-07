@@ -20,7 +20,7 @@ const ChangePwd = () => {
 
   const handleSearch = (e) => {
     e.preventDefault(); 
-    axios.post(`./api/in/member/before/changePwd`, formData)
+    axios.post(`/api/in/member/before/changePwd`, formData)
       .then(response => {
         if (response.data === true) {
           setIsPasswordChanged(true);
@@ -59,8 +59,13 @@ const ChangePwd = () => {
     if(newData.confirmPwd!==newData.password){
       alert('비밀번호와 비밀번호확인은 같은 값이어야 합니다.');
       return;
-    }
-    axios.put(`./api/in/member/changePwd`, newData)
+    }else if(newData.password.length < 10 || newData.password.length > 25 ||
+      newData.confirmPwd.length < 10 || newData.confirmPwd.length > 25){
+  alert('비밀번호는 10자리이상 25자리 이하여야 합니다.');
+  return;
+}
+
+    axios.put(`/api/in/member/changePwd`, newData)
     .then(response => {
       if (response.data === true) {
          navigate('/');

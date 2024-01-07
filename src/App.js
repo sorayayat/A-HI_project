@@ -18,16 +18,14 @@ import ChatbotMain from './pages/chatbot/ChatbotMain';
 import CompanyRegist from './pages/company/CompanyRegist';
 import WriteInfo from './pages/company/WriteInfo';
 import JoinFormCompany from './pages/join/JoinFormCompany';
-import CompanyUpdate from './pages/memberUpdate/CompanyUpdate';
 import SearchPage from './pages/searchpage/SearchPage';
 import InspectionDetail from './pages/inspection/InspectionDetail';
 import InspectionMain from './pages/inspection/InspectionMain';
 import InterviewSpring from './pages/InterviewSpring/InterviewSpring';
 import { ProtectedRoute } from './pages/login/ProtectedRoute';
-import ChangePwd from './pages/changePwd/ChangePwd';
 import Verify from './pages/verify/Verify';
 import RankModal from './pages/InterviewSpring/RankModal';
-import PostingLike from './pages/potingLike/PostinLike';
+import InterviewNav from './pages/interviewNav/InterviewNav';
 function App() { 
 
 
@@ -56,18 +54,18 @@ return (
         <Route path='/inspection/detail/:resumeCode' element={<InspectionDetail/>}/>
         <Route path='/companyList' element={<CompanyList />} />
         
-        <Route path='/interview' element={<Interview/>}/>
+        {/* <Route path='/interview' element={<Interview/>}/> */}
         <Route path='/createResume' element={<CreateResume/>}/>
         <Route path='/companyList/companyRegist' element={<CompanyRegist/>}/>
         <Route path='/companyList/companyRegist/writeInfo' element={<WriteInfo/>}/>
         <Route path='/SearchPage' element={<SearchPage/>}/>
-        <Route path='/interviewSpring' element={<InterviewSpring/>}/>
+        {/* <Route path='/interviewSpring' element={<InterviewSpring/>}/> */}
         
         <Route path='/verify' element={<Verify/>}/>
         <Route path='/rank' element={<RankModal/>}/>
         
         <Route path="/loginForm" element={<LoginForm />} />
-        
+        <Route path='/interviewNav/*' element={<InterviewNav />} />
         <Route path='/mypage/*' element={
       <ProtectedRoute>
         <Mypage />

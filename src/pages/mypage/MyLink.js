@@ -1,30 +1,60 @@
 import React from 'react';
-import ProtectedLink from '../login/ProtectedLink';
+import { NavLink } from 'react-router-dom';
 import styles from './mypage.module.css';
+import { useEffect, useState } from 'react';
 const MyLink = () => {
+    const [userRole, setUserRole] = useState("");
+    useEffect(() => {
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        setUserRole(userInfo.role);
+      }, []);
     return (
         <div className={styles.linkContainer}>
-       <ProtectedLink to="/mypage/member_update" className={styles.protectedlink} roles={['ROLE_MEMBER']}>
-    정보변경
-</ProtectedLink>
-        <div className={styles.marginDiv}></div> {/* 빈 div 요소 추가 */}
-        <ProtectedLink to="/mypage/member_update" className={styles.protectedlink} roles={['ROLE_COMPANY']}>
-    정보변경
-</ProtectedLink>
-        <div className={styles.marginDiv}></div> {/* 빈 div 요소 추가 */}
-        <ProtectedLink to="/mypage/changePwd" className={styles.protectedlink}>
-    비밀번호 변경
-</ProtectedLink>
-<ProtectedLink to="/mypage/withdrawal" className={styles.protectedlink}>
-    회원탈퇴
-</ProtectedLink>
-        <div className={styles.marginDiv}></div> 
-        <ProtectedLink to="/mypage/postingLike" className={styles.protectedlink}>
-    찜한공고
-</ProtectedLink>
+      {userRole === 'ROLE_MEMBER' && (
+        <NavLink
+          to="/mypage/member_update"
+          className={({ isActive }) =>
+            isActive ? `${styles.protectedlink} ${styles.activeLink}` : styles.protectedlink}
+        >
+          정보변경
+        </NavLink>
+      )}
 
-    </div>
+      {userRole === 'ROLE_COMPANY' && (
+        <NavLink
+          to="/mypage/companyUpdate"
+          className={({ isActive }) =>
+            isActive ? `${styles.protectedlink} ${styles.activeLink}` : styles.protectedlink}
+        >
+          정보변경
+        </NavLink>
+      )}
+  
+        <NavLink
+          to="/mypage/changePwd"
+          className={({ isActive }) =>
+            isActive ? `${styles.protectedlink} ${styles.activeLink}` : styles.protectedlink}
+        >
+          비밀번호 변경
+        </NavLink>
+  
+        <NavLink
+          to="/mypage/withdrawal"
+          className={({ isActive }) =>
+            isActive ? `${styles.protectedlink} ${styles.activeLink}` : styles.protectedlink}
+        >
+          회원탈퇴
+        </NavLink>
+  
+        <NavLink
+          to="/mypage/postingLike"
+          className={({ isActive }) =>
+            isActive ? `${styles.protectedlink} ${styles.activeLink}` : styles.protectedlink}
+        >
+          찜한공고
+        </NavLink>
+      </div>
     );
-};
+  };
 
 export default MyLink;

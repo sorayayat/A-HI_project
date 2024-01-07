@@ -1,5 +1,3 @@
-import styles from './mypage.module.css';
-import ProtectedLink from '../login/ProtectedLink';
 import {  Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from '../login/ProtectedRoute';
 import Withdrawal from '../withdrawal/Withdrawal';

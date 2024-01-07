@@ -16,7 +16,7 @@ const ProtectedLink = ({ to, children, roles }) => {
   };
 
   if (!isAuthenticated() || (roles && !hasRole(roles))) {
-    return null; // Do not render anything if the user is not authenticated or doesn't have the required role
+    return null; 
   }
 
   return <Link to={to}>{children}</Link>;
