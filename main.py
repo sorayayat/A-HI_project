@@ -9,14 +9,14 @@ from recommendation.recommendation import RErouter
 from recommendation.likePosting import LIrouter
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from chatbot.websocketConnection import WebSocketConnection
-from chatbot.chatbot import create_chatbot_router
+# from chatbot.chatbot import create_chatbot_router
 
 app = FastAPI()
 wsConnetion = WebSocketConnection()
 
-CBrouter = create_chatbot_router(wsConnetion)
+# CBrouter = create_chatbot_router(wsConnetion)
 
-app.include_router(CBrouter)
+# app.include_router(CBrouter)
 app.include_router(Interview_router)
 app.include_router(ITrouter)
 app.include_router(POrouter)
