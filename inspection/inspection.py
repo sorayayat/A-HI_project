@@ -164,10 +164,8 @@ async def ImageToPdf(file : UploadFile=File(...)):
         contents = await file.read()
         buffer = io.BytesIO(contents) 
         pil_image = Image.open(buffer)
-        print(pil_image.mode) 
         pdf_bytes = io.BytesIO()
         pil_image.save(pdf_bytes, format='PDF')
-        print(pil_image.mode) 
         pdf_bytes.seek(0) 
 
         return Response(content=pdf_bytes.getvalue(), media_type="application/pdf")
