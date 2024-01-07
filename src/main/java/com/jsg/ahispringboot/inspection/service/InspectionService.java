@@ -102,7 +102,7 @@ public class InspectionService {
     @Transactional
     public Map<String, Object> imageToPdf(String resumCode, MultipartFile image) {
 
-        Long userCode = 3L;
+        Long userCode = 1L;
         LocalDateTime date = LocalDateTime.now();
         String newDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
         Long code = Long.parseLong(resumCode);
