@@ -128,6 +128,7 @@ async def readResume(file : UploadFile = File(...)):
 @ITrouter.post("/modify")
 async def modify(modifyResume : RequestEntity):
     print("시작")
+    print(modifyResume.modify)
     data = modifyResume.modify
     start = time.time()
     for d in data:
