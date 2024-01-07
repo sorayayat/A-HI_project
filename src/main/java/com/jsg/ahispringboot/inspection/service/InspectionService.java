@@ -11,8 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -97,6 +99,7 @@ public class InspectionService {
         return modifyResume;
     }
 
+    @Transactional
     public Map<String, Object> imageToPdf(String resumCode, MultipartFile image) {
 
         Long userCode = 3L;
@@ -107,20 +110,22 @@ public class InspectionService {
         ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
         String title = fileUtils.getTitle(resumeDTO.getResumePath());
         ByteArrayResource resource = fileUtils.UploadFileToByteArray(image, title);
-        log.info("resource : {}", resource);
         HttpEntity<MultiValueMap<String, Object>> httpEntity = fileUtils.UploadFileCreatebody(resource, "file");
         byte[] barr = fileUtils.getPdf(endPoint, httpEntity);
-        log.info("barr : {}", barr);
         String path = fileUtils.SavePdf(barr, resumeDTO.getMember().getName(), title);
+        log.info("path : {}", path);
+
         Resume modifyResume = new Resume();
         modifyResume.setResumePath(path);
         modifyResume.setCreateDate(newDate);
-        modifyResume.getMember().setId(code);
+        modifyResume.setMember(resume.getMember());
+        ;
         inspectionRepositroy.save(modifyResume);
 
         Map<String, Object> map = new HashMap<>();
         map.put("title", title);
         map.put("pdf", barr);
+        log.info("map : {}", map);
 
         return map;
     }

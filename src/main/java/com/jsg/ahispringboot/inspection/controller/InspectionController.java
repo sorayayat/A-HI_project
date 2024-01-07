@@ -63,12 +63,11 @@ public class InspectionController {
     @PostMapping("/saveResume")
     public ResponseEntity<ResponseDTO> postMethodName(@RequestParam("resumeCode") String resumeCode,
             @RequestParam("image") MultipartFile image) {
-
-        log.info("resumeCode : {}", resumeCode);
-        log.info("image : {}", image.getName());
-        log.info("image : {}", image.getOriginalFilename());
-        log.info("image : {}", image.getSize());
-        log.info("image : {}", image.getContentType());
+        log.info("H2");
+        if (image.isEmpty()) {
+            log.info("파일 없음");
+            return ResponseEntity.badRequest().body(new ResponseDTO(HttpStatus.BAD_REQUEST, "파일이 없습니다.", null));
+        }
         Map<String, Object> pdf = inspectionsService.imageToPdf(resumeCode, image);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 저장하였습니다.", pdf));
     }

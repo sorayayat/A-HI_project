@@ -3,6 +3,7 @@ package com.jsg.ahispringboot.inspection.utils;
 import java.util.List;
 
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;

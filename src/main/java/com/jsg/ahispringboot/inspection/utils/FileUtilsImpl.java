@@ -1,6 +1,7 @@
 package com.jsg.ahispringboot.inspection.utils;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -10,11 +11,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -161,21 +166,25 @@ public class FileUtilsImpl implements FileUtils {
 
     public String SavePdf(byte[] resource, String name, String title) {
         String path = staticPath + "resume/" + name + "/" + title + "-수정본" + ".pdf";
+        FilenameFilter filter = new FilenameFilter() {
+            public boolean accept(File f, String name) {
+                return name.contains(title + "-수정본");
+            }
+        };
         try {
             File file = new File(path);
 
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdir();
-            } else if (file.exists()) {
-                File[] files = file.listFiles(new FilenameFilter() {
-                    public boolean accept(File dir, String name) {
-                        return name.contains(title);
-                    }
-                });
-                String newPath = staticPath + "resume/" + name + "/" + title + "-수정본" + files.length + 1 + ".pdf";
+            }
+            if (file.exists()) {
+                String[] fileName = file.list(filter);
+                if (fileName == null) {
+                    fileName = new String[0];
+                }
+                String newPath = staticPath + "resume/" + name + "/" + title + "-수정본" + (fileName.length + 1) + ".pdf";
                 File newFile = new File(newPath);
                 try (FileOutputStream fos = new FileOutputStream(newFile)) {
-
                     fos.write(resource);
                 }
             } else {
@@ -191,4 +200,5 @@ public class FileUtilsImpl implements FileUtils {
         return path;
 
     }
+
 }
