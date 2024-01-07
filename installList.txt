@@ -4,3 +4,6 @@ pip install —upgrade openai
 12-27
 pip install SQLAlchemy
 pip install mysql
+
+01-05
+pip install reportlab
