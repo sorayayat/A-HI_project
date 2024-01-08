@@ -1,16 +1,19 @@
 import style from './CompanyDetails.module.css';
 import { useEffect, useState } from 'react';
 import { Link, animateScroll as scroll } from 'react-scroll';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import { useDispatch , useSelector } from 'react-redux';
-import { callUpdatePostingLike , callGetLikeState } from '../../apis/postingAPICalls'
+import { callUpdatePostingLike , callGetLikeState , callDeletePosting} from '../../apis/postingAPICalls'
+import Swal from 'sweetalert2';
+
 
 function CompanyDetails() {
 
     const { state } = useLocation();
     const posting = state?.posting
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     const [isLiked, setIsLiked] = useState(null);
@@ -63,6 +66,27 @@ function CompanyDetails() {
         }))
 
         setIsLiked((prevIsLiked) => !prevIsLiked);
+    }
+
+    const onClickDeleteHandler = (postingCode) => {
+
+        
+        dispatch(callDeletePosting({
+
+            postingCode : postingCode
+        }))
+
+        Swal.fire({
+            text: '삭제완료',
+            showCancelButton: false, // 취소 버튼 비활성화
+            confirmButtonText: '확인', // 확인 버튼 텍스트 지정
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 확인 버튼이 눌렸을 때 페이지 이동
+                navigate('/companyList');
+            }
+        });
+
     }
 
     return (
@@ -127,6 +151,7 @@ function CompanyDetails() {
                     <div className={style.companyInfomation}><p>기업 정보</p></div>
 
                     <div className={style.companyInfoDetails}>
+                        
                         <div>회사명: {posting.company.company}</div>
                         <div>기업 형태 : {posting.company.companyType}</div>
                         <div>사원수 : {posting.company.employeesNumber}</div>
@@ -134,8 +159,11 @@ function CompanyDetails() {
                         <div>대표 이름 :{posting.company.name}</div>
                         <div>기업 페이지: <a href={posting.company.companyHomepage} target="_blank" rel="noopener noreferrer">{posting.company.companyHomepage}</a></div>
                         <div>상세 주소 :{posting.location}</div>
+
                     </div>
                 </div>
+
+                <button className={style.deleteButton} onClick={() =>onClickDeleteHandler(posting.postingCode)}>삭제</button>
             </div>
         </>
     );

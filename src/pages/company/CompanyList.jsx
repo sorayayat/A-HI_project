@@ -1,5 +1,5 @@
 import style from './CompanyList.module.css'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { callSelectJobListing } from '../../apis/postingAPICalls'
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,15 +9,25 @@ function Apply() {
 
     const dispatch = useDispatch();
     const posting = useSelector(state => state.companyReducer.getJoblist);
-    const postingList = posting?.data;
+    const postingList = posting?.data?.data;
     const navigate = useNavigate();
     const postingLikeList = useSelector(state => state.recommendationReducer.postingLike);
 
-    console.log(postingLikeList , ">?");
     
-    
-    
-    
+    const pageInfo = posting?.data?.pageInfo;
+
+    const [start, setStart] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageEnd, setPageEnd] = useState(1);
+
+    const pageNumber = [];
+
+    if(pageInfo){
+        for(let i = 1; i <= pageInfo.pageEnd; i++){
+            pageNumber.push(i);
+        }
+    }
+
 
     const sortByPostingCode = (a, b) => b.postingCode - a.postingCode;
 
@@ -27,12 +37,12 @@ function Apply() {
         window.scrollTo(0, 0);
 
         dispatch(callSelectJobListing({
-
+            currentPage : currentPage,
         }))
 
         dispatch(callSelectLikePosting({
             memberCode: 3
-        }))
+        }),[currentPage])
 
 
 
@@ -40,12 +50,10 @@ function Apply() {
         return () => {
             document.body.classList.remove(style.companyListBody);
         };
-    }, []);
+    }, [currentPage]);
 
     function getPostingCity(fullAddress) {
 
-        
-        
         // 예시: "서울 광진구 천호대로124길 20"
         const addressParts = fullAddress.split(' '); // 공백을 기준으로 나눔
         const city = addressParts[0] +  " "  + addressParts[1]; // 첫 번째 부분이 서울시
@@ -55,11 +63,6 @@ function Apply() {
         return city;
     }
 
-    
-    
-
-
-
     const onClickPostingHandler = (posting) => {
 
         const url = `/companyDetails/${posting.postingCode}`
@@ -68,8 +71,6 @@ function Apply() {
         navigate(url, { state: { posting } });
 
     }
-
-
 
 
     return (
@@ -84,7 +85,7 @@ function Apply() {
                                 공고 등록
                             </Link>
                         </div>
-                        {postingList?.sort(sortByPostingCode).map((posting, index) => (
+                        {postingList?.map((posting, index) => (
                             <div key={index} className={style.companyDetails} onClick={() => onClickPostingHandler(posting, index)}>
                                 <div className={style.companyTitle}>
                                     <div><strong>{posting.postingTitle}</strong></div>
@@ -124,6 +125,37 @@ function Apply() {
                     ))}
                 </div>
             </div>
+            <div style={{ listStyleType: "none", display: "flex", justifyContent: "center" }} className={style.pagingContainer}>
+                            { Array.isArray(postingList) &&
+                            <button 
+                                onClick={() => setCurrentPage(currentPage - 1)} 
+                                disabled={currentPage === 1}
+                                className={ style.pagingBtn }
+                            >
+                                &lt;
+                            </button>
+                            }
+                            {pageNumber.map((num) => (
+                            <li key={num} onClick={() => setCurrentPage(num)}>
+                                <button
+                                    style={ currentPage === num ? {backgroundColor : '#3498db' , color : "white"} : null}
+                                    className={ style.pagingBtn }
+                                >
+                                    {num}
+                                </button>
+                            </li>
+                            ))}
+                            { Array.isArray(postingList) &&
+                            <button 
+                                className={ style.pagingBtn }
+                                onClick={() => setCurrentPage(currentPage + 1)} 
+                                disabled={currentPage === pageInfo.pageEnd || pageInfo.total == 0}
+                            >
+                                &gt;
+                            </button>
+                            }
+                        </div>
+            
         </>
 
     )
