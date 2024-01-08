@@ -23,7 +23,6 @@ public class CompanyEntity {
     private Long companyId;
 
     @Column(name = "company")
-
     private String company;
 
     @Column(name = "employees_number")
