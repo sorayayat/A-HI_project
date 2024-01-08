@@ -6,6 +6,7 @@ import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import com.jsg.ahispringboot.member.service.MemberService;
 import com.jsg.ahispringboot.member.utils.FileProcess;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -37,13 +38,13 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public Long memberSignup(@RequestBody MemberDto memberDto) {
+    public Long memberSignup(@RequestBody MemberDto memberDto) throws MessagingException {
         Long signup = memberServiceImpl.signup(memberDto);
         return signup;
     }
 
     @PostMapping("/signupCompany")
-    public Long companySignup(@ModelAttribute CompanyDto companyDto, @RequestParam(required = false) MultipartFile logo) {
+    public Long companySignup(@ModelAttribute CompanyDto companyDto, @RequestParam(required = false) MultipartFile logo) throws MessagingException {
         Long signup = memberServiceImpl.companySignup(companyDto, logo);
         return signup;
     }

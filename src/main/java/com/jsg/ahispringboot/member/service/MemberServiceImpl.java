@@ -16,6 +16,7 @@ import com.jsg.ahispringboot.member.repository.MemberRepository;
 import com.jsg.ahispringboot.member.repository.MemberRepositoryDataJpa;
 import com.jsg.ahispringboot.member.utils.FileProcess;
 import com.jsg.ahispringboot.member.utils.MailSend;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -69,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Long signup(MemberDto memberDto) {
+    public Long signup(MemberDto memberDto) throws MessagingException {
         MemberEntity memberEntity = MemberTransMapper.INSTANCE.dtoToEntity(memberDto);
         memberEntity.setPassword(passwordEncoder.encode(memberEntity.getPassword()));
         memberEntity.setRole(MemberRole.ROLE_GUEST);
@@ -80,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Long companySignup(CompanyDto companyDto, MultipartFile logo) {
+    public Long companySignup(CompanyDto companyDto, MultipartFile logo) throws MessagingException {
         LogoEntity logoEntity;
         if(logo!=null){
             logoEntity = fileProcess.fileSave(logo);
@@ -225,7 +226,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void confirmMailSend(MemberEntity memberEntity) {
+    public void confirmMailSend(MemberEntity memberEntity) throws MessagingException {
         String token = memberEntity.getRole().toString()+UUID.randomUUID().toString();
         String verificationUrl = "http://localhost:3000/verify?token=" + token;
             ConfirmTokenEntity confirmTokenEntity =ConfirmTokenEntity.builder()
