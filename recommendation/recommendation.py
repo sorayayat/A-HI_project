@@ -98,7 +98,7 @@ async def get_posting(file: UploadFile = File(...)):
         # filename = f"{str(uuid.uuid4())}.jpg"  # uuid로 유니크한 파일명으로 변경
         # file_path = os.path.join(UPLOAD_DIR, filename)
 
-        with pdfplumber.open(BytesIO(content)) as pdf:
+        with pdfplumber.open(BytesIO(content), encoding='UTF8') as pdf:
             # 각 페이지의 텍스트를 추출하여 리스트로 저장
             text_content = [page.extract_text() for page in pdf.pages]
 

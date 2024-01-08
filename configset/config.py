@@ -1,11 +1,15 @@
 from starlette.config import Config
-from dotenv import load_dotenv
-env = Config(".env")
-load_dotenv()
+from dotenv import load_dotenv , dotenv_values
+
+
+
+env = dotenv_values('.env', encoding='utf-8')
 def getAPIkey():
-    return env('OPENAI_API_KEY')
+    return env.get('OPENAI_API_KEY')
 def getModel():
-    return env('MODEL')
+    return env.get('MODEL')
 
 def geturl():
-    return env('dburl')
+    return env.get('dburl')
+
+load_dotenv()
