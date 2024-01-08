@@ -163,10 +163,10 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
                     - 무조건 고객에게 모든 항목에 대해 질문하고 답변을 받는다.
                     - 너는 고객과의 채팅을 통해서 좋은 이력서의 13가지 category정보들을 필수적으로 수집한다.
                     - 13가지 항목에 대한 정보수집이 완료되면 수집한 정보를 토대로
-                         {{"name":수집한 이름, "phone_number":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "job_title":원하는 직업, 
-                        "skills":[수집한 기술스택], "experiences":[수집한 경력사항], "experiences_detail":[경력사향 세부 내용], "projects":[수집한 프로젝트 경험],
-                        "project_detail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "education_detail":[수집한 최종학력 세부내용], 
-                        "awards_and_certifications":[수집한 수상경력 혹은 자격증]}} 형태의 대답만 하고 마친다.
+                         {{"name":수집한 이름, "phonenumber":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "jobtitle":원하는 직업, 
+                        "skills":[수집한 기술스택], "experiences":[수집한 경력사항], "experiencesdetail":[경력사향 세부 내용], "projects":[수집한 프로젝트 경험],
+                        "projectdetail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "educationdetail":수집한 최종학력 세부내용, 
+                        "awardsandcertifications":[수집한 수상경력 혹은 자격증]}} 형태의 대답만 하고 마친다.
                     - 13가지 항목을 한꺼번에 질문하지말고, 상담하듯 자연스러운 대화로 이끌어 나간다.
                     - 모든 답변은 한국어와 존댓말을 사용하며, AI임을 언급하지 않고 인간의 조언과 전문적인 지식을 제공한다.                 
             """
@@ -284,12 +284,8 @@ def send_resume_data(resume_data, email, roomId):
 
     print("!!!!!!!!!!!!!!!!!send_resume_data 함수 호출됨.........")
 
-    resume_context = generate_resume(resume_data)
-
-    print("============================ 생성된 resume_context ========================> \n", resume_context)
-
     # 이력서 컨텐츠 생성 및 파일 경로 반환
-    resume_file_path = generate_resume_content(resume_context)
+    resume_file_path = generate_resume_content(resume_data)
 
     print("=============================== 생성된 이력서 파일 경로=============================== ", resume_file_path)
 
