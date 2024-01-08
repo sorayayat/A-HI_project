@@ -54,7 +54,7 @@ public class QMemberEntity extends EntityPathBase<MemberEntity> {
 
     public QMemberEntity(Class<? extends MemberEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.companyEntity = inits.isInitialized("companyEntity") ? new QCompanyEntity(forProperty("companyEntity")) : null;
+        this.companyEntity = inits.isInitialized("companyEntity") ? new QCompanyEntity(forProperty("companyEntity"), inits.get("companyEntity")) : null;
     }
 
 }

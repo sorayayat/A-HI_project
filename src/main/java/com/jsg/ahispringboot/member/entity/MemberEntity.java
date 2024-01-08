@@ -2,9 +2,8 @@ package com.jsg.ahispringboot.member.entity;
 
 import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 
 @Entity
 @Table(name = "member")
@@ -18,7 +17,7 @@ public class MemberEntity {
     private Long id;
 
     private String email;
-    @Column(name = "name")
+    @Column(name = "member_name")
     private String name;
     private String password;
     private String phoneNumber;

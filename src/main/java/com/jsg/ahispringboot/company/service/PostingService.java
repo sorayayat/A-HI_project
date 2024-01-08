@@ -2,14 +2,21 @@ package com.jsg.ahispringboot.company.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jsg.ahispringboot.common.Criteria;
+import com.jsg.ahispringboot.company.dto.CompanyDTO;
 import com.jsg.ahispringboot.company.dto.PostingDTO;
 import com.jsg.ahispringboot.company.entity.*;
 import com.jsg.ahispringboot.company.repository.*;
+import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.entity.CompanyEntity;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -117,9 +124,6 @@ public class PostingService {
 
 
 
-        System.out.println(posting + "gg");
-
-
 
 
         return modelMapper.map(posting, PostingDTO.class);
@@ -169,6 +173,8 @@ public class PostingService {
 
         Integer postingCode = postingDTO.getPostingCode();
         MemberEntity member = memberRepository2.findById(memberCode);
+
+        System.out.println(member + "ㅠ");
         Posting posting = postingRepository.findByPostingCode(postingCode);
 
         // 이미 존재하는지 확인
@@ -190,7 +196,7 @@ public class PostingService {
             return result;
         }
 
-        System.out.println(existingPostingLike+ "gdgd");
+
 
         return result;
     }
@@ -222,4 +228,66 @@ public class PostingService {
         return result;
     }
 
+
+    public List<CompanyDTO> searchCompany() {
+
+        List<CompanyEntity> companyList = companyRepository.findAll();
+
+
+
+
+        List<CompanyDTO> companyDTOList = companyList.stream().map(companyEntity -> modelMapper.map(companyEntity, CompanyDTO.class)).collect(Collectors.toList());
+
+
+        return companyDTOList;
+    }
+
+    public List<PostingDTO> searchCompanyName(String searchName) {
+
+        CompanyEntity company = companyRepository.findByCompany(searchName);
+
+
+
+        List<Posting> postingList = postingRepository.findByCompanyCompanyId(company.getCompanyId());
+
+        System.out.println(postingList);
+
+        List<PostingDTO> postingDTOList = postingList.stream().map(posting -> modelMapper.map(posting, PostingDTO.class)).collect(Collectors.toList());
+
+        return postingDTOList;
+    }
+
+    public List<PostingDTO> selectJobPostingListPaging(Criteria cri) {
+
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+
+        Pageable paging = PageRequest.of(index, count, Sort.by("postingCode").descending());
+
+        Page<Posting> result = postingRepository.findAll(paging);
+
+        List<Posting> postingList = result.getContent();
+
+        System.out.println(postingList + "????");
+
+        return postingList.stream().map(posting -> modelMapper.map(posting, PostingDTO.class)).collect(Collectors.toList());
+    }
+
+    public int selectPostingTotal() {
+
+        List<Posting> postingList = postingRepository.findAll();
+
+        return postingList.size();
+    }
+
+
+    @Transactional
+    public void deletePosting(Integer postingCode) {
+
+        Posting posting = postingRepository.findByPostingCode(postingCode);
+
+        postingRepository.delete(posting);
+
+
+    }
 }

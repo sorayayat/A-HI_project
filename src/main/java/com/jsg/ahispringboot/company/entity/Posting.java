@@ -53,17 +53,22 @@ public class Posting {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    @JsonIgnore
     private CompanyEntity company;
 
-    @OneToMany(mappedBy = "posting")
+    @OneToMany(mappedBy = "posting" ,  cascade = CascadeType.ALL, orphanRemoval = true)
     List<PostingExperience> postingExperienceList;
 
-    @OneToMany(mappedBy = "posting")
+    @OneToMany(mappedBy = "posting" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<WorkType> workTypeList;
 
-    @OneToMany(mappedBy = "posting")
+    @OneToMany(mappedBy = "posting" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<Skill> skillList;
+
+    @OneToMany(mappedBy = "posting" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    List<PostingLike> postingLikeList;
+
+
 
 
     @PrePersist
