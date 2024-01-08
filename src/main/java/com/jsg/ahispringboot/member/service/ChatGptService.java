@@ -22,9 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
@@ -52,9 +50,11 @@ public class
 
 
     public String gptMake(String source,String prompt) {
-        ChatGptRequest request = new ChatGptRequest(model, source, temperature, max_tokens);
+        Map<String, String> responseFormat = new HashMap<>();
+        responseFormat.put("type", "json_object");
+        ChatGptRequest request = new ChatGptRequest(model, source, temperature, max_tokens, responseFormat);
+      //  ChatGptRequest request = new ChatGptRequest(model, source, temperature, max_tokens);
         request.addSystemMessage(prompt);
-        log.info("source={}",source);
         ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
         return chatGptResponse.getChoices().get(0).getMessage().getContent();
     }
@@ -89,9 +89,9 @@ public class
                     "6. 주어진 질문은 면접 질문과 그에 대한 응답 이야 인력을 선발 하는 능력이 탁월한 it 회사의 평가와 분석 능력이 탁월 하고 객관적이고 공정 하며 직관력과 판단력이 뛰어난 23년차 하고 인사 담당 면접관의 관점에서 면접 질문에 대한 " +
                     " 응답을 분석하고 피드백을 해주는데 응답에서 잘한점과 개선이 필요한 부분을 알려 줘서 어떤식으로 개선하면 좋은지 알려주고 면접 질문에 대한 완벽한 정답을 생성해줘 \n" +
                     "8. 답변은 반드시 존댓말과 한글로만 하면서 면접 예상 질문만 생성할 것 다른 설명 이나 피드백은 하지 말고 그냥 면접예상질문만 생성할것 \n" +
-                    "9. indexing은 json 형태로  goodjob:응답 에서 잘한 부분을 구체적으로 말해줘 만약 면접과 관련 없는 응답을 했을때 면접과 관련이 없는 응답입니다 라는 늬앙스의 text를 생성해줘 improve:응답에서 별로인 부분을 구체적으로 지적해주고 어떤식으로 개선하면 좋을지 말해줘 만약 " +
-                    "면접과 관련이 없는 응답을 했다면 응답에서 어떤점을 개선해야 면접과 관련이 있는 응답이 되는지 text를 생성해줘 perfect:질문에 대한 정답 모범 답안을 생성해줘  " +
-                    " index:indexing번호 맨앞에는 result:success 이걸 꼭 넣어줘 데이터 가공 하려고 하는 거니깐 반드시 지켜줘 특히 면접과 관련이 없는 응답일 때 내가 지시한대로 지적하고 개선하라고 이야기해줘 Hallucination때문에 맘대로 정상적인 답변인거처럼 대답하지말고 이부분을 신경 써줄래";
+                    "9. indexing은 json 형태로  goodjob: <이곳에는 응답에서 잘한점을 구체적으로 언급해줘 잘한점이 없거나 면접질문과 관련없는 대답을 했을경우 질문과 관련없는 응답입니다 같은 지적해주는 문장을 생성해줘> improve:<이곳에는 응답에서 별로인 부분을 구체적으로 지적해주고 어떤식으로 개선하면 좋을지 말해줘>  " +
+                    " perfect:<질문에 대한 정답 모범 답안을 생성해줘>  " +
+                    " index:<indexing번호> 맨앞에는 result:<success> 이걸 꼭 넣어줘 데이터 가공 하려고 하는 거니깐 반드시 지켜줘 특히 면접과 관련이 없는 응답일 때 내가 지시한대로 지적하고 개선하라고 이야기해줘 Hallucination때문에 맘대로 정상적인 답변인거처럼 대답하지말고 이부분을 신경 써줄래";
             return feedback;
         }
     }
@@ -99,43 +99,42 @@ public class
 
 
     public String validateCheck(String queryString) throws JsonProcessingException {   //쿼리스트링 유효성검사
-        String confirm = "postCode=";
+        String confirm = "companyDetails/";
         String result;
-        if (queryString.contains(confirm)) {            // postCode 가 있는지 검사
+
+        if (queryString.contains(confirm)) { // companyDetails/ 가 있는지 검사
             int startIndex = queryString.indexOf(confirm) + confirm.length();
-            int endIndex = queryString.indexOf("&", startIndex);
-            if (endIndex == -1) {
-                endIndex = queryString.length();
-            }
-            String postCode = queryString.substring(startIndex, endIndex);
-            if (postCode.isEmpty()) {     // postCode= 자체는 있지만 빈값인경우
+            String pathVariable = queryString.substring(startIndex);
+
+            if (pathVariable.isEmpty()) { // pathVariable이 빈값인 경우
                 result = getResult();
                 return result;
-            } else if (postCode.matches("\\d+")) {    // 유효성을 통과
-                GptResult gptResult = getPosting(postCode);
-                if (gptResult.getResult().equals("success")) {  // 유효성을 통과하고 db에 저장된 공고도 있는경우 gpt에 프롬프트
+            } else if (pathVariable.matches("\\d+")) { // pathVariable이 숫자로만 구성되어 있는 경우
+                GptResult gptResult = getPosting(pathVariable);
+                if (gptResult.getResult().equals("success")) { // 유효성을 통과하고 db에 저장된 공고가 있는 경우
                     String fullPosting = gptResult.getQuestion1();
                     String requirements = "posting";
                     String prompt = promptMake(requirements);
-                    String gptAnswer = gptMake(fullPosting,prompt);
+                    String gptAnswer = gptMake(fullPosting, prompt);
                     log.info("answer={}", gptAnswer);
                     String jsonGpt = transJson(gptAnswer);
-                    return jsonGpt;
-                } else {  // 유효성은 통과했지만 db에 저장된 공고가 없는경우
+                    return gptAnswer;
+                } else { // 유효성은 통과했지만 db에 저장된 공고가 없는 경우
                     result = getResult();
                     return result;
                 }
-            } else {  // 숫자말고 다른 문자도 포함된경우
+            } else { // 숫자가 아닌 다른 문자가 포함된 경우
                 result = getResult();
                 return result;
             }
-        } else {   // postCode 가 없는경우
+        } else { // companyDetails/ 가 없는 경우
             result = getResult();
             return result;
         }
     }
 
-    private String transJson(String gptAnswer) throws JsonProcessingException {
+
+        private String transJson(String gptAnswer) throws JsonProcessingException {
 
 
         JSONObject json = new JSONObject();
@@ -213,6 +212,6 @@ public class
         String gptAnswer = gptMake(source,prompt);
         String jsonGpt = transJson(gptAnswer);
         log.info("answer={}", gptAnswer);
-        return jsonGpt;
+        return gptAnswer;
     }
 }
