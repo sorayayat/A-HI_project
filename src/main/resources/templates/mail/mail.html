@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>가입 인증</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; padding: 40px; text-align: center;">
+<div style="background-color: white; padding: 30px; margin: auto; width: 80%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <h1 style="color: #333; margin-bottom: 20px;"> <span style="color: #3674EA;">jsg</span> 가입을 환영합니다.</h1>
+    <p style="margin-bottom: 30px;">아래 버튼을 클릭하여 이메일 주소를 확인해 주세요.</p>
+    <a th:href="${code}" style="background-color: #3674EA; color: white; padding: 15px 30px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px; font-weight: bold; margin: 20px auto; display: block; width: max-content;">이메일 확인</a>
+</div>
+</body>
+</html>

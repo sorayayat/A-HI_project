@@ -42,6 +42,8 @@ public class QPosting extends EntityPathBase<Posting> {
 
     public final ListPath<PostingExperience, QPostingExperience> postingExperienceList = this.<PostingExperience, QPostingExperience>createList("postingExperienceList", PostingExperience.class, QPostingExperience.class, PathInits.DIRECT2);
 
+    public final ListPath<PostingLike, QPostingLike> postingLikeList = this.<PostingLike, QPostingLike>createList("postingLikeList", PostingLike.class, QPostingLike.class, PathInits.DIRECT2);
+
     public final StringPath postingTitle = createString("postingTitle");
 
     public final ListPath<Skill, QSkill> skillList = this.<Skill, QSkill>createList("skillList", Skill.class, QSkill.class, PathInits.DIRECT2);
@@ -68,7 +70,7 @@ public class QPosting extends EntityPathBase<Posting> {
 
     public QPosting(Class<? extends Posting> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.company = inits.isInitialized("company") ? new com.jsg.ahispringboot.member.entity.QCompanyEntity(forProperty("company")) : null;
+        this.company = inits.isInitialized("company") ? new com.jsg.ahispringboot.member.entity.QCompanyEntity(forProperty("company"), inits.get("company")) : null;
     }
 
 }

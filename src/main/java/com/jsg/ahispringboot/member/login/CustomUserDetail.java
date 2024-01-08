@@ -2,6 +2,7 @@ package com.jsg.ahispringboot.member.login;
 
 import com.jsg.ahispringboot.member.entity.MemberEntity;
 //import com.mysql.cj.log.Log;
+import com.jsg.ahispringboot.member.memberEnum.MemberRole;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -67,25 +68,27 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        boolean result = (memberEntity.getRole()== MemberRole.ROLE_GUEST)?false:true;
+        return result;
+
     }
 
-    // public String company(){
-    //     return memberEntity.getCompanyEntity().getCompany();
-    // }
-    // public String companyType(){
-    //     return memberEntity.getCompanyEntity().getCompanyType();
-    // }
-    // public int employeesNumber(){
-    //     return memberEntity.getCompanyEntity().getEmployeesNumber();
-    // }
-    // public Date establishmentDate(){
-    //     return memberEntity.getCompanyEntity().getEstablishmentDate();
-    // }
-    // public String companyHomepage(){
-    //     return memberEntity.getCompanyEntity().getCompanyHomepage();
-    // }
-    // public Long companyPk(){
-    //     return memberEntity.getCompanyEntity().getCompanyId();
-    // }
+     public String company(){
+         return memberEntity.getCompanyEntity().getCompany();
+     }
+     public String companyType(){
+         return memberEntity.getCompanyEntity().getCompanyType();
+     }
+     public int employeesNumber(){
+         return memberEntity.getCompanyEntity().getEmployeesNumber();
+     }
+     public Date establishmentDate(){
+         return memberEntity.getCompanyEntity().getEstablishmentDate();
+     }
+     public String companyHomepage(){
+         return memberEntity.getCompanyEntity().getCompanyHomepage();
+     }
+     public Long companyPk(){
+         return memberEntity.getCompanyEntity().getCompanyId();
+     }
 }

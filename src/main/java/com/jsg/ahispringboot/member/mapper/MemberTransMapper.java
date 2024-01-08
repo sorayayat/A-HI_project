@@ -1,8 +1,10 @@
 package com.jsg.ahispringboot.member.mapper;
 
 import com.jsg.ahispringboot.member.dto.CompanyDto;
+import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.entity.CompanyEntity;
+import com.jsg.ahispringboot.member.entity.ConfirmTokenEntity;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
