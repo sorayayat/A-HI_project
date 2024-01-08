@@ -109,7 +109,7 @@ public class AhiSpringbootApplicationTests {
 
 
     private LogoEntity createAndPersistLogo(int index) {
-        String[] imageNames = {"jingjing.jpg", "loading1.jpg", "loading2.jpg", "loading3.jpg"};
+        String[] imageNames = {"loading1.jpg", "loading2.jpg", "loading3.jpg"};
         String imageName = imageNames[new Random().nextInt(imageNames.length)];
         String imagePath = "E:\\hi28\\AHI-SPRINGBOOT\\logoimg";
 
