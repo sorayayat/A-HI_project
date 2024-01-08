@@ -17,42 +17,33 @@ engine = create_engine(
 metadata_obj = MetaData()
 metadata_obj.bind = engine
 
+
+def findPosting(search_Code):
+    SkillTBL = Table("skill", metadata_obj, autoload_with=engine)
+    
+    stmt = select(SkillTBL).where(SkillTBL.c.posting_code == search_Code)
 # 3. Make SessionLocal class
-# 생성한 SQLAlchemy engine 을 물려서(?) 세션을 생성합니다.
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-db = SessionLocal()
-
-# 4. Base class 생성
-# Base = declarative_base()
-
+    with engine.connect() as connection:
+        results = connection.execute(stmt).fetchall()
+# 4. skill_names 가져온다
+    skill_names = [result.skill_name for result in results]
+    if skill_names == null:
+        skill_names = "공고가 없습니다"
+        return skill_names
 # 5. db에서 데이터 조회를 해서 skill 정보를 리턴한다.
-
-def findPosting(findCode):
-    SkillTable = Table("skill", metadata_obj, autoload_with=engine)
-
-    skill_stmt = select(SkillTable).where(SkillTable.c.posting_code == findCode)
-    results = db.execute(skill_stmt).fetchall()
-
-    skill_names = []
-    for result in results:
-        skill_names.append(result.skill_name)
-
-    db.close()
     return skill_names
+
 
 # user의 이력서 정보를 가져온다
 def findResume(userData):
     FileTBL = Table("file", metadata_obj, autoload_with=engine)
+    stmt = select(FileTBL).where(FileTBL.c.posting_code == userData)
 
-    file_stmt = select(FileTBL).where(FileTBL.c.posting_code == userData)
-    results = db.execute(file_stmt).fetchall()
+    with engine.connect() as connection:
+        results = connection.execute(stmt).fetchall()
 
     file_names = []
-    for result in results:
-        file_names.append(result.file_names)
-
-    db.close()
+    
     return file_names
 
 # # 조회
