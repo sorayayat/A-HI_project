@@ -33,7 +33,7 @@ db = SessionLocal()
 # 4. Base class 생성
 Base = declarative_base()
 
-some_table = Table("member",metadata_obj,autoload_with=engine)
+# some_table = Table("member",metadata_obj,autoload_with=engine)
 
 # stmt = select(some_table)
 # datas = db.execute(stmt)

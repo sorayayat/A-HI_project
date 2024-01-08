@@ -24,8 +24,8 @@ OPENAI_API_KEY = getAPIkey()
 openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
 UPLOAD_DIR = "recommendation/resumeImg"
-# client = chromadb.HttpClient(host="13.125.242.46", port=8005)
-client = chromadb.PersistentClient(path="C:\dev\jgsProject\chromaDB")
+client = chromadb.HttpClient(host="52.79.181.213", port=8005)
+# client = chromadb.PersistentClient(path="C:\dev\jgsProject\chromaDB")
 
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
