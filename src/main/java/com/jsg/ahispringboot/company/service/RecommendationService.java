@@ -71,6 +71,8 @@ public class RecommendationService {
 
         List<PostingLike> postingLikes =  postingLikeRepository.findByMemberEntityId(memberCode);
 
+        System.out.println(postingLikes + "?");
+
         List<PostingDTO> postingDTOList = new ArrayList<>();
 
 

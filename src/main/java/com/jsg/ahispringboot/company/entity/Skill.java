@@ -25,4 +25,6 @@ public class Skill {
     @JoinColumn(name = "posting_code")
     @JsonIgnore
     private Posting posting;
+
+
 }

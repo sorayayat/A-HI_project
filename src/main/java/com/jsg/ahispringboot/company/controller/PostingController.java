@@ -2,13 +2,19 @@ package com.jsg.ahispringboot.company.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jsg.ahispringboot.common.Criteria;
+import com.jsg.ahispringboot.common.PageDTO;
+import com.jsg.ahispringboot.common.PagingResponseDTO;
 import com.jsg.ahispringboot.common.ResponseDTO;
+import com.jsg.ahispringboot.company.dto.CompanyDTO;
 import com.jsg.ahispringboot.company.dto.PostingDTO;
 import com.jsg.ahispringboot.company.entity.PostingLike;
 import com.jsg.ahispringboot.company.service.PostingService;
+import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,7 +92,7 @@ public class PostingController {
 
         );
 
-        System.out.println(responseEntity + "확인" );
+
 
 
         return ResponseEntity.ok()
@@ -98,19 +104,35 @@ public class PostingController {
 
     }
 
-    @GetMapping("jobListing")
-    public ResponseEntity<ResponseDTO> selectJobPosting() {
+    @GetMapping("jobListing/{offset}")
+    public ResponseEntity<ResponseDTO> selectJobPosting(@PathVariable String offset) {
+
+        System.out.println(offset + "offset");
+
+        int total = 0;
+
+        Criteria cri = new Criteria(Integer.valueOf(offset), 10);
+
+        List<PostingDTO> postingDTOList = postingService.selectJobPostingListPaging(cri);
+
+        total = postingService.selectPostingTotal();
+
+        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+        /* 1. offset의 번호에 맞는 페이지에 뿌려줄 Product들 */
+        pagingResponseDTO.setData(postingDTOList);
+        /* 2. PageDTO : 화면에서 페이징 처리에 필요한 정보들 */
+        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
 
-        List<PostingDTO> postingDTOList = postingService.selectJobPosting();
 
+//        List<PostingDTO> postingDTOList = postingService.selectJobPosting();
 
 
 
         return ResponseEntity.ok()
                 .body(ResponseDTO.builder()
                         .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
-                        .data(postingDTOList)
+                        .data(pagingResponseDTO)
                         .message("success")
                         .build());
     }
@@ -122,6 +144,8 @@ public class PostingController {
 
 
         boolean result =  postingService.updatePostingLike(postingDTO, memberCode);
+
+        System.out.println(result + "왜이래");
 
 
         return ResponseEntity.ok()
@@ -138,7 +162,7 @@ public class PostingController {
 
         boolean result = postingService.getPostingLike(postingDTO, memberCode);
 
-        System.out.println(result + "제발제발");
+
 
         return ResponseEntity.ok()
                 .body(ResponseDTO.builder()
@@ -151,7 +175,73 @@ public class PostingController {
 
 
 
+    @GetMapping("searchPage")
+    public ResponseEntity<ResponseDTO> searchCompany() {
 
+        List<CompanyDTO> companyDtoList = postingService.searchCompany();
+
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                        .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
+                        .message("success")
+                        .data(companyDtoList)
+                        .build());
+    }
+
+    @GetMapping("{searchName}")
+    public ResponseEntity<ResponseDTO> searchCompanyName(@PathVariable String searchName) {
+
+        System.out.println(searchName);
+
+        List<PostingDTO> postingDTO = postingService.searchCompanyName(searchName);
+
+
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                        .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
+                        .message("success")
+                        .data(postingDTO)
+                        .build());
+    }
+
+    @DeleteMapping("delete/{postingCode}")
+    public ResponseEntity<ResponseDTO> deletePosting(@PathVariable Integer postingCode) {
+
+        System.out.println("postingCode" + postingCode);
+
+        postingService.deletePosting(postingCode);
+
+        // FastAPI 엔드포인트 URL
+        String fastApiEndpoint = "http://localhost:8000/posting/delete/{postingCode}";
+
+        // HTTP 헤더 설정 (필요한 경우 추가 설정)
+        HttpHeaders headers = new HttpHeaders();
+
+        // HTTP 엔티티 생성
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+        // URL에 postingCode를 맵핑
+        Map<String, Object> uriVariables = new HashMap<>();
+        uriVariables.put("postingCode", postingCode);
+
+        // RestTemplate을 사용하여 DELETE 요청 전송
+        ResponseEntity<ResponseDTO> responseEntity = new RestTemplate().exchange(
+                fastApiEndpoint,
+                HttpMethod.DELETE,
+                requestEntity,
+                ResponseDTO.class,
+                uriVariables
+        );
+
+
+
+
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                        .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
+                        .message("success")
+                        .build());
+    }
 
 
 

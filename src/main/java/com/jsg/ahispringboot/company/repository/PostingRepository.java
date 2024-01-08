@@ -20,6 +20,8 @@ public interface PostingRepository extends JpaRepository<Posting , Integer> {
     @Query("select p from Posting p where p.postingCode in :postingCode ")
     List<Posting> findByResultLike(@Param("postingCode") List<Integer> postingCode);
 
+    List<Posting> findByCompanyCompanyId(Long companyId);
+
 
 //    @Query("select a,b  from Posting a left join WorkType b on (a.postingCode = b.posting.postingCode)")
 //    List<Posting> findBySelectPosting();
