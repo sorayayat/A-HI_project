@@ -23,8 +23,9 @@ import Verify from './pages/verify/Verify';
 import RankModal from './pages/InterviewSpring/RankModal';
 import InterviewNav from './pages/interviewNav/InterviewNav';
 import InspectionChoice from './pages/inspection/InspectionChoice';
-function App() { 
 
+
+function App() { 
 
 
 return (
