@@ -2,6 +2,7 @@ from docx import Document
 import os
 import subprocess
 
+
 def format_skills(skills):
     formatted_skills = ''
     for i, skill in enumerate(skills):
