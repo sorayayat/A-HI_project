@@ -9,7 +9,7 @@ import { callInterviewAnswer } from '../../apis/interviewAPIanswerCall'
 
 const Interview = () => {
 
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(null);
     const [question, setquestion] = useState('');
     const [answer, setAnswer] = useState({});
     const [AIanswer, setAIanswer] = useState('');
@@ -26,7 +26,7 @@ const Interview = () => {
         }));
     };
 
-    const handleSendAnswer = async () => {
+    const   handleSendAnswer = async () => {
         setIsLoading(true); // 로딩 시작
         dispatch(callInterviewAnswer({ answer: answer }, (sandresult) => {
             setAIanswer(sandresult.AIanswer);
@@ -81,7 +81,6 @@ const Interview = () => {
                 {isLoading &&
                     <div className={style.lodingIndicator}>
                         <div className={style.spinner}></div>
-                        <div className={style.load}>질문을 생성하고 있습니다</div>
                     </div>
                 }
 

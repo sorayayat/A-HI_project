@@ -60,7 +60,7 @@ const AiServices = () => {
                             </li>
                             <li className={styles.boxBanner}>
                                 {/* 서비스 3 - 면접 예상 질문 */}
-                                <Link to="/interview">
+                                <Link to="/interviewNav">
                                     <article className={styles.box}>
                                         <div className={styles.boxTitle}>
                                             <h2>면접 예상 질문</h2>

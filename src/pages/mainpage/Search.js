@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Search.module.css';
 import logoImage from '../../components/commons/logo.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { useSelector , useDispatch } from 'react-redux';
+import { callSearchCompany } from '../../apis/postingAPICalls'
 
 
 // 드롭 박스 텍스트 색상 변경
+
+
+
 const highlightText = (text, highlight) => {
     const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
     return (
@@ -28,16 +33,30 @@ const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
     const [showDropDown, setShowDropDown] = useState(false);
+    const companyList = useSelector(state => state.companyReducer?.searchCompany);
+
+    
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+
+        dispatch(callSearchCompany({
+
+        }))
+    },[])
+
+    
+    
 
     // 임시 검색 데이터
-    const sampleData = ['삼성', '삼성전자', '카카오', '백엔드 개발자', 'Java', 'Python', 'AI'];
+    const companyName = companyList?.data.map(company => company.company);
 
     const handleInputChange = (event) => {
         const value = event.target.value;
         setInputValue(value);
 
         if (value) {
-            const filteredResults = sampleData.filter(item =>
+            const filteredResults = companyName.filter(item =>
                 item.toLowerCase().includes(value.toLowerCase())
             );
             setSearchResults(filteredResults);

@@ -15,7 +15,7 @@ export const callInterview = (searchQuery, callback) => {
                 },
                 body: JSON.stringify(searchQuery)
             });
-
+            
             if (result.ok) {
                 const data = await result.json();
                 callback(data); // 콜백 함수를 호출하여 데이터 처리

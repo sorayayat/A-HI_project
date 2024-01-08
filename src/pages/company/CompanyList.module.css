@@ -96,3 +96,37 @@
     color: #fff;
 
 }
+
+.pagingContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .pagingBtn {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 5px;
+  }
+  
+  .pagingBtn:hover {
+    background-color: #ddd;
+  }
+  
+  .pagingBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .pagingBtn.active {
+    background-color: #3498db;
+    color: #fff;
+  }
