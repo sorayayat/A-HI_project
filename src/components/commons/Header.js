@@ -4,8 +4,13 @@ import { NavLink  } from 'react-router-dom';
 import styles from '../commons/Header.module.css';
 import { useNavigate } from 'react-router-dom';
 import logonav from './logonav.png';
+import { clearChatRoomData } from '../../modules/chatbotModules'; 
+import { useDispatch } from 'react-redux';
+
+
 const Header = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch(); 
     const userInfo = sessionStorage.getItem('userInfo');
 
     const handleLogout = async () => {
@@ -16,6 +21,7 @@ const Header = () => {
                 // localStorage.removeItem('userInfo'); 
               //  sessionStorage.setItem('isLoggedIn', 'false');
                 sessionStorage.removeItem('userInfo');
+                dispatch(clearChatRoomData());
                 navigate('/');
             } else {
             }

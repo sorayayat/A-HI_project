@@ -19,6 +19,7 @@ const Interview = () => {
 
     // 로딩 중을 표시해줌
     const handleSearchAnnouncement = () => {
+
         setIsLoading(true); // 로딩 시작
         dispatch(callInterview({ searchQuery: searchQuery }, (result) => {
             setquestion(result.question);
