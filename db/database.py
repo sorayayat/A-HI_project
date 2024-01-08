@@ -27,7 +27,9 @@ def findPosting(search_Code):
         results = connection.execute(stmt).fetchall()
 # 4. skill_names 가져온다
     skill_names = [result.skill_name for result in results]
-    print(skill_names)
+    if skill_names == null:
+        skill_names = "공고가 없습니다"
+        return skill_names
 # 5. db에서 데이터 조회를 해서 skill 정보를 리턴한다.
     return skill_names
 

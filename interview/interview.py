@@ -38,12 +38,10 @@ async def AIiterview(searchQuery: InterviewData):
 # 사용자에 답변을 받아서 피드백 해준다
 @Interview_router.get('/sendAnswer')
 async def AI_question(answer: AnswerData):
-   userAnswer = answer.answer
+   userAnswer = str(answer)
    feedback = gpt_feedback(userAnswer)
    return {"feedback": feedback}
 
-# 이력서 경로 저장
-# PDF_FILE_PATH = '/Users/baesola/dev/AHI-FASTAPI/imgs/test.pdf'
 
 # lid open함수로 파일 읽기
 def UserResume(PDF_FILE_PATH):
@@ -54,8 +52,6 @@ def UserResume(PDF_FILE_PATH):
         sub = page.extract_text()
         user += sub
     return user
-
-
 
 # gpt로 질문을 생성해주는 함수
 def gpt_question(skillSetData):
