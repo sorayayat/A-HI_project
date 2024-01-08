@@ -1,4 +1,4 @@
-import './App.css';
+import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/layout";
 import MainContents from './pages/mainpage/MainContents'
@@ -7,12 +7,9 @@ import Recommendation from './pages/recommendation/Recommendation';
 import LoginForm from './pages/login/LoginForm';
 import JoinForm from './pages/join/JoinForm';
 import FindForm from './pages/find/FindForm';
-import MemberUpdate from './pages/memberUpdate/MemberUpdate';
-import Withdrawal from './pages/withdrawal/Withdrawal';
 import Mypage from './pages/mypage/Mypage';
 import Inspection from './pages/inspection/Inspection';
 import CompanyList from './pages/company/CompanyList';
-import Interview from './pages/Interview/Interview';
 import CreateResume from './pages/createresume/CreateResume';
 import ChatbotMain from './pages/chatbot/ChatbotMain';
 import CompanyRegist from './pages/company/CompanyRegist';
@@ -21,7 +18,6 @@ import JoinFormCompany from './pages/join/JoinFormCompany';
 import SearchPage from './pages/searchpage/SearchPage';
 import InspectionDetail from './pages/inspection/InspectionDetail';
 import InspectionMain from './pages/inspection/InspectionMain';
-import InterviewSpring from './pages/InterviewSpring/InterviewSpring';
 import { ProtectedRoute } from './pages/login/ProtectedRoute';
 import Verify from './pages/verify/Verify';
 import RankModal from './pages/InterviewSpring/RankModal';

@@ -1,5 +1,5 @@
-import {POST_COMPANY , GET_JOBLISTING , PUT_UPDATELIKE, GET_UPDATELIKE } from '../modules/companyModules'
-
+import {POST_COMPANY , GET_JOBLISTING , PUT_UPDATELIKE, GET_UPDATELIKE ,GET_SEARCHCOMPANY , GET_SEARCHNAME , DELETE_POSTING} from '../modules/companyModules'
+import Swal from 'sweetalert2';
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 
@@ -41,10 +41,17 @@ export const callPostingAPI = ({ form, companyCode , navigate }) => {
     };
 };
 
-export const callSelectJobListing = () => {
+export const callSelectJobListing = ({currentPage}) => {
 
+    console.log(currentPage , "??");
 
-    const requestURL = `${SPRING_PRE_URL}/jobListing`;
+    let requestURL;
+
+    if(currentPage !== undefined || currentPage !== null){
+        requestURL = `${SPRING_PRE_URL}/jobListing/${currentPage}`;
+    }else {
+        requestURL = `${SPRING_PRE_URL}/jobListing`;
+    }
 
     return async (dispatch, getState) => {
         const result = await fetch(requestURL, {
@@ -75,6 +82,8 @@ export const callUpdatePostingLike = ({memberCode , postingCode}) => {
             body: JSON.stringify({ postingCode }), 
         }).then(response => response.json());
 
+        console.log(result , "???");
+
         
         dispatch({ type: PUT_UPDATELIKE, payload: result });
 
@@ -97,13 +106,84 @@ export const callGetLikeState = ({memberCode , postingCode}) => {
         }).then(response => response.json());
 
         
-        console.log(result ,"이거불러오니?");
+        
         
         dispatch({ type: GET_UPDATELIKE, payload: result });
 
         
     };
 };
+
+export const callSearchCompany = () => {
+
+
+    const requestURL = `${SPRING_PRE_URL}/searchPage`;
+
+    return async (dispatch, getState) => {
+        const result = await fetch(requestURL, {
+            method: 'GET',
+
+            
+        }).then(response => response.json());
+
+        
+        
+        
+        dispatch({ type: GET_SEARCHCOMPANY, payload: result });
+
+        
+    };
+};
+
+
+export const callCompanyNameSearch = ({searchName}) => {
+
+
+    const requestURL = `${SPRING_PRE_URL}/${searchName}`;
+
+    return async (dispatch, getState) => {
+        const result = await fetch(requestURL, {
+            method: 'GET',
+
+            
+        }).then(response => response.json());
+
+        
+        console.log(result ,"이거불러오니?");
+        
+        dispatch({ type: GET_SEARCHNAME, payload: result });
+
+        
+    };
+};
+
+export const callDeletePosting = ({postingCode}) => {
+
+
+    const requestURL = `${SPRING_PRE_URL}/delete/${postingCode}`;
+
+    
+
+    return async (dispatch, getState) => {
+        const result = await fetch(requestURL, {
+            method: 'DELETE',
+
+            
+        }).then(response => response.json());
+
+        
+        console.log(result ,"이거불러오니?");
+
+        
+        
+        dispatch({ type: DELETE_POSTING, payload: result });
+
+        
+    };
+};
+
+
+
 
 
 
