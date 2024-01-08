@@ -1,17 +1,39 @@
 import { useEffect, useRef, useState } from "react";
 import style from "../static/css/ResumeModifyModal.module.css";
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { callModifyResumeAPI } from "../../../apis/inspectionAPICalls";
+import { useNavigate } from "react-router";
 
 
-function ResumeModifyModal({ setModifyIsModalOpen , modifyIsModalOpen , setModifyInfo }){
+function ResumeModifyModal({ setModifyIsModalOpen , modifyIsModalOpen , selfIntroduction  , modifyIndex}){
 
     const ref = useRef();
-    const [way , SetWay] = useState("첨삭");
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [type , setType] = useState("");
     const [form , setForm ] = useState({});
+    const [updateForm , setUpdateForm] = useState({});
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'ri',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', () => Swal.stopTimer())
+            toast.addEventListener('mouseleave', () => Swal.resumeTimer())
+        }});
+
+    useEffect(() =>{
+        setType("modify");  
+    },[]);
 
     useEffect(() => {
         const clickOutside = (e) => {
           if (modifyIsModalOpen && ref.current && !ref.current.contains(e.target)) {
             setModifyIsModalOpen(false);
+            setForm(undefined);
           }
         };
         document.addEventListener("mousedown", clickOutside);
@@ -21,21 +43,72 @@ function ResumeModifyModal({ setModifyIsModalOpen , modifyIsModalOpen , setModif
       }, [modifyIsModalOpen]);
 
     const onChangeSelectHandler = (e) =>{
-        SetWay({
-            [e.target.name] : [e.target.value]
-        })
+        setType([e.target.value])
     }
 
     const onChangeHandler = (e) =>{
         setForm({
             ...form,
-            [e.target.name] : [e.target.value]
+            [e.target.name] : e.target.value
         });
     }
 
-    console.log(form ? form : "null");
+    const onCallAPIBtn = () =>{
+            if(!form.direction){
+                Toast.fire({
+                    icon : 'error',
+                    title : "수정내역 미입력"
+                });
+            }
+            else if(!form.eligibility){
+                Toast.fire({
+                    icon : 'error',
+                    title : "지원자격 미입력"
+                });
+            }
+            else if(!form.skill){
+                Toast.fire({
+                    icon : 'error',
+                    title : "기술스택 미입력"
+                });
+            }
+            else{
+                if(modifyIndex !== 99){
+                    setUpdateForm({
+                        ...form,
+                        "type" : type,
+                        selfIntroduction : [selfIntroduction]
+                    });
+                }
+                else{
+                    setUpdateForm({
+                        ...form,
+                        "type" : type,
+                        selfIntroduction : selfIntroduction
+                    });
+                }
+            }
+        }
     
+    useEffect(() =>{
+        if(updateForm?.direction){
+            console.log("updateForm : " , updateForm)
+            dispatch(callModifyResumeAPI(updateForm , modifyIndex)).then((result) => {
+                console.log(result)
+                if(result.status === 200){
+                    navigate("/inspection/choice")
+                }});
+        }
+
+    },[updateForm])
+
+
+    const onCancellBtn = () =>{
+        setForm(undefined);
+        setModifyIsModalOpen(false);
+    }
     
+    console.log(form);
     return(
         <div className={style.backGround}>
             <div className={style.contentBack} ref={ref}>
@@ -75,8 +148,8 @@ function ResumeModifyModal({ setModifyIsModalOpen , modifyIsModalOpen , setModif
                         />
                     </div>
                     <div className={style.btnBox}>
-                        <button className={style.saveBtn}>저장</button>
-                        <button className={style.cencelBtn}>취소</button>
+                        <button className={style.saveBtn} onClick={onCallAPIBtn}>저장</button>
+                        <button className={style.cencelBtn} onClick={onCancellBtn}>취소</button>
                     </div>
                 </div>
             </div>

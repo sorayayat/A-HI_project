@@ -22,6 +22,7 @@ import { ProtectedRoute } from './pages/login/ProtectedRoute';
 import Verify from './pages/verify/Verify';
 import RankModal from './pages/InterviewSpring/RankModal';
 import InterviewNav from './pages/interviewNav/InterviewNav';
+import InspectionChoice from './pages/inspection/InspectionChoice';
 function App() { 
 
 
@@ -47,7 +48,8 @@ return (
         <Route path='/recommendation' element={<Recommendation />} />
         <Route path='/inspection' element={<InspectionMain/>}/>
         <Route path='/inspection/modify' element={<Inspection/>}/>
-        <Route path='/inspection/detail/:resumeCode' element={<InspectionDetail/>}/>
+        <Route path="/inspection/detail" element={<InspectionDetail />}/>
+        <Route path='/inspection/choice' element={<InspectionChoice/>}/>
         <Route path='/companyList' element={<CompanyList />} />
         
         {/* <Route path='/interview' element={<Interview/>}/> */}

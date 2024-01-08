@@ -7,24 +7,30 @@ import ModifyModal from "./modal/ResumeModifyModal";
 
 function InspectionDetail()
 {
-    const navigate = useNavigate();
-    const dispach = useDispatch();
     const resume = useSelector((state) => state.inspectionReducer.resume);
     const [modifySelf , setModifySelf] = useState([{}]);
-    const [info , setInfo] = useState({});
+    const [number , setNumber] = useState({});
     const [isModalOpen , setIsModalOpen] = useState(false);
 
-    useEffect(() =>{
 
-    },[resume])
-
-    const onClickHandler = (SelfIntroduction) =>{
+    const onClickHandler = (SelfIntroduction , index) =>{
         if( !isModalOpen )
             setIsModalOpen(true);
-        setModifySelf([{
-            SelfIntroduction : SelfIntroduction
-        }]);
+        setModifySelf(SelfIntroduction);
+
+        setNumber({
+            "index" : index
+        });
     }
+
+    useEffect(() =>{
+        console.log("modifySelf : " ,modifySelf)
+    },[modifySelf])
+
+    useEffect(() =>{
+        if(!isModalOpen)
+            setModifySelf(undefined);
+    },[isModalOpen])
 
     return(
         <>
@@ -36,7 +42,8 @@ function InspectionDetail()
                     <div>
                         <ModifyModal setModifyIsModalOpen={setIsModalOpen}
                                      modifyIsModalOpen={isModalOpen} 
-                                     setModifyInfo={setInfo} />
+                                     selfIntroduction={modifySelf}
+                                     modifyIndex={number.index} />
                     </div>
                 }
                 <div className={style.resumeBack}>
@@ -51,14 +58,14 @@ function InspectionDetail()
                     <div className={style.selfTitleBoder}>
                         <h2 className={style.selfTitle}>자기소개서</h2>
                         <button className={style.modiftBtn1}
-                                onClick={() => onClickHandler(resume?.data.SelfIntroduction) }>전체 수정</button>
+                                onClick={() => onClickHandler(resume?.data.SelfIntroduction , 99) }>전체 수정</button>
                     </div>
                     <div className={style.selfIntroduction}>
                         {resume.data.SelfIntroduction.map((self , index) =>(
                             <div key={index} className={style.selfInfo}>
                                 <h3>{self.title}</h3>
                                 <button className={style.modiftBtn2}
-                                    onClick={ () => onClickHandler(self)}>수정</button>
+                                    onClick={ () => onClickHandler(self , index)}>수정</button>
                                 <p>{self.content}</p>
                                 <p className={style.Line}></p>
                             </div>
