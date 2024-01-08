@@ -35,13 +35,10 @@ const JoinFormCompany = () => {
       alert('비밀번호와 비밀번호확인은 같은 값이어야 합니다.');
       return;
     }else if (formData.password.length < 10 || formData.password.length > 25 ||
-      formData.confirmPwd.length < 10 || formData.confirmPwd.length > 25){
+      formData.confirmPassword.length < 10 || formData.confirmPassword.length > 25){
       alert("비밀번호와 비밀번호 확인은 10자리 이상 25자리 이하 여야 합니다.");
       return;
-    } else if (formData.password.length <10 || formData.confirmPassword.length <10){
-      alert("비밀번호와 비밀번호 확인은 11자리 이상 이어야 합니다.");
-      return;
-    }
+    } 
 
     const data = new FormData();
     for (const key in formData) {

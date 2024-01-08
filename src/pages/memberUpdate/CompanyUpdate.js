@@ -21,7 +21,7 @@ const CompanyUpdate = () => {
     companyHomepage:"",
     logo: null,
   });
-
+    
   useEffect(() => {
     const fetchUserInfo = async () => {
       const response = await axios.get('/api/in/member/infoCompany');
