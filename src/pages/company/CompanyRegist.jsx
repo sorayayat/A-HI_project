@@ -26,7 +26,8 @@ function CompanyRegist() {
     
 
     const skillList = ["HTML", "CSS", "JavaScript", "React", "Vue.js", "Angular", "Node.js", "Python", "Ruby"
-        , "Java", "MySQL", "PostgreSQL", "MongoDB", "Apache", "Nginx", "Git"];
+        , "Java", "MySQL", "PostgreSQL", "MongoDB", "Apache", "Nginx", "Git" , "MachineLearning" ,"TensorFlow",
+    "PyTorch" , "Slack" , "Kotlin" , "WebRTC" , "MVVM" , "Confluence" , "Jira"];
 
     const conditionList = ["재택가능", "정규직", "주 5일(월~금)", "주 6일(월~토)", "주 3일(격일제)",
         "유연 근무제", "면접후 결정", "2600~", "2800~", "3000~"];
@@ -181,6 +182,7 @@ function CompanyRegist() {
                         <option value="프론트앤드">프론트앤드</option>
                         <option value="백">백</option>
                         <option value="풀스택">풀스택</option>
+                        <option value="안드로이드 앱">안드로이드 앱</option>
                     </select>
 
                     <div className={style.education}>
