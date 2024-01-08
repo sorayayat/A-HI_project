@@ -14,41 +14,43 @@ def format_skills(skills):
 
 # 이력서 데이터를 받아서 텍스트 치환에 사용할 context를 생성
 def generate_resume(resume_data):
-    
     formatted_skills = format_skills(resume_data.get("skills", []))
-    
-    context = {
-        
-        '{Name}': resume_data.get("name"),
-        '{Phone}': resume_data.get("phone_number"),
-        '{Email}': resume_data.get("email"),
-        '{Git}': resume_data.get("git"),
-        '{JobTitle}': resume_data.get("job_title"),
-        '{Skills}': formatted_skills,
-        '{Experiences}': ', '.join(resume_data.get("experiences", [])),
-        '{ExperiencesDetail}': '\n'.join(resume_data.get("experiences_detail", [])),
-        '{Projects}': '  '.join(resume_data.get("projects", [])),
-        '{ProjectsDetail}': '\n'.join(resume_data.get("projects_detail", [])),
-        '{Education}': resume_data.get("education"),
-        '{EducationDetail}': resume_data.get("education_detail"),
-        '{AwardsAndCertifications}': '\n'.join(resume_data.get("awards_and_certifications", []))
-    }
-    
 
+    # Placeholder에 대해 초기 공백 값 설정
+    context = {f'{{Skills{i}}}': ' ' for i in range(1, 6)}
+    context.update({f'{{Experiences{i}}}': ' ' for i in range(1, 6)})
+    context.update({f'{{ExperiencesDetail{i}}}': ' ' for i in range(1, 6)})
+    context.update({f'{{Projects{i}}}': ' ' for i in range(1, 6)})
+    context.update({f'{{ProjectsDetail{i}}}': ' ' for i in range(1, 6)})
+
+    # 기존 로직을 사용하여 실제 데이터가 있는 경우 값 업데이트
     for i, skill in enumerate(resume_data.get("skills", [])):
         context[f'{{Skills{i + 1}}}'] = skill
-
     for i, experience in enumerate(resume_data.get("experiences", [])):
         context[f'{{Experiences{i + 1}}}'] = experience
-
-    for i, detail in enumerate(resume_data.get("experiences_detail", [])):
+    for i, detail in enumerate(resume_data.get("experiencesdetail", [])):
         context[f'{{ExperiencesDetail{i + 1}}}'] = detail
-    
     for i, project in enumerate(resume_data.get("projects", [])):
         context[f'{{Projects{i + 1}}}'] = project
-        
-    for i, detail in enumerate(resume_data.get("projects_detail", [])):
+    for i, detail in enumerate(resume_data.get("projectsdetail", [])):
         context[f'{{ProjectsDetail{i + 1}}}'] = detail
+
+    # 나머지 데이터는 기존 로직대로 처리
+    context.update({
+        '{Name}': resume_data.get("name", ' '),
+        '{Phone}': resume_data.get("phonenumber", ' '),
+        '{Email}': resume_data.get("email", ' '),
+        '{Git}': resume_data.get("git", ' '),
+        '{JobTitle}': resume_data.get("jobtitle", ' '),
+        '{Skills}': formatted_skills,
+        '{Experiences}': ', '.join(resume_data.get("experiences", [])),
+        '{ExperiencesDetail}': '\n'.join(resume_data.get("experiencesdetail", [])),
+        '{Projects}': '  '.join(resume_data.get("projects", [])),
+        '{ProjectsDetail}': '\n'.join(resume_data.get("projectsdetail", [])),
+        '{Education}': resume_data.get("education", ' '),
+        '{EducationDetail}': resume_data.get("educationdetail", ' '),
+        '{AwardsAndCertifications}': '\n'.join(resume_data.get("awardsandcertifications", []))
+    })
 
     return context
 
@@ -57,28 +59,18 @@ def replace_text_in_paragraph(paragraph, context):
     for run in paragraph.runs:
         for key, value in context.items():
             if key in run.text:
-                run.text = run.text.replace(key, '' if value is None else value)
+                run.text = run.text.replace(key, ' ' if value is None or value == '' else value)
+# def replace_text_in_paragraph(paragraph, context):
+#     for run in paragraph.runs:
+#         for key, value in context.items():
+#             if key in run.text:
+#                 run.text = run.text.replace(key, '' if value is None else value)
+
 
 # 이력서 템플릿을 채우고 저장하는 함수
-def generate_resume(template_path, output_path, resume_data):
+def fill_template(template_path, output_path, context):
     try:
         doc = Document(template_path)
-
-        context = {
-            '{Name}': resume_data.get("name"),
-            '{Phone}': resume_data.get("phone_number"),
-            '{Email}': ', '.join(resume_data.get("email")),
-            '{Git}': resume_data.get("git"),
-            '{JobTitle}': resume_data.get("job_title"),
-            '{Skills}': ', '.join(resume_data.get("skills", [])),
-            '{Experiences}': ', '.join(resume_data.get("experiences", [])),
-            '{ExperiencesDetail}': ', '.join(resume_data.get("experiences_detail", [])),
-            '{Projects}': ', '.join(resume_data.get("projects", [])),
-            '{ProjectsDetail}': ', '.join(resume_data.get("projects_detail", [])),  
-            '{Education}': ', '.join(resume_data.get("educations", [])),
-            '{EducationDetail}': ', '.join(resume_data.get("educations_detail", [])),
-            '{AwardsAndCertifications}': ', '.join(resume_data.get("awards_and_certifications", [])),
-        }
 
         for paragraph in doc.paragraphs:
             replace_text_in_paragraph(paragraph, context)
@@ -110,22 +102,34 @@ def generate_resume_content(resume_data):
     
     user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
-     # 파일 경로에 사용자 이름 포함
-    output_path_docx = f'{user_name}_Resume.docx'
-    output_path_pdf = f'{user_name}_Resume.pdf'
+
+    print("****************[generate_resume_content] ********************\n ", resume_data)
+    print("**************************************************************")
+    user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
+    
+    output_folder = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\resumeResult'
+
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    # 파일 경로에 사용자 이름 포함
+
+    output_path_docx = os.path.join(output_folder, '{}_Resume.docx'.format(user_name))
+    output_path_pdf = os.path.join(output_folder, '{}_Resume.pdf'.format(user_name))
+
     
     # resume_data를 확인해 적절한 템플릿 파일 선택
     experiences = resume_data.get("experiences")
-    certifications = resume_data.get("awards_and_certifications")
+    certifications = resume_data.get("awardsandcertifications")
 
     if experiences and certifications:
-        template_path = 'tem/Template1.docx'  # 경력과 자격증 둘 다 존재하는 경우
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template1.docx'  # 경력과 자격증 둘 다 존재하는 경우
     elif not experiences and certifications:
-        template_path = 'tem/Template2.docx'  # 자격증만 있는 신입 템플릿
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template2.docx'  # 자격증만 있는 신입 템플릿
     elif experiences and not certifications:
-        template_path = 'tem/Template3.docx'  # 경력만 있는 경력자 템플릿
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template3.docx'  # 경력만 있는 경력자 템플릿
     else:
-        template_path = 'tem/Template4.docx'  # 경력과 자격증 모두 없는 신입 템플릿
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template4.docx'  # 경력과 자격증 모두 없는 신입 템플릿
 
     # 선택된 템플릿으로 context를 적용
     context = generate_resume(resume_data)
@@ -138,24 +142,3 @@ def generate_resume_content(resume_data):
     
 
     return output_path_pdf  # PDF 파일 경로 반환
-
-
-# 이력서 템플릿을 채우고 저장하는 함수
-def fill_template(template_path, output_path, context):
-    try:
-        doc = Document(template_path)
-
-        for paragraph in doc.paragraphs:
-            replace_text_in_paragraph(paragraph, context)
-
-        for table in doc.tables:
-            for row in table.rows:
-                for cell in row.cells:
-                    for paragraph in cell.paragraphs:
-                        replace_text_in_paragraph(paragraph, context)
-
-        doc.save(output_path)
-        print("Document created successfully. File path:", output_path)
-    except Exception as e:
-        print(f"Error: {e}")
-

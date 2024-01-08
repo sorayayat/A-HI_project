@@ -13,7 +13,7 @@ import re
 import json
 import sys
 sys.path.append('..')
-from resume.resumegenerator import generate_resume
+from resume.resumegenerator import generate_resume, generate_resume_content
 
 
 
@@ -163,10 +163,10 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
                     - 무조건 고객에게 모든 항목에 대해 질문하고 답변을 받는다.
                     - 너는 고객과의 채팅을 통해서 좋은 이력서의 13가지 category정보들을 필수적으로 수집한다.
                     - 13가지 항목에 대한 정보수집이 완료되면 수집한 정보를 토대로
-                         {{"name":수집한 이름, "phone_number":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "job_title":원하는 직업, 
-                        "skills":[수집한 기술스택], "experiences":[수집한 경력사항], "experiences_detail":[경력사향 세부 내용], "projects":[수집한 프로젝트 경험],
-                        "project_detail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "education_detail":[수집한 최종학력 세부내용], 
-                        "awards_and_certifications":[수집한 수상경력 혹은 자격증]}} 형태의 대답만 하고 마친다.
+                         {{"name":수집한 이름, "phonenumber":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "jobtitle":원하는 직업, 
+                        "skills":[수집한 기술스택], "experiences":[수집한 경력사항], "experiencesdetail":[경력사향 세부 내용], "projects":[수집한 프로젝트 경험],
+                        "projectdetail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "educationdetail":수집한 최종학력 세부내용, 
+                        "awardsandcertifications":[수집한 수상경력 혹은 자격증]}} 형태의 대답만 하고 마친다.
                     - 13가지 항목을 한꺼번에 질문하지말고, 상담하듯 자연스러운 대화로 이끌어 나간다.
                     - 모든 답변은 한국어와 존댓말을 사용하며, AI임을 언급하지 않고 인간의 조언과 전문적인 지식을 제공한다.                 
             """
@@ -215,26 +215,20 @@ async def chatbot_endpoint(message: User):
     chatbot_response = gpt_response["choices"][0]["message"]["content"]
 
 
-    # 변경된 부분: 여기서 extract_and_prepare_resume_data 함수를 호출하여 이력서 데이터를 추출하고 사용자에게 보여줄 응답을 준비함
-    resume_data, user_visible_response = extract_and_prepare_resume_data(chatbot_response, message.email, message.roomId)
-
-
     # 이전 대화 내용 업데이트
-    # 챗봇 응답을 업데이트
-    # 변경 전: 모든 대화에 원래의 챗봇 응답을 사용
-    # 변경 후: 마지막 대화에서만 사용자에게 보여줄 응답으로 업데이트
-    updated_chat = f"사용자: {user_message}\n챗봇: {user_visible_response if resume_data else chatbot_response}"
+    updated_chat = f"사용자: {user_message}\n챗봇: {chatbot_response}"
     previous_system_content[(message.email, message.roomId)] = full_prompt + f"\n{updated_chat}"
     print("============================== Updated previous_system_content ============================== \n", previous_system_content[(message.email, message.roomId)])
 
-    # 수정전코드
-    # updated_chat = f"사용자: {user_message}\n챗봇: {chatbot_response}"
-    # previous_system_content[(message.email, message.roomId)] = full_prompt + f"\n{updated_chat}"
-
     # 챗봇 마지막 응답에서 이력서용 데이터 추출 후 사용자에게 보여줄 메세지 준비
-    # resume_data, user_visible_response = extract_and_prepare_resume_data(chatbot_response, message.email, message.roomId)
+    resume_data = extract_resume_data(message.email, message.roomId)
 
-    # send_reresume_data(resume_data)
+    # resume_data가 생성된 경우에만 send_resume_data 함수 호출
+    if resume_data:
+        send_resume_data(resume_data, message.email, message.roomId)
+    else:
+        print("아직 resume_data가 생성되지 않았습니다.")
+        
 
     await update_chatroom(
         email=message.email,
@@ -250,25 +244,27 @@ async def chatbot_endpoint(message: User):
     return {"gptMessage": chatbot_response}
 
 
+
 # 챗봇의 마지막 응답에서  이력서 데이터 뽑아오기
 def extract_resume_data(email, room_id):
-    print("extract_resume_data 호출됨...")
     try:
-        # previous_system_content에서 대화 내용을 가져옴
         chat_content = previous_system_content.get((email, room_id), "")
-        
-        # 대화 내용을 줄 단위로 분할하여 챗봇의 마지막 응답을 찾음
-        last_response = None
         lines = chat_content.split("\n")
-        for line in reversed(lines):
+        last_response_start_index = None
+
+        # 마지막 챗봇 응답의 시작 지점 찾기
+        for i, line in enumerate(reversed(lines)):
             if line.startswith("챗봇:"):
-                last_response = line[len("챗봇:"):].strip()
-                print("======================= 추출된 챗봇의 마지막 응답 =======================\n", last_response)
+                last_response_start_index = len(lines) - 1 - i
                 break
-        
-        # 마지막 응답에서 JSON 데이터 추출
-        if last_response:
-            json_str_match = re.search(r'{.*}', last_response, re.DOTALL)
+
+        # 전체 챗봇 응답 추출
+        if last_response_start_index is not None:
+            last_response = "\n".join(lines[last_response_start_index:])
+            print("======================= 추출된 챗봇의 마지막 응답 =======================\n", last_response)
+
+            # JSON 데이터 추출
+            json_str_match = re.search(r'\{.*?\}', last_response, re.DOTALL)
             if json_str_match:
                 json_str = json_str_match.group()
                 print("======================= 추출된 JSON 데이터 =======================\n", json_str)
@@ -282,28 +278,16 @@ def extract_resume_data(email, room_id):
     return None
 
 
-# 챗봇 응답 {}부분 사용자에게는 텍스트로 보이도록  
-def extract_and_prepare_resume_data(chatbot_response, email, room_id):
-
-    print("extract_and_prepare_resume_data 호출됨...")
-
-    # 마지막 응답에서 이력서 데이터 추출
-    resume_data = extract_resume_data(email, room_id)
-
-    # 사용자에게 보여줄 응답 메시지
-    if resume_data:
-        user_visible_response = "수고하셨습니다. 이력서에 필요한 데이터 수집을 완료했습니다! 이력서를 생성하려면 아래 버튼을 눌러주세요."
-    else:
-        user_visible_response = chatbot_response  # JSON 데이터가 없으면 기존 응답을 사용
-
-    return resume_data, user_visible_response
-
-
 
 
 # 이력서 데이터 resumegenerator로 전달하는 함수
 def send_resume_data(resume_data, email, roomId):
 
-    resume_context = generate_resume(resume_data)
+    print("!!!!!!!!!!!!!!!!!send_resume_data 함수 호출됨.........")
+
+    # 이력서 컨텐츠 생성 및 파일 경로 반환
+    resume_file_path = generate_resume_content(resume_data)
+
+    print("=============================== 생성된 이력서 파일 경로=============================== ", resume_file_path)
 
     return None
