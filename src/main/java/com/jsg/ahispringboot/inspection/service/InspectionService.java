@@ -78,10 +78,6 @@ public class InspectionService {
         Long afterTime = System.currentTimeMillis();
         Long diffTime = (afterTime - beforeTime) / 1000;
         log.info("실행 시간(sec) : " + diffTime);
-        for (SelfIntroductionDTO s : reader.getSelfIntroductionDTO()) {
-            log.info("s : {}", s);
-        }
-        log.info("reader : {}", reader.getPersonalInformationDTO());
         return reader;
 
     }
@@ -102,7 +98,7 @@ public class InspectionService {
     @Transactional
     public Map<String, Object> imageToPdf(String resumCode, MultipartFile image) {
 
-        Long userCode = 1L;
+        Long userCode = 3L;
         LocalDateTime date = LocalDateTime.now();
         String newDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
         Long code = Long.parseLong(resumCode);
@@ -119,7 +115,6 @@ public class InspectionService {
         modifyResume.setResumePath(path);
         modifyResume.setCreateDate(newDate);
         modifyResume.setMember(resume.getMember());
-        ;
         inspectionRepositroy.save(modifyResume);
 
         Map<String, Object> map = new HashMap<>();

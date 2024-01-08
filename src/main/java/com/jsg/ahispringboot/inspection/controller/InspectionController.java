@@ -38,7 +38,7 @@ public class InspectionController {
 
     @GetMapping("/getResumeList")
     public ResponseEntity<ResponseDTO> selectResume() {
-        Long code = 1L;
+        Long code = 3L;
         List<ResumeDTO> resume = inspectionsService.selectMemberResume(code);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공", resume));
@@ -47,8 +47,9 @@ public class InspectionController {
     @GetMapping("/getResume/{resumeCode}")
     public ResponseEntity<ResponseDTO> selectResume(@PathVariable("resumeCode") Long resumeCode) {
         log.info("resumeCode : {} ", resumeCode);
-        Long userCode = 1L;
+        Long userCode = 3L;
         ReaderDTO reader = inspectionsService.selcetResumeDetall(resumeCode, userCode);
+        log.info("reader : {}", reader);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공 bro", reader));
     }
 
