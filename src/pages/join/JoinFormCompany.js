@@ -220,11 +220,11 @@ const JoinFormCompany = () => {
           <div className={styles.inputOnly}>
           <select id="companyType" name="companyType" className={styles.selectType}   value={formData.companyType} required 
       onChange={handleChange}>
-    <option value="micro">5인 이하</option>
-    <option value="small">중소기업</option>
-    <option value="medium">중견기업</option>
-    <option value="large">대기업</option>
-    <option value="global">글로벌기업</option>
+    <option value="5인이하기업">5인 이하</option>
+    <option value="중소기업">중소기업</option>
+    <option value="중견기업">중견기업</option>
+    <option value="대기업">대기업</option>
+    <option value="글로벌기업">글로벌기업</option>
 </select>
           </div>
           <span></span>
