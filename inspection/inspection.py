@@ -96,9 +96,11 @@ async def readResume(file : UploadFile = File(...)):
     contents = await file.read()
     buffer = io.BytesIO(contents) 
     pdf_reader = PdfReader(buffer)
-    pageNumber = 0
-    page = pdf_reader.pages[pageNumber]
-    text = page.extract_text()
+    text = "";
+    for page in pdf_reader.pages:
+        page_text = page.extract_text()
+        if page_text :
+            text += page_text + "\n"
     pSec = (time.time() - start)
     pdfEndTime = str(datetime.timedelta(seconds=pSec)).split(".")
     pdfEndTime = pdfEndTime[0]
@@ -106,7 +108,8 @@ async def readResume(file : UploadFile = File(...)):
     pre_prompt1 = "1.Keep the original content without summarizing it;"
     pre_prompt2 = "2.Separate the content into key and value, distinguishing between title and content.;"
     pre_prompt3 = "3.Separate the PersonalInformation and SelfIntroduction sections within the content."
-    pre_prompt4 = "ex) ReaderDTO : {{PersonalInformation : name:name , position : position, dateOfBirth : dateOfBirth , gender : gender , department : department ....}, {SelfIntroduction : title : title , content : content ...}};"
+    # pre_prompt4 = "ex) ReaderDTO : {{PersonalInformation : name:name , position : position, dateOfBirth : dateOfBirth , gender : gender , department : department ....}, {SelfIntroduction : title : title , content : content ...}};"
+    pre_prompt4 = "ex) ReaderDTO : {{PersonalInformation : name:name , email : email, github : github , phone : phone , education : education},{awardsCertifications : [awardsCertification]},{Skills : [Skillname]...},{Experience : company : company , duration : duration},{Projects : ProjectsTitle : ProjectsTitle , ProjectsContent : ProjectsContent...} ,{SelfIntroduction : title : title , content : content ...}};"
     pre_prompt5 = "4.Provide in JSON format"
     pre_prompt6 = "5.Translate only 'key' into English."
     system_content = pre_prompt1 + pre_prompt2 + pre_prompt3 + pre_prompt4 + pre_prompt5 + pre_prompt6
@@ -128,7 +131,6 @@ async def readResume(file : UploadFile = File(...)):
 @ITrouter.post("/modify")
 async def modify(modifyResume : RequestEntity):
     print("시작")
-    print(modifyResume.modify)
     data = modifyResume.modify
     start = time.time()
     for d in data:
