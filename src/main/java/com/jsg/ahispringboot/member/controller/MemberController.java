@@ -89,7 +89,8 @@ public class MemberController {
 
     @GetMapping("/in/member/infoCompany")
     public CompanyDto company(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
-        String logo = memberServiceImpl.findLogo(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyId());
+    //    String logo = memberServiceImpl.findLogo(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyId());
+        log.info("img={}",customUserDetail.getMemberEntity().getCompanyEntity().getLogoEntity().getServerName());
         CompanyDto companyDto = CompanyDto
                 .builder()
                 .memberId(customUserDetail.getPk())
@@ -102,7 +103,7 @@ public class MemberController {
                 .employeesNumber(customUserDetail.getMemberEntity().getCompanyEntity().getEmployeesNumber())
                 .establishmentDate(customUserDetail.getMemberEntity().getCompanyEntity().getEstablishmentDate())
                 .companyHomepage(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyHomepage())
-                .logoServer(logo)
+                .logoServer(customUserDetail.getMemberEntity().getCompanyEntity().getLogoEntity().getServerName())
                 .build();
         return companyDto;
     }
