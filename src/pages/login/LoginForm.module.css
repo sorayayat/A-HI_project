@@ -1,15 +1,15 @@
 .loginFormContainer {
-    margin-top: 10vh;
-    width: 20vw;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    margin-bottom: 10vh;
-  }
-  
+  margin-top: 5vh;
+  width: 300px; /* 기본 너비 설정 */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 5vh;
+}
+
   .formGroup {
     margin-bottom: 15px;
   }
@@ -71,3 +71,20 @@
     color: #4682B4;
   }
   
+
+  @media (max-width: 768px) {
+    .loginFormContainer {
+      width: 60%; /* 화면 너비에 따라 너비 조정 */
+      margin-top: 10vh;
+      margin-bottom: 10vh;
+    }
+  }
+  
+  /* 작은 화면 크기(모바일)에 대한 스타일 */
+  @media (max-width: 480px) {
+    .loginFormContainer {
+      width: 90%; /* 화면 너비에 따라 너비 조정 */
+      margin-top: 10vh;
+      margin-bottom: 10vh;
+    }
+  }

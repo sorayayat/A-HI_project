@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { Answer, Feedback } from './Answer';
-import RankModal from './RankModal'; // RankModal 컴포넌트 임포트
 import LoadingModal from "./LoadingModal";
 
 const InterviewSpring = () => {

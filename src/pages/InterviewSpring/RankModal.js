@@ -19,20 +19,22 @@ const RankModal = () => {
     }, []);
 
     const nextItem = () => {
-        setCurrentIndex(prevIndex => (prevIndex + 4 < data.length) ? prevIndex + 4 : 0);
+        setCurrentIndex(prevIndex => (prevIndex + 2 < data.length) ? prevIndex + 2 : 0);
     };
-
+    
     const prevItem = () => {
-        setCurrentIndex(prevIndex => (prevIndex - 4 >= 0) ? prevIndex - 4 : data.length - (data.length % 4));
+        setCurrentIndex(prevIndex => (prevIndex - 2 >= 0) ? prevIndex - 2 : data.length - (data.length % 2));
     };
+    
 
     return (
-        <div className={style.rankModal} style={{ width: '70%', height: '60%' }}>
+        <div className={style.modalBackdrop}>
+        <div className={style.rankModal}>
             {data.length > 0 && (
                 <div className={style.carousel}>
                 <button onClick={prevItem}>이전</button>
                 <div>
-                    {data.slice(currentIndex, currentIndex + 4).map((item, index) => (
+                    {data.slice(currentIndex, currentIndex + 2).map((item, index) => (
                         <div key={index} className={style.carouselItem}>
                            
                             {item.posting.logoEntity && (
@@ -50,6 +52,7 @@ const RankModal = () => {
             </div>
             
             )}
+        </div>
         </div>
     );
 };
