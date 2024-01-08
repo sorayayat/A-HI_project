@@ -70,7 +70,7 @@ public class MemberController {
     }
 
 
-    @GetMapping("/member/info")
+    @GetMapping("/in/member/info")
     public MemberDto user(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
         MemberDto memberDto = MemberDto.builder()
                 .id(customUserDetail.getPk())
@@ -81,14 +81,14 @@ public class MemberController {
         return memberDto;
     }
 
-    @PutMapping("/member/info_update")
+    @PutMapping("/in/member/info_update")
     public void memberInfoUpdate(@RequestBody MemberDto memberDto, Authentication Authentication) {
         memberServiceImpl.memberInfoUpdate(Authentication, memberDto);
     }
 
-    @GetMapping("/member/infoCompany")
+    @GetMapping("/in/member/infoCompany")
     public CompanyDto company(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
-        String logo = memberServiceImpl.findLogo(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyId());
+      //  String logo = memberServiceImpl.findLogo(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyId());
         CompanyDto companyDto = CompanyDto
                 .builder()
                 .memberId(customUserDetail.getPk())
@@ -101,18 +101,18 @@ public class MemberController {
                 .employeesNumber(customUserDetail.getMemberEntity().getCompanyEntity().getEmployeesNumber())
                 .establishmentDate(customUserDetail.getMemberEntity().getCompanyEntity().getEstablishmentDate())
                 .companyHomepage(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyHomepage())
-                .logoServer(logo)
+                .logoServer(customUserDetail.getMemberEntity().getCompanyEntity().getLogoEntity().getServerName())
                 .build();
         return companyDto;
     }
 
-    @PutMapping("/member/company_info_update")
+    @PutMapping("/in/member/company_info_update")
     public void companyInfoUpdate(@ModelAttribute CompanyDto companyDto, Authentication authentication, @RequestParam(required = false) MultipartFile logo) {
         log.info("com={},mem={}", companyDto.getCompanyId(), companyDto.getMemberId());
         memberServiceImpl.companyInfoUpdate(companyDto, authentication, logo);
     }
 
-    @DeleteMapping("/member/withdrawal")
+    @DeleteMapping("/in/member/withdrawal")
     public boolean withdrawal(@RequestBody MemberDto memberDto) {
         memberServiceImpl.withdrawal(memberDto);
         return true;
