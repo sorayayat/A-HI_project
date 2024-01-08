@@ -48,13 +48,8 @@ public class RecommendationController {
     @GetMapping("selectLike/{memberCode}")
     public ResponseEntity<ResponseDTO> selectLikePosting(@PathVariable Integer memberCode) {
 
-        System.out.println(memberCode + "GD");
-
-
 
         List<PostingDTO> postingDTOList = recommendationService.selectLikePosting(memberCode);
-
-        System.out.println("뭐지" + postingDTOList);
 
 
         // JSON 페이로드와 헤더를 갖는 요청 엔터티 생성
@@ -84,7 +79,7 @@ public class RecommendationController {
 
         List<Integer> postingCode = (List<Integer>) responseDTO.getData();
 
-        System.out.println(postingCode);
+        System.out.println(postingCode + "ㅎㅇㅎㅇ");
 
         postingDTOList = recommendationService.selectResultLike(postingCode);
 
