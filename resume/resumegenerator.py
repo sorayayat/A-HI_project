@@ -1,77 +1,144 @@
 from docx import Document
-from .utils import call_openai_gpt
+import os
+import subprocess
 
-def generate_resume_content(data):
-    # 이력서 데이터를 메시지 형식으로 변환
-    messages = [
-        {"role": "system", "content": "당신은 이력서 작성을 도와주는 AI 비서입니다."},
-        {"role": "user", "content": f"이름: {data.name}, 휴대폰 번호: {data.phone_number}, 이메일: {data.email}, 직무: {data.job_title}, 기술 스택: {', '.join(data.skills)}, 경력 사항: {', '.join(data.experiences)}, 프로젝트 내용: {', '.join(data.projects)}, 학력: {', '.join(data.educations)}, 수상 내역 및 자격증: {', '.join(data.awards_and_certifications)}"}
-    ]
+def format_skills(skills):
+    formatted_skills = ''
+    for i, skill in enumerate(skills):
+        if i % 5 == 0 and i != 0:
+            formatted_skills += '\n'  # 다섯 개마다 줄 바꿈 추가
+        elif i != 0:
+            formatted_skills += '  '  # 기술 사이에 두 개의 공백 추가
+        formatted_skills += skill
+    return formatted_skills
 
+# 이력서 데이터를 받아서 텍스트 치환에 사용할 context를 생성
+def generate_resume(resume_data):
+    formatted_skills = format_skills(resume_data.get("skills", []))
+
+    # Placeholder에 대해 초기 공백 값 설정
+    context = {f'{{Skills{i}}}': ' ' for i in range(1, 6)}
+    context.update({f'{{Experiences{i}}}': ' ' for i in range(1, 6)})
+    context.update({f'{{ExperiencesDetail{i}}}': ' ' for i in range(1, 6)})
+    context.update({f'{{Projects{i}}}': ' ' for i in range(1, 6)})
+    context.update({f'{{ProjectsDetail{i}}}': ' ' for i in range(1, 6)})
+
+    # 기존 로직을 사용하여 실제 데이터가 있는 경우 값 업데이트
+    for i, skill in enumerate(resume_data.get("skills", [])):
+        context[f'{{Skills{i + 1}}}'] = skill
+    for i, experience in enumerate(resume_data.get("experiences", [])):
+        context[f'{{Experiences{i + 1}}}'] = experience
+    for i, detail in enumerate(resume_data.get("experiencesdetail", [])):
+        context[f'{{ExperiencesDetail{i + 1}}}'] = detail
+    for i, project in enumerate(resume_data.get("projects", [])):
+        context[f'{{Projects{i + 1}}}'] = project
+    for i, detail in enumerate(resume_data.get("projectsdetail", [])):
+        context[f'{{ProjectsDetail{i + 1}}}'] = detail
+
+    # 나머지 데이터는 기존 로직대로 처리
+    context.update({
+        '{Name}': resume_data.get("name", ' '),
+        '{Phone}': resume_data.get("phonenumber", ' '),
+        '{Email}': resume_data.get("email", ' '),
+        '{Git}': resume_data.get("git", ' '),
+        '{JobTitle}': resume_data.get("jobtitle", ' '),
+        '{Skills}': formatted_skills,
+        '{Experiences}': ', '.join(resume_data.get("experiences", [])),
+        '{ExperiencesDetail}': '\n'.join(resume_data.get("experiencesdetail", [])),
+        '{Projects}': '  '.join(resume_data.get("projects", [])),
+        '{ProjectsDetail}': '\n'.join(resume_data.get("projectsdetail", [])),
+        '{Education}': resume_data.get("education", ' '),
+        '{EducationDetail}': resume_data.get("educationdetail", ' '),
+        '{AwardsAndCertifications}': '\n'.join(resume_data.get("awardsandcertifications", []))
+    })
+
+    return context
+
+# 텍스트 치환 함수
+def replace_text_in_paragraph(paragraph, context):
+    for run in paragraph.runs:
+        for key, value in context.items():
+            if key in run.text:
+                run.text = run.text.replace(key, ' ' if value is None or value == '' else value)
+# def replace_text_in_paragraph(paragraph, context):
+#     for run in paragraph.runs:
+#         for key, value in context.items():
+#             if key in run.text:
+#                 run.text = run.text.replace(key, '' if value is None else value)
+
+
+# 이력서 템플릿을 채우고 저장하는 함수
+def fill_template(template_path, output_path, context):
     try:
-        response = call_openai_gpt(messages)
-        chat_response = response['choices'][0]['message']['content']
-        return chat_response
+        doc = Document(template_path)
+
+        for paragraph in doc.paragraphs:
+            replace_text_in_paragraph(paragraph, context)
+
+        for table in doc.tables:
+            for row in table.rows:
+                for cell in row.cells:
+                    for paragraph in cell.paragraphs:
+                        replace_text_in_paragraph(paragraph, context)
+
+        doc.save(output_path)
+        print("Document created successfully. File path:", output_path)
     except Exception as e:
         print(f"Error: {e}")
-        return None
+        
 
-def fill_template(template_path, output_path, context):
-    # 템플릿 문서 호출
-    doc = Document(template_path)
+# LibreOffice 실행 파일 경로 설정
+libreoffice_path = 'C:\\Program Files\\LibreOffice\\program\\soffice.exe'
+             
+# Docx 파일을 PDF로 변환하는 함수
+def convert_to_pdf(output_path_docx, output_path_pdf, libreoffice_path):
+    try:
+        subprocess.run([libreoffice_path, '--headless', '--convert-to', 'pdf', output_path_docx, '--outdir', os.path.dirname(output_path_pdf)])
+        print(f"PDF conversion successful. File path: {output_path_pdf}")
+    except Exception as e:
+        print(f"Error during PDF conversion: {e}")
+
+def generate_resume_content(resume_data):
     
-    # 모든 단락을 순회하며 플레이스홀더를 실제 데이터로 교체
-    for paragraph in doc.paragraphs:
-        for key, value in context.items():
-            if key in paragraph.text:
-                paragraph.text = paragraph.text.replace(key, value)
+    user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
-    # 모든 테이블을 순회하며 플레이스 홀더를 실제 데이터로 교체
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                for key, value in context.items():
-                    if key in cell.text:
-                        cell.text = cell.text.replace(key, value)
+
+    print("****************[generate_resume_content] ********************\n ", resume_data)
+    print("**************************************************************")
+    user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
-    # 최종 문서를 저장
-    doc.save(output_path)
+    output_folder = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\resumeResult'
+
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    # 파일 경로에 사용자 이름 포함
+
+    output_path_docx = os.path.join(output_folder, '{}_Resume.docx'.format(user_name))
+    output_path_pdf = os.path.join(output_folder, '{}_Resume.pdf'.format(user_name))
 
     
-def save_resume_as_docx(data, output_path):
-    # 새 문서 객체 생성
-    doc = Document()
+    # resume_data를 확인해 적절한 템플릿 파일 선택
+    experiences = resume_data.get("experiences")
+    certifications = resume_data.get("awardsandcertifications")
 
-    # 문서에 내용 추가
-    doc.add_heading('이력서', 0)
-    doc.add_paragraph(f"이름: {data.name}")
-    doc.add_paragraph(f"휴대폰 번호: {data.phone_number}")
-    doc.add_paragraph(f"이메일: {data.email}")
-    doc.add_paragraph(f"직무: {data.job_title}")
+    if experiences and certifications:
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template1.docx'  # 경력과 자격증 둘 다 존재하는 경우
+    elif not experiences and certifications:
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template2.docx'  # 자격증만 있는 신입 템플릿
+    elif experiences and not certifications:
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template3.docx'  # 경력만 있는 경력자 템플릿
+    else:
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template4.docx'  # 경력과 자격증 모두 없는 신입 템플릿
 
-    if data.skills:
-        skills_text = ", ".join(data.skills)
-        doc.add_paragraph("기술 스택: " + skills_text)
+    # 선택된 템플릿으로 context를 적용
+    context = generate_resume(resume_data)
 
-    # 경력 사항 추가
-    if data.experiences:
-        experiences_text = ", ".join(data.experiences)
-        doc.add_paragraph("경력 사항: " + experiences_text)
+    # 이력서 템플릿을 채우고 저장
+    fill_template(template_path, output_path_docx, context)
 
-    # 프로젝트 추가
-    if data.projects:
-        projects_text = ", ".join(data.projects)
-        doc.add_paragraph("프로젝트: " + projects_text)
+    # Docx 파일을 PDF로 변환
+    convert_to_pdf(output_path_docx, output_path_pdf, libreoffice_path)
+    
 
-    # 교육 추가
-    if data.education:
-        education_text = ", ".join(data.education)
-        doc.add_paragraph("교육: " + education_text)
-
-    # 수상 내역 및 자격증 추가
-    if data.awards_and_certifications:
-        awards_text = ", ".join(data.awards_and_certifications)
-        doc.add_paragraph("수상 내역 및 자격증: " + awards_text)
-
-    # 문서 저장
-    doc.save(output_path)
+    return output_path_pdf  # PDF 파일 경로 반환
