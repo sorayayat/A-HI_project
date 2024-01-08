@@ -13,6 +13,11 @@ function Apply() {
     const navigate = useNavigate();
     const postingLikeList = useSelector(state => state.recommendationReducer.postingLike);
 
+    // const companyCode = localStorage.session("user")
+
+    // console.log('companyCode' , companyCode);
+    
+
     
     const pageInfo = posting?.data?.pageInfo;
 
