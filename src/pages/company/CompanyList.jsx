@@ -27,6 +27,14 @@ function Apply() {
 
     const pageNumber = [];
 
+    const companyCodeJSON  = sessionStorage?.getItem("userInfo")
+
+    const parsedData = JSON.parse(companyCodeJSON);
+
+    const companyCode = parsedData?.companyEntity?.companyId;
+
+    const memberCode = parsedData?.id;
+
     if(pageInfo){
         for(let i = 1; i <= pageInfo.pageEnd; i++){
             pageNumber.push(i);
@@ -46,7 +54,7 @@ function Apply() {
         }))
 
         dispatch(callSelectLikePosting({
-            memberCode: 3
+            memberCode: memberCode
         }),[currentPage])
 
 

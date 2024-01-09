@@ -14,6 +14,14 @@ function WriteInfo() {
     const navigate = useNavigate ();
     const dataObject = location.state ? location.state.dataObject : null;
 
+    const companyCodeJSON  = sessionStorage?.getItem("userInfo")
+
+    const parsedData = JSON.parse(companyCodeJSON);
+
+    const companyCode = parsedData?.companyEntity?.companyId;
+
+    const memberCode = parsedData?.id;
+
     useEffect(() => {
         document.body.classList.add(style.companyRegistBody);
         window.scrollTo(0, 0)
@@ -76,7 +84,7 @@ function WriteInfo() {
     
         dispatch(callPostingAPI({
             form: formData,
-            companyCode : 1,
+            companyCode : companyCode,
             navigate :navigate
         }));
         

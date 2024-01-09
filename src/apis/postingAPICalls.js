@@ -70,6 +70,8 @@ export const callSelectJobListing = ({currentPage}) => {
 
 export const callUpdatePostingLike = ({memberCode , postingCode}) => {
 
+    
+
 
     const requestURL = `${SPRING_PRE_URL}/updateLike/${memberCode}`;
 
