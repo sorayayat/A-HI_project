@@ -59,7 +59,7 @@ async def get_user_chatrooms(request_body: dict = Body(...)):
 
 
 # mongoDB 데이터 저장
-async def update_chatroom(email, roomId, user_message, prompt, chatbot_response):
+async def update_chatroom(email, roomId, user_message, prompt, chatbot_response, resume_path=None):
     user_data = await db.chatrooms.find_one({"email": email})
 
     if user_data:
@@ -73,18 +73,30 @@ async def update_chatroom(email, roomId, user_message, prompt, chatbot_response)
                 room["messageList"].append({"sender": "사용자", "content": user_message})
                 room["messageList"].append({"sender": "챗봇", "content": chatbot_response})
                 room["prompt"] = prompt
+
+                # 이력서 파일 경로 추가
+                if resume_path:
+                    room["resumePath"] = resume_path
+
                 break
+                
 
         if not chatroom_exists:
             # 채팅방이 존재하지 않는 경우 새로운 채팅방 생성
-            user_data["chatroomList"].append({
+            new_chatroom = {
                 "roomId": roomId,
                 "messageList": [
                     {"sender": "사용자", "content": user_message},
                     {"sender": "챗봇", "content": chatbot_response}
                 ],
                 "prompt": prompt
-            })
+            }
+
+            # 이력서 파일 경로 추가
+            if resume_path:
+                new_chatroom["resumePath"] = resume_path
+
+            user_data["chatroomList"].append(new_chatroom)
 
         # 업데이트된 데이터베이스 정보를 업데이트
         await db.chatrooms.update_one({"email": email}, {"$set": user_data}, upsert=True)
@@ -103,6 +115,11 @@ async def update_chatroom(email, roomId, user_message, prompt, chatbot_response)
                 }
             ]
         }
+
+        # 이력서 파일 경로 추가
+        if resume_path:
+            new_user_data["chatroomList"][0]["resumePath"] = resume_path
+
         await db.chatrooms.insert_one(new_user_data)
 
 
@@ -151,7 +168,7 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
                       - rule 2) 최종학력에는 학교이름, 최종학력 세부내용에는 전공, 입학/졸업 시기 정도로만 간략하게 쓴다. 학점은 필요 없다.    
                       - rule 3) 기술 스택에는 지원한 포지션에 맞게 필요한 주력 기술만 넣는다.
                       - rule 4) 경력사항은 최신순으로 가장 최근 경험을 상단에 둔다.
-                      - rule 5) 경력사항에는 회사이름과 부서/직함을 넣고, 경력사항 세부내용에는 진행했던 업무 내용을 한줄로 요약해서 넣는다. (경력사항 세부내용 예시: 테스트 규모별 서버 증설 담당, 부하테스트(BMT) 진행)
+                      - rule 5) 경력사항에는 회사이름과 부서/직함을 넣고, 경력사항 세부내용에는 진행했던 업무 내용을 고객에게 입력받은 내용을 한줄로 요약해서 넣는다. (경력사항 세부내용 예시: 테스트 규모별 서버 증설 담당, 부하테스트(BMT) 진행)
 
 
                     <Persona>
@@ -165,7 +182,7 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
                     - 13가지 항목에 대한 정보수집이 완료되면 수집한 정보를 토대로
                          {{"name":수집한 이름, "phonenumber":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "jobtitle":원하는 직업, 
                         "skills":[수집한 기술스택], "experiences":[수집한 경력사항], "experiencesdetail":[경력사향 세부 내용], "projects":[수집한 프로젝트 경험],
-                        "projectdetail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "educationdetail":수집한 최종학력 세부내용, 
+                        "projectsdetail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "educationdetail":수집한 최종학력 세부내용, 
                         "awardsandcertifications":[수집한 수상경력 혹은 자격증]}} 형태의 대답만 하고 마친다.
                     - 13가지 항목을 한꺼번에 질문하지말고, 상담하듯 자연스러운 대화로 이끌어 나간다.
                     - 모든 답변은 한국어와 존댓말을 사용하며, AI임을 언급하지 않고 인간의 조언과 전문적인 지식을 제공한다.                 
@@ -220,12 +237,22 @@ async def chatbot_endpoint(message: User):
     previous_system_content[(message.email, message.roomId)] = full_prompt + f"\n{updated_chat}"
     print("============================== Updated previous_system_content ============================== \n", previous_system_content[(message.email, message.roomId)])
 
-    # 챗봇 마지막 응답에서 이력서용 데이터 추출 후 사용자에게 보여줄 메세지 준비
-    resume_data = extract_resume_data(message.email, message.roomId)
+    # 챗봇 마지막 응답에서 이력서용 데이터 추출 및 이력서 준비 여부 확인
+    resume_data, resume_ready = extract_resume_data(message.email, message.roomId)
 
     # resume_data가 생성된 경우에만 send_resume_data 함수 호출
+    resume_web_url = None
     if resume_data:
-        send_resume_data(resume_data, message.email, message.roomId)
+
+        # 사용자에게 보낼 새로운 메시지
+        user_friendly_message = "이력서에 필요한 정보 수집이 완료되었습니다! 이력서를 확인하려면 아래 버튼을 눌러주세요!"
+
+        # 사용자에게 보낼 메시지를 챗봇 응답으로 설정
+        chatbot_response = user_friendly_message
+
+        # 이력서 파일의 웹 접근 가능 URL 생성
+        resume_web_url = send_resume_data(resume_data, message.email, message.roomId)
+        # send_resume_data(resume_data, message.email, message.roomId)
     else:
         print("아직 resume_data가 생성되지 않았습니다.")
         
@@ -235,13 +262,12 @@ async def chatbot_endpoint(message: User):
         roomId=message.roomId,
         user_message=user_message,
         prompt=message.prompt,
-        chatbot_response=chatbot_response
+        chatbot_response=chatbot_response,
+        resume_path=resume_web_url # 웹 접근 가능 URL 추가
     )
 
-    
-    
-
-    return {"gptMessage": chatbot_response}
+    # 이력서 생성 가능 여부도 함께 전달
+    return {"gptMessage": chatbot_response, "resumeReady": resume_ready}
 
 
 
@@ -268,7 +294,10 @@ def extract_resume_data(email, room_id):
             if json_str_match:
                 json_str = json_str_match.group()
                 print("======================= 추출된 JSON 데이터 =======================\n", json_str)
-                return json.loads(json_str)
+                # 이력서 생성 가능 여부 판단
+                resume_ready = True
+
+                return json.loads(json_str), resume_ready
 
     except json.JSONDecodeError:
         print("JSON 파싱 오류: 챗봇 응답에서 유효한 JSON 데이터를 추출할 수 없습니다.")
@@ -288,6 +317,13 @@ def send_resume_data(resume_data, email, roomId):
     # 이력서 컨텐츠 생성 및 파일 경로 반환
     resume_file_path = generate_resume_content(resume_data)
 
-    print("=============================== 생성된 이력서 파일 경로=============================== ", resume_file_path)
+    # 파일 이름 추출 (예: 'your_resume_file.pdf')
+    file_name = os.path.basename(resume_file_path)
 
-    return None
+    # 로컬에서 접근 가능한 URL 생성
+    web_accessible_url = f"http://localhost:8000/static/resume/resumeResult/{file_name}"
+
+    print("=============================== 생성된 이력서 파일 경로 =============================== ", resume_file_path)
+    print("================================== 웹 접근 가능 URL ================================== ", resume_file_path)
+
+    return web_accessible_url
