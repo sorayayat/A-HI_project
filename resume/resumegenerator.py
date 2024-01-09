@@ -2,6 +2,7 @@ from docx import Document
 import os
 import subprocess
 
+
 def format_skills(skills):
     formatted_skills = ''
     for i, skill in enumerate(skills):
@@ -17,39 +18,36 @@ def generate_resume(resume_data):
     formatted_skills = format_skills(resume_data.get("skills", []))
 
     # Placeholder에 대해 초기 공백 값 설정
-    context = {f'{{Skills{i}}}': ' ' for i in range(1, 6)}
-    context.update({f'{{Experiences{i}}}': ' ' for i in range(1, 6)})
+    context = {f'{{Experiences{i}}}': ' ' for i in range(1, 6)}
     context.update({f'{{ExperiencesDetail{i}}}': ' ' for i in range(1, 6)})
     context.update({f'{{Projects{i}}}': ' ' for i in range(1, 6)})
     context.update({f'{{ProjectsDetail{i}}}': ' ' for i in range(1, 6)})
 
     # 기존 로직을 사용하여 실제 데이터가 있는 경우 값 업데이트
-    for i, skill in enumerate(resume_data.get("skills", [])):
-        context[f'{{Skills{i + 1}}}'] = skill
     for i, experience in enumerate(resume_data.get("experiences", [])):
         context[f'{{Experiences{i + 1}}}'] = experience
-    for i, detail in enumerate(resume_data.get("experiencesdetail", [])):
+    for i, detail in enumerate(resume_data.get("experiences_detail", [])):
         context[f'{{ExperiencesDetail{i + 1}}}'] = detail
     for i, project in enumerate(resume_data.get("projects", [])):
         context[f'{{Projects{i + 1}}}'] = project
-    for i, detail in enumerate(resume_data.get("projectsdetail", [])):
+    for i, detail in enumerate(resume_data.get("projects_detail", [])):
         context[f'{{ProjectsDetail{i + 1}}}'] = detail
 
     # 나머지 데이터는 기존 로직대로 처리
     context.update({
         '{Name}': resume_data.get("name", ' '),
-        '{Phone}': resume_data.get("phonenumber", ' '),
+        '{Phone}': resume_data.get("phone_number", ' '),
         '{Email}': resume_data.get("email", ' '),
         '{Git}': resume_data.get("git", ' '),
-        '{JobTitle}': resume_data.get("jobtitle", ' '),
+        '{JobTitle}': resume_data.get("job_title", ' '),
         '{Skills}': formatted_skills,
         '{Experiences}': ', '.join(resume_data.get("experiences", [])),
-        '{ExperiencesDetail}': '\n'.join(resume_data.get("experiencesdetail", [])),
+        '{ExperiencesDetail}': '\n'.join(resume_data.get("experiences_detail", [])),
         '{Projects}': '  '.join(resume_data.get("projects", [])),
-        '{ProjectsDetail}': '\n'.join(resume_data.get("projectsdetail", [])),
+        '{ProjectsDetail}': '\n'.join(resume_data.get("projects_detail", [])),
         '{Education}': resume_data.get("education", ' '),
-        '{EducationDetail}': resume_data.get("educationdetail", ' '),
-        '{AwardsAndCertifications}': '\n'.join(resume_data.get("awardsandcertifications", []))
+        '{EducationDetail}': resume_data.get("education_detail", ' '),
+        '{AwardsAndCertifications}': '\n'.join(resume_data.get("awards_and_certifications", []))
     })
 
     return context
@@ -60,12 +58,6 @@ def replace_text_in_paragraph(paragraph, context):
         for key, value in context.items():
             if key in run.text:
                 run.text = run.text.replace(key, ' ' if value is None or value == '' else value)
-# def replace_text_in_paragraph(paragraph, context):
-#     for run in paragraph.runs:
-#         for key, value in context.items():
-#             if key in run.text:
-#                 run.text = run.text.replace(key, '' if value is None else value)
-
 
 # 이력서 템플릿을 채우고 저장하는 함수
 def fill_template(template_path, output_path, context):
