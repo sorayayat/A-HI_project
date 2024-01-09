@@ -2,7 +2,7 @@ import {useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import style from './static/css/inspectionMain.module.css'
 import modalStyle from './static/css/ResumeListModal.module.css'
-import logo from './static/image/logo.png'
+import logo from '../../components/commons/logo.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { callInspectionResumeAPI, callResumeDetailAPI } from '../../apis/inspectionAPICalls.js';
 
@@ -64,7 +64,6 @@ function InspectionMain()
     }
 
 
-    console.log(resume?.data)
     return(
     <div>
         <div>

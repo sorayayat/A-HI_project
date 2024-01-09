@@ -10,6 +10,7 @@
     justify-content: center;
     z-index: 101;
     
+    
 }
 
 .recommendationContainer{
@@ -18,4 +19,49 @@
     width: 500px;
     height: auto;
     padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+    
 }
+
+.companyTitle{
+
+    display: flex;
+    justify-content: space-between;
+
+}
+
+
+
+.recommendationTitle{
+
+    font-size: 40px;
+    font-weight: 800;
+    color: #3498db;
+    margin-bottom: 20px;
+}
+
+.companyDetails{
+    
+    border-radius: 20px;
+    padding: 20px;
+    background-color: #3498db;
+    color: white;
+    
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+}
+
+.closeButton:hover {
+    color: #000;
+}
+

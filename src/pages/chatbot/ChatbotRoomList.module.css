@@ -29,6 +29,20 @@
 .roomListMenu {
     height: 300px;
     flex: 1 1 0%;
+    overflow: hidden;
+}
+
+
+.roomListMenuSetWrapper {
+    height: calc(100% - 60px);
+    width: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.roomListMenuSetWrapper::-webkit-scrollbar {
+    display: none;
 }
 
 .roomListMenuSet {
@@ -62,7 +76,7 @@
 
 
 .roomLists {
-    height: 60px;
+    height: 75px;
     padding: 5px 15px;
     display: flex;
     flex-direction: column;
@@ -89,4 +103,12 @@ p {
 
 .activeRoom:hover {
     background-color: #bfd1f5;
+}
+
+.roomLists .deleteButton {
+    display: none;
+}
+
+.roomLists:hover .deleteButton {
+    display: block; /* 마우스 올렸을 때만 삭제 버튼 보이게 */
 }

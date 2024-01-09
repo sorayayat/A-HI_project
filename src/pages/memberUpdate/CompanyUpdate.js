@@ -21,11 +21,12 @@ const CompanyUpdate = () => {
     companyHomepage:"",
     logo: null,
   });
-
+    
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await axios.get('/api/member/infoCompany');
+      const response = await axios.get('/api/in/member/infoCompany');
       const data = response.data;
+      console.log(data);
       setOriginalNumber(data.phoneNumber);
       setFormData({
         email: data.email,
@@ -57,7 +58,7 @@ const CompanyUpdate = () => {
       return;
     }
     
-    axios.get(`./api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    axios.get(`/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
             if(response.data===true) {
               alert("등록 가능한 번호 입니다.");
@@ -116,7 +117,7 @@ const CompanyUpdate = () => {
       alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     }
-    axios.put(`/api/member/company_info_update`, data)
+    axios.put(`/api/in/member/company_info_update`, data)
     .then(response => {
       const updatedUserInfo = {
         ...JSON.parse(sessionStorage.getItem('userInfo')),
@@ -214,11 +215,11 @@ const CompanyUpdate = () => {
           <div className={styles.inputOnly}>
           <select id="companyType" name="companyType" className={styles.selectType}   value={formData.companyType} required 
       onChange={handleChange}>
-    <option value="micro">5인 이하</option>
-    <option value="small">중소기업</option>
-    <option value="medium">중견기업</option>
-    <option value="large">대기업</option>
-    <option value="global">글로벌기업</option>
+    <option value="5인이하기업">5인 이하</option>
+    <option value="중소기업">중소기업</option>
+    <option value="중견기업">중견기업</option>
+    <option value="대기업">대기업</option>
+    <option value="글로벌기업">글로벌기업</option>
 </select>
           </div>
           <span></span>

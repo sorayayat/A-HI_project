@@ -34,13 +34,11 @@ const JoinFormCompany = () => {
     if(formData.password!==formData.confirmPassword) {
       alert('비밀번호와 비밀번호확인은 같은 값이어야 합니다.');
       return;
-    }else if (formData.phoneNumber.length < 10) {
-      alert("전화번호는 최소 10자리 이상 이어야 합니다.");
+    }else if (formData.password.length < 10 || formData.password.length > 25 ||
+      formData.confirmPassword.length < 10 || formData.confirmPassword.length > 25){
+      alert("비밀번호와 비밀번호 확인은 10자리 이상 25자리 이하 여야 합니다.");
       return;
-    } else if (formData.password.length <10 || formData.confirmPassword.length <10){
-      alert("비밀번호와 비밀번호 확인은 11자리 이상 이어야 합니다.");
-      return;
-    }
+    } 
 
     const data = new FormData();
     for (const key in formData) {
@@ -222,11 +220,11 @@ const JoinFormCompany = () => {
           <div className={styles.inputOnly}>
           <select id="companyType" name="companyType" className={styles.selectType}   value={formData.companyType} required 
       onChange={handleChange}>
-    <option value="micro">5인 이하</option>
-    <option value="small">중소기업</option>
-    <option value="medium">중견기업</option>
-    <option value="large">대기업</option>
-    <option value="global">글로벌기업</option>
+    <option value="5인이하기업">5인 이하</option>
+    <option value="중소기업">중소기업</option>
+    <option value="중견기업">중견기업</option>
+    <option value="대기업">대기업</option>
+    <option value="글로벌기업">글로벌기업</option>
 </select>
           </div>
           <span></span>

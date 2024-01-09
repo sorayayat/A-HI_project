@@ -6,6 +6,7 @@ import { callInterview } from '../../apis/interviewAPICalls'
 import { callInterviewAnswer } from '../../apis/interviewAPIanswerCall'
 import { calluserInterview } from '../../apis/userinterviewCall'
 import Swal from "sweetalert2";
+import LoadingScreen from "./LoadingScreen";
 
 const UserInterview = () => {
     // 이력서 pdf formdata
@@ -21,7 +22,6 @@ const UserInterview = () => {
     // 샹태 값에 따라 토글 동작
     const [isToggled, setIsToggled] = useState({});
     const dispatch = useDispatch();
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [dragging, setDragging] = useState(false);
     const [droppedFiles, setDroppedFiles] = useState();
 
@@ -56,30 +56,23 @@ const UserInterview = () => {
                 userPDF : formData
             }))
 
-            setIsModalOpen(true)
+            setIsLoading(true)
         }
     }
-
-    // 로딩 중을 표시해줌
-    const handleSearchAnnouncement = () => {
-        setIsLoading(true); // 로딩 시작
-        dispatch(callInterview({ userPDF: userPDF }, (result) => {
-            setquestion(result.question);
-            setIsLoading(false); // 로딩 종료
-        }));
-    };
-
+    
     const handleSendAnswer = async () => {
         setIsLoading(true); // 로딩 시작
         dispatch(callInterviewAnswer({ userAnswer: userAnswer }, (sandresult) => {
             setAIanswer(sandresult.AIanswer);
             setIsLoading(false); // 로딩 종료
-        }));
+        })).catch(() => {
+            setIsLoading(false); // 오류 발생 시 로딩 종료
+        });
     };
 
 
     const handleAnswerChange = (index, value) => {
-        setAnswer(prev => ({ ...prev, [index]: value }));
+        setuserAnswer(prev => ({ ...prev, [index]: value }));
     };
 
     const handleToggle = (index) => {
@@ -96,16 +89,16 @@ const UserInterview = () => {
     return (
         <>
             {/* 첫 화면에 나타날 내용 */}
-
+        <div className={interviewstyle.container}>
             <div className={interviewstyle.header}><h1>AI 면접</h1>
                 <div className={interviewstyle.shoulder}><h3>AI와 함께 면접을 준비해보세요</h3></div>
             </div>
+            {/* 로딩화면을 나타낸다 */}
+            <LoadingScreen isLoading={isLoading} />
 
-
-            <div className={styles.attachedFile}>
                 <div className={styles.uploadBox} onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDrop}
-                    styles={{
+                    style={{
                         border: '2px dashed #ccc',
                         textAlign: 'center',
                         backgroundColor: dragging ? 'gray' : 'white',
@@ -116,22 +109,18 @@ const UserInterview = () => {
                         <div >
                             {droppedFiles.map((fileName, index) => (
                                 <p key={index}>{fileName}</p>
-                            ))}
+                                ))}
 
                         </div>
                     )}
                 </div>
                 <button className={styles.recommendationButton} onClick={onClickuserfileHandler}>AI 면접시작하기</button>
-            </div>
+        </div>
 
+    
             {/* 질문창과 답변 창을 중앙으로 정렬 */}
             <div className={interviewstyle.questionBoxWrapper}>
-                {/* 로딩 상태를 보여준다 */}
-                {isModalOpen &&
-                    <div className={styles.lodingIndicator}>
-                        <div className={styles.spinner}></div>
-                    </div>
-                }
+                
 
                 {questions.map((q, index) => (
                     <div className={interviewstyle.questionBox}>

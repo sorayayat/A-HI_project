@@ -49,7 +49,7 @@ const Search = () => {
     
 
     // 임시 검색 데이터
-    const companyName = companyList?.data.map(company => company.company);
+    const companyName = companyList?.data?.map(company => company?.company);
 
     const handleInputChange = (event) => {
         const value = event.target.value;

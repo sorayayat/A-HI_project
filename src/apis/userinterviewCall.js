@@ -17,7 +17,7 @@ export const calluserInterview = (userPDF, callback) => {
                 const data = await PDFresult.json();
                 callback(data); // 콜백 함수를 호출하여 데이터 처리
             } else {
-                console.error("Server responded with status", sandresult.status);
+                console.error("Server responded with status", PDFresult.status);
             }
         } catch (error) {
             console.error("Error while fetching", error);
