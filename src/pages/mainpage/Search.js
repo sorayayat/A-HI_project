@@ -33,23 +33,23 @@ const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
     const [showDropDown, setShowDropDown] = useState(false);
+    const [companyName , setCompanyName] = useState([])
     const companyList = useSelector(state => state.companyReducer?.searchCompany);
 
     
     const dispatch = useDispatch();
 
     useEffect(() => {
-
-        dispatch(callSearchCompany({
-
-        }))
+        
+        dispatch(callSearchCompany({}))
     },[])
 
-    
-    
+    useEffect(() =>{
+        if(companyList?.data){
+            setCompanyName(companyList.data.map(company => company.company))
+        }
+    },[companyList])
 
-    // 임시 검색 데이터
-    const companyName = companyList?.data?.map(company => company?.company);
 
     const handleInputChange = (event) => {
         const value = event.target.value;

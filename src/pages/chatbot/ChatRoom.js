@@ -102,49 +102,39 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
             });
 
             const data = await response.json();
-
+            console.log("========================== [sendMessage] chatbot_endpoint response ==========================\n", data);
             const newChatbotMessage = { sender: '챗봇', content: data.gptMessage };
 
-                setMessage('');
+            setMessage('');
 
             setMessageList(prevMessages => [...prevMessages, newUserMessage, newChatbotMessage]);
 
              // 새 메시지를 chatRooms 상태에 반영
             updateChatRoomsMessages(activeChatRoom.roomId, newUserMessage);
             updateChatRoomsMessages(activeChatRoom.roomId, newChatbotMessage);
-        }
-    };
 
-
-    const handleCreateResume = async () => {
-        console.log("이력서 생성 요청 동작...")
-        // 서버로 이력서 생성 요청 보내기
-        try {
-            const response = await fetch('http://localhost:8000/create-resume/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: userEmail,
-                    roomId: activeChatRoom.roomId
-                })
-            });
-            const data = await response.json();
-    
-            // 서버로부터의 응답 처리
-            if (data.success) {
-                console.log('이력서 생성 성공:', data);
-                // 성공 메시지 표시 또는 다른 UI 처리
-            } else {
-                console.log('이력서 생성 실패:', data);
-                // 실패 메시지 표시 또는 다른 UI 처리
+            // 이력서 생성 버튼 표시 여부 결정
+            if (data.resumeReady) {
+                console.log("!!!!!!!!!!!!!!!!!!!이력서 준비됨: ", data.resumeReady);
+                setShowResumeButton(true);
             }
-        } catch (error) {
-            console.error('이력서 생성 요청 중 오류 발생:', error);
-            // 오류 메시지 표시 또는 다른 UI 처리
         }
     };
 
+    useEffect(() => {
+        console.log("activeChatRoom 변경됨: ", activeChatRoom);
+        if (activeChatRoom && activeChatRoom.resumePath) {
+            console.log("이력서 파일 URL: ", activeChatRoom.resumePath);
+        }
+    }, [activeChatRoom]);
 
+
+    const handleDownloadResume = () => {
+        if (activeChatRoom && activeChatRoom.resumePath) {
+            window.location.href = activeChatRoom.resumePath; // 이력서 파일 URL로 직접 이동
+        }
+    };
+    
 
     return (
         <>
@@ -161,16 +151,15 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
                                             <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
                                                 {msg.content}
                                             </p>
+                                            {/* 조건부 렌더링으로 버튼 추가 */}
+                                            {showResumeButton && activeChatRoom.resumePath && (
+                                                <button onClick={handleDownloadResume} className={styles.resumeButton}>
+                                                    이력서 다운로드
+                                                </button>
+                                            )}
                                         </div>
                                 ))}
                                 {/* 이력서 생성하기 버튼을 말풍선 목록 마지막에 추가 */}
-                                {showResumeButton && (
-                                    <div className={styles.resumeButtonContainer}>
-                                        <button onClick={handleCreateResume} className={styles.resumeButton}>
-                                            이력서 생성하기
-                                        </button>
-                                    </div>
-                                )}
                             </div>
                         </div>
                         

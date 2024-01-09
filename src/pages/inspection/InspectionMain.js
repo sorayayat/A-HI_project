@@ -4,36 +4,47 @@ import style from './static/css/inspectionMain.module.css'
 import modalStyle from './static/css/ResumeListModal.module.css'
 import logo from '../../components/commons/logo.png'
 import { useDispatch, useSelector } from 'react-redux';
-import { callInspectionResumeAPI, callResumeDetailAPI } from '../../apis/inspectionAPICalls.js';
+import { callInspectionResumeAPI, callPafRaderAPI, callResumeDetailAPI } from '../../apis/inspectionAPICalls.js';
+import Swal from 'sweetalert2';
 
 
 function InspectionMain()
 {
     const navigate = useNavigate();
     const [dragging, setDragging] = useState(false);
-    const [file,setFile] = useState([]);
-    const [droppedFiles, setDroppedFiles] = useState([]);
+    const [file , setFile] = useState({});
+    const formData = new FormData();
+    const [fileName , setFileName] = useState("");
+    const [info , setInfo] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const resume = useSelector((state) => state.inspectionReducer.resumelist);
     const dispatch = useDispatch();
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
     const ref = useRef();
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'ri',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', () => Swal.stopTimer())
+            toast.addEventListener('mouseleave', () => Swal.resumeTimer())
+        }});
 
     const handleDrop = (e) => {
         e.preventDefault();
         setDragging(true);
-        const files = Array.from(e.dataTransfer.files)
-        setFile(prevFile => ([...prevFile, ...files]));
-        console.log('asd',e.dataTransfer.files);
-        const fileNames = files.map(file => file.name);
-        console.log('드롭한 파일:', fileNames);
-        setDroppedFiles(prevFiles => [...prevFiles, ...fileNames]); // 이전 파일 목록에 새 파일 추가
+        const dropFile = e.dataTransfer.files[0];
+        if(dropFile){
+            setFileName(dropFile.name);
+            setFile(dropFile);
+        }
 
     };
-
-    // 모달창 내부가 아닌 외부 클릭시 닫힘 로직
     useEffect(() => {
         const clickOutside = (e) => {
-          // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+          
           if (isModalOpen && ref.current && !ref.current.contains(e.target)) {
             setIsModalOpen(false);
           }
@@ -44,9 +55,21 @@ function InspectionMain()
         };
       }, [isModalOpen]);
 
+    useEffect(() =>{
+        if(info?.resumeCode){
+            dispatch(callResumeDetailAPI(info)).then((result) => {
+                console.log(result);
+                if(result.status === 200)
+                    navigate("/inspection/detail")
+            })
+        }
+        else
+            console.log(info)
+    },[info])
+
     const openModal = () =>{
         setIsModalOpen(true)
-        dispatch(callInspectionResumeAPI());
+        dispatch(callInspectionResumeAPI(userInfo));
     }
 
     const closeModal = () =>{
@@ -54,13 +77,28 @@ function InspectionMain()
     }
 
     const onClickResumeHandler = (code) =>{
-        //여기서 현재 로그인한 계정인지 아닌지 체크하면 좋을듯
-        dispatch(callResumeDetailAPI(code)).then((result) => {
-            console.log(result);
-            if(result.status === 200)
-                navigate("/inspection/detail")
-        })
+        setInfo({
+            "resumeCode" : code,
+            "memberDto" : userInfo
+        });
+    }
 
+    const onClickPdfHandler = () => {
+        const formData = new FormData();
+        formData.append("file",file);
+        if(formData){
+            dispatch(callPafRaderAPI(formData)).then((result) => {
+                if(result.status === 200)
+                    navigate("/inspection/detail");
+            });
+        }
+        else{
+            Toast.fire({
+                icon : 'error',
+                title : "등록된 파일이 없습니다."
+            });
+        } 
+            
     }
 
 
@@ -106,17 +144,15 @@ function InspectionMain()
                 backgroundColor: dragging ? 'gray' : 'white',
                     }}>
             <p>{dragging ? '' : '여기로 파일을 드래그하세요'}</p>
-            {droppedFiles && (
+            {file && (
                 <div >
-                    {droppedFiles.map((fileName, index) => (
-                    <p key={index}>{fileName}</p>
-                    ))}   
+                    <p >{file.name}</p>
                 </div>
                     )}
             </div>
         </div>
 
-            <button className={style.recommendationButton}>PDF 파일로 자소서 평가 받기</button>
+            <button className={style.recommendationButton} onClick={onClickPdfHandler}>PDF 파일로 자소서 평가 받기</button>
             <h1 className={style.noResume}>등록된 이력서가 있다면?</h1>
             <button className={style.resumeButton}
                 onClick={openModal}

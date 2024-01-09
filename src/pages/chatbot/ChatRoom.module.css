@@ -221,3 +221,13 @@
     display: none; /* Webkit 기반 브라우저에 적용되는 속성 */
   }
 
+  .resumeButton {
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+    background-color: rgb(222, 218, 255);
+    cursor: pointer;
+    justify-content: center;
+    color: black;
+    font-family: "Pretendard";
+  }

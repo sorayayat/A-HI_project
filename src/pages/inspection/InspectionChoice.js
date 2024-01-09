@@ -55,7 +55,7 @@ function InspectionChoice(){
 
     const saveBtnHandler = async () =>{
         if(!divRef.current) return;
-
+        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         try{
             const div = divRef.current;
             const canvas = await html2canvas(div, { scale : 1});
@@ -63,8 +63,8 @@ function InspectionChoice(){
             canvas.toBlob((blob) =>{
                 if(blob !== null){
                     formData.append("resumeCode" , resume.data.resumeCode);
+                    formData.append("memberId", userInfo.id);
                     formData.append("image", blob , "test.png");
-
                     dispatch(callImageToPdfAPI(formData));
                 }     
             })

@@ -21,13 +21,15 @@
   position: relative; /* NO CHANGE */ /* 내부 요소를 절대 위치로 배치*/
   color: #043d68; /* NO CHANGE */
   font-size: 19px;
+  overflow: auto;
+  padding-right: 15px;
 }
 
 .contentArea {
   /* 전체 NO CHANGE */
   padding: 40px;
   width: 300px;
-  height: 900px;
+  height: auto;
   background-color: #e9f5fe; /* 하늘색 배경 */
   position: absolute; /* 절대 위치 */
   right: 0;
@@ -51,3 +53,4 @@
   font-size: 30px;
   color: #043d68;
 }
+
