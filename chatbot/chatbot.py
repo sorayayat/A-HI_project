@@ -59,7 +59,7 @@ async def get_user_chatrooms(request_body: dict = Body(...)):
 
 
 # mongoDB 데이터 저장
-async def update_chatroom(email, roomId, user_message, prompt, chatbot_response):
+async def update_chatroom(email, roomId, user_message, prompt, chatbot_response, resume_path=None):
     user_data = await db.chatrooms.find_one({"email": email})
 
     if user_data:
@@ -73,18 +73,30 @@ async def update_chatroom(email, roomId, user_message, prompt, chatbot_response)
                 room["messageList"].append({"sender": "사용자", "content": user_message})
                 room["messageList"].append({"sender": "챗봇", "content": chatbot_response})
                 room["prompt"] = prompt
+
+                # 이력서 파일 경로 추가
+                if resume_path:
+                    room["resumePath"] = resume_path
+
                 break
+                
 
         if not chatroom_exists:
             # 채팅방이 존재하지 않는 경우 새로운 채팅방 생성
-            user_data["chatroomList"].append({
+            new_chatroom = {
                 "roomId": roomId,
                 "messageList": [
                     {"sender": "사용자", "content": user_message},
                     {"sender": "챗봇", "content": chatbot_response}
                 ],
                 "prompt": prompt
-            })
+            }
+
+            # 이력서 파일 경로 추가
+            if resume_path:
+                new_chatroom["resumePath"] = resume_path
+
+            user_data["chatroomList"].append(new_chatroom)
 
         # 업데이트된 데이터베이스 정보를 업데이트
         await db.chatrooms.update_one({"email": email}, {"$set": user_data}, upsert=True)
@@ -103,6 +115,11 @@ async def update_chatroom(email, roomId, user_message, prompt, chatbot_response)
                 }
             ]
         }
+
+        # 이력서 파일 경로 추가
+        if resume_path:
+            new_user_data["chatroomList"][0]["resumePath"] = resume_path
+
         await db.chatrooms.insert_one(new_user_data)
 
 
@@ -224,6 +241,7 @@ async def chatbot_endpoint(message: User):
     resume_data = extract_resume_data(message.email, message.roomId)
 
     # resume_data가 생성된 경우에만 send_resume_data 함수 호출
+    resume_web_url = None
     if resume_data:
 
         # 사용자에게 보낼 새로운 메시지
@@ -232,7 +250,9 @@ async def chatbot_endpoint(message: User):
         # 사용자에게 보낼 메시지를 챗봇 응답으로 설정
         chatbot_response = user_friendly_message
 
-        send_resume_data(resume_data, message.email, message.roomId)
+        # 이력서 파일의 웹 접근 가능 URL 생성
+        resume_web_url = send_resume_data(resume_data, message.email, message.roomId)
+        # send_resume_data(resume_data, message.email, message.roomId)
     else:
         print("아직 resume_data가 생성되지 않았습니다.")
         
@@ -242,8 +262,8 @@ async def chatbot_endpoint(message: User):
         roomId=message.roomId,
         user_message=user_message,
         prompt=message.prompt,
-        chatbot_response=chatbot_response
-        # chatbot_response=chatbot_response
+        chatbot_response=chatbot_response,
+        resume_path=resume_web_url # 웹 접근 가능 URL 추가
     )
 
     
@@ -296,6 +316,13 @@ def send_resume_data(resume_data, email, roomId):
     # 이력서 컨텐츠 생성 및 파일 경로 반환
     resume_file_path = generate_resume_content(resume_data)
 
-    print("=============================== 생성된 이력서 파일 경로=============================== ", resume_file_path)
+    # 파일 이름 추출 (예: 'your_resume_file.pdf')
+    file_name = os.path.basename(resume_file_path)
 
-    return None
+    # 로컬에서 접근 가능한 URL 생성
+    web_accessible_url = f"http://localhost:8000/static/resume/resumeResult/{file_name}"
+
+    print("=============================== 생성된 이력서 파일 경로 =============================== ", resume_file_path)
+    print("================================== 웹 접근 가능 URL ================================== ", resume_file_path)
+
+    return web_accessible_url
