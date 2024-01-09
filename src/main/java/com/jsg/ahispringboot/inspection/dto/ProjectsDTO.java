@@ -1,5 +1,7 @@
 package com.jsg.ahispringboot.inspection.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,15 +10,12 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class PersonalInformationDTO {
-
-    private String name;
-    private String position;
-    private String email;
-    private String github;
-    private String phone;
-    private String education;
+public class ProjectsDTO {
+    @JsonProperty("ProjectsTitle")
+    private String ProjectsTitle;
+    @JsonProperty("ProjectsContent")
+    private String ProjectsContent;
 }

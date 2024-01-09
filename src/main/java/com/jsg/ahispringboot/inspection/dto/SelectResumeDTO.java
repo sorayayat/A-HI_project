@@ -1,5 +1,9 @@
 package com.jsg.ahispringboot.inspection.dto;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.jsg.ahispringboot.member.dto.MemberDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,12 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PersonalInformationDTO {
-
-    private String name;
-    private String position;
-    private String email;
-    private String github;
-    private String phone;
-    private String education;
+public class SelectResumeDTO {
+    private Long resumeCode;
+    private MemberDto memberDto;
 }

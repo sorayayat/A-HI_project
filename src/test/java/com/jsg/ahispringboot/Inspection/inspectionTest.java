@@ -29,11 +29,15 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.jsg.ahispringboot.company.entity.Member;
 import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
 import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.SelfIntroductionDTO;
 import com.jsg.ahispringboot.inspection.entity.Resume;
 import com.jsg.ahispringboot.inspection.repository.InspectionRepository;
+import com.jsg.ahispringboot.member.dto.MemberDto;
+import com.jsg.ahispringboot.member.entity.MemberEntity;
+import com.jsg.ahispringboot.member.repository.MemberRepository;
 
 @SpringBootTest
 @Commit
@@ -41,11 +45,14 @@ public class inspectionTest {
 
     private final InspectionRepository inspectionRepository;
     private final ModelMapper modelMapper;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public inspectionTest(InspectionRepository inspectionRepository, ModelMapper modelMapper) {
+    public inspectionTest(InspectionRepository inspectionRepository, ModelMapper modelMapper,
+            MemberRepository memberRepository) {
         this.inspectionRepository = inspectionRepository;
         this.modelMapper = modelMapper;
+        this.memberRepository = memberRepository;
     }
 
     @Test
@@ -69,23 +76,27 @@ public class inspectionTest {
             }
             System.out.println("fileList : " + filePaths);
         }
-
+        MemberEntity member = memberRepository.findById(3L);
         for (String path : filePaths) {
             ResumeDTO r = new ResumeDTO();
             LocalDateTime date = LocalDateTime.now();
             String newDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
             r.setResumePath(path);
             r.setCreateDate(newDate);
-            r.setModifyDate(newDate);
-            r.getMember().setId(1L);
             ResumeDTOs.add(r);
         }
         System.out.println("fileDTOs : " + ResumeDTOs);
+
         // then
         try {
             List<Resume> resume = ResumeDTOs.stream()
                     .map(r -> modelMapper.map(r, Resume.class))
                     .collect(Collectors.toList());
+            int i = 0;
+            for (Resume r : resume) {
+                r.setMember(member);
+                i++;
+            }
             inspectionRepository.saveAll(resume);
         } catch (Exception e) {
             throw new RuntimeException(e);

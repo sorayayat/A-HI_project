@@ -1,5 +1,7 @@
 package com.jsg.ahispringboot.inspection.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -13,9 +15,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SelfIntroductionDTO {
-    @JsonProperty("title")
-    private String title;
-    @JsonProperty("content")
-    private String content;
+public class AnswerDTO {
+    @JsonProperty("gptAnswer")
+    private String answer;
+    @JsonProperty("SelfIntroduction")
+    public List<SelfIntroductionDTO> selfIntroduction;
 }

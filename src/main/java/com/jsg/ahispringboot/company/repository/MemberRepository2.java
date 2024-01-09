@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository2 extends JpaRepository<MemberEntity, Integer> {
 
-
     MemberEntity findById(Long memberCode);
 }

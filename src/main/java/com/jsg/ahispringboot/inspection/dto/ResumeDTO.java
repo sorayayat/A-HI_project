@@ -17,6 +17,5 @@ public class ResumeDTO {
     private Long resumeCode;
     private String resumePath;
     private String createDate;
-    private String modifyDate;
     private MemberDto member;
 }
