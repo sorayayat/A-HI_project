@@ -237,8 +237,8 @@ async def chatbot_endpoint(message: User):
     previous_system_content[(message.email, message.roomId)] = full_prompt + f"\n{updated_chat}"
     print("============================== Updated previous_system_content ============================== \n", previous_system_content[(message.email, message.roomId)])
 
-    # 챗봇 마지막 응답에서 이력서용 데이터 추출 후 사용자에게 보여줄 메세지 준비
-    resume_data = extract_resume_data(message.email, message.roomId)
+    # 챗봇 마지막 응답에서 이력서용 데이터 추출 및 이력서 준비 여부 확인
+    resume_data, resume_ready = extract_resume_data(message.email, message.roomId)
 
     # resume_data가 생성된 경우에만 send_resume_data 함수 호출
     resume_web_url = None
@@ -266,10 +266,8 @@ async def chatbot_endpoint(message: User):
         resume_path=resume_web_url # 웹 접근 가능 URL 추가
     )
 
-    
-    
-
-    return {"gptMessage": chatbot_response}
+    # 이력서 생성 가능 여부도 함께 전달
+    return {"gptMessage": chatbot_response, "resumeReady": resume_ready}
 
 
 
@@ -296,7 +294,10 @@ def extract_resume_data(email, room_id):
             if json_str_match:
                 json_str = json_str_match.group()
                 print("======================= 추출된 JSON 데이터 =======================\n", json_str)
-                return json.loads(json_str)
+                # 이력서 생성 가능 여부 판단
+                resume_ready = True
+
+                return json.loads(json_str), resume_ready
 
     except json.JSONDecodeError:
         print("JSON 파싱 오류: 챗봇 응답에서 유효한 JSON 데이터를 추출할 수 없습니다.")
