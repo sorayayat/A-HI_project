@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 
 
 function CompanyRegist() {
@@ -125,6 +126,16 @@ function CompanyRegist() {
 
 
     const handleNextClick = () => {
+
+        if (!postingTitle || !q1 || !q3 || !detailAddress || !selectedJob || !education || !selectedCareer.length || !selectedSkills.length || !selectedConditions.length || !date || !deadLine) {
+            // 필수 입력 항목이 누락된 경우 알림창 표시
+            Swal.fire({
+                icon: 'error',
+                title: '정보를 모두 입력해주세요',
+            });
+            return;
+        }
+
         const dataObject = {
             q1,
             q3,
