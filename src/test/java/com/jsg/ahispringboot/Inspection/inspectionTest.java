@@ -76,7 +76,7 @@ public class inspectionTest {
             }
             System.out.println("fileList : " + filePaths);
         }
-        List<Resume> members = inspectionRepository.FindById(3l);
+        MemberEntity member = memberRepository.findById(3L);
         for (String path : filePaths) {
             ResumeDTO r = new ResumeDTO();
             LocalDateTime date = LocalDateTime.now();
@@ -94,7 +94,7 @@ public class inspectionTest {
                     .collect(Collectors.toList());
             int i = 0;
             for (Resume r : resume) {
-                r.setMember(members.get(i).getMember());
+                r.setMember(member);
                 i++;
             }
             inspectionRepository.saveAll(resume);

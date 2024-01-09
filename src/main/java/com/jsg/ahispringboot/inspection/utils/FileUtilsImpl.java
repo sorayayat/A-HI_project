@@ -187,6 +187,8 @@ public class FileUtilsImpl implements FileUtils {
                 try (FileOutputStream fos = new FileOutputStream(newFile)) {
                     fos.write(resource);
                 }
+
+                return Change(newPath);
             } else {
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     fos.write(resource);
@@ -197,8 +199,14 @@ public class FileUtilsImpl implements FileUtils {
             log.info("[SavePdf] 에러 : {}", e);
         }
 
-        return path;
+        return Change(path);
 
     }
 
+    public String Change(String path) {
+        String resourcesPath = "/static";
+        String renamePath = path.substring(path.indexOf(resourcesPath) + resourcesPath.length());
+        String change = renamePath.replace('\\', '/');
+        return change;
+    }
 }

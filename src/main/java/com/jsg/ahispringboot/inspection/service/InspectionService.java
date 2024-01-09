@@ -22,11 +22,13 @@ import com.jsg.ahispringboot.inspection.dto.AnswerDTO;
 import com.jsg.ahispringboot.inspection.dto.ModifyResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
 import com.jsg.ahispringboot.inspection.dto.ResumeDTO;
+import com.jsg.ahispringboot.inspection.dto.SaveResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.SelfIntroductionDTO;
 import com.jsg.ahispringboot.inspection.entity.Resume;
 import com.jsg.ahispringboot.inspection.repository.InspectionRepository;
 import com.jsg.ahispringboot.inspection.utils.FileUtils;
 import com.jsg.ahispringboot.inspection.utils.FileUtilsImpl;
+import com.jsg.ahispringboot.member.dto.MemberDto;
 
 import jakarta.mail.Multipart;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +84,14 @@ public class InspectionService {
 
     }
 
+    public ReaderDTO readResume(MultipartFile file) {
+        String title = file.getOriginalFilename();
+        ByteArrayResource resource = fileUtils.UploadFileToByteArray(file, title);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = fileUtils.FileCreatebody(resource, "file");
+        ReaderDTO reader = fileUtils.GetJsonData(endPoint, requestEntity);
+        return reader;
+    }
+
     public AnswerDTO modifyResume(ModifyResumeDTO modifyResumeDTO) {
 
         Long beforeTime = System.currentTimeMillis();
@@ -96,13 +106,12 @@ public class InspectionService {
     }
 
     @Transactional
-    public Map<String, Object> imageToPdf(String resumCode, MultipartFile image) {
+    public Map<String, Object> imageToPdf(Long resumeCode, MultipartFile image, Long memberId) {
 
-        Long userCode = 3L;
         LocalDateTime date = LocalDateTime.now();
         String newDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
-        Long code = Long.parseLong(resumCode);
-        Resume resume = inspectionRepositroy.findResumeCode(code, userCode);
+        // Long code = Long.parseLong(saveResumeDTO.getResumeCode());
+        Resume resume = inspectionRepositroy.findResumeCode(resumeCode, memberId);
         ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
         String title = fileUtils.getTitle(resumeDTO.getResumePath());
         ByteArrayResource resource = fileUtils.UploadFileToByteArray(image, title);
