@@ -27,23 +27,31 @@ public class MailSend {
         mailSender.send(message);
     }
 
-    public void sendEmail(String to, String subject, String code) {
+    public void sendEmail(String to, String subject, String code) throws MessagingException {
+        // Thymeleaf 컨텍스트 생성 및 변수 설정
         Context context = new Context();
         context.setVariable("code", code);
 
+        // Thymeleaf를 사용하여 HTML 컨텐츠 생성
         String htmlContent = templateEngine.process("mail/mail", context);
 
+        // MimeMessage 및 Helper 생성
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, "utf-8");
+
         try {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlContent, true); // true는 HTML 이메일임을 나타냅니다.
+
+            // MimeMessage 전송
+            mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             throw new MailParseException(e);
         }
-        mailSender.send(mimeMessage);
     }
+
+
 
 
     public String createCode() {

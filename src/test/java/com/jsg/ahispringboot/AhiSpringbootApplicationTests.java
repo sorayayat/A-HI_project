@@ -97,6 +97,7 @@ public class AhiSpringbootApplicationTests {
 
     private PostingLike createDummyPostingLike(long memberId, int postingId) {
         MemberEntity member = entityManager.find(MemberEntity.class, memberId);
+
         Posting posting = entityManager.find(Posting.class, postingId);
 
         PostingLike postingLike = new PostingLike();
@@ -109,9 +110,9 @@ public class AhiSpringbootApplicationTests {
 
 
     private LogoEntity createAndPersistLogo(int index) {
-        String[] imageNames = {"jingjing.jpg", "loading1.jpg", "loading2.jpg", "loading3.jpg"};
+        String[] imageNames = {"loading1.jpg", "loading2.jpg", "loading3.jpg"};
         String imageName = imageNames[new Random().nextInt(imageNames.length)];
-        String imagePath = "E:\\hi28\\AHI-SPRINGBOOT\\logoimg";
+        String imagePath = "E:\\hi28\\AHI-SPRINGBOOT\\logoimg\\";
 
         LogoEntity logo = new LogoEntity();
         logo.setOriginalName(imageName);
@@ -123,8 +124,8 @@ public class AhiSpringbootApplicationTests {
 
     private CompanyEntity createCompany(int index, LogoEntity logo) {
         CompanyEntity company = new CompanyEntity();
-        String[] companyTypes = {"micro", "small", "medium", "large", "global"};
-        String[] companyNames = {"고길동컴퍼니", "코딩은한글로흥선대원군코딩회사", "돼지발굽컴퍼니", "굉장해엄청나", "니가감히지원해주식회사", "하이미디어","안랩","홈플러스","it비즈","아이티이앤씨","갈갈이패밀리","데브옵스런쳐","db마스터","현대로보틱스","스페이스x","이엠텍","뽀로로it","호두컴퍼니","멋쟁이사자","24/7코딩컴퍼니"};
+        String[] companyTypes = {"5인이하기업", "중소기업", "중견기업", "대기업", "글로벌기업"};
+        String[] companyNames = {"이엠테크", "it비즈", "it인터네셔날", "크립토", "엄브렐라", "테크원","멋쟁이사자","칙바이칙","파이브가이즈","에이원","브롱코","랜드로버","호호마켓","홈플러스","이마트","하이테크","현대로직","하이테크빌리지","포스원","오더나인","아이테크빌리지","남원상사","풍산"};
 
         company.setCompany(companyNames[new Random().nextInt(companyNames.length)] + " " + index);
         company.setEmployeesNumber(new Random().nextInt(1000));
@@ -136,8 +137,8 @@ public class AhiSpringbootApplicationTests {
     }
 
     private MemberEntity createMember(int index, CompanyEntity company) {
-        String[] name = {"디발라", "홍두깨", "영심이", "케인", "손흥민","서건창","최형우","안용복","전봉길","오택","고길동","도우너","희동이","김두한","궁예","존시나","크레이지매드"};
         MemberEntity member = new MemberEntity();
+        String[] name = {"홍길동","홍두깨","고길동","희동이","마이콜","메타몽","이브이","제다이","바보","김길동","호랑이","디발라","서건창"};
         member.setEmail("user" + index + "@example.com");
         member.setName(name[new Random().nextInt(name.length)]);
         member.setPassword(BCryptPasswordEncoder.encode("password"));
@@ -149,8 +150,8 @@ public class AhiSpringbootApplicationTests {
 
     private Posting createPosting(int index, CompanyEntity company) {
         Posting posting = new Posting();
-        String[] locations = {"서울", "부산", "대구", "인천", "광주","대전","강원","나주","봉평","울릉도","독도","평양","아오지","개마고원","백두산","개성공단"};
-        String[] positions = {"Full Stack Developer", "Backend Developer", "안드로이드", "프론트"};
+        String[] locations = {"서울", "부산", "대구", "인천", "광주","평양","개성공단","나주","봉평","개마고원","제주","강원","전남","전북","충청","수원","판교","구리"};
+        String[] positions = {"풀스택","프론트","백","안드로이드"};
         String[] educationLevels = {"대학교 졸업", "석사 졸업", "박사 졸업"};
         String[] closingForms = {"온라인 지원", "이메일 지원", "방문 지원", "우편 지원"};
 
