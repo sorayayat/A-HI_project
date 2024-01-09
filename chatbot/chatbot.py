@@ -151,7 +151,7 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
                       - rule 2) 최종학력에는 학교이름, 최종학력 세부내용에는 전공, 입학/졸업 시기 정도로만 간략하게 쓴다. 학점은 필요 없다.    
                       - rule 3) 기술 스택에는 지원한 포지션에 맞게 필요한 주력 기술만 넣는다.
                       - rule 4) 경력사항은 최신순으로 가장 최근 경험을 상단에 둔다.
-                      - rule 5) 경력사항에는 회사이름과 부서/직함을 넣고, 경력사항 세부내용에는 진행했던 업무 내용을 한줄로 요약해서 넣는다. (경력사항 세부내용 예시: 테스트 규모별 서버 증설 담당, 부하테스트(BMT) 진행)
+                      - rule 5) 경력사항에는 회사이름과 부서/직함을 넣고, 경력사항 세부내용에는 진행했던 업무 내용을 고객에게 입력받은 내용을 한줄로 요약해서 넣는다. (경력사항 세부내용 예시: 테스트 규모별 서버 증설 담당, 부하테스트(BMT) 진행)
 
 
                     <Persona>
@@ -165,7 +165,7 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
                     - 13가지 항목에 대한 정보수집이 완료되면 수집한 정보를 토대로
                          {{"name":수집한 이름, "phonenumber":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "jobtitle":원하는 직업, 
                         "skills":[수집한 기술스택], "experiences":[수집한 경력사항], "experiencesdetail":[경력사향 세부 내용], "projects":[수집한 프로젝트 경험],
-                        "projectdetail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "educationdetail":수집한 최종학력 세부내용, 
+                        "projectsdetail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "educationdetail":수집한 최종학력 세부내용, 
                         "awardsandcertifications":[수집한 수상경력 혹은 자격증]}} 형태의 대답만 하고 마친다.
                     - 13가지 항목을 한꺼번에 질문하지말고, 상담하듯 자연스러운 대화로 이끌어 나간다.
                     - 모든 답변은 한국어와 존댓말을 사용하며, AI임을 언급하지 않고 인간의 조언과 전문적인 지식을 제공한다.                 
@@ -225,6 +225,13 @@ async def chatbot_endpoint(message: User):
 
     # resume_data가 생성된 경우에만 send_resume_data 함수 호출
     if resume_data:
+
+        # 사용자에게 보낼 새로운 메시지
+        user_friendly_message = "이력서에 필요한 정보 수집이 완료되었습니다! 이력서를 확인하려면 아래 버튼을 눌러주세요!"
+
+        # 사용자에게 보낼 메시지를 챗봇 응답으로 설정
+        chatbot_response = user_friendly_message
+
         send_resume_data(resume_data, message.email, message.roomId)
     else:
         print("아직 resume_data가 생성되지 않았습니다.")

@@ -2,6 +2,9 @@ from docx import Document
 import os
 import subprocess
 
+
+current_directory = os.getcwd()
+
 def format_skills(skills):
     formatted_skills = ''
     for i, skill in enumerate(skills):
@@ -14,18 +17,16 @@ def format_skills(skills):
 
 # 이력서 데이터를 받아서 텍스트 치환에 사용할 context를 생성
 def generate_resume(resume_data):
+    
     formatted_skills = format_skills(resume_data.get("skills", []))
 
     # Placeholder에 대해 초기 공백 값 설정
-    context = {f'{{Skills{i}}}': ' ' for i in range(1, 6)}
-    context.update({f'{{Experiences{i}}}': ' ' for i in range(1, 6)})
+    context = {f'{{Experiences{i}}}': ' ' for i in range(1, 6)}
     context.update({f'{{ExperiencesDetail{i}}}': ' ' for i in range(1, 6)})
     context.update({f'{{Projects{i}}}': ' ' for i in range(1, 6)})
     context.update({f'{{ProjectsDetail{i}}}': ' ' for i in range(1, 6)})
 
     # 기존 로직을 사용하여 실제 데이터가 있는 경우 값 업데이트
-    for i, skill in enumerate(resume_data.get("skills", [])):
-        context[f'{{Skills{i + 1}}}'] = skill
     for i, experience in enumerate(resume_data.get("experiences", [])):
         context[f'{{Experiences{i + 1}}}'] = experience
     for i, detail in enumerate(resume_data.get("experiencesdetail", [])):
@@ -60,12 +61,6 @@ def replace_text_in_paragraph(paragraph, context):
         for key, value in context.items():
             if key in run.text:
                 run.text = run.text.replace(key, ' ' if value is None or value == '' else value)
-# def replace_text_in_paragraph(paragraph, context):
-#     for run in paragraph.runs:
-#         for key, value in context.items():
-#             if key in run.text:
-#                 run.text = run.text.replace(key, '' if value is None else value)
-
 
 # 이력서 템플릿을 채우고 저장하는 함수
 def fill_template(template_path, output_path, context):
@@ -102,34 +97,28 @@ def generate_resume_content(resume_data):
     
     user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
-
-    print("****************[generate_resume_content] ********************\n ", resume_data)
-    print("**************************************************************")
-    user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
-    
     output_folder = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\resumeResult'
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    # 파일 경로에 사용자 이름 포함
 
+     # 파일 경로에 사용자 이름 포함
     output_path_docx = os.path.join(output_folder, '{}_Resume.docx'.format(user_name))
     output_path_pdf = os.path.join(output_folder, '{}_Resume.pdf'.format(user_name))
-
     
     # resume_data를 확인해 적절한 템플릿 파일 선택
     experiences = resume_data.get("experiences")
     certifications = resume_data.get("awardsandcertifications")
 
     if experiences and certifications:
-        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template1.docx'  # 경력과 자격증 둘 다 존재하는 경우
+        template_path = os.path.join(current_directory, 'resume/tem', 'Template1.docx')  # 경력과 자격증 둘 다 존재하는 경우
     elif not experiences and certifications:
-        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template2.docx'  # 자격증만 있는 신입 템플릿
+        template_path = os.path.join(current_directory, 'resume/tem', 'Template2.docx')  # 자격증만 있는 신입 템플릿
     elif experiences and not certifications:
-        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template3.docx'  # 경력만 있는 경력자 템플릿
+        template_path = os.path.join(current_directory, 'resume/tem', 'Template3.docx')  # 경력만 있는 경력자 템플릿
     else:
-        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template4.docx'  # 경력과 자격증 모두 없는 신입 템플릿
+        template_path = os.path.join(current_directory, 'resume/tem', 'Template4.docx')  # 경력과 자격증 모두 없는 신입 템플릿
 
     # 선택된 템플릿으로 context를 적용
     context = generate_resume(resume_data)
