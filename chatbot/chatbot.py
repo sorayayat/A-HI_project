@@ -245,7 +245,7 @@ async def chatbot_endpoint(message: User):
     if resume_data:
 
         # 사용자에게 보낼 새로운 메시지
-        user_friendly_message = "이력서에 필요한 정보 수집이 완료되었습니다! 이력서를 확인하려면 아래 버튼을 눌러주세요!"
+        user_friendly_message = "이력서에 필요한 정보 수집이 완료되었습니다!\n생성된 이력서를 확인하려면 아래 버튼을 눌러주세요!"
 
         # 사용자에게 보낼 메시지를 챗봇 응답으로 설정
         chatbot_response = user_friendly_message
@@ -253,6 +253,7 @@ async def chatbot_endpoint(message: User):
         # 이력서 파일의 웹 접근 가능 URL 생성
         resume_web_url = send_resume_data(resume_data, message.email, message.roomId)
         # send_resume_data(resume_data, message.email, message.roomId)
+
     else:
         print("아직 resume_data가 생성되지 않았습니다.")
         
@@ -266,13 +267,21 @@ async def chatbot_endpoint(message: User):
         resume_path=resume_web_url # 웹 접근 가능 URL 추가
     )
 
+    print("========================== [chatbot_endpoint] resumeReady ==========================\n", resume_ready)
+    print("========================== [chatbot_endpoint] resumePath ==========================\n", resume_web_url)
+
     # 이력서 생성 가능 여부도 함께 전달
-    return {"gptMessage": chatbot_response, "resumeReady": resume_ready}
+    return {
+        "gptMessage": chatbot_response,
+        "resumeReady": resume_ready,
+        "resumePath": resume_web_url if resume_web_url else None
+    }
 
 
 
 # 챗봇의 마지막 응답에서  이력서 데이터 뽑아오기
 def extract_resume_data(email, room_id):
+    resume_ready = False  # 기본값은 False로 설정
     try:
         chat_content = previous_system_content.get((email, room_id), "")
         lines = chat_content.split("\n")
@@ -294,9 +303,7 @@ def extract_resume_data(email, room_id):
             if json_str_match:
                 json_str = json_str_match.group()
                 print("======================= 추출된 JSON 데이터 =======================\n", json_str)
-                # 이력서 생성 가능 여부 판단
-                resume_ready = True
-
+                resume_ready = True  # 이력서 데이터가 존재하므로 True로 설정
                 return json.loads(json_str), resume_ready
 
     except json.JSONDecodeError:
@@ -304,7 +311,42 @@ def extract_resume_data(email, room_id):
     except Exception as e:
         print(f"이력서 데이터 가져오기 실패: {e}")
 
-    return None
+    return None, resume_ready  # 예외 발생 시 None과 resume_ready의 현재값 반환
+
+
+# def extract_resume_data(email, room_id):
+#     try:
+#         chat_content = previous_system_content.get((email, room_id), "")
+#         lines = chat_content.split("\n")
+#         last_response_start_index = None
+
+#         # 마지막 챗봇 응답의 시작 지점 찾기
+#         for i, line in enumerate(reversed(lines)):
+#             if line.startswith("챗봇:"):
+#                 last_response_start_index = len(lines) - 1 - i
+#                 break
+
+#         # 전체 챗봇 응답 추출
+#         if last_response_start_index is not None:
+#             last_response = "\n".join(lines[last_response_start_index:])
+#             print("======================= 추출된 챗봇의 마지막 응답 =======================\n", last_response)
+
+#             # JSON 데이터 추출
+#             json_str_match = re.search(r'\{.*?\}', last_response, re.DOTALL)
+#             if json_str_match:
+#                 json_str = json_str_match.group()
+#                 print("======================= 추출된 JSON 데이터 =======================\n", json_str)
+#                 # 이력서 생성 가능 여부 판단
+#                 resume_ready = True
+
+#                 return json.loads(json_str), resume_ready
+
+#     except json.JSONDecodeError:
+#         print("JSON 파싱 오류: 챗봇 응답에서 유효한 JSON 데이터를 추출할 수 없습니다.")
+#     except Exception as e:
+#         print(f"이력서 데이터 가져오기 실패: {e}")
+
+#     return None
 
 
 
@@ -324,6 +366,6 @@ def send_resume_data(resume_data, email, roomId):
     web_accessible_url = f"http://localhost:8000/static/resume/resumeResult/{file_name}"
 
     print("=============================== 생성된 이력서 파일 경로 =============================== ", resume_file_path)
-    print("================================== 웹 접근 가능 URL ================================== ", resume_file_path)
+    print("================================== 웹 접근 가능 URL ================================== ", web_accessible_url)
 
     return web_accessible_url
