@@ -243,6 +243,7 @@ async def chatbot_endpoint(message: User):
         user_message=user_message,
         prompt=message.prompt,
         chatbot_response=chatbot_response
+        # chatbot_response=chatbot_response
     )
 
     
