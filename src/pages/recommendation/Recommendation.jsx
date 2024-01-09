@@ -45,6 +45,21 @@ function Recommendation() {
 
         const files = Array.from(e.dataTransfer.files)
 
+        const nonPdfFiles = files.filter(file => file.type !== 'application/pdf');
+
+        if (nonPdfFiles.length > 0) {
+            // PDF가 아닌 파일에 대한 경고창 표시
+            Swal.fire({
+                icon: 'error',
+                title: '잘못된 파일 형식',
+                text: 'PDF 파일만 드래그해 주세요.',
+            });
+
+            setDragging(false);
+            return;
+        }
+
+
         setfile(files);
 
 
@@ -59,27 +74,27 @@ function Recommendation() {
 
     const onClickRecommendationHandler = () => {
 
-        if(file === undefined) {
+        if (file === undefined) {
             Swal.fire({
-                icon:'info',
+                icon: 'info',
                 text: '파일 넣으셈',
             })
         }
-        else{
+        else {
 
-        const formData = new FormData();
+            const formData = new FormData();
 
-        console.log("gd", file[0]);
+            console.log("gd", file[0]);
 
-        formData.append("file", file[0])
+            formData.append("file", file[0])
 
-        dispatch(callRecommendationResume({
+            dispatch(callRecommendationResume({
 
-            file: formData
+                file: formData
 
-        }))
+            }))
 
-        setIsModalOpen(true)
+            setIsModalOpen(true)
         }
 
     }
