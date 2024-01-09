@@ -11,10 +11,6 @@ import Swal from 'sweetalert2';
 
 
 
-
-
-
-
 function Recommendation() {
 
 
@@ -33,8 +29,6 @@ function Recommendation() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     
-
-
 
     const handleDrop = (e) => {
 

@@ -17,6 +17,8 @@ const Interview = () => {
     const [isToggled, setIsToggled] = useState({});
     const dispatch = useDispatch();
 
+
+
     // 로딩 중을 표시해줌
     const handleSearchAnnouncement = () => {
         setIsLoading(true); // 로딩 시작

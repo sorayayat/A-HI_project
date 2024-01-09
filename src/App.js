@@ -28,6 +28,7 @@ import Card from "./pages/inspection/Card";
 import ChangePwd from "./pages/changePwd/ChangePwd";
 import Verify from "./pages/verify/Verify";
 import RankModal from "./pages/InterviewSpring/RankModal";
+import userInterview from "./pages/Interview/userInterview";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
           />
           <Route path="/companyList" element={<CompanyList />} />
           <Route path="/interview" element={<Interview />} />
+          <Route path="/userinterview" element={<userInterview/>} />
           <Route path="/createResume" element={<CreateResume />} />
           <Route
             path="/companyList/companyRegist"
