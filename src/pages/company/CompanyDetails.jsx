@@ -16,11 +16,24 @@ function CompanyDetails() {
     const navigate = useNavigate();
 
 
-    const [isLiked, setIsLiked] = useState(null);
+    const [isLiked, setIsLiked] = useState(false);
     
-    const earlyPostingLike = useSelector(state => state.companyReducer.getLike);
-    const postingLike = useSelector(state => state.companyReducer.putUpdalike);
+    const earlyPostingLike = useSelector(state => state.companyReducer?.getLike);
+    const postingLike = useSelector(state => state.companyReducer?.putUpdalike);
 
+    const companyCodeJSON  = sessionStorage?.getItem("userInfo") ?? "{}";
+
+    const parsedData = JSON.parse(companyCodeJSON);
+
+    const companyCode = parsedData?.companyEntity?.companyId ?? "";
+
+    console.log('companyCode' , companyCode);
+    
+
+    const memberCode = parsedData?.id;
+
+    console.log('memberCode' , memberCode);
+    
     
 
     useEffect(() => {
@@ -45,7 +58,7 @@ function CompanyDetails() {
         document.body.classList.add(style.companyDetailsBody);
         window.scrollTo(0, 0)
         dispatch(callGetLikeState({
-            memberCode: 3,
+            memberCode: memberCode,
             postingCode: posting.postingCode
         }))
 
@@ -61,7 +74,7 @@ function CompanyDetails() {
         
 
         dispatch(callUpdatePostingLike({
-            memberCode: 3,
+            memberCode: memberCode,
             postingCode: posting.postingCode
         }))
 
@@ -109,23 +122,23 @@ function CompanyDetails() {
                 <div className={style.companyInfoContainer}>
                     <div>
                         <div className={style.titleText1}>
-                            <p>{posting.postingTitle}</p>
+                            <p>{posting?.postingTitle}</p>
                         </div>
                     </div>
                     <div className={style.companyInfo}>
                         <div className={style.titleText2}>
                             <p>지원 자격</p>
-                            <div>학력 : {posting.education}</div>
-                            <div>스킬: {posting.skillList.map((skill, index) => (
-                                <span key={index}>{skill.skillName}{index < posting.skillList.length - 1 ? ', ' : ''}</span>
+                            <div>학력 : {posting?.education}</div>
+                            <div>스킬: {posting?.skillList.map((skill, index) => (
+                                <span key={index}>{skill.skillName}{index < posting?.skillList.length - 1 ? ', ' : ''}</span>
                             ))}</div>
-                            <div>경력 : {posting.postingExperienceList.map((experience, index) => (
-                                <span key={index}>{experience.experienceLevel}{index < posting.postingExperienceList.length -1 ? ',' : ''}</span>))}</div>
+                            <div>경력 : {posting?.postingExperienceList.map((experience, index) => (
+                                <span key={index}>{experience.experienceLevel}{index < posting?.postingExperienceList.length -1 ? ',' : ''}</span>))}</div>
                         </div>
                         <div className={style.titleText3}>
                             <p>근무 조건</p>
-                            <div>{posting.workTypeList.map((workType, index) => (
-                                <span key={index}>{workType.workConditions}{index < posting.workTypeList.length -1 ? ',' : ''}</span>))}  </div>
+                            <div>{posting?.workTypeList.map((workType, index) => (
+                                <span key={index}>{workType.workConditions}{index < posting?.workTypeList.length -1 ? ',' : ''}</span>))}  </div>
                         </div>
                     </div>
                 </div>
@@ -138,7 +151,7 @@ function CompanyDetails() {
                         <div className={style.quill}>
                             <ReactQuill style={ quillStyle}
 
-                            value={ posting.content}
+                            value={ posting?.content}
                             readOnly={true}
                             modules={modules}
                             />
@@ -152,18 +165,24 @@ function CompanyDetails() {
 
                     <div className={style.companyInfoDetails}>
                         
-                        <div>회사명: {posting.company.company}</div>
-                        <div>기업 형태 : {posting.company.companyType}</div>
-                        <div>사원수 : {posting.company.employeesNumber}</div>
-                        <div>설립일 : {posting.company.establishmentDate}</div>
-                        <div>대표 이름 :{posting.company.name}</div>
-                        <div>기업 페이지: <a href={posting.company.companyHomepage} target="_blank" rel="noopener noreferrer">{posting.company.companyHomepage}</a></div>
-                        <div>상세 주소 :{posting.location}</div>
+                        <div>회사명: {posting?.company?.company}</div>
+                        <div>기업 형태 : {posting?.company?.companyType}</div>
+                        <div>사원수 : {posting?.company?.employeesNumber}</div>
+                        <div>설립일 : {posting?.company?.establishmentDate}</div>
+                        <div>대표 이름 :{posting?.company?.name}</div>
+                        <div>기업 페이지: <a href={posting?.company?.companyHomepage} target="_blank" rel="noopener noreferrer">{posting?.company?.companyHomepage}</a></div>
+                        <div>상세 주소 :{posting?.location}</div>
 
                     </div>
                 </div>
 
-                <button className={style.deleteButton} onClick={() =>onClickDeleteHandler(posting.postingCode)}>삭제</button>
+                {/* ... (다른 JSX 코드) */}
+
+            {posting?.company?.companyId === companyCode && (
+                <button className={style.deleteButton} onClick={() => onClickDeleteHandler(posting?.postingCode)}>
+                    삭제
+                </button>
+            )}
             </div>
         </>
     );

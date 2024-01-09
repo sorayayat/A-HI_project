@@ -32,7 +32,9 @@ function Recommendation() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
 
 
@@ -71,20 +73,14 @@ function Recommendation() {
 
         formData.append("file", file[0])
 
-
-
         dispatch(callRecommendationResume({
 
             file: formData
 
         }))
 
-
         setIsModalOpen(true)
         }
-
-        
-
 
     }
 
@@ -129,7 +125,7 @@ function Recommendation() {
                 <h2 className={style.noResume}>AI로 이력서를 작성 해보세요!</h2>
 
                 {
-                    isModalOpen && <RecommendationModal selectPostingData={selectPostingData} />
+                    isModalOpen && <RecommendationModal selectPostingData={selectPostingData} closeModal={closeModal} />
                 }
             </div>
 

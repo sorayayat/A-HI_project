@@ -13,6 +13,11 @@ function Apply() {
     const navigate = useNavigate();
     const postingLikeList = useSelector(state => state.recommendationReducer.postingLike);
 
+    // const companyCode = localStorage.session("user")
+
+    // console.log('companyCode' , companyCode);
+    
+
     
     const pageInfo = posting?.data?.pageInfo;
 
@@ -21,6 +26,14 @@ function Apply() {
     const [pageEnd, setPageEnd] = useState(1);
 
     const pageNumber = [];
+
+    const companyCodeJSON  = sessionStorage?.getItem("userInfo")
+
+    const parsedData = JSON.parse(companyCodeJSON);
+
+    const companyCode = parsedData?.companyEntity?.companyId;
+
+    const memberCode = parsedData?.id;
 
     if(pageInfo){
         for(let i = 1; i <= pageInfo.pageEnd; i++){
@@ -41,7 +54,7 @@ function Apply() {
         }))
 
         dispatch(callSelectLikePosting({
-            memberCode: 3
+            memberCode: memberCode
         }),[currentPage])
 
 
