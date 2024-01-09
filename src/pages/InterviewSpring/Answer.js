@@ -75,10 +75,9 @@ export const Answer = ({ answer }) => {
 
 
                 return questionText && (
-                    <div key={i}>
+                    <div key={i} className={style.feedbackButtonWrapper}>
                         <button onClick={() => toggleFeedback(i)} className={style.feedbackButton} id={questionButton}>
                             {questionText}
-                            <hr/>
                         </button>
                        
                         {showFeedback[i] && (
@@ -140,5 +139,4 @@ export const Feedback = () => {
     );
 
 }
-
 

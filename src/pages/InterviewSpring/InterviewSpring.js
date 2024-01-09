@@ -28,7 +28,7 @@ const InterviewSpring = () => {
             setIsLoading(true);
         }, 1000);
 
-        axios.get(`./interview/gpt?queryString=${searchQuery}`)
+        axios.get(`/interview/gpt?queryString=${searchQuery}`)
             .then(response => {
                 const responseData = response.data;
                 if (response.data.result === 'success') {
