@@ -32,10 +32,6 @@ class Ask(BaseModel):
 class SelfIntroduction(BaseModel):
     title: str
     content: str
-    
-class SelfIntroduction(BaseModel):
-    title: str
-    content: str
 
 class PersonalInformation(BaseModel):
     name: str
@@ -154,11 +150,15 @@ async def modify(modifyResume : RequestEntity):
       eligibility = d.eligibility
       skill = d.skill
       selfIntroduction = d.selfIntroduction
+
+    print(selfIntroduction)
+
     if type == 'modify':
         system_content = "You're the best resume editor"
+        # 상황 설명 및 메인 룰
     else :
         system_content = "You're the best inspector."
-    ask = f"자기소개서 내용은{selfIntroduction}이고; 지원할 기업의 지원자격은 {eligibility} 이고; 내가 보유한 기술 스택은 {skill}이야; {type}받고 싶은 방향은 {direction}이야;"
+    ask = f"자기소개서 제목은{selfIntroduction}이고; 지원할 기업의 지원자격은 {eligibility} 이고; 내가 보유한 기술 스택은 {skill}이야; {type}받고 싶은 방향은 {direction}이야;"
     pre_prompt = f"한국어로 답변해줘; 자기소개서를 {type}해줘;"
     pre_prompt2 = "Json 타입 분리해줘; 분리하는 형식은 {gptAnswer : gpt 답변내용 , SelfIntroduction : selfIntroduction[{title : title , content : cotnet},{...}, ]};"
     pre_prompt3 = "gptAnswer = 너의 답변을 여기에 담아줘; SelfIntroduction = 수정된 자소서 내용이 들어가야되 \n\n"
