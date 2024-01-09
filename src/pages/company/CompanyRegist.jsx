@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 
 
 function CompanyRegist() {
@@ -14,20 +15,21 @@ function CompanyRegist() {
     const [q1, setQ1] = useState('');
     const [q3, setQ3] = useState('');
     const [detailAddress, setDetailAddress] = useState('');
-    const [selectedJob, setSelectedJob] = useState("직무");
-    const [education, setEducation] = useState("학력");
+    const [selectedJob, setSelectedJob] = useState("프론트앤드");
+    const [education, setEducation] = useState("학력무관");
     const [selectedCareer, setSelectedCareer] = useState([]);
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedConditions, setSelectedConditions] = useState([]);
     const navigate = useNavigate();
     const [postingTitle, setPostingTitle] = useState('');
     const [date, setDate] = useState();
-    const [deadLine, setDeadLine ] = useState('');
+    const [deadLine, setDeadLine ] = useState('상시채용');
     
 
     const skillList = ["HTML", "CSS", "JavaScript", "React", "Vue.js", "Angular", "Node.js", "Python", "Ruby"
         , "Java", "MySQL", "PostgreSQL", "MongoDB", "Apache", "Nginx", "Git" , "MachineLearning" ,"TensorFlow",
-    "PyTorch" , "Slack" , "Kotlin" , "WebRTC" , "MVVM" , "Confluence" , "Jira"];
+    "PyTorch" , "Slack" , "Kotlin" , "WebRTC" , "MVVM" , "Confluence" , "Jira" , "Spring Data JPA" , "REST API" , "AWS"
+    ,"QueryDSL" ,"Jenkins" , "TypeScript" , "Spring" ,"Docker"];
 
     const conditionList = ["재택가능", "정규직", "주 5일(월~금)", "주 6일(월~토)", "주 3일(격일제)",
         "유연 근무제", "면접후 결정", "2600~", "2800~", "3000~"];
@@ -124,6 +126,16 @@ function CompanyRegist() {
 
 
     const handleNextClick = () => {
+
+        if (!postingTitle || !q1 || !q3 || !detailAddress || !selectedJob || !education || !selectedCareer.length || !selectedSkills.length || !selectedConditions.length || !date || !deadLine) {
+            // 필수 입력 항목이 누락된 경우 알림창 표시
+            Swal.fire({
+                icon: 'error',
+                title: '정보를 모두 입력해주세요',
+            });
+            return;
+        }
+
         const dataObject = {
             q1,
             q3,
@@ -178,7 +190,6 @@ function CompanyRegist() {
 
                     <div style={{ padding: '20px' }}>직무 / 직군</div>
                     <select name="job" id={style.job} value={selectedJob} onChange={handleJobChange}>
-                        <option value="직무">직군/직무</option>
                         <option value="프론트앤드">프론트앤드</option>
                         <option value="백">백</option>
                         <option value="풀스택">풀스택</option>

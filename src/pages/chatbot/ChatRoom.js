@@ -116,33 +116,10 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     };
 
 
-    const handleCreateResume = async () => {
-        console.log("이력서 생성 요청 동작...")
-        // 서버로 이력서 생성 요청 보내기
-        try {
-            const response = await fetch('http://localhost:8000/create-resume/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: userEmail,
-                    roomId: activeChatRoom.roomId
-                })
-            });
-            const data = await response.json();
-    
-            // 서버로부터의 응답 처리
-            if (data.success) {
-                console.log('이력서 생성 성공:', data);
-                // 성공 메시지 표시 또는 다른 UI 처리
-            } else {
-                console.log('이력서 생성 실패:', data);
-                // 실패 메시지 표시 또는 다른 UI 처리
-            }
-        } catch (error) {
-            console.error('이력서 생성 요청 중 오류 발생:', error);
-            // 오류 메시지 표시 또는 다른 UI 처리
-        }
-    };
+
+
+
+
 
 
 
@@ -164,13 +141,6 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
                                         </div>
                                 ))}
                                 {/* 이력서 생성하기 버튼을 말풍선 목록 마지막에 추가 */}
-                                {showResumeButton && (
-                                    <div className={styles.resumeButtonContainer}>
-                                        <button onClick={handleCreateResume} className={styles.resumeButton}>
-                                            이력서 생성하기
-                                        </button>
-                                    </div>
-                                )}
                             </div>
                         </div>
                         
