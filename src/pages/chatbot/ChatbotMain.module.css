@@ -1,156 +1,151 @@
 .chatbotContainer {
-    /* overflow-x: auto; */
-    height: calc(100vh - 80px); 
-    margin: 0 auto;
-    display: flex;
-    flex-direction: row;
+  /* overflow-x: auto; */
+  height: calc(100vh - 80px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
 }
 
 .roomlistMainContainer {
-    display: flex;
-    width: 300px;
-    height: 100%;
-    background-color: #e7efff;
-    border-right: 1px solid rgb(228, 227, 227);
+  display: flex;
+  width: 300px;
+  height: 100%;
+  background-color: #e7efff;
+  border-right: 1px solid rgb(228, 227, 227);
 }
 
 .chatRoomContents {
-    width: 100vw;
+  width: 100vw;
 }
-
 
 /* =============================== 프롬프트 선택화면 ===============================*/
 .messageListWrapper {
-    width: calc(100vW - 300px);
-    min-width: 400px; 
-    position: relative;
+  width: calc(100vw - 300px);
+  min-width: 400px;
+  position: relative;
 }
 
 .messageList {
-    width: 100%;
-    height: calc(100vh - 80px);
-    overflow: hidden;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 80px);
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .messageContainer {
-    width: 100%;
-    flex: 1 1 0%;
-    position: relative;
-    display: flex;
-    /* height: calc(100vh - 80px); */
-    /* flex-direction: column; */
-    justify-content: space-between;
-    align-items: center;
+  width: 100%;
+  flex: 1 1 0%;
+  position: relative;
+  display: flex;
+  /* height: calc(100vh - 80px); */
+  /* flex-direction: column; */
+  justify-content: space-between;
+  align-items: center;
 }
 
 .messageItemScreen {
+  display: flex;
+  flex-direction: column;
+  top: 0px;
+  left: 0px;
+  padding: 120px 180px 280px;
+  gap: 85px;
+  width: 100vh;
+  /* height: calc(100vh - 80px); */
+}
+
+.chatDirectionText p {
+  color: rgb(104, 104, 104);
+}
+
+.promptSelect {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex: 1 1 0%;
+}
+
+.prompt {
+  display: flex;
+  max-width: 640px;
+  width: 100%;
+  flex: 1 0 0px;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.promptTitle {
+  font-size: larger;
+}
+
+.promptBox {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 27px;
+}
+
+.promptBox1,
+.promptBox2 {
+  width: 350px;
+  height: 100px;
+  background-color: #ddfbff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.promptBox1:hover,
+.promptBox2:hover {
+  width: 350px;
+  height: 100px;
+  background-color: #b5f3fc;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1300px) {
+  .promptBox {
+    flex-direction: column; /* 세로 정렬로 변경 */
+    align-items: center;
+  }
+
+  .messageItemScreen {
     display: flex;
     flex-direction: column;
     top: 0px;
     left: 0px;
-    padding: 120px 180px 280px;
-    gap: 85px;
+    padding: 20px 180px 20px;
+    gap: 50px;
     width: 100vh;
-    /* height: calc(100vh - 80px); */
+  }
+
+  .promptBox1,
+  .promptBox2 {
+    flex-basis: auto; /* 자동으로 너비 조정 */
+    width: 350px; /* 원래 너비로 설정 */
+    margin-top: 15px; /* 간격 설정 */
+  }
 }
-
-
-.chatDirectionText p {
-    color: rgb(104, 104, 104);
-}
-
-.promptSelect {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    flex: 1 1 0%;
-}
-
-.prompt {
-    display: flex;
-    max-width: 640px;
-    width: 100%;
-    flex: 1 0 0px;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-}
-
-.promptTitle {
-    font-size: larger;
-}
-
-
-.promptBox {
-    /* width: 100%; */
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 27px;
-}
-
-.promptBox1, .promptBox2 {
-    width: 350px;
-    height: 100px;
-    background-color: #DDFBFF;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-
-.promptBox1:hover, .promptBox2:hover {
-    width: 350px;
-    height: 100px;
-    background-color: #b5f3fc;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-
-@media screen and (max-width: 1300px) {
-    .promptBox {
-        flex-direction: column; /* 세로 정렬로 변경 */
-        align-items: center;
-    }
-
-    .messageItemScreen {
-        display: flex;
-        flex-direction: column;
-        top: 0px;
-        left: 0px;
-        padding: 20px 180px 20px;
-        gap: 50px;
-        width: 100vh;
-    }
-
-    .promptBox1,
-    .promptBox2 {
-        flex-basis: auto; /* 자동으로 너비 조정 */
-        width: 350px; /* 원래 너비로 설정 */
-        margin-top: 15px; /* 간격 설정 */
-    }
-}
-
-
 
 .box1Text b {
-    color: #3674EA; 
+  color: #3674ea;
 }
 
 .box2Text b {
-    color: #3674EA; 
+  color: #3674ea;
 }
 
 .bubbleIcon {
-    margin-bottom: none;
+  margin-bottom: none;
 }
