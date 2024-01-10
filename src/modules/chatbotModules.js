@@ -3,6 +3,7 @@ export const ADD_MESSAGE_TO_CHATROOM = 'CHATROOM/ADD_MESSAGE_TO_CHATROOM';
 export const ADD_CHATROOM_DATA = 'CHATROOM/ADD_CHATROOM_DATA';
 export const DELETE_CHATROOM = 'CHATROOM/DELETE_CHATROOM';
 export const SET_PROMPT = 'CHATROOM/SET_PROMPT';
+// export const SET_RESUME_READY = 'CHATROOM/SET_RESUME_READY';
 
 
 const initialState = {
@@ -40,6 +41,12 @@ export const setPrompt = (roomId, prompt) => ({
   type: SET_PROMPT,
   payload: { roomId, prompt },
 });
+
+// 이력서 준비 여부 set 
+// export const setResumeReady = (roomId, resumeReady, resumePath) => ({
+//   type: SET_RESUME_READY,
+//   payload: { roomId, resumeReady, resumePath },
+// });
 
 
 const chatbotReducer = (state = initialState, action) => {
@@ -100,9 +107,6 @@ const chatbotReducer = (state = initialState, action) => {
       };
 
 
-
-
-
       case SET_PROMPT:
         const { roomId: promptRoomId, prompt } = action.payload;
         return {
@@ -111,8 +115,17 @@ const chatbotReducer = (state = initialState, action) => {
             room.roomId === promptRoomId ? { ...room, prompt } : room
           ),
         };
-    
 
+
+        // case SET_RESUME_READY:
+        //   const { roomId, resumeReady, resumePath } = action.payload;
+        //   return {
+        //     ...state,
+        //     chatroomList: state.chatroomList.map(room =>
+        //       room.roomId === roomId ? { ...room, resumeReady, resumePath } : room
+        //     ),
+        //   };
+    
 
     default:
       return state;
