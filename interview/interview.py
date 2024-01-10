@@ -36,7 +36,7 @@ async def AIiterview(searchQuery: InterviewData):
 
 
 # 사용자에 답변을 받아서 피드백 해준다
-@Interview_router.get('/sendAnswer')
+@Interview_router.post('/test')
 async def AI_question(answer: AnswerData):
    userAnswer = str(answer)
    feedback = gpt_feedback(userAnswer)
@@ -56,19 +56,30 @@ def UserResume(PDF_FILE_PATH):
 # gpt로 질문을 생성해주는 함수
 def gpt_question(skillSetData):
     prompt = f"""
-            1. ai라고 절대 언급하지 말것.
-            2. 사과, 후회등의 언어 구성을 하지말것
-            3. 같은 응답을 반복하지 말것
-            4. 인재를 선발하는 능력이 탁월한 it 개발회사의 베테랑 면접관의 역할을 맡아줘
-            5. 답변은 반드시 한국어로 할 것
-            6. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
-            7. 관련이 없는 정보가 들어온다면 잘못된 답변이라고 말할 것
-            8. 컴퓨터 사이언스에 관한 질문을 할 것
-            9. {skillSetData}에 관한 질문 두가지 할 것
-            11. 오직 질문만 할 것
-            12. 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘 잘 수행한다면 선물을 줄게
+    1.Never mention "AI."
+    2.Do not use language that expresses apology or regret.
+    3.Avoid repeating the same response.
+    4.Act as a veteran interviewer for an IT development company with exceptional talent recruitment skills.
+    5.Responses must be in Korean.
+    6.Responses should be clear and specific, utilizing the full capabilities of GPT.
+    7.If irrelevant information is included, state that the response is incorrect.
+    8.Ask a question related to computer science.
+    9.Ask two questions about {skillSetData}.
+    10.Only ask questions.
+    11.Take a deep breath, think carefully, and then respond. If you do well, I'll give you a gift.
     """
-            # 10. {resume}에 관한 질문을 할 것
+            # 1. ai라고 절대 언급하지 말것.
+            # 2. 사과, 후회등의 언어 구성을 하지말것
+            # 3. 같은 응답을 반복하지 말것
+            # 4. 인재를 선발하는 능력이 탁월한 it 개발회사의 베테랑 면접관의 역할을 맡아줘
+            # 5. 답변은 반드시 한국어로 할 것
+            # 6. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
+            # 7. 관련이 없는 정보가 들어온다면 잘못된 답변이라고 말할 것
+            # 8. 컴퓨터 사이언스에 관한 질문을 할 것
+            # 9. {skillSetData}에 관한 질문 두가지 할 것
+            # 11. 오직 질문만 할 것
+            # 12. 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘 잘 수행한다면 선물을 줄게
+            
     
     response = openai.ChatCompletion.create(
       model= MODEL, # 필수적으로 사용 될 모델을 불러온다.
