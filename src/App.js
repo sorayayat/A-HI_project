@@ -24,6 +24,8 @@ import RankModal from "./pages/InterviewSpring/RankModal";
 import InterviewNav from "./pages/interviewNav/InterviewNav";
 import InspectionChoice from "./pages/inspection/InspectionChoice";
 import Card from "./pages/inspection/Card";
+
+import UserInterview from "./pages/Interview/userInterview";
 import ResumeSend from "./pages/inspection/ResumeSend";
 
 function App() {
@@ -46,46 +48,41 @@ function App() {
           <Route path="/chatbot" element={<ChatbotMain />} />
           <Route path="/joinFormCompany" element={<JoinFormCompany />} />
 
-          <Route path="/companyDetails" element={<CompanyDetails />} />
-          <Route path="/recommendation" element={<Recommendation />} />
-          <Route path="/inspection" element={<InspectionMain />} />
-          <Route path="/inspection/modify" element={<Inspection />} />
-          <Route path="/inspection/detail" element={<InspectionDetail />} />
-          <Route path="/inspection/choice" element={<InspectionChoice />} />
-          <Route path="/inspection/card" element={<Card />} />
-          <Route path="/companyList" element={<CompanyList />} />
 
-          {/* <Route path='/interview' element={<Interview/>}/> */}
-          <Route path="/createResume" element={<CreateResume />} />
-          <Route
-            path="/companyList/companyRegist"
-            element={<CompanyRegist />}
-          />
-          <Route
-            path="/companyList/companyRegist/writeInfo"
-            element={<WriteInfo />}
-          />
-          <Route path="/SearchPage" element={<SearchPage />} />
-          {/* <Route path='/interviewSpring' element={<InterviewSpring/>}/> */}
-          <Route path="/ResumeSend" element={<ResumeSend />} />
+        <Route path='/companyDetails' element={<CompanyDetails />} />
+        <Route path='/recommendation' element={<Recommendation />} />
+        <Route path='/inspection' element={<InspectionMain/>}/>
+        <Route path='/inspection/modify' element={<Inspection/>}/>
+        <Route path="/inspection/detail" element={<InspectionDetail />}/>
+        <Route path='/inspection/choice' element={<InspectionChoice/>}/>
+        <Route path="/inspection/card" element={<Card/>}/>
+        <Route path='/companyList' element={<CompanyList />} />
+        
+        {/* <Route path='/interview' element={<Interview/>}/> */}
+        <Route path='/UserInterview' element={<UserInterview/>}/>
+        <Route path='/createResume' element={<CreateResume/>}/>
+        <Route path='/companyList/companyRegist' element={<CompanyRegist/>}/>
+        <Route path='/companyList/companyRegist/writeInfo' element={<WriteInfo/>}/>
+        <Route path='/SearchPage' element={<SearchPage/>}/>
+        {/* <Route path='/interviewSpring' element={<InterviewSpring/>}/> */}
+        
+        <Route path='/verify' element={<Verify/>}/>
+        <Route path='/rank' element={<RankModal/>}/>
+        
+        <Route path="/loginForm" element={<LoginForm />} />
+        <Route path='/interviewNav/*' element={<InterviewNav />} />
+        <Route path='/mypage/*' element={
+      <ProtectedRoute>
+        <Mypage />
+      </ProtectedRoute>
+    }/>
+        
+      </Route>       
+    </Routes>
+  </BrowserRouter>
 
-          <Route path="/verify" element={<Verify />} />
-          <Route path="/rank" element={<RankModal />} />
 
-          <Route path="/loginForm" element={<LoginForm />} />
-          <Route path="/interviewNav/*" element={<InterviewNav />} />
-          <Route
-            path="/mypage/*"
-            element={
-              <ProtectedRoute>
-                <Mypage />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+);
 }
 
 export default App;

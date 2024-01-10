@@ -1,0 +1,87 @@
+.overlay {
+    position: fixed; /* 고정된 위치 */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정색 배경 */
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center;
+    z-index: 1000; /* 다른 요소들 위에 표시 */
+}
+
+.loading {
+    width: 100vw;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .loading span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: gray;
+    border-radius: 50%;
+    animation: loading 1s linear infinite;
+    background-color: black;
+  }
+  
+  .loading span:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  .loading span:nth-child(2) {
+    animation-delay: 0.2s;.overlay {
+        position: fixed; /* 고정된 위치 */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정색 배경 */
+        display: flex;
+        justify-content: center; /* 중앙 정렬 */
+        align-items: center;
+        z-index: 1000; /* 다른 요소들 위에 표시 */
+    }
+    
+    .loadingBar {
+        width: 50%; /* 로딩바의 너비 */
+        max-width: 300px; /* 최대 너비 */
+        height: 20px;
+        background-color: #ddd;
+        border-radius: 10px; /* 둥근 모서리 */
+        overflow: hidden; /* 내부 진행 막대가 테두리를 넘지 않게 함 */
+    }
+    
+    .loadingBarProgress111 {
+        height: 100%;
+        width: 0;
+        background-color: white;
+        animation: loadingAnimation 2s linear infinite;
+    }
+    
+    @keyframes loadingAnimation {
+        0% { width: 0; }
+        100% { width: 100%; }
+    }
+    
+    margin: 0px 10px
+  }
+  
+  .loading span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes loading {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
