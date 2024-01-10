@@ -25,7 +25,7 @@ export const callRecommendationResume = ({ file }) => {
             
         }).then(response => response.json());
 
-        console.log(result.response.data , "gdgd");
+        console.log(result , "gdgd");
 
     
 

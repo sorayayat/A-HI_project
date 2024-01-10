@@ -10,6 +10,7 @@ export const GET_UPDATELIKE = 'COMPANY/GET_UPDATELIKE';
 export const GET_SEARCHCOMPANY = 'COMPANY/GET_SEARCHCOMPANY';
 export const GET_SEARCHNAME = 'COMPANY/GET_SEARCHNAME';
 export const DELETE_POSTING = 'COMPANY/DELETE_POSTING';
+export const GET_COMPANYTLOGO = 'COMPANY/GET_COMPANYTLOGO';
 
 
 
@@ -21,6 +22,7 @@ const actions = createActions({
     [GET_SEARCHCOMPANY]: () => {},
     [GET_SEARCHNAME]: () => {},
     [DELETE_POSTING]: () => {},
+    [GET_COMPANYTLOGO]: () => {},
     
 
 })
@@ -41,7 +43,8 @@ const companyReducer = handleActions(
         [GET_SEARCHNAME]: (state, { payload }) => ({ searchName : payload }),
 
         [DELETE_POSTING]: (state, { payload }) => ({ deletePosting : payload }),
-
+        
+        [GET_COMPANYTLOGO]: (state, { payload }) => ({ getCompanyLogo : payload }),
     },
     initialState);
 

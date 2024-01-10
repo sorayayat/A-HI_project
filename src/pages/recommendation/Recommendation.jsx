@@ -30,6 +30,8 @@ function Recommendation() {
 
     const selectPostingData = selectPosting?.response?.data
 
+    
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const closeModal = () => {

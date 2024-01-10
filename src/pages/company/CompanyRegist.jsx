@@ -26,10 +26,10 @@ function CompanyRegist() {
     const [deadLine, setDeadLine ] = useState('상시채용');
     
 
-    const skillList = ["HTML", "CSS", "JavaScript", "React", "Vue.js", "Angular", "Node.js", "Python", "Ruby"
+    const skillList = ["C","C#" ,"C++","HTML", "CSS", "JavaScript", "React", "Vue.js", "Angular", "Node.js", "Python", "Ruby"
         , "Java", "MySQL", "PostgreSQL", "MongoDB", "Apache", "Nginx", "Git" , "MachineLearning" ,"TensorFlow",
     "PyTorch" , "Slack" , "Kotlin" , "WebRTC" , "MVVM" , "Confluence" , "Jira" , "Spring Data JPA" , "REST API" , "AWS"
-    ,"QueryDSL" ,"Jenkins" , "TypeScript" , "Spring" ,"Docker"];
+    ,"QueryDSL" ,"Jenkins" , "TypeScript" , "Spring" ,"Docker" , "Oracle"];
 
     const conditionList = ["재택가능", "정규직", "주 5일(월~금)", "주 6일(월~토)", "주 3일(격일제)",
         "유연 근무제", "면접후 결정", "2600~", "2800~", "3000~"];

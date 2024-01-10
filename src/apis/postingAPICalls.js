@@ -1,4 +1,4 @@
-import {POST_COMPANY , GET_JOBLISTING , PUT_UPDATELIKE, GET_UPDATELIKE ,GET_SEARCHCOMPANY , GET_SEARCHNAME , DELETE_POSTING} from '../modules/companyModules'
+import {POST_COMPANY , GET_JOBLISTING , PUT_UPDATELIKE, GET_UPDATELIKE ,GET_SEARCHCOMPANY , GET_SEARCHNAME , DELETE_POSTING , GET_COMPANYTLOGO} from '../modules/companyModules'
 import Swal from 'sweetalert2';
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
@@ -84,7 +84,6 @@ export const callUpdatePostingLike = ({memberCode , postingCode}) => {
             body: JSON.stringify({ postingCode }), 
         }).then(response => response.json());
 
-        console.log(result , "???");
 
         
         dispatch({ type: PUT_UPDATELIKE, payload: result });
@@ -105,10 +104,7 @@ export const callGetLikeState = ({memberCode , postingCode}) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ postingCode }), 
-        }).then(response => response.json());
-
-        
-        
+        }).then(response => response.json()); 
         
         dispatch({ type: GET_UPDATELIKE, payload: result });
 
@@ -128,7 +124,7 @@ export const callSearchCompany = () => {
             
         }).then(response => response.json());
 
-        
+        console.log(result , "??");
         
         
         dispatch({ type: GET_SEARCHCOMPANY, payload: result });
@@ -149,9 +145,6 @@ export const callCompanyNameSearch = ({searchName}) => {
 
             
         }).then(response => response.json());
-
-        
-        console.log(result ,"이거불러오니?");
         
         dispatch({ type: GET_SEARCHNAME, payload: result });
 
@@ -174,15 +167,33 @@ export const callDeletePosting = ({postingCode}) => {
         }).then(response => response.json());
 
         
-        console.log(result ,"이거불러오니?");
-
-        
-        
         dispatch({ type: DELETE_POSTING, payload: result });
 
         
     };
 };
+
+export const callGetCompanyLogo = () => {
+
+
+    const requestURL = `${SPRING_PRE_URL}/companyLogo`;
+
+    return async (dispatch, getState) => {
+        const result = await fetch(requestURL, {
+            method: 'GET',
+
+            
+        }).then(response => response.json());
+
+
+        
+        dispatch({ type: GET_COMPANYTLOGO, payload: result });
+
+        
+    };
+};
+
+
 
 
 
