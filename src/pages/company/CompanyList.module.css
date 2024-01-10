@@ -130,3 +130,10 @@
     background-color: #3498db;
     color: #fff;
   }
+
+  .loadingSpiner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 뷰포트 높이의 100%를 차지하도록 설정 */
+}

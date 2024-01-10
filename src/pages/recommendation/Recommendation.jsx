@@ -19,7 +19,10 @@ function Recommendation() {
     dispatch(postRecommendation({}));
   }, []);
 
-  const selectPostingData = selectPosting?.response?.data;
+
+    const selectPostingData = selectPosting?.response?.data
+
+    
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 

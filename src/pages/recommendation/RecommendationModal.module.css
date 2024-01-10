@@ -34,11 +34,14 @@
   margin-bottom: 20px;
 }
 
-.companyDetails {
-  border-radius: 20px;
-  padding: 20px;
-  background-color: #3498db;
-  color: white;
+.companyDetails{
+    
+    border-radius: 20px;
+    padding: 20px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    
 }
 
 .closeButton {
