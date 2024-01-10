@@ -8,7 +8,11 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
+<<<<<<< HEAD
     date = "2024-01-08T14:33:56+0900",
+=======
+    date = "2024-01-09T17:14:34+0900",
+>>>>>>> b7f744f301177bd96bee74e8d42f8a91108f016f
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.5.jar, environment: Java 17.0.9 (Oracle Corporation)"
 )
 public class MemberTransMapperImpl implements MemberTransMapper {

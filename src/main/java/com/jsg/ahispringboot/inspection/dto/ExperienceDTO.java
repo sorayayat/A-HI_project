@@ -11,12 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PersonalInformationDTO {
-
-    private String name;
-    private String position;
-    private String email;
-    private String github;
-    private String phone;
-    private String education;
+public class ExperienceDTO {
+    private String company;
+    private String duration;
 }

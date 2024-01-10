@@ -26,8 +26,6 @@ public class QResume extends EntityPathBase<Resume> {
 
     public final com.jsg.ahispringboot.member.entity.QMemberEntity member;
 
-    public final StringPath modifyDate = createString("modifyDate");
-
     public final NumberPath<Long> resumeCode = createNumber("resumeCode", Long.class);
 
     public final StringPath resumePath = createString("resumePath");

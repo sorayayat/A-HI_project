@@ -10,8 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
-
 public interface MemberRepository {
+
+    MemberEntity findById(Long memberid);
 
     MemberEntity findMember(String memberEmail, String phoneNumber);
 
@@ -19,13 +20,11 @@ public interface MemberRepository {
 
     MemberEntity companySignup(MemberEntity memberEntity);
 
-
     void updatePwd(MemberEntity member);
 
     UserDetails updateMember(MemberDto memberDto);
 
     UserDetails updateCompany(CompanyDto companyDto);
-
 
     List<PostingLike> myPagePostingLike(Long memberId);
 
@@ -40,7 +39,5 @@ public interface MemberRepository {
     void roleUpdate(MemberEntity memberEntity);
 
     List<Object[]> countPostLike();
-
-
 
 }

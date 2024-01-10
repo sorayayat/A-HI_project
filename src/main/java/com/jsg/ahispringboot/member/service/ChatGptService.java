@@ -31,7 +31,7 @@ import static java.lang.Integer.parseInt;
 @Service
 @Slf4j
 public class
- ChatGptService {
+ChatGptService {
     @Value("${openai.model}")
     private String model;
     @Value("${openai.url}")
@@ -53,7 +53,7 @@ public class
         Map<String, String> responseFormat = new HashMap<>();
         responseFormat.put("type", "json_object");
         ChatGptRequest request = new ChatGptRequest(model, source, temperature, max_tokens, responseFormat);
-      //  ChatGptRequest request = new ChatGptRequest(model, source, temperature, max_tokens);
+        //  ChatGptRequest request = new ChatGptRequest(model, source, temperature, max_tokens);
         request.addSystemMessage(prompt);
         ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
         return chatGptResponse.getChoices().get(0).getMessage().getContent();
@@ -78,7 +78,7 @@ public class
                     "10. 각 질문의 indexing은 json 형태로  question1:생성한 질문 question2:생성한 질문....이런식 으로 하고 맨앞에 result:success 이걸 꼭 넣어줘 데이터 가공 하려고 하는 거니깐 반드시 지켜줘   \n" +
                     "11. 면접 예상 질문에서 예외 상황을 염두한 질문도 제시할 것 어떤 경험을 물었을 때 그 경험이 없는경우 혹시 xx 경험이 없다면 xx 경험을 이야기 해 주세요 같이";
 
-        return postAnalyze;
+            return postAnalyze;
         }else {
             String feedback = "아래의 규칙을 꼭 지키면서 대답해 대답 하기 전에 쉼 호흡도 한 번 하고 명상도 하고 아래의 규칙을 잘 지켰을 때 넉넉한 팁도 챙겨 줄게 잘 해보자\n" +
                     "1. ai라고 절대 언급 하지 말것\n" +
@@ -134,7 +134,7 @@ public class
     }
 
 
-        private String transJson(String gptAnswer) throws JsonProcessingException {
+    private String transJson(String gptAnswer) throws JsonProcessingException {
 
 
         JSONObject json = new JSONObject();

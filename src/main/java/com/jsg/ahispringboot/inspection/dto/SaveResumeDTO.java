@@ -1,5 +1,9 @@
 package com.jsg.ahispringboot.inspection.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.jsg.ahispringboot.member.dto.MemberDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,12 +15,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PersonalInformationDTO {
+public class SaveResumeDTO {
+    private Long resumeCode;
+    private MultipartFile image;
+    private Long memberId;
 
-    private String name;
-    private String position;
-    private String email;
-    private String github;
-    private String phone;
-    private String education;
 }

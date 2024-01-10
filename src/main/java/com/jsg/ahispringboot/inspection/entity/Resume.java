@@ -35,9 +35,6 @@ public class Resume {
     @Column(name = "create_date")
     private String createDate;
 
-    @Column(name = "modify_date")
-    private String modifyDate;
-
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private MemberEntity member;
