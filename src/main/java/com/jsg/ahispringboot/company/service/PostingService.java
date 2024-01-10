@@ -290,4 +290,39 @@ public class PostingService {
 
 
     }
+
+    public List<PostingDTO> selectPostingAndCompanyLogo() {
+
+        List<CompanyEntity> companyEntities = companyRepository.findAll();
+
+
+        List<PostingDTO> postingDTOList = new ArrayList<>();
+
+
+        for (int i = 0; i < companyEntities.size(); i++) {
+
+            List<Posting> postingList = postingRepository.findByCompanyCompanyId(companyEntities.get(i).getCompanyId());
+
+            System.out.println(postingList + "Eldyd");
+
+            for (Posting posting : postingList) {
+                Optional<Posting> optionalPosting = Optional.ofNullable(posting);
+
+                if (optionalPosting.isPresent()) {
+                    PostingDTO postingDTO = modelMapper.map(optionalPosting.get(), PostingDTO.class);
+                    postingDTOList.add(postingDTO);
+                }
+            }
+        }
+
+
+
+        System.out.println(postingDTOList + "ㅎㅇㅎㅇㅎㅇ");
+
+
+
+
+
+        return postingDTOList;
+    }
 }

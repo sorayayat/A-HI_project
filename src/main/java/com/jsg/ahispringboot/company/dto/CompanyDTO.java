@@ -1,5 +1,6 @@
 package com.jsg.ahispringboot.company.dto;
 
+import com.jsg.ahispringboot.member.dto.LogoDto;
 import lombok.*;
 
 import java.sql.Date;
@@ -21,6 +22,7 @@ public class CompanyDTO {
     private int employeesNumber;
     private Date establishmentDate;
     private String companyHomepage;
+    private LogoDto logoEntity;
 
 
 }

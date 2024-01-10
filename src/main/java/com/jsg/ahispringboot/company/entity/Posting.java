@@ -71,6 +71,8 @@ public class Posting {
 
 
 
+
+
     @PrePersist
     public void prePersist() {
         // 다른 설정이 있다면 제거하고 postingDate 설정만 남기세요.
