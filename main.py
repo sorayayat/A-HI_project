@@ -7,7 +7,7 @@ from chatbot.chatbot import CBrouter
 # from resume.resume import resume_router
 from recommendation.recommendation import RErouter
 from recommendation.likePosting import LIrouter
-
+from interview.userinterview import userInterViewrouter
 # from chatbot.chatbot import create_chatbot_router
 
 app = FastAPI()
@@ -16,6 +16,7 @@ app = FastAPI()
 
 app.include_router(CBrouter)
 app.include_router(Interview_router)
+app.include_router(userInterViewrouter)
 app.include_router(ITrouter)
 app.include_router(POrouter)
 app.include_router(RErouter)

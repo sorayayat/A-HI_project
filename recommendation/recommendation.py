@@ -18,8 +18,6 @@ import httpx
 import json
 
 
-
-
 OPENAI_API_KEY = getAPIkey()
 openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
@@ -75,9 +73,7 @@ def gpt_selectCompany(data , resume):
             {"type": "text", "text": "{0}여기에 있는 공고데이터 읽어줘".format(data)},
             {"type": "text", "text": "{0}여기에 있는 이력서 읽어줘".format(resume)},
             {"type": "text", "text" : "이력서와 채용 공고 데이터를 분석한 후, 이력서와 가장 잘 맞는 공고의 id만 5개뽑아줘"},
-            {"type": "text", "text" : "Json 형태로 뽑아줘"},
-            
-            
+            {"type": "text", "text" : "Json 형태로 뽑아줘"},   
 
       ],
     }
@@ -169,7 +165,4 @@ async def get_posting(file: UploadFile = File(...)):
 
         
         
-
-
-
 
