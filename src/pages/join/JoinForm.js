@@ -3,6 +3,8 @@ import styles from './JoinForm.module.css';
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 const JoinForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -37,7 +39,7 @@ const JoinForm = () => {
       return;
     }
     alert("회원가입을 환영합니다. 가입하신 이메일로 인증메일을 보냈으니 확인해주시기 바랍니다. 잠시 기다려주시면 감사하겠습니다");
-    axios.post(`./api/signup`,formData)
+    axios.post(`http://${serverIp}:${serverPort}/api/signup`,formData)
         .then(response => {
           navigate('/loginForm');
         })
@@ -57,7 +59,7 @@ const JoinForm = () => {
     const emailInput = document.getElementById('email');
 
     if (emailInput.validity.valid) {
-      axios.get(`/api/email_duplication_check?email=${formData.email}`)
+      axios.get(`http://${serverIp}:${serverPort}/api/email_duplication_check?email=${formData.email}`)
           .then(response => {
             let result = (response.data)? "가입가능합니다":"기 등록된 이메일 입니다.";
             alert(result);
@@ -80,7 +82,7 @@ const JoinForm = () => {
       return;
     }
     if (phoneNumber.length>=10) {
-      axios.get(`/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+      axios.get(`http://${serverIp}:${serverPort}/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
             let result = (response.data)? "가입가능합니다":"이미 등록된 번호입니다.";
             alert(result);

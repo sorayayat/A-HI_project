@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import styles from './changePwd.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
+
 
 const ChangePwd = () => {
   let user = JSON.parse(sessionStorage.getItem("userInfo"));
@@ -20,7 +23,7 @@ const ChangePwd = () => {
 
   const handleSearch = (e) => {
     e.preventDefault(); 
-    axios.post(`/api/in/member/before/changePwd`, formData)
+    axios.post(`http://${serverIp}:${serverPort}/api/in/member/before/changePwd`, formData, { withCredentials: true })
       .then(response => {
         if (response.data === true) {
           setIsPasswordChanged(true);
@@ -65,7 +68,7 @@ const ChangePwd = () => {
   return;
 }
 
-    axios.put(`/api/in/member/changePwd`, newData)
+    axios.put(`http://${serverIp}:${serverPort}/api/in/member/changePwd`, newData,{ withCredentials: true })
     .then(response => {
       if (response.data === true) {
          navigate('/');

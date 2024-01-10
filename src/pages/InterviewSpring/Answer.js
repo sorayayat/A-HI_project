@@ -2,6 +2,8 @@ import style from './Answer.module.css';
 import { useState,useEffect } from "react";
 import axios from 'axios';
 import RankModal from './RankModal'; 
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 export const Answer = ({ answer }) => {
     const [showRankModal, setShowRankModal] = useState(false);
     const [showFeedback, setShowFeedback] = useState(Array(6).fill(false));
@@ -35,7 +37,7 @@ export const Answer = ({ answer }) => {
         const questionText = answer[questionKey];
         const responseText = textAreaValues[index];
         setShowRankModal(true);
-        axios.post('/interview/person/answer', {
+        axios.post(`http://${serverIp}:${serverPort}/interview/person/answer`, {
             question1: questionText,
             result: responseText,
             question2: index + 1,
@@ -75,7 +77,7 @@ export const Answer = ({ answer }) => {
 
 
                 return questionText && (
-                    <div key={i} className={style.feedbackButtonWrapper}>
+                    <div key={i}>
                         <button onClick={() => toggleFeedback(i)} className={style.feedbackButton} id={questionButton}>
                             {questionText}
                         </button>
@@ -139,4 +141,5 @@ export const Feedback = () => {
     );
 
 }
+
 

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './postingLike.module.css';
 
-
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 
 
 const PostingLike = () => {
@@ -12,7 +13,7 @@ const [currentIndex, setCurrentIndex] = useState(0);
 const userInfoString=sessionStorage.getItem('userInfo'); 
 let userInfo = JSON.parse(userInfoString);
 const loadPostings = () => {
-    axios.get(`/api/in/member/myPage?memberId=`+userInfo.id)
+    axios.get(`http://${serverIp}:${serverPort}/api/in/member/myPage?memberId=`+userInfo.id,{ withCredentials: true })
         .then(response => {
             const postingsData = response.data.map(item => {
                 const posting = JSON.parse(item);
@@ -52,7 +53,7 @@ return (
 <div key={index} className={styles.postingItem}>
 {posting.company?.logoEntity && (
   <img 
-  src={`http://localhost:8001/logoimg/${posting.company.logoEntity.serverName}`} 
+  src={`http://${serverIp}:${serverPort}/logoimg/${posting.company.logoEntity.serverName}`} 
   alt={posting.company.logoEntity.originalName} 
 />
 

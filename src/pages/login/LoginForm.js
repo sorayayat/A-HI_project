@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styles from './LoginForm.module.css';
 import {  Link,useNavigate } from "react-router-dom";
 import axios from 'axios';
-
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 const LoginForm = () => {
     const navigate = useNavigate();
     const [loginData, setLoginData] = useState({
@@ -23,7 +24,7 @@ const LoginForm = () => {
         formData.append('username', loginData.username);
         formData.append('password', loginData.password);
 
-        axios.post(`/login`,formData.toString())
+        axios.post(`http://${serverIp}:${serverPort}/login`,formData.toString())
             .then(response => {
 
                 if(response.data.memberEntity.password==='N'){
