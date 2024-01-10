@@ -130,11 +130,20 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     }, [activeChatRoom]);
 
 
-    const handleDownloadResume = () => {
+
+    const handleDownloadResume = async () => {
         if (activeChatRoomResumePath) {
-            window.location.href = activeChatRoomResumePath; // 이력서 파일 URL로 직접 이동
+            const filename = activeChatRoomResumePath.split('/').pop();
+            window.location.href = `http://localhost:8000/chatbot/download/${filename}`;
         }
     };
+    
+
+    // const handleDownloadResume = () => {
+    //     if (activeChatRoomResumePath) {
+    //         window.location.href = activeChatRoomResumePath; // 이력서 파일 URL로 직접 이동
+    //     }
+    // };
     
 
     return (
