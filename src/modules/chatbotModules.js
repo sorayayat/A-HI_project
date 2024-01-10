@@ -3,13 +3,15 @@ export const ADD_MESSAGE_TO_CHATROOM = 'CHATROOM/ADD_MESSAGE_TO_CHATROOM';
 export const ADD_CHATROOM_DATA = 'CHATROOM/ADD_CHATROOM_DATA';
 export const DELETE_CHATROOM = 'CHATROOM/DELETE_CHATROOM';
 export const SET_PROMPT = 'CHATROOM/SET_PROMPT';
-// export const SET_RESUME_READY = 'CHATROOM/SET_RESUME_READY';
+export const SET_RESUME_DOWNLOADABLE = 'CHATROOM/SET_RESUME_DOWNLOADABLE';
 
 
 const initialState = {
   _id: '',
   email: '',
   chatroomList: [],
+  resumeDownloadable: false,
+  resumePath: null,
 };
 
 
@@ -42,11 +44,12 @@ export const setPrompt = (roomId, prompt) => ({
   payload: { roomId, prompt },
 });
 
-// 이력서 준비 여부 set 
-// export const setResumeReady = (roomId, resumeReady, resumePath) => ({
-//   type: SET_RESUME_READY,
-//   payload: { roomId, resumeReady, resumePath },
-// });
+// 이력서 다운로드 가능 상태 설정 액션 생성자
+export const setResumeDownloadable = (downloadable, path) => ({
+  type: SET_RESUME_DOWNLOADABLE,
+  payload: { downloadable, path },
+});
+
 
 
 const chatbotReducer = (state = initialState, action) => {
@@ -117,16 +120,13 @@ const chatbotReducer = (state = initialState, action) => {
         };
 
 
-        // case SET_RESUME_READY:
-        //   const { roomId, resumeReady, resumePath } = action.payload;
-        //   return {
-        //     ...state,
-        //     chatroomList: state.chatroomList.map(room =>
-        //       room.roomId === roomId ? { ...room, resumeReady, resumePath } : room
-        //     ),
-        //   };
+      case SET_RESUME_DOWNLOADABLE:
+        return {
+          ...state,
+          resumeDownloadable: action.payload.downloadable,
+          resumePath: action.payload.path,
+        };
     
-
     default:
       return state;
   }

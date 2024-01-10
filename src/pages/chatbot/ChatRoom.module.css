@@ -163,7 +163,7 @@
 
 /* ========================== 채팅창 메세지, 말풍선 디자인 ========================== */
 
-/* 수정된 클래스명에 대한 CSS */
+
 .userMessage {
     display: flex;
     justify-content: flex-end;
@@ -237,6 +237,7 @@
     border: none;
     font-size: 20px;
     font-weight: bold;
+    margin-left: 60px;
   }
 
 
@@ -256,4 +257,5 @@
     border: 3px solid #9fcbfd;
     font-size: 20px;
     font-weight: bold;
+    margin-left: 60px;
   }

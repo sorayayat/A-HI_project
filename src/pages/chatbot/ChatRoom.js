@@ -1,8 +1,9 @@
 import styles from './ChatRoom.module.css';
 import sendIcon from '../mainpage/Icons/Sent.png';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useRef } from 'react';
+import { setResumeDownloadable } from '../../modules/chatbotModules';
 
 
 const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, setSelectedPrompt }) => {
@@ -14,6 +15,10 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     const scrollRef = useRef(null);
     const [showResumeButton, setShowResumeButton] = useState(false);
     const [activeChatRoomResumePath, setActiveChatRoomResumePath] = useState(null);
+    const [serverResponse, setServerResponse] = useState(null);
+    const resumeDownloadable = useSelector(state => state.chatbotReducer.resumeDownloadable);
+    const resumePath = useSelector(state => state.chatbotReducer.resumePath);
+    const dispatch = useDispatch();
 
 
     useEffect(() => {
@@ -65,14 +70,16 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     }, [activeChatRoom]);
     
 
-
-
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
     }
 
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
+        // Shift + Enter가 눌렸을 경우, 줄바꿈 처리
+        if (e.key === 'Enter' && e.shiftKey) {
+            // 기본 동작 수행 (줄바꿈)
+        } else if (e.key === 'Enter') {
+            // Enter만 눌렸을 경우, 메시지 전송
             e.preventDefault();
             sendMessage();
         }
@@ -102,6 +109,7 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
             });
 
             const data = await response.json();
+            setServerResponse(data); // 서버 응답으로 상태 업데이트
             console.log("========================== [sendMessage] chatbot_endpoint response ==========================\n", data);
             const newChatbotMessage = { sender: '챗봇', content: data.gptMessage };
 
@@ -131,20 +139,47 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
 
 
 
-    const handleDownloadResume = async () => {
+    // 채팅방에 진입할 때마다 이력서 다운로드 상태 확인
+    // useEffect(() => {
+    //     if (resumeDownloadable && resumePath) {
+    //         setShowResumeButton(true);
+    //         setActiveChatRoomResumePath(resumePath);
+    //     }
+    // }, [resumeDownloadable, resumePath]);
+
+
+
+    // activeChatRoom이 변경될 때마다 상태 업데이트 --> 이거 없으면 버튼 안됨
+    useEffect(() => {
+        if (activeChatRoom && activeChatRoom.resumePath) {
+            setShowResumeButton(true);
+            setActiveChatRoomResumePath(activeChatRoom.resumePath);
+        } else {
+            setShowResumeButton(false);
+            setActiveChatRoomResumePath(null);
+        }
+    }, [activeChatRoom]);
+
+
+    // 이력서 다운로드 버튼 클릭 핸들러
+    const handleDownloadResume = () => {
         if (activeChatRoomResumePath) {
             const filename = activeChatRoomResumePath.split('/').pop();
+            console.log("~~~~~~~~~~~~~~~~~~~Downloading file:", filename);
             window.location.href = `http://localhost:8000/chatbot/download/${filename}`;
         }
     };
-    
 
     // const handleDownloadResume = () => {
-    //     if (activeChatRoomResumePath) {
-    //         window.location.href = activeChatRoomResumePath; // 이력서 파일 URL로 직접 이동
+    //     if (activeChatRoom && activeChatRoom.resumePath) {
+    //         const filename = activeChatRoom.resumePath.split('/').pop();
+    //         console.log("!!!!!!!!!!!!!!!!!!!!!Downloading file:", filename);
+    //         window.location.href = `http://localhost:8000/chatbot/download/${filename}`;
     //     }
     // };
     
+
+
 
     return (
         <>
