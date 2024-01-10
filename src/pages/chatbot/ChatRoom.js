@@ -151,13 +151,13 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
                                         <div key={`${msg.sender}-${msg.content}-${index}`} className={msg.sender === '사용자' ? styles.userMessage : styles.chatbotMessage}>
                                             <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
                                                 {msg.content}
-                                            {/* 조건부 렌더링으로 버튼 추가 */}
-                                            {/* 챗봇의 메시지에 특정 텍스트가 포함되어 있을 때만 이력서 버튼을 표시합니다. */}
-                                                {msg.sender === '챗봇' && msg.content.includes("이력서에 필요한 정보 수집이 완료되었습니다!") && showResumeButton && activeChatRoomResumePath && (
-                                                    <button onClick={handleDownloadResume} className={styles.resumeButton}>
-                                                        이력서 다운로드
-                                                    </button>
-                                                )}
+                                                    {/* 조건부 렌더링으로 버튼 추가 */}
+                                                    {/* 챗봇의 메시지에 특정 텍스트가 포함되어 있을 때만 이력서 버튼을 표시합니다. */}
+                                                    {msg.sender === '챗봇' && msg.content.includes("이력서에 필요한 정보 수집이 완료되었습니다!") && showResumeButton && activeChatRoomResumePath && (
+                                                        <button onClick={handleDownloadResume} className={styles.resumeButton}>
+                                                            이력서 다운로드
+                                                        </button>
+                                                    )}
                                             </p>
                                         </div>
                                 ))}
