@@ -362,4 +362,3 @@ def send_resume_data(resume_data, email, roomId):
 
     return web_accessible_url
 
-

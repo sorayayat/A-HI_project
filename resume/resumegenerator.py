@@ -106,6 +106,11 @@ def generate_resume_content(resume_data):
     output_path_docx = os.path.join(output_folder, '{}_Resume.docx'.format(user_name))
     output_path_pdf = os.path.join(output_folder, '{}_Resume.pdf'.format(user_name))
     
+    # 파일 경로에 roomId 포함하여 고유한 파일 이름 설정
+    # output_path_docx = os.path.join(output_folder, f'{roomId}_Resume.docx')
+    # output_path_pdf = os.path.join(output_folder, f'{roomId}_Resume.pdf')
+
+
     # resume_data를 확인해 적절한 템플릿 파일 선택
     experiences = resume_data.get("experiences")
     certifications = resume_data.get("awardsandcertifications")
