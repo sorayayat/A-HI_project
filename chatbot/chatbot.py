@@ -297,6 +297,14 @@ async def chatbot_endpoint(message: User):
     }
 
 
+@CBrouter.get("/download/{filename}")
+async def download_file(filename: str):
+    file_location = f"resume/resumeResult/{filename}"
+    if os.path.isfile(file_location):
+        return FileResponse(path=file_location, filename=filename)
+    else:
+        raise HTTPException(status_code=404, detail="File not found")
+
 
 # 챗봇의 마지막 응답에서  이력서 데이터 뽑아오기
 def extract_resume_data(email, room_id):
