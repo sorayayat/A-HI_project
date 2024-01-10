@@ -2,7 +2,6 @@ from docx import Document
 import os
 import subprocess
 
-
 current_directory = os.getcwd()
 
 def format_skills(skills):
@@ -97,8 +96,8 @@ def generate_resume_content(resume_data):
     
     user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
-    output_folder = os.path.join(current_directory, 'static', 'resume', 'resumeResult')
-    
+    output_folder = os.path.join(current_directory, 'static/resumeResult')
+
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 

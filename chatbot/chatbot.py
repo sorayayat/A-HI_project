@@ -299,11 +299,12 @@ async def chatbot_endpoint(message: User):
 
 @CBrouter.get("/download/{filename}")
 async def download_file(filename: str):
-    file_location = f"resume/resumeResult/{filename}"
+    file_location = f"static/resumeResult/{filename}"
     if os.path.isfile(file_location):
         return FileResponse(path=file_location, filename=filename)
     else:
         raise HTTPException(status_code=404, detail="File not found")
+
 
 
 # 챗봇의 마지막 응답에서  이력서 데이터 뽑아오기
@@ -354,12 +355,11 @@ def send_resume_data(resume_data, email, roomId):
     file_name = os.path.basename(resume_file_path)
 
     # 로컬에서 접근 가능한 URL 생성
-    web_accessible_url = f"http://localhost:8000/static/resume/resumeResult/{file_name}"
+    web_accessible_url = f"http://localhost:8000/static/resumeResult/{file_name}"
 
     print("=============================== 생성된 이력서 파일 경로 =============================== ", resume_file_path)
     print("================================== 웹 접근 가능 URL ================================== ", web_accessible_url)
 
     return web_accessible_url
-
 
 
