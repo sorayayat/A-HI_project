@@ -2,6 +2,8 @@ import styles from './FindForm.module.css';
 import {  Link } from "react-router-dom";
 import { useState,React } from "react";
 import axios from 'axios';
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 const FindForm = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -15,7 +17,7 @@ const FindForm = () => {
 
 
 const findData = () =>{
-  axios.post(`./api/find_info`,formData)
+  axios.post(`http://${serverIp}:${serverPort}/api/find_info`,formData)
   .then(response => {
     if(response.data.check==='success'){
       setFormData({ ...formData, email: response.data.email });
@@ -29,7 +31,7 @@ const findData = () =>{
 }
 
 const findPwd =() =>{
-  axios.put(`./api/find_pwd`,formData)
+  axios.put(`http://${serverIp}:${serverPort}/api/find_pwd`,formData)
   .then(response => {
     if(response.data.check==='success'){
       

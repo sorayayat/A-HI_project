@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styles from './companyUpdate.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 const CompanyUpdate = () => {
   const navigate = useNavigate();
   const [logoPreview, setLogoPreview] = useState("");
@@ -24,7 +25,7 @@ const CompanyUpdate = () => {
     
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await axios.get('/api/in/member/infoCompany');
+      const response = await axios.get(`http://${serverIp}:${serverPort}/api/in/member/infoCompany`,{ withCredentials: true });
       const data = response.data;
       console.log(data);
       setOriginalNumber(data.phoneNumber);
@@ -41,7 +42,7 @@ const CompanyUpdate = () => {
         logo: response.data.logo,
         memberId:response.data.memberId,
       });
-      setLogoPreview(`http://localhost:8001/logoimg/`+response.data.logoServer);
+      setLogoPreview(`http://${serverIp}:${serverPort}/logoimg/`+response.data.logoServer);
     };
 
     fetchUserInfo();
@@ -58,7 +59,7 @@ const CompanyUpdate = () => {
       return;
     }
     
-    axios.get(`/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    axios.get(`http://${serverIp}:${serverPort}/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
             if(response.data===true) {
               alert("등록 가능한 번호 입니다.");
@@ -117,7 +118,7 @@ const CompanyUpdate = () => {
       alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     }
-    axios.put(`/api/in/member/company_info_update`, data)
+    axios.put(`http://${serverIp}:${serverPort}/api/in/member/company_info_update`, data,{ withCredentials: true })
     .then(response => {
       const updatedUserInfo = {
         ...JSON.parse(sessionStorage.getItem('userInfo')),

@@ -4,19 +4,17 @@
     text-align: center;
   }
   .myContainer {
-      width: 70vw;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: auto;
-      margin: 10vh, 0, 10vh, 0;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      padding: 5%, 0, 5%, 0;
-      margin-top: 10vh;
-      margin-bottom: 10vh;
-      height: 50vh;
-    }
+    width: 70vw;
+    display: flex;
+    justify-content: center; /* 가로축 중앙 정렬 */
+    align-items: center;
+    margin: 10vh auto; /* 상하 10vh, 좌우 자동 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 5%;
+    height: 50vh;
+}
+
     .myContainer div {
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
       height: 50%;
