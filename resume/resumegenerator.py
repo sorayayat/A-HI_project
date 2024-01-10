@@ -3,6 +3,9 @@ import os
 import subprocess
 
 
+current_directory = os.getcwd()
+
+
 def format_skills(skills):
     formatted_skills = ''
     for i, skill in enumerate(skills):
@@ -95,11 +98,7 @@ def generate_resume_content(resume_data):
     user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
 
-    print("****************[generate_resume_content] ********************\n ", resume_data)
-    print("**************************************************************")
-    user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
-    
-    output_folder = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\resumeResult'
+    output_folder = os.path.join(current_directory, 'static/resumeResult')
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
@@ -110,6 +109,11 @@ def generate_resume_content(resume_data):
     output_path_pdf = os.path.join(output_folder, '{}_Resume.pdf'.format(user_name))
 
     
+    # 파일 경로에 roomId 포함하여 고유한 파일 이름 설정
+    # output_path_docx = os.path.join(output_folder, f'{roomId}_Resume.docx')
+    # output_path_pdf = os.path.join(output_folder, f'{roomId}_Resume.pdf')
+
+
     # resume_data를 확인해 적절한 템플릿 파일 선택
     experiences = resume_data.get("experiences")
     certifications = resume_data.get("awardsandcertifications")
