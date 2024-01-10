@@ -11,6 +11,9 @@ import os
 import requests
 import json
 
+from db.database import db, FileTBL
+
+
 # FastAPI 라우터
 resume_router = APIRouter(prefix="/resume")
 
@@ -36,12 +39,24 @@ OPENAI_API_KEY = getAPIkey()
 OPENAI_MODEL = getModel()
 openai.api_key = OPENAI_API_KEY
 
-
-
 async def get_resume_data(file: UploadFile):
     contents = await file.read()
     resume_data = json.loads(contents)
     return resume_data
+
+
+def save_pdf_info(email, file_name, file_path):
+    try:
+        # 새 파일 정보 객체 생성
+        new_file_info = FileTBL(email=email, file_name=file_name, file_path=file_path)
+        # 세션에 추가하고 커밋
+        db.add(new_file_info)
+        db.commit()
+        print("File info saved to database successfully.")
+    except Exception as e:
+        print(f"Error saving file info to database: {e}")
+        db.rollback()
+
 
 @resume_router.post("/create-resume/")
 async def create_resume(file: UploadFile = None, resume_data: ResumeData = Depends()):
@@ -61,9 +76,16 @@ async def create_resume(file: UploadFile = None, resume_data: ResumeData = Depen
 
     # 생성된 이력서 내용을 파일로 저장하고 저장된 파일 경로를 반환
     generated_resume_path = generate_resume_content(chat_response)
+
+    # PDF 파일 정보를 데이터베이스에 저장
+    save_pdf_info(resume_data.email, generated_resume_path)
+
     return {"message": "이력서가 성공적으로 생성되었습니다.", "resume_path": generated_resume_path}
+
 
 @resume_router.get("/download-resume/{filename}")
 async def download_resume(filename: str):
     file_path = os.path.join("path_to_saved_resumes", filename)  # 이력서가 저장된 경로
     return FileResponse(file_path, media_type='application/pdf', filename=filename)
+
+
