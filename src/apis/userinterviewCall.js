@@ -2,25 +2,24 @@ const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
 const FAST_PRE_URL = `http://${FAST_SERVER_IP}:${FAST_SERVER_PORT}/userinterview`
 
-export const calluserInterview = (userPDF, callback) => {
-
+export const calluserInterview = ({file}, callback) => {
     const requestURL = `${FAST_PRE_URL}/userinterview`;
-    return async (dispatch, getState) => {
+    return async (dispatch) => {
         try {
-            const PDFresult = await fetch(requestURL, {
+            const result = await fetch(requestURL, {
                 method: 'POST',
-                
-                body: userPDF
+                body: file
             });
-
-            if (PDFresult.ok) {
-                const data = await PDFresult.json();
-                callback(data); // 콜백 함수를 호출하여 데이터 처리
+            const data = await result.json();
+                console.log(result)
+            if (result.ok) {
+                if(typeof callback === 'function'){
+                callback(data);}
             } else {
-                console.error("Server responded with status", PDFresult.status);
+                console.error("error", result.status);
             }
         } catch (error) {
-            console.error("Error while fetching", error);
+            console.error("Network error:", error);
         }
-    }
-}
+    };
+};

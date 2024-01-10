@@ -2,7 +2,7 @@ const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
 const FAST_PRE_URL = `http://${FAST_SERVER_IP}:${FAST_SERVER_PORT}/interview`
 
-export const callInterviewAnswer = (answer, callback) => {
+export const callInterviewAnswer = ({userAnswer}, callback) => {
 
     const requestURL = `${FAST_PRE_URL}/sendAnswer`;
     return async (dispatch, getState) => {
@@ -13,12 +13,14 @@ export const callInterviewAnswer = (answer, callback) => {
 
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(answer)
+                body: JSON.stringify(userAnswer)
             });
 
+            const AIanswer = await sandresult.json();
             if (sandresult.ok) {
-                const data = await sandresult.json();
-                callback(data); // 콜백 함수를 호출하여 데이터 처리
+                if (typeof callback === 'function'){
+                callback(AIanswer); // 콜백 함수를 호출하여 데이터 처리
+                }
             } else {
                 console.error("Server responded with status", sandresult.status);
             }

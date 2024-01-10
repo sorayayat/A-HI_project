@@ -1,20 +1,19 @@
-import interviewstyle from './Interview.module.css';
+import React from 'react';
+import styles from './LoadingScreen.module.css';
 
 const LoadingScreen = ({ isLoading }) => {
     if (!isLoading) return null;
-  
+
     return (
-      <div className="loading loading-full-screen">
-        <div className="loading-dim"></div>
-        <div className="indicator">
-          <div className="progress-rail">
-            <div className="progress" style={{ width: '100%' }}></div> {/* 100% 로드를 가정 */}
-            
-          </div>
-          <p>Loading...</p>
+        <div className={styles.overlay}>
+            <div className={styles.loading}>
+                {/* <div className={styles.loadingBarProgres}></div> */}
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </div>
     );
-  };
-  
-  export default LoadingScreen;
+};
+
+export default LoadingScreen;
