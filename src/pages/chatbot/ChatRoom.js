@@ -13,7 +13,7 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     const [messageList, setMessageList] = useState([]); 
     const scrollRef = useRef(null);
     const [showResumeButton, setShowResumeButton] = useState(false);
-
+    const [activeChatRoomResumePath, setActiveChatRoomResumePath] = useState(null);
 
 
     useEffect(() => {
@@ -113,10 +113,11 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
             updateChatRoomsMessages(activeChatRoom.roomId, newUserMessage);
             updateChatRoomsMessages(activeChatRoom.roomId, newChatbotMessage);
 
-            // 이력서 생성 버튼 표시 여부 결정
+            // 이력서 생성 버튼 표시 여부 결정 및 이력서 경로 설정
             if (data.resumeReady) {
-                console.log("!!!!!!!!!!!!!!!!!!!이력서 준비됨: ", data.resumeReady);
+                console.log("!!!!!!!!!!!!!!!!!!!!!이력서 준비됨: ", data.resumeReady);
                 setShowResumeButton(true);
+                setActiveChatRoomResumePath(data.resumePath);
             }
         }
     };
@@ -130,8 +131,8 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
 
 
     const handleDownloadResume = () => {
-        if (activeChatRoom && activeChatRoom.resumePath) {
-            window.location.href = activeChatRoom.resumePath; // 이력서 파일 URL로 직접 이동
+        if (activeChatRoomResumePath) {
+            window.location.href = activeChatRoomResumePath; // 이력서 파일 URL로 직접 이동
         }
     };
     
@@ -150,13 +151,14 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
                                         <div key={`${msg.sender}-${msg.content}-${index}`} className={msg.sender === '사용자' ? styles.userMessage : styles.chatbotMessage}>
                                             <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
                                                 {msg.content}
-                                            </p>
                                             {/* 조건부 렌더링으로 버튼 추가 */}
-                                            {showResumeButton && activeChatRoom.resumePath && (
-                                                <button onClick={handleDownloadResume} className={styles.resumeButton}>
-                                                    이력서 다운로드
-                                                </button>
-                                            )}
+                                            {/* 챗봇의 메시지에 특정 텍스트가 포함되어 있을 때만 이력서 버튼을 표시합니다. */}
+                                                {msg.sender === '챗봇' && msg.content.includes("이력서에 필요한 정보 수집이 완료되었습니다!") && showResumeButton && activeChatRoomResumePath && (
+                                                    <button onClick={handleDownloadResume} className={styles.resumeButton}>
+                                                        이력서 다운로드
+                                                    </button>
+                                                )}
+                                            </p>
                                         </div>
                                 ))}
                                 {/* 이력서 생성하기 버튼을 말풍선 목록 마지막에 추가 */}

@@ -222,12 +222,38 @@
   }
 
   .resumeButton {
-    width: 300px;
-    height: 200px;
-    border-radius: 10px;
-    background-color: rgb(222, 218, 255);
+    width: 200px;
+    height: 70px;
+    border-radius: 50px;
+    background-color: #dbebfc;
     cursor: pointer;
     justify-content: center;
-    color: black;
+    color: rgb(96, 95, 98);
     font-family: "Pretendard";
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+
+  .resumeButton:hover {
+    width: 200px;
+    height: 70px;
+    border-radius: 50px;
+    background-color: #c2defd;
+    cursor: pointer;
+    justify-content: center;
+    color:rgb(96, 95, 98);
+    font-family: "Pretendard";
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    border: 3px solid #9fcbfd;
+    font-size: 20px;
+    font-weight: bold;
   }
