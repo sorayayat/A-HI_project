@@ -4,6 +4,8 @@ import subprocess
 
 current_directory = os.getcwd()
 
+current_directory = os.getcwd()
+
 def format_skills(skills):
     formatted_skills = ''
     for i, skill in enumerate(skills):
@@ -96,6 +98,7 @@ def generate_resume_content(resume_data):
     
     user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
+
     output_folder = os.path.join(current_directory, 'static/resumeResult')
 
     if not os.path.exists(output_folder):

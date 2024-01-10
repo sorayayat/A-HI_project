@@ -314,40 +314,6 @@ def extract_resume_data(email, room_id):
     return None, resume_ready  # 예외 발생 시 None과 resume_ready의 현재값 반환
 
 
-# def extract_resume_data(email, room_id):
-#     try:
-#         chat_content = previous_system_content.get((email, room_id), "")
-#         lines = chat_content.split("\n")
-#         last_response_start_index = None
-
-#         # 마지막 챗봇 응답의 시작 지점 찾기
-#         for i, line in enumerate(reversed(lines)):
-#             if line.startswith("챗봇:"):
-#                 last_response_start_index = len(lines) - 1 - i
-#                 break
-
-#         # 전체 챗봇 응답 추출
-#         if last_response_start_index is not None:
-#             last_response = "\n".join(lines[last_response_start_index:])
-#             print("======================= 추출된 챗봇의 마지막 응답 =======================\n", last_response)
-
-#             # JSON 데이터 추출
-#             json_str_match = re.search(r'\{.*?\}', last_response, re.DOTALL)
-#             if json_str_match:
-#                 json_str = json_str_match.group()
-#                 print("======================= 추출된 JSON 데이터 =======================\n", json_str)
-#                 # 이력서 생성 가능 여부 판단
-#                 resume_ready = True
-
-#                 return json.loads(json_str), resume_ready
-
-#     except json.JSONDecodeError:
-#         print("JSON 파싱 오류: 챗봇 응답에서 유효한 JSON 데이터를 추출할 수 없습니다.")
-#     except Exception as e:
-#         print(f"이력서 데이터 가져오기 실패: {e}")
-
-#     return None
-
 
 # 이력서 데이터 resumegenerator로 전달하는 함수
 def send_resume_data(resume_data, email, roomId):
