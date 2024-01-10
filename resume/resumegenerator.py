@@ -97,8 +97,8 @@ def generate_resume_content(resume_data):
     
     user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
-    output_folder = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\resumeResult'
-
+    output_folder = os.path.join(current_directory, 'static', 'resume', 'resumeResult')
+    
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 

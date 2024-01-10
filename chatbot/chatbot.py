@@ -8,12 +8,13 @@ from .database import get_database
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from fastapi import Body
+from fastapi.responses import FileResponse
 from typing import Dict, Optional
 import re
 import json
 import sys
 sys.path.append('..')
-from resume.resumegenerator import generate_resume, generate_resume_content
+from resume.resumegenerator import generate_resume_content
 
 
 
@@ -151,13 +152,31 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
     if not previous_chat:
         if prompt_type == "신입":
             base_prompt = f""" 
-                    너는 취업 컨설턴트야. 너는 경력이 없는 신입 개발자 준비생 고객과 채팅을 할거고, 채팅을 통해서 고객의 이름, 전화번호, 이메일, 깃주소, 원하는 직무, 기술 스택,
-                    경력, 경력사항 세부내용, 프로젝트 경험, 프로젝트 경험 세부 내용, 학력, 학력 세부 내용, 수상경력 및 자격증에 대한 정보를 수집할거야.
-                    위 13개 항목에 대한 정보 수집이 완료되면 다른 내용 없이
-                    {{"name":수집한 이름, "phone_number":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "job_title":원하는 직업, 
-                    "skills":[수집한 기술스택], "experiences":[수집한 경력], "experiences_detail":[수집한 경력 세부내용], "projects":[수집한 프로젝트 경험],
-                    "project_detail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "education_detail":[수집한 최종학력 세부내용], 
-                    "awards_and_certifications":[수집한 수상경력이나 자격증]}} 형태의 대답을 하고 마치면 돼.
+                    <Knowledge>
+                    - 좋은 이력서는 5개 rule을 무조건 지켜야 한다
+                      - rule 1) 이름, 전화번호, 이메일, 깃주소, 원하는 직무('프론트엔드'와'백엔드'중 한가지), 기술스택, 경력사항, 경력사항 세부 내용, 
+                                프로젝트 경험, 프로젝트 경험 세부내용, 최종학력, 최종학력 세부내용, 수상경력 혹은 자격증 13가지 항목이 필수적으로 들어간다.
+                      - rule 2) 최종학력에는 학교이름, 최종학력 세부내용에는 전공, 입학/졸업 시기 정도로만 간략하게 쓴다. 학점은 필요 없다.    
+                      - rule 3) 기술 스택에는 지원한 포지션에 맞게 필요한 주력 기술만 넣는다.
+                      - rule 4) 경력사항은 최신순으로 가장 최근 경험을 상단에 둔다.
+                      - rule 5) 경력사항에는 회사이름과 부서/직함을 넣고, 경력사항 세부내용에는 진행했던 업무 내용을 고객에게 입력받은 내용을 한줄로 요약해서 넣는다. (경력사항 세부내용 예시: 테스트 규모별 서버 증설 담당, 부하테스트(BMT) 진행)
+
+
+                    <Persona>
+                    - 너는 개발자 출신 이력서 컨설턴트다.
+                    - 너는 신입 개발자 준비생 고객과 채팅을 진행한다.
+                    - 좋은 이력서의 rule에 맞게 데이터를 수집한다.
+                    - 맨 처음 대화에 답변할 때 "안녕하세요! 신입 개발자 준비생이시군요!"라는 인사말로 시작한다.
+                    - 절대로 고객에게 "어떤 정보를 수집해야 할까요?"와 같은 질문은 하지 않는다.
+                    - 무조건 고객에게 모든 항목에 대해 질문하고 답변을 받는다.
+                    - 너는 고객과의 채팅을 통해서 좋은 이력서의 13가지 category정보들을 필수적으로 수집한다.
+                    - 13가지 항목에 대한 정보수집이 완료되면 수집한 정보를 토대로
+                         {{"name":수집한 이름, "phonenumber":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "jobtitle":원하는 직업, 
+                        "skills":[수집한 기술스택], "experiences":[수집한 경력사항], "experiencesdetail":[경력사향 세부 내용], "projects":[수집한 프로젝트 경험],
+                        "projectsdetail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "educationdetail":수집한 최종학력 세부내용, 
+                        "awardsandcertifications":[수집한 수상경력 혹은 자격증]}} 형태의 대답만 하고 마친다.
+                    - 13가지 항목을 한꺼번에 질문하지말고, 상담하듯 자연스러운 대화로 이끌어 나간다.
+                    - 모든 답변은 한국어와 존댓말을 사용하며, AI임을 언급하지 않고 인간의 조언과 전문적인 지식을 제공한다.                 
             """
         elif prompt_type == "경력직":
             base_prompt = f""" 
@@ -314,42 +333,6 @@ def extract_resume_data(email, room_id):
     return None, resume_ready  # 예외 발생 시 None과 resume_ready의 현재값 반환
 
 
-# def extract_resume_data(email, room_id):
-#     try:
-#         chat_content = previous_system_content.get((email, room_id), "")
-#         lines = chat_content.split("\n")
-#         last_response_start_index = None
-
-#         # 마지막 챗봇 응답의 시작 지점 찾기
-#         for i, line in enumerate(reversed(lines)):
-#             if line.startswith("챗봇:"):
-#                 last_response_start_index = len(lines) - 1 - i
-#                 break
-
-#         # 전체 챗봇 응답 추출
-#         if last_response_start_index is not None:
-#             last_response = "\n".join(lines[last_response_start_index:])
-#             print("======================= 추출된 챗봇의 마지막 응답 =======================\n", last_response)
-
-#             # JSON 데이터 추출
-#             json_str_match = re.search(r'\{.*?\}', last_response, re.DOTALL)
-#             if json_str_match:
-#                 json_str = json_str_match.group()
-#                 print("======================= 추출된 JSON 데이터 =======================\n", json_str)
-#                 # 이력서 생성 가능 여부 판단
-#                 resume_ready = True
-
-#                 return json.loads(json_str), resume_ready
-
-#     except json.JSONDecodeError:
-#         print("JSON 파싱 오류: 챗봇 응답에서 유효한 JSON 데이터를 추출할 수 없습니다.")
-#     except Exception as e:
-#         print(f"이력서 데이터 가져오기 실패: {e}")
-
-#     return None
-
-
-
 
 # 이력서 데이터 resumegenerator로 전달하는 함수
 def send_resume_data(resume_data, email, roomId):
@@ -369,3 +352,6 @@ def send_resume_data(resume_data, email, roomId):
     print("================================== 웹 접근 가능 URL ================================== ", web_accessible_url)
 
     return web_accessible_url
+
+
+
