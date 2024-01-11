@@ -30,6 +30,7 @@
     height: auto; /* 버튼 높이 자동 조절 */
     white-space: normal; /* 텍스트가 필요에 따라 여러 줄로 나뉘도록 설정 */
     overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+    
 }
 
 .feedbackButton:hover {
@@ -40,6 +41,7 @@
 
 .feedbackContainer {
     text-align: center;
+    
 }
 
 .inputAnswer {
@@ -93,6 +95,7 @@
     flex-direction: column;
     align-items: flex-end;
     width: 100%;
+    border-color: #0056b3;
 }
 
 .submitButtonContainer {

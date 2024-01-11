@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { callSelectJobListing } from '../../apis/postingAPICalls'
 import { useDispatch, useSelector } from 'react-redux';
 import { callSelectLikePosting } from '../../apis/recommendationAPICalls';
+import { LoadingSpiner } from '../../other/LoadingSpiner';
 
 function Apply() {
 
@@ -12,13 +13,23 @@ function Apply() {
     const postingList = posting?.data?.data;
     const navigate = useNavigate();
     const postingLikeList = useSelector(state => state.recommendationReducer.postingLike);
+    const [isLoading, setIsLoading] = useState(false);
 
     // const companyCode = localStorage.session("user")
 
     // console.log('companyCode' , companyCode);
-    
 
-    
+    const setCurrentPageWithLoading = async (pageNum) => {
+        setIsLoading(true);
+        setCurrentPage(pageNum);
+        await dispatch(callSelectJobListing({ currentPage: pageNum }));
+        await dispatch(callSelectLikePosting({ memberCode: memberCode }));
+        setIsLoading(false);
+        window.scrollTo(0, 0);
+    };
+
+
+
     const pageInfo = posting?.data?.pageInfo;
 
     const [start, setStart] = useState(0);
@@ -27,7 +38,7 @@ function Apply() {
 
     const pageNumber = [];
 
-    const companyCodeJSON  = sessionStorage?.getItem("userInfo")
+    const companyCodeJSON = sessionStorage?.getItem("userInfo")
 
     const parsedData = JSON.parse(companyCodeJSON);
 
@@ -35,11 +46,15 @@ function Apply() {
 
     const memberCode = parsedData?.id;
 
-    if(pageInfo){
-        for(let i = 1; i <= pageInfo.pageEnd; i++){
+
+
+    if (pageInfo) {
+        for (let i = 1; i <= pageInfo.pageEnd; i++) {
             pageNumber.push(i);
         }
     }
+
+
 
 
     const sortByPostingCode = (a, b) => b.postingCode - a.postingCode;
@@ -50,29 +65,28 @@ function Apply() {
         window.scrollTo(0, 0);
 
         dispatch(callSelectJobListing({
-            currentPage : currentPage,
+            currentPage: currentPage,
         }))
 
         dispatch(callSelectLikePosting({
             memberCode: memberCode
-        }),[currentPage])
+        }), [currentPage])
 
-
-
+        setIsLoading(false);
 
         return () => {
             document.body.classList.remove(style.companyListBody);
         };
-    }, [currentPage]);
+    }, []);
 
     function getPostingCity(fullAddress) {
 
         // 예시: "서울 광진구 천호대로124길 20"
         const addressParts = fullAddress.split(' '); // 공백을 기준으로 나눔
-        const city = addressParts[0] +  " "  + addressParts[1]; // 첫 번째 부분이 서울시
+        const city = addressParts[0] + " " + addressParts[1]; // 첫 번째 부분이 서울시
 
-        
-        
+
+
         return city;
     }
 
@@ -85,6 +99,17 @@ function Apply() {
 
     }
 
+    if (isLoading || postingList === undefined) {
+        return (
+            <div className={style.modalOverlay}>
+                <div className={style.loadingSpiner}>
+                    <LoadingSpiner />
+                </div>
+            </div>
+        );
+    }
+
+
 
     return (
 
@@ -94,9 +119,11 @@ function Apply() {
                     <div className={style.companyList}>
                         <div className={style.title}>
                             <h1 style={{ marginLeft: '100px' }}>채용정보</h1>
-                            <Link to="/companyList/companyRegist" className={style.registButton}>
-                                공고 등록
-                            </Link>
+                            {companyCode && (
+                                <Link to="/companyList/companyRegist" className={style.registButton}>
+                                    공고 등록
+                                </Link>
+                            )}
                         </div>
                         {postingList?.map((posting, index) => (
                             <div key={index} className={style.companyDetails} onClick={() => onClickPostingHandler(posting, index)}>
@@ -124,51 +151,51 @@ function Apply() {
 
                     {postingLikeList?.map((posting, index) => (
 
-                        <div> <div className={style.companyTitle} onClick={() => onClickPostingHandler(posting,index)}>
-                        <div><strong>{posting.postingTitle}</strong></div>
-                        
+                        <div> <div className={style.companyTitle} onClick={() => onClickPostingHandler(posting, index)}>
+                            <div><strong>{posting.postingTitle}</strong></div>
+
                         </div>
-                        <div className={style.condition}>
-                            <div>{getPostingCity(posting.location)}</div>
-                            <div>{posting.education}</div>
-                            
-                            <div>{posting.closingForm}</div>
-                        </div></div>
-                        
+                            <div className={style.condition}>
+                                <div>{getPostingCity(posting.location)}</div>
+                                <div>{posting.education}</div>
+
+                                <div>{posting.closingForm}</div>
+                            </div></div>
+
                     ))}
                 </div>
             </div>
             <div style={{ listStyleType: "none", display: "flex", justifyContent: "center" }} className={style.pagingContainer}>
-                            { Array.isArray(postingList) &&
-                            <button 
-                                onClick={() => setCurrentPage(currentPage - 1)} 
-                                disabled={currentPage === 1}
-                                className={ style.pagingBtn }
-                            >
-                                &lt;
-                            </button>
-                            }
-                            {pageNumber.map((num) => (
-                            <li key={num} onClick={() => setCurrentPage(num)}>
-                                <button
-                                    style={ currentPage === num ? {backgroundColor : '#3498db' , color : "white"} : null}
-                                    className={ style.pagingBtn }
-                                >
-                                    {num}
-                                </button>
-                            </li>
-                            ))}
-                            { Array.isArray(postingList) &&
-                            <button 
-                                className={ style.pagingBtn }
-                                onClick={() => setCurrentPage(currentPage + 1)} 
-                                disabled={currentPage === pageInfo.pageEnd || pageInfo.total == 0}
-                            >
-                                &gt;
-                            </button>
-                            }
-                        </div>
-            
+                {Array.isArray(postingList) &&
+                    <button
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={style.pagingBtn}
+                    >
+                        &lt;
+                    </button>
+                }
+                {pageNumber.map((num) => (
+                    <li key={num} onClick={() => setCurrentPage(num)}>
+                        <button
+                            style={currentPage === num ? { backgroundColor: '#3498db', color: "white" } : null}
+                            className={style.pagingBtn} onClick={() => setCurrentPageWithLoading(num)}
+                        >
+                            {num}
+                        </button>
+                    </li>
+                ))}
+                {Array.isArray(postingList) &&
+                    <button
+                        className={style.pagingBtn}
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        disabled={currentPage === pageInfo.pageEnd || pageInfo.total == 0}
+                    >
+                        &gt;
+                    </button>
+                }
+            </div>
+
         </>
 
     )

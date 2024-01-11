@@ -33,6 +33,9 @@ function CompanyDetails() {
     const memberCode = parsedData?.id;
 
     console.log('memberCode' , memberCode);
+
+    
+    
     
     
 
@@ -69,6 +72,11 @@ function CompanyDetails() {
 
 
     const onClickPostingScrapHandler = () => {
+
+        if(memberCode === undefined) {
+
+            navigate("/loginForm")
+        }
 
         console.log(posting.postingCode);
         

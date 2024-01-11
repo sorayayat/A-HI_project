@@ -6,7 +6,8 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { Answer, Feedback } from './Answer';
 import LoadingModal from "./LoadingModal";
-
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 const InterviewSpring = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [answer, setAnswer] = useState({
@@ -28,7 +29,7 @@ const InterviewSpring = () => {
             setIsLoading(true);
         }, 1000);
 
-        axios.get(`./interview/gpt?queryString=${searchQuery}`)
+        axios.get(`http://${serverIp}:${serverPort}/interview/gpt?queryString=${searchQuery}`)
             .then(response => {
                 const responseData = response.data;
                 if (response.data.result === 'success') {

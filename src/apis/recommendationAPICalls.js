@@ -14,7 +14,7 @@ const SPRING_PRE_URL = `http://${SPRING_SERVER_IP}:${SPRING_SERVER_PORT}/recomme
 
 export const callRecommendationResume = ({ file }) => {
 
-
+    
     const requestURL = `${FAST_PRE_URL}/resume`;
 
     return async (dispatch, getState) => {
@@ -25,7 +25,7 @@ export const callRecommendationResume = ({ file }) => {
             
         }).then(response => response.json());
 
-        console.log(result.response.data , "gdgd");
+        console.log(result , "gdgd");
 
     
 

@@ -163,7 +163,7 @@
 
 /* ========================== 채팅창 메세지, 말풍선 디자인 ========================== */
 
-/* 수정된 클래스명에 대한 CSS */
+
 .userMessage {
     display: flex;
     justify-content: flex-end;
@@ -221,3 +221,41 @@
     display: none; /* Webkit 기반 브라우저에 적용되는 속성 */
   }
 
+  .resumeButton {
+    width: 200px;
+    height: 70px;
+    border-radius: 50px;
+    background-color: #dbebfc;
+    cursor: pointer;
+    justify-content: center;
+    color: rgb(96, 95, 98);
+    font-family: "Pretendard";
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    align-items: center;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 60px;
+  }
+
+
+  .resumeButton:hover {
+    width: 200px;
+    height: 70px;
+    border-radius: 50px;
+    background-color: #c2defd;
+    cursor: pointer;
+    justify-content: center;
+    color:rgb(96, 95, 98);
+    font-family: "Pretendard";
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    align-items: center;
+    border: 3px solid #9fcbfd;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 60px;
+  }

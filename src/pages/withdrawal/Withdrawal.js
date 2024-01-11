@@ -2,6 +2,8 @@ import React , { useEffect, useState }from 'react';
 import styles from './withdrawal.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 const Withdrawal = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -13,7 +15,7 @@ const Withdrawal = () => {
   
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await axios.get('/api/in/member/info');
+      const response = await axios.get(`http://${serverIp}:${serverPort}/api/in/member/info`,{ withCredentials: true });
       const data = response.data;
       setFormData({
         email: data.email,
@@ -30,7 +32,7 @@ const Withdrawal = () => {
   
     if (isConfirmed) {
   
-      axios.delete(`/api/in/member/withdrawal`, { data: formData })
+      axios.delete(`http://${serverIp}:${serverPort}/api/in/member/withdrawal`, { data: formData },{ withCredentials: true })
       .then(response => {
         sessionStorage.setItem('isLoggedIn', 'false');
         sessionStorage.removeItem('userInfo');

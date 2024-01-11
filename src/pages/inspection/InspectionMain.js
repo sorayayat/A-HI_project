@@ -85,16 +85,16 @@ function InspectionMain()
         dispatch(callInspectionResumeAPI(userInfo));
     }
 
-    const closeModal = () =>{
-        setIsModalOpen(false);
-    }
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-    const onClickResumeHandler = (code) =>{
-        setInfo({
-            "resumeCode" : code,
-            "memberDto" : userInfo
-        });
-    }
+  const onClickResumeHandler = (code) => {
+    setInfo({
+      resumeCode: code,
+      memberDto: userInfo,
+    });
+  };
 
     const onClickPdfHandler = () => {
         if(Object.keys(file).length !== 0){
@@ -186,34 +186,39 @@ function InspectionMain()
      <div className={style.container}>         
         <img className={style.logo} src={logo} alt="로고" />
         <div className={style.attachedFile}>
-            <div className={ style.uploadBox}  onDragOver={(e) => e.preventDefault()}
+          <div
+            className={style.uploadBox}
+            onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
-             style={{
-                border: '2px dashed #ccc',
-                textAlign: 'center',
-                backgroundColor: dragging ? 'gray' : 'white',
-                    }}>
-            <p>{dragging ? '' : '여기로 파일을 드래그하세요'}</p>
+            style={{
+              border: "2px dashed #ccc",
+              textAlign: "center",
+              backgroundColor: dragging ? "gray" : "white",
+            }}
+          >
+            <p>{dragging ? "" : "여기로 파일을 드래그하세요"}</p>
             {file && (
-                <div >
-                    <p >{file.name}</p>
-                </div>
-                    )}
-            </div>
+              <div>
+                <p>{file.name}</p>
+              </div>
+            )}
+          </div>
         </div>
 
-            <button className={style.recommendationButton} onClick={onClickPdfHandler}>PDF 파일로 자소서 평가 받기</button>
-            <h1 className={style.noResume}>등록된 이력서가 있다면?</h1>
-            <button className={style.resumeButton}
-                onClick={openModal}
-                >
-                    내 이력서 확인
-            </button>
-            <h2 className={style.noResume}>이력서 확인!</h2>
-        </div>
+        <button
+          className={style.recommendationButton}
+          onClick={onClickPdfHandler}
+        >
+          PDF 파일로 자소서 평가 받기
+        </button>
+        <h1 className={style.noResume}>등록된 이력서가 있다면?</h1>
+        <button className={style.resumeButton} onClick={openModal}>
+          내 이력서 확인
+        </button>
+        <h2 className={style.noResume}>이력서 확인!</h2>
+      </div>
     </div>
-    )
-
+  );
 }
 
 export default InspectionMain;

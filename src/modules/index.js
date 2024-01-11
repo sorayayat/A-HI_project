@@ -6,6 +6,7 @@ import chatbotReducer from "./chatbotModules";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import recommendationReducer from "./recommendationModules";
+import userinterviewReduer from "./userinterviewModules";
 
 const rootReducer = combineReducers({
     inspectionReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     companyReducer,
     chatbotReducer,
     recommendationReducer,
+    userinterviewReduer,
 })
 
 const persistConfig = {

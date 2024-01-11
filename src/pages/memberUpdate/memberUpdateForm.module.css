@@ -1,15 +1,14 @@
 /* JoinForm.module.css */
 
 .container {
-  width: 40vw;
+  width: 20vw;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
-  margin: 10vh, 0, 10vh, 0;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 3%;
-  padding: 5%, 0, 5%, 0;
+  padding: 5%;
   margin-top: 10vh;
   margin-bottom: 10vh;
 }

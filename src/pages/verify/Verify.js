@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './Verify.module.css';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
-
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 const Verify = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,7 +24,7 @@ const Verify = () => {
     }, [location]);
 
     const verifyToken = (token, id) => {
-      axios.put(`/api/confirmCheck`, { token, id })
+      axios.put(`http://${serverIp}:${serverPort}/api/confirmCheck`, { token, id })
         .then(response => {
            if(response.data===true){
             setTimeout(() => {

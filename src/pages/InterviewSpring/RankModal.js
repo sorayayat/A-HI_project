@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import style from './RankModal.module.css';
-
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 const RankModal = () => {
     const [data, setData] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -9,7 +10,7 @@ const RankModal = () => {
     useEffect(() => {
         const rankInfo = async () => {
             try {
-                const response = await axios.get('/api/rank/post');
+                const response = await axios.get(`http://${serverIp}:${serverPort}/api/rank/post`);
                 setData(response.data);
             } catch (error) {
                 console.error("Error fetching data: ", error);
