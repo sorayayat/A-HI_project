@@ -5,6 +5,7 @@ import subprocess
 
 current_directory = os.getcwd()
 
+
 def format_skills(skills):
     formatted_skills = ''
     for i, skill in enumerate(skills):
@@ -17,7 +18,6 @@ def format_skills(skills):
 
 # 이력서 데이터를 받아서 텍스트 치환에 사용할 context를 생성
 def generate_resume(resume_data):
-    
     formatted_skills = format_skills(resume_data.get("skills", []))
 
     # Placeholder에 대해 초기 공백 값 설정
@@ -29,28 +29,28 @@ def generate_resume(resume_data):
     # 기존 로직을 사용하여 실제 데이터가 있는 경우 값 업데이트
     for i, experience in enumerate(resume_data.get("experiences", [])):
         context[f'{{Experiences{i + 1}}}'] = experience
-    for i, detail in enumerate(resume_data.get("experiencesdetail", [])):
+    for i, detail in enumerate(resume_data.get("experiences_detail", [])):
         context[f'{{ExperiencesDetail{i + 1}}}'] = detail
     for i, project in enumerate(resume_data.get("projects", [])):
         context[f'{{Projects{i + 1}}}'] = project
-    for i, detail in enumerate(resume_data.get("projectsdetail", [])):
+    for i, detail in enumerate(resume_data.get("projects_detail", [])):
         context[f'{{ProjectsDetail{i + 1}}}'] = detail
 
     # 나머지 데이터는 기존 로직대로 처리
     context.update({
         '{Name}': resume_data.get("name", ' '),
-        '{Phone}': resume_data.get("phonenumber", ' '),
+        '{Phone}': resume_data.get("phone_number", ' '),
         '{Email}': resume_data.get("email", ' '),
         '{Git}': resume_data.get("git", ' '),
-        '{JobTitle}': resume_data.get("jobtitle", ' '),
+        '{JobTitle}': resume_data.get("job_title", ' '),
         '{Skills}': formatted_skills,
         '{Experiences}': ', '.join(resume_data.get("experiences", [])),
-        '{ExperiencesDetail}': '\n'.join(resume_data.get("experiencesdetail", [])),
+        '{ExperiencesDetail}': '\n'.join(resume_data.get("experiences_detail", [])),
         '{Projects}': '  '.join(resume_data.get("projects", [])),
-        '{ProjectsDetail}': '\n'.join(resume_data.get("projectsdetail", [])),
+        '{ProjectsDetail}': '\n'.join(resume_data.get("projects_detail", [])),
         '{Education}': resume_data.get("education", ' '),
-        '{EducationDetail}': resume_data.get("educationdetail", ' '),
-        '{AwardsAndCertifications}': '\n'.join(resume_data.get("awardsandcertifications", []))
+        '{EducationDetail}': resume_data.get("education_detail", ' '),
+        '{AwardsAndCertifications}': '\n'.join(resume_data.get("awards_and_certifications", []))
     })
 
     return context
@@ -97,28 +97,35 @@ def generate_resume_content(resume_data):
     
     user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
     
-    output_folder = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\resumeResult'
+
+    output_folder = os.path.join(current_directory, 'static/resumeResult')
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
+    # 파일 경로에 사용자 이름 포함
 
-     # 파일 경로에 사용자 이름 포함
     output_path_docx = os.path.join(output_folder, '{}_Resume.docx'.format(user_name))
     output_path_pdf = os.path.join(output_folder, '{}_Resume.pdf'.format(user_name))
+
     
+    # 파일 경로에 roomId 포함하여 고유한 파일 이름 설정
+    # output_path_docx = os.path.join(output_folder, f'{roomId}_Resume.docx')
+    # output_path_pdf = os.path.join(output_folder, f'{roomId}_Resume.pdf')
+
+
     # resume_data를 확인해 적절한 템플릿 파일 선택
     experiences = resume_data.get("experiences")
     certifications = resume_data.get("awardsandcertifications")
 
     if experiences and certifications:
-        template_path = os.path.join(current_directory, 'resume/tem', 'Template1.docx')  # 경력과 자격증 둘 다 존재하는 경우
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template1.docx'  # 경력과 자격증 둘 다 존재하는 경우
     elif not experiences and certifications:
-        template_path = os.path.join(current_directory, 'resume/tem', 'Template2.docx')  # 자격증만 있는 신입 템플릿
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template2.docx'  # 자격증만 있는 신입 템플릿
     elif experiences and not certifications:
-        template_path = os.path.join(current_directory, 'resume/tem', 'Template3.docx')  # 경력만 있는 경력자 템플릿
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template3.docx'  # 경력만 있는 경력자 템플릿
     else:
-        template_path = os.path.join(current_directory, 'resume/tem', 'Template4.docx')  # 경력과 자격증 모두 없는 신입 템플릿
+        template_path = 'C:\\dev2\\A-HI-FASTAPI\\AHI-FASTAPI\\resume\\tem\\template4.docx'  # 경력과 자격증 모두 없는 신입 템플릿
 
     # 선택된 템플릿으로 context를 적용
     context = generate_resume(resume_data)

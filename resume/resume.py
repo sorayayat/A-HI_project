@@ -2,10 +2,12 @@ import openai
 import json
 from fastapi import APIRouter, HTTPException, UploadFile, Depends
 from typing import List
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from .resumegenerator import generate_resume, generate_resume_content
 from motor.motor_asyncio import AsyncIOMotorClient
 from configset.config import getAPIkey, getModel
+import os
 import requests
 import json
 
@@ -60,3 +62,8 @@ async def create_resume(file: UploadFile = None, resume_data: ResumeData = Depen
     # 생성된 이력서 내용을 파일로 저장하고 저장된 파일 경로를 반환
     generated_resume_path = generate_resume_content(chat_response)
     return {"message": "이력서가 성공적으로 생성되었습니다.", "resume_path": generated_resume_path}
+
+@resume_router.get("/download-resume/{filename}")
+async def download_resume(filename: str):
+    file_path = os.path.join("path_to_saved_resumes", filename)  # 이력서가 저장된 경로
+    return FileResponse(file_path, media_type='application/pdf', filename=filename)

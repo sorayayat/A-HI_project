@@ -18,8 +18,6 @@ import httpx
 import json
 
 
-
-
 OPENAI_API_KEY = getAPIkey()
 openai.api_key = OPENAI_API_KEY
 MODEL = getModel()
@@ -71,18 +69,21 @@ def gpt_selectCompany(data , resume):
         messages=[
     {
         "role": "user",
-        "content": [
-            {"type": "text", "text": "{0}여기에 있는 공고데이터 읽어줘".format(data)},
-            {"type": "text", "text": "{0}여기에 있는 이력서 읽어줘".format(resume)},
-            {"type": "text", "text" : "이력서와 채용 공고 데이터를 분석한 후, 이력서와 가장 잘 맞는 공고의 id만 5개뽑아줘"},
-            {"type": "text", "text" : "Json 형태로 뽑아줘"},
-            
-            
-
-      ],
+         "content": [
+            {"type": "text", "text": "{0}여기에 있는 공고 데이터를 읽어 주세요.".format(data)},
+            {"type": "text", "text": "{0}여기에 있는 이력서 읽어 주세요. ".format(resume)},
+            {"type": "text", "text" : "이력서 안의 experiences 란의 유무를 먼저 확인하세요. 만약 경력이 없는 신입이라면, 이력서 내에 해당 experiences 란이 존재하지 않습니다. "},
+            {"type": "text", "text" : "이력서의 주인이 experience 란이 존재하지 않는 신입이라면, 신입 개발자를 뽑는 공고만 선별해야 합니다"},
+            {"type": "text", "text" : "경력 개발자일 경우 experiences 란 안의 재직 기간을 계산하여, 조건에 충족되는 공고를 추천해 주세요."},
+            {"type": "text", "text" : "이력서와 채용 공고의 데이터를 분석하고 비교한 후, 이력서와 가장 잘 맞는 공고의 id를 선별해 보내 주세요."},
+            {"type": "text", "text" : "ids를 선별하는 것 외에 다른 모든 행위들을 금지합니다."},
+            {"type": "text", "text" : "만약 공고에 신입을 뽑는 공고가 3개 이하라면 ids를 3개 이하로 선별해도 됩니다."},
+            {"type": "text", "text" : "ids를 반드시 Json 형태로 뽑아 주세요." "{ matching_job_ids : [] } 형태로 뽑아 주세요."},
+            {"type": "text", "text" : "넌 아무말도 하지말고 Json 객체만 뽑아줘 그냥 ids 만 뽑아 헛소리하지말고"},
+    ],
     }
   ],
-    max_tokens=1000,
+    
     )
     output_text = response["choices"][0]["message"]["content"]
     
@@ -91,6 +92,8 @@ def gpt_selectCompany(data , resume):
 
 @RErouter.post("/resume")
 async def get_posting(file: UploadFile = File(...)):
+
+        print(file , "gdgd")
     
         # 파일을 비동기 방식으로 읽고 동기 방식으로 얻기
         content = await file.read()
@@ -124,7 +127,7 @@ async def get_posting(file: UploadFile = File(...)):
         result = collection.query(
             # query_texts=[model.encode("spring")],
             query_embeddings=[query_embedding.tolist()],
-            n_results=10
+            n_results=7
         )
 
         print(result)
@@ -142,7 +145,7 @@ async def get_posting(file: UploadFile = File(...)):
             postingList.append('\n'.join(postingData))
 
 
-        print("gdgd", postingList , "gdgd")
+        # print("gdgd", postingList , "gdgd")
 
         answer = gpt_selectCompany(postingList , resume)
 
@@ -150,7 +153,7 @@ async def get_posting(file: UploadFile = File(...)):
 
         answer = answer.replace("```json", "").replace("```", "").strip()
 
-        print(answer)
+        # print(answer)
 
 
         spring_server_url = "http://localhost:8001/recommendation/selectResume"
@@ -169,7 +172,4 @@ async def get_posting(file: UploadFile = File(...)):
 
         
         
-
-
-
 
