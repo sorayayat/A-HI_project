@@ -139,26 +139,27 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public void memberInfoUpdate(Authentication authentication, MemberDto memberDto) {
+    public void memberInfoUpdate(/*Authentication authentication, */MemberDto memberDto) {
         UserDetails userDetails = memberRepositoryImpl.updateMember(memberDto);
-        Authentication newAuth =
+     /*   Authentication newAuth =
                 new UsernamePasswordAuthenticationToken
                         (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
+        SecurityContextHolder.getContext().setAuthentication(newAuth);*/
     }
 
     @Override
-    public void companyInfoUpdate(CompanyDto companyDto, Authentication authentication, MultipartFile logo) {
+    public UserDetails companyInfoUpdate(CompanyDto companyDto, /*Authentication authentication,*/ MultipartFile logo) {
         if(logo!=null){
             LogoEntity oldLogo = memberRepositoryImpl.findLogo(companyDto.getCompanyId());
             LogoEntity logoEntity = fileProcess.fileDelete(logo, oldLogo);
             memberRepositoryImpl.updateLogo(logoEntity);
         }
         UserDetails userDetails = memberRepositoryImpl.updateCompany(companyDto);
-        Authentication newAuth =
-                new UsernamePasswordAuthenticationToken
-                        (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
+        return  userDetails;
+//        Authentication newAuth =
+//                new UsernamePasswordAuthenticationToken
+//                        (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
+//        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
     @Override

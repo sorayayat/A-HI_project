@@ -1,5 +1,7 @@
 package com.jsg.ahispringboot.member.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
 import com.jsg.ahispringboot.member.dto.ConfirmTokenDto;
 import com.jsg.ahispringboot.member.dto.MemberDto;
@@ -7,10 +9,12 @@ import com.jsg.ahispringboot.member.login.CustomUserDetail;
 import com.jsg.ahispringboot.member.service.MemberService;
 import com.jsg.ahispringboot.member.utils.FileProcess;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -83,14 +87,14 @@ public class MemberController {
     }
 
     @PutMapping("/in/member/info_update")
-    public void memberInfoUpdate(@RequestBody MemberDto memberDto, Authentication Authentication) {
-        memberServiceImpl.memberInfoUpdate(Authentication, memberDto);
+    public void memberInfoUpdate(@RequestBody MemberDto memberDto/*, Authentication Authentication*/) {
+        memberServiceImpl.memberInfoUpdate(/*Authentication,*/ memberDto);
     }
 
     @GetMapping("/in/member/infoCompany")
     public CompanyDto company(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
     //    String logo = memberServiceImpl.findLogo(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyId());
-        log.info("img={}",customUserDetail.getMemberEntity().getCompanyEntity().getLogoEntity().getServerName());
+    //    log.info("img={}",customUserDetail.getMemberEntity().getCompanyEntity().getLogoEntity().getServerName());
         CompanyDto companyDto = CompanyDto
                 .builder()
                 .memberId(customUserDetail.getPk())
@@ -109,13 +113,15 @@ public class MemberController {
     }
 
     @PutMapping("/in/member/company_info_update")
-    public void companyInfoUpdate(@ModelAttribute CompanyDto companyDto, Authentication authentication, @RequestParam(required = false) MultipartFile logo) {
+    public UserDetails companyInfoUpdate(@ModelAttribute CompanyDto companyDto, /*Authentication authentication,*/ @RequestParam(required = false) MultipartFile logo) throws IOException {
         log.info("com={},mem={}", companyDto.getCompanyId(), companyDto.getMemberId());
-        memberServiceImpl.companyInfoUpdate(companyDto, authentication, logo);
+        UserDetails userDetails = memberServiceImpl.companyInfoUpdate(companyDto, /*authentication,*/ logo);
+        return userDetails;
     }
 
     @DeleteMapping("/in/member/withdrawal")
     public boolean withdrawal(@RequestBody MemberDto memberDto) {
+        System.out.println("여기오나");
         memberServiceImpl.withdrawal(memberDto);
         return true;
     }
