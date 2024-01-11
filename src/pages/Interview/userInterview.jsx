@@ -97,7 +97,21 @@ const UserInterview = () => {
         
     };
 
-
+    const questions = question.split('\n').filter(q => q.trim() !== '');
+    
+    const handleSendAnswer = async (index, value) => {
+        const answerToSend = {[index]: value}
+        setIsLoading(true); // 로딩 시작
+        dispatch(callInterviewAnswer({ userAnswer : answerToSend }, (AIanswer, error) => {
+            if (error) {
+                console.error("오류", error);
+            } else {
+                setAIanswer(AIanswer.feedback);
+            }
+            setIsLoading(false); // 로딩 종료
+        }));
+    };
+    
     const handleDragOver = (e) => {
         e.preventDefault();
         setDragging(true);
@@ -114,18 +128,6 @@ const UserInterview = () => {
             [index]: !prev[index]
         }));
     };
-    const questions = question.split('\n').filter(q => q.trim() !== '');
-
-
-
-    const handleSendAnswer = async () => {
-        setIsLoading(true); // 로딩 시작
-        dispatch(callInterviewAnswer({ userAnswer: userAnswer }, (AIanswer, error) => {
-            setAIanswer(AIanswer.feedback);
-            setIsLoading(false); // 로딩 종료
-        }));
-    };
-
 
     // 화면 작업은 return 내부에 작성한다.
     return (
@@ -172,7 +174,7 @@ const UserInterview = () => {
                                     value={userAnswer[index] || ''}
                                     onChange={(e) => handleAnswerChange(index, e.target.value, e)}
                                     autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
-                                <button className={interviewstyle.actionButton} onClick={handleSendAnswer}>답변 하기</button>
+                                <button className={interviewstyle.actionButton} onClick={() => handleSendAnswer(index, userAnswer[index])}>답변 하기</button>
                                 {AIanswer && (
                                     <div className={interviewstyle.questionBox}>
                                         {AIanswer && <p>AI 피드백: {AIanswer}</p>}
