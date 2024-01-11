@@ -17,8 +17,8 @@ const MemberUpdate = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await axios.get(`http://${serverIp}:${serverPort}/api/in/member/info`,{ withCredentials: true });
-      const data = response.data;
+      const user = sessionStorage.getItem('userInfo');
+      const data = JSON.parse(user); 
       setOriginalNumber(data.phoneNumber);
       setFormData({
         email: data.email,
@@ -98,6 +98,8 @@ const MemberUpdate = () => {
         ...JSON.parse(sessionStorage.getItem('userInfo')),
         ...formData
       };
+      console.log(formData);
+      console.log(sessionStorage.getItem('userInfo'));
       sessionStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
       alert('정보수정완료');
       navigate('/');

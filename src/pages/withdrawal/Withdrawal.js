@@ -15,8 +15,9 @@ const Withdrawal = () => {
   
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await axios.get(`http://${serverIp}:${serverPort}/api/in/member/info`,{ withCredentials: true });
-      const data = response.data;
+      const user = sessionStorage.getItem('userInfo');
+      const data = JSON.parse(user); 
+      console.log(data);
       setFormData({
         email: data.email,
         id:data.id,

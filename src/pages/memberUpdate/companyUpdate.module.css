@@ -1,4 +1,3 @@
-/* JoinForm.module.css */
 
 .container {
     width: 40vw;
@@ -6,7 +5,7 @@
     justify-content: center;
     align-items: center;
     margin: auto;
-    margin: 10vh, 0, 10vh, 0;
+    margin: 10vh, auto;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     border-radius: 3%;
     padding: 5%, 0, 5%, 0;
