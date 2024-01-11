@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jsg.ahispringboot.company.dto.PostingDTO;
+import com.jsg.ahispringboot.company.entity.Posting;
+import com.jsg.ahispringboot.company.repository.PostingRepository;
 import com.jsg.ahispringboot.inspection.dto.AnswerDTO;
 import com.jsg.ahispringboot.inspection.dto.ModifyResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
@@ -38,17 +41,19 @@ import lombok.extern.slf4j.Slf4j;
 public class InspectionService {
 
     private final InspectionRepository inspectionRepositroy;
+    private final PostingRepository postingRepository;
     private final ModelMapper modelMapper;
     private final FileUtils fileUtils;
     @Value("${fastapi.endpoint}")
     private String endPoint;
 
     public InspectionService(InspectionRepository inspectionRepositroy,
-            ModelMapper modelMapper,
+            ModelMapper modelMapper, PostingRepository postingRepository,
             FileUtilsImpl fileUtilsImpl) {
         this.inspectionRepositroy = inspectionRepositroy;
         this.modelMapper = modelMapper;
         this.fileUtils = fileUtilsImpl;
+        this.postingRepository = postingRepository;
     }
 
     public List<ResumeDTO> selectMemberResume(Long memberId) {
@@ -74,9 +79,11 @@ public class InspectionService {
         Long beforeTime = System.currentTimeMillis();
         Resume resume = inspectionRepositroy.findResumeCode(resumeCode, userCode);
         ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
+        String title = fileUtils.getTitle(resumeDTO.getResumePath());
         ByteArrayResource resource = fileUtils.FileToByteArray(resumeDTO.getResumePath());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = fileUtils.FileCreatebody(resource, "file");
         ReaderDTO reader = fileUtils.GetJsonData(endPoint, requestEntity);
+        reader.setTitle(title);
         Long afterTime = System.currentTimeMillis();
         Long diffTime = (afterTime - beforeTime) / 1000;
         log.info("실행 시간(sec) : " + diffTime);
@@ -132,6 +139,13 @@ public class InspectionService {
         log.info("map : {}", map);
 
         return map;
+    }
+
+    public List<PostingDTO> findPosting(String search) {
+        List<Posting> posting = postingRepository.findPostingLikeSearch(search);
+        List<PostingDTO> postingDTO = posting.stream().map(p -> modelMapper.map(p, PostingDTO.class))
+                .collect(Collectors.toList());
+        return postingDTO;
     }
 
 }
