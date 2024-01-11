@@ -28,9 +28,9 @@
 .contentArea {
   /* 전체 NO CHANGE */
   padding: 40px;
-  width: 300px;
-  height: auto;
-  background-color: #e9f5fe; /* 하늘색 배경 */
+  width: 35%;
+  height: 890px;
+  background-color: #e9f5fe; /* 하늘색 배 경 */
   position: absolute; /* 절대 위치 */
   right: 0;
   top: 0;
@@ -38,8 +38,21 @@
 
 .content {
   padding: 40px;
+  width: 50%;
   text-align: left;
   margin-right: 350px; /* NO CHANGE */ /* 겹치지 않도록 */
+}
+
+.contentArea p {
+  font-size: 14px
+}
+
+.Contect{
+  margin-top: 210px;
+}
+
+.Education{
+  margin-top: 40px;
 }
 
 .text {
@@ -53,4 +66,110 @@
   font-size: 30px;
   color: #043d68;
 }
+
+.skillDev{
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.skillDev p{
+  flex: 1;
+}
+
+.Line{
+  border-bottom: 1px solid rgba(87, 87, 87 , 0.2);
+  margin: 30px auto;
+  width: 100%;
+}
+
+.selfContent {
+  width: 90%;
+  height: 70%;
+  position: absolute; 
+  right: 5%;
+  top: 105%;
+}
+
+.selfContent .Line{
+  border-bottom: 1px solid rgba(87, 87, 87 , 1);
+  width: 100%;
+}
+
+.selfDev{
+  margin-bottom: 50px;
+}
+
+.self{
+  padding-right: 20px;
+  padding-bottom: 20px;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.selfTitle{
+  border-bottom: 1px solid black;
+  margin-top: 0;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.selfText{
+  margin-bottom: 40px;
+}
+
+.modiftBtn1{
+  color: white; 
+  padding: 5px 10px;
+  display: inline-block;
+  position: relative;
+  bottom: 26px; 
+  left: 90%; 
+  transform: translate(-50%, -50%);
+  background-color: #7d7b7b;
+  border: 1px solid rgba(0,0,0,0.21);
+  border-bottom-color: rgba(0,0,0,0.34);
+  text-shadow:0 1px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+              0 2px 0 -1px rgba(0,0,0,0.13), 
+              0 3px 0 -1px rgba(0,0,0,0.08), 
+              0 3px 13px -1px rgba(0,0,0,0.21);
+
+}
+.modiftBtn1:active{
+    border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+}
+.modiftBtn1:hover{
+    background-color: rgb(151, 151, 151);
+}
+
+.modiftBtn2{
+    color: white; 
+    padding: 5px 15px;
+    display: inline-block;
+    position: relative;
+    top: 40px; 
+    left: 93%; 
+    transform: translate(-50%, -50%);
+    background-color: #7d7b7b;
+    border: 1px solid rgba(0,0,0,0.21);
+    border-bottom-color: rgba(0,0,0,0.34);
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+                0 2px 0 -1px rgba(0,0,0,0.13), 
+                0 3px 0 -1px rgba(0,0,0,0.08), 
+                0 3px 13px -1px rgba(0,0,0,0.21);
+  
+  }
+  .modiftBtn2:active{
+      border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+  }
+  .modiftBtn2:hover{
+      background-color: rgb(151, 151, 151);
+  }
 

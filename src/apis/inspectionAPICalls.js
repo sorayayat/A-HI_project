@@ -1,4 +1,4 @@
-import { getResume, getResumelist, postAsk, postModify, postNew } from "../modules/inspectionModule";
+import { getPostings, postAsk, postModify, postNew, postResume, postResumelist } from "../modules/inspectionModule";
 import { json, useNavigate } from "react-router";
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
@@ -38,7 +38,7 @@ export const callInspectionResumeAPI = (info) =>{
         }).then(resp => resp.json());
         if(result.status === 200)
         {
-            dispath(getResumelist(result));
+            dispath(postResumelist(result));
         }
     }
 }
@@ -52,7 +52,7 @@ export const callPafRaderAPI = (file) =>{
             body : file
         }).then(resp => resp.json());
         if(result.status === 200){
-           dispath(getResume(result));
+           dispath(postResume(result));
            return {status : result.status}
         }
     }
@@ -73,11 +73,12 @@ export const callResumeDetailAPI = (info) =>{
         if(result.status === 200)
         {
             result.data = Object.assign({}, result.data,{"resumeCode" : info.resumeCode});
-            dispath(getResume(result));
+            dispath(postResume(result));
             return {status : result.status}
         }
     }
 }
+
 
 export const callModifyResumeAPI = (form , index) => {
     const requestURL = `${SB_PRE_URL}/modifyResume`;
@@ -116,4 +117,15 @@ export const callModifyResumeAPI = (form , index) => {
         }
     }
     
+}
+
+export const callPostingSearch = (search) =>{
+    const requestURL = `${SB_PRE_URL}/search/${search}`;
+    return async(dispath , getState) => {
+        const result = await fetch(requestURL).then(resp => resp.json());
+        if(result.status === 200){
+            dispath(getPostings(result));
+            return { status : result.status};
+        }
+    }
 }

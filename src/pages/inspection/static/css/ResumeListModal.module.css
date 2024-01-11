@@ -14,10 +14,7 @@
     background: white;
     border-radius: 8px;
     padding: 20px;
-    position:relative;
-    top: 30%;
-    left: 20%;
-    margin: -25px 0 0 -25px;
+    margin: 200px auto;
 }
 
 .resumTr{
@@ -38,12 +35,20 @@
     cursor: pointer;
 }
 
+.resumeDev{
+    height: 500px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+    flex-direction: row;
+}
+
 .divTable {
     border: 1px solid #656565;
     border-radius: 8px;
     margin-bottom: 10px;
     padding: 10px;
-
+    position: relative;
   }
   
   /* 각 항목 스타일 */
@@ -64,6 +69,7 @@
 
 .title_head{
     display: flex;
+    text-align: justify;
 }
 
 .title1{
@@ -71,19 +77,20 @@
 }
 
 .title2{
-    margin-left: 140px;
+    margin-left: 30%;
+    text-align: justify;
 }
 
 .title3{
-    margin-left: 140px;
+    margin-left: 30%;
+    text-align: center;
 }
 
-.title4{
-    margin-left: 180px;
-}
 
 .createText{
-    margin-left: 30px;
+    position: absolute;
+    left: 70%;
+
 }
 
 .modifyText{
@@ -91,11 +98,79 @@
 }
 
 .closeBtn{
-    margin-left: 1120px;
+   margin-left: 95%;
 }
 
 .mainTitle{
     text-align: center;
+}
+.mainText{
+    text-align: right;
+    color: rgba(107, 107, 107 , 0.8 );
+}
+
+.Line{
+    border-bottom: 1px solid gray;
+    margin: 30px auto;
+    width: 100%;
+}
+
+.warningImage{
+    padding-left: 42%;
+    margin: 5%;
+    width: 80px;
+    height: 100px;
+}
+
+.text{
+    text-align: center;
+}
+
+.BtnDev{    
+    padding-left: 40%;
+}
+
+.loginBtn{
+    width: 100px;
+    height: 40px;
+    background-color: #156bae;
+    border: 1px solid rgba(64, 130, 223, 0.21);
+    border-bottom-color: rgba(0,0,0,0.34);
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+                0 2px 0 -1px rgba(0,0,0,0.13), 
+                0 3px 0 -1px rgba(0,0,0,0.08), 
+                0 3px 13px -1px rgba(0,0,0,0.21);
+}
+.loginBtn:active{
+    border-color: #4087bd;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+}
+.loginBtn:hover{
+    background-color: #0e568e;
+}
+
+.cancellationBtn{
+    width: 100px;
+    height: 40px;
+    margin-left: 10px;
+    background-color: #ae153e;
+    border: 1px solid rgba(223, 64, 130, 0.21);
+    border-bottom-color: rgba(0,0,0,0.34);
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+                0 2px 0 -1px rgba(0,0,0,0.13), 
+                0 3px 0 -1px rgba(0,0,0,0.08), 
+                0 3px 13px -1px rgba(0,0,0,0.21);
+    
+}
+
+.cancellationBtn:active{
+    border-color: #ae155f;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+}
+.cancellationBtn:hover{
+    background-color: #ae1573;
 }
 
   
