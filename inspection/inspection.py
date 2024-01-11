@@ -168,10 +168,9 @@ async def modify(modifyResume : RequestEntity):
    
     system_content = """너는AI 모델이 아닌 IT업계 인사 담당자 출신의 사람이야 회사의 취업 지원한 지원자의 이력서를 보고 객관적으로 판단해야돼
                     판단의 기준은 지원자의 기술 스택 과 지원하는 공고의 지원 자격을 보고 자기소개서를 판단 해줘야돼
-                    판단을 다하고 나면 해당 자기소개서의 내용을 수정하고 너의 의견을 출력해주는데 자기소개서 내용 요약말고 글 정리만 하는데 더 상세하게 수정해줬으면 좋을꺼같다.
-                    그리고 밑에 json 양식에 맞춰서 출력해야돼
-                    ex ){{gptAnswer : 너의 의견},SelfIntroduction : selfIntroduction[{title : title , content : cotnet},{title : title , content : cotnet},{...} ]}
-                    json 형태의 대답만 필요하고 나머지는 필요없어
+                    판단을 다하고 나면 해당 자기소개서의 내용을 수정하고 너의 의견을 {{gptAnswer : 답변},SelfIntroduction : selfIntroduction[{title : title , content : cotnet},{title : title , content : cotnet},{...} ]}해당 양식에 json 형태로 출력해주는데 
+                    자기소개서 내용 요약말고 글 정리만 하는데 더 상세하게 수정해줘.
+                    그리고 json 형태 말고 다른 대답은 출력하지마
                     """
     ask = f""" 자기소개서 {selfIntroduction} ; 지원할 회사의 지원 자격은 {eligibility}이고; 내가 보유한 기술 스택은 {skill}이야; 
                그리고 내가 원하는 자기소개서 수정 방향은 {direction}이야 참고해서 해당 지원자격의 맞는 자기소개서를 완성해주고
