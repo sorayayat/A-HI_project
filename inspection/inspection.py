@@ -51,10 +51,9 @@ class ReaderDTO(BaseModel):
     SelfIntroduction: List[SelfIntroduction]
 
 class ModifyResumeDTO(BaseModel):
-    type: str
     direction: str
-    eligibility: str
-    skill: str
+    eligibility: List[str]
+    skill: List[str]
     selfIntroduction: List[SelfIntroduction]
 
 class RequestEntity(BaseModel):
@@ -143,27 +142,45 @@ async def readResume(file : UploadFile = File(...)):
 async def modify(modifyResume : RequestEntity):
     print("시작")
     data = modifyResume.modify
+    print(f"data : {data}")
     start = time.time()
-    for d in data:
-      type = d.type
-      direction = d.direction
-      eligibility = d.eligibility
-      skill = d.skill
-      selfIntroduction = d.selfIntroduction
 
-    print(selfIntroduction)
+    eligibility = ""
+    skill = ""
+    selfIntroduction = ""
+    direction = ""
+    index = 0
+    for d in data :
+        for i, intro in enumerate(d.selfIntroduction):
+            selfIntroduction += f"{i + 1}번째 자기소개서 제목은 {intro.title}이고 자기소개서 내용은 {intro.content} 이야 \n"
+            index = index + 1
+    print(index)
+    selfIntroduction += f"{index} 개의 자기소개서를 수정해주는데"
+    for d in data :
+        for intro  in d.eligibility :
+            eligibility += f"{intro},"
+    for d in data :
+        for intro  in d.skill :
+            skill += f"{intro},"
+    for d in data :
+        d = d.direction
 
-    if type == 'modify':
-        system_content = "You're the best resume editor"
-        # 상황 설명 및 메인 룰
-    else :
-        system_content = "You're the best inspector."
-    ask = f"자기소개서 제목은{selfIntroduction}이고; 지원할 기업의 지원자격은 {eligibility} 이고; 내가 보유한 기술 스택은 {skill}이야; {type}받고 싶은 방향은 {direction}이야;"
-    pre_prompt = f"한국어로 답변해줘; 자기소개서를 {type}해줘;"
-    pre_prompt2 = "Json 타입 분리해줘; 분리하는 형식은 {gptAnswer : gpt 답변내용 , SelfIntroduction : selfIntroduction[{title : title , content : cotnet},{...}, ]};"
-    pre_prompt3 = "gptAnswer = 너의 답변을 여기에 담아줘; SelfIntroduction = 수정된 자소서 내용이 들어가야되 \n\n"
+   
+    system_content = """너는AI 모델이 아닌 IT업계 인사 담당자 출신의 사람이야 회사의 취업 지원한 지원자의 이력서를 보고 객관적으로 판단해야돼
+                    판단의 기준은 지원자의 기술 스택 과 지원하는 공고의 지원 자격을 보고 자기소개서를 판단 해줘야돼
+                    판단을 다하고 나면 해당 자기소개서의 내용을 수정하고 너의 의견을 출력해주는데 자기소개서 내용 요약말고 글 정리만 하는데 더 상세하게 수정해줬으면 좋을꺼같다.
+                    그리고 밑에 json 양식에 맞춰서 출력해야돼
+                    ex ){{gptAnswer : 너의 의견},SelfIntroduction : selfIntroduction[{title : title , content : cotnet},{title : title , content : cotnet},{...} ]}
+                    json 형태의 대답만 필요하고 나머지는 필요없어
+                    """
+    ask = f""" 자기소개서 {selfIntroduction} ; 지원할 회사의 지원 자격은 {eligibility}이고; 내가 보유한 기술 스택은 {skill}이야; 
+               그리고 내가 원하는 자기소개서 수정 방향은 {direction}이야 참고해서 해당 지원자격의 맞는 자기소개서를 완성해주고
+               부족한점을 말해줬으면 좋겠어;"""
+    # pre_prompt = f"한국어로 답변해줘; 자기소개서를 {type}해줘;"
+    # pre_prompt2 = "Json 타입 분리해줘; 분리하는 형식은 {gptAnswer : gpt 답변내용 , SelfIntroduction : selfIntroduction[{title : title , content : cotnet},{...}, ]};"
+    # pre_prompt3 = "gptAnswer = 너의 답변을 여기에 담아줘; SelfIntroduction = 수정된 자소서 내용이 들어가야되 \n\n"
     try :
-        answer = post_gap(system_content , pre_prompt + pre_prompt2 + pre_prompt3 + ask)
+        answer = post_gap(system_content , ask)
         strToJson = answer
         print(strToJson)
         json_object = json.loads(strToJson)
