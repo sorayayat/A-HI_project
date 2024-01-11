@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface PostingRepository extends JpaRepository<Posting , Integer> {
+public interface PostingRepository extends JpaRepository<Posting, Integer> {
     Posting findByPostingCode(Integer postingCode);
 
     @Query("select p from Posting p where p.postingCode in :matchingIds ")
@@ -22,7 +22,10 @@ public interface PostingRepository extends JpaRepository<Posting , Integer> {
 
     List<Posting> findByCompanyCompanyId(Long companyId);
 
+    @Query("select p from Posting p where p.postingTitle like %:search%")
+    List<Posting> findPostingLikeSearch(String search);
 
-//    @Query("select a,b  from Posting a left join WorkType b on (a.postingCode = b.posting.postingCode)")
-//    List<Posting> findBySelectPosting();
+    // @Query("select a,b from Posting a left join WorkType b on (a.postingCode =
+    // b.posting.postingCode)")
+    // List<Posting> findBySelectPosting();
 }

@@ -29,4 +29,6 @@ public class ReaderDTO {
     @JsonProperty("SelfIntroduction")
     private List<SelfIntroductionDTO> selfIntroductionDTO;
 
+    private String title;
+
 }
