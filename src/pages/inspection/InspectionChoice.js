@@ -18,9 +18,9 @@ function InspectionChoice(){
     const divRef = useRef();
     const dispatch = useDispatch();
 
-
-    useEffect(() =>{
-        if(modify.data.index !== 99){
+    console.log(modify?.data)
+    useEffect(() =>{    
+        if(modify.data?.index !== 99){
             console.log(modify.data.SelfIntroduction);
             const upData = resume.data.SelfIntroduction.map((state , index) =>{
                 if(index === modify.data.index){
