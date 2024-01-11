@@ -8,6 +8,7 @@ import com.jsg.ahispringboot.common.PagingResponseDTO;
 import com.jsg.ahispringboot.common.ResponseDTO;
 import com.jsg.ahispringboot.company.dto.CompanyDTO;
 import com.jsg.ahispringboot.company.dto.PostingDTO;
+import com.jsg.ahispringboot.company.entity.Posting;
 import com.jsg.ahispringboot.company.entity.PostingLike;
 import com.jsg.ahispringboot.company.service.PostingService;
 import com.jsg.ahispringboot.member.dto.CompanyDto;
@@ -243,6 +244,20 @@ public class PostingController {
                         .build());
     }
 
+
+    @GetMapping("companyLogo")
+    public ResponseEntity<ResponseDTO> selectCompanyLogo(){
+
+        List<PostingDTO> postingDTOList = postingService.selectPostingAndCompanyLogo();
+
+
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                        .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
+                        .message("success")
+                        .data(postingDTOList)
+                        .build());
+    }
 
 
 

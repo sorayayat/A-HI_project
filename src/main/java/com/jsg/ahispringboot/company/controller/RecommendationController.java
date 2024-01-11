@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/recommendation")
@@ -27,12 +28,18 @@ public class RecommendationController {
     @PostMapping("/selectResume")
     public ResponseEntity<ResponseDTO> selectCompany(@RequestBody Map<String, Object> data) {
 
-        List<Integer> matchingIds = (List<Integer>) data.get("matching_job_ids");
+        // 원래 데이터를 가져옵니다.
+        List<?> tempMatchingIds = (List<?>) data.get("matching_job_ids");
+
+        // 안전하게 Integer로 변환합니다.
+        List<Integer> matchingIds = tempMatchingIds.stream()
+                .map(Object::toString)
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
 
         System.out.println(matchingIds);
 
         List<PostingDTO> postingDTO = recommendationService.matchingIdsPosting(matchingIds);
-
 
 
 
