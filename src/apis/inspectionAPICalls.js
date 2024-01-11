@@ -5,7 +5,7 @@ const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
 const SB_SERVER_PORT = `${process.env.REACT_APP_FAST_SB_SERVER_PORT}`;
 const FAST_PRE_URL =`http://${FAST_SERVER_IP}:${FAST_SERVER_PORT}/inspection`
-const SB_PRE_URL = `http://${FAST_SERVER_IP}:${SB_SERVER_PORT}/inspection`
+const SB_PRE_URL = `http://${FAST_SERVER_IP}:8001/inspection`
 
 
 export const callInspectionAskAPI = (form) =>{
