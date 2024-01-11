@@ -5,6 +5,7 @@ import pdfplumber
 from io import BytesIO
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from typing import List, Dict
 
 OPENAI_API_KEY = getAPIkey()
 openai.api_key = OPENAI_API_KEY
@@ -79,15 +80,16 @@ async def get_userPDF(file: UploadFile = File(...)):
     
     # print(textPDF)
     question =  gpt_question(textPDF)
-    print("akdsfhusdf", type(question))
     return JSONResponse(content={"question": question})
 
 
 class AnswerData(BaseModel):
-    answer : str
+    userAnswer : Dict[int, str]
 
 @userInterViewrouter.post('/sendAnswer')
-async def AI_question(answer: AnswerData):
-   userAnswer = str(answer)
-   feedback = gpt_feedback(userAnswer)
+async def AI_question(userAnswer: AnswerData):
+   print('aaa')
+   print(type(userAnswer))
+   PYanswer = userAnswer.userAnswer
+   feedback = gpt_feedback(PYanswer)
    return {"feedback": feedback}
