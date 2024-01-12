@@ -17,10 +17,6 @@ openai.api_key = OPENAI_API_KEY
 class InterviewData(BaseModel):
     searchQuery : str
 
-class AnswerData(BaseModel):
-    answer : str
-
-
 # 클라이언트에서 정보를 받아서 모델에 질문을 생성한다.
 @Interview_router.post('/makequestion')
 async def AIiterview(searchQuery: InterviewData):
@@ -35,12 +31,17 @@ async def AIiterview(searchQuery: InterviewData):
     return {"question" : question}
 
 
+
+class AnswerData(BaseModel):
+    answer : str
+
 # 사용자에 답변을 받아서 피드백 해준다
 @Interview_router.post('/test')
 async def AI_question(answer: AnswerData):
-   userAnswer = str(answer)
-   feedback = gpt_feedback(userAnswer)
-   return {"feedback": feedback}
+   print('ok')
+#    userAnswer = str(answer)
+#    feedback = gpt_feedback(userAnswer)
+#    return {"feedback": feedback}
 
 
 # lid open함수로 파일 읽기
