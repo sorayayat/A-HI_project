@@ -87,14 +87,13 @@ public class MemberController {
     }
 
     @PutMapping("/in/member/info_update")
-    public void memberInfoUpdate(@RequestBody MemberDto memberDto/*, Authentication Authentication*/) {
-        memberServiceImpl.memberInfoUpdate(/*Authentication,*/ memberDto);
+    public void memberInfoUpdate(@RequestBody MemberDto memberDto, Authentication Authentication) {
+        memberServiceImpl.memberInfoUpdate(Authentication, memberDto);
     }
 
     @GetMapping("/in/member/infoCompany")
     public CompanyDto company(@AuthenticationPrincipal CustomUserDetail customUserDetail) {
     //    String logo = memberServiceImpl.findLogo(customUserDetail.getMemberEntity().getCompanyEntity().getCompanyId());
-    //    log.info("img={}",customUserDetail.getMemberEntity().getCompanyEntity().getLogoEntity().getServerName());
         CompanyDto companyDto = CompanyDto
                 .builder()
                 .memberId(customUserDetail.getPk())
@@ -113,15 +112,13 @@ public class MemberController {
     }
 
     @PutMapping("/in/member/company_info_update")
-    public UserDetails companyInfoUpdate(@ModelAttribute CompanyDto companyDto, /*Authentication authentication,*/ @RequestParam(required = false) MultipartFile logo) throws IOException {
+    public void companyInfoUpdate(@ModelAttribute CompanyDto companyDto, Authentication authentication, @RequestParam(required = false) MultipartFile logo) throws IOException {
         log.info("com={},mem={}", companyDto.getCompanyId(), companyDto.getMemberId());
-        UserDetails userDetails = memberServiceImpl.companyInfoUpdate(companyDto, /*authentication,*/ logo);
-        return userDetails;
+        memberServiceImpl.companyInfoUpdate(companyDto, authentication, logo);
     }
 
     @DeleteMapping("/in/member/withdrawal")
     public boolean withdrawal(@RequestBody MemberDto memberDto) {
-        System.out.println("여기오나");
         memberServiceImpl.withdrawal(memberDto);
         return true;
     }

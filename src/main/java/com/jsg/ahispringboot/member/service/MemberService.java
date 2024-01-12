@@ -22,9 +22,9 @@ public interface MemberService {
 
     boolean phoneNumberDuplicationCheck(String phoneNumber);
 
-    void memberInfoUpdate(/*Authentication authentication,*/MemberDto memberDto);
+    void memberInfoUpdate(Authentication authentication,MemberDto memberDto);
 
-    UserDetails companyInfoUpdate(CompanyDto companyDto,/* Authentication authentication, */MultipartFile logo);
+    void companyInfoUpdate(CompanyDto companyDto, Authentication authentication, MultipartFile logo);
 
     void withdrawal(MemberDto memberDto);
 
