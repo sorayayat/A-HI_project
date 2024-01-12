@@ -51,6 +51,7 @@ public class MemberServiceImpl implements MemberService {
     private final ModelMapper modelMapper;
     @Value("${app.file-storage.directory}")
     private String fileStoragePath;
+
     @Override
     public boolean emailDuplicationCheck(String email) {
         MemberEntity member = memberRepositoryImpl.findMember(email, null);
@@ -83,9 +84,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Long companySignup(CompanyDto companyDto, MultipartFile logo) throws MessagingException {
         LogoEntity logoEntity;
-        if(logo!=null){
+        if (logo != null) {
             logoEntity = fileProcess.fileSave(logo);
-        }else {
+        } else {
             logoEntity = LogoEntity
                     .builder()
                     .path(fileStoragePath)
@@ -100,7 +101,8 @@ public class MemberServiceImpl implements MemberService {
         confirmMailSend(memberEntity1);
         return memberEntity1.getId();
     }
-    public MemberEntity setCompany(CompanyDto companyDto){
+
+    public MemberEntity setCompany(CompanyDto companyDto) {
         CompanyEntity companyEntity = MemberTransMapper.INSTANCE.cDtoToEntity(companyDto);
         MemberEntity memberEntity = MemberTransMapper.INSTANCE.cDtoToMemberEntity(companyDto);
         memberEntity.setPassword(passwordEncoder.encode(memberEntity.getPassword()));
@@ -139,27 +141,26 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public void memberInfoUpdate(/*Authentication authentication, */MemberDto memberDto) {
+    public void memberInfoUpdate(Authentication authentication, MemberDto memberDto) {
         UserDetails userDetails = memberRepositoryImpl.updateMember(memberDto);
-     /*   Authentication newAuth =
+        Authentication newAuth =
                 new UsernamePasswordAuthenticationToken
                         (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(newAuth);*/
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
     @Override
-    public UserDetails companyInfoUpdate(CompanyDto companyDto, /*Authentication authentication,*/ MultipartFile logo) {
-        if(logo!=null){
+    public void companyInfoUpdate(CompanyDto companyDto, Authentication authentication, MultipartFile logo) {
+        if (logo != null) {
             LogoEntity oldLogo = memberRepositoryImpl.findLogo(companyDto.getCompanyId());
             LogoEntity logoEntity = fileProcess.fileDelete(logo, oldLogo);
             memberRepositoryImpl.updateLogo(logoEntity);
         }
         UserDetails userDetails = memberRepositoryImpl.updateCompany(companyDto);
-        return  userDetails;
-//        Authentication newAuth =
-//                new UsernamePasswordAuthenticationToken
-//                        (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(newAuth);
+        Authentication newAuth =
+                new UsernamePasswordAuthenticationToken
+                        (userDetails, authentication.getCredentials(), userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
     @Override
@@ -178,7 +179,7 @@ public class MemberServiceImpl implements MemberService {
                 List<String> postingsJson = postingLikes.stream()
                         .map(postingLike -> {
                             try {
-                                log.info("post={}",objectMapper.writeValueAsString(postingLike.getPosting()));
+                                log.info("post={}", objectMapper.writeValueAsString(postingLike.getPosting()));
                                 return objectMapper.writeValueAsString(postingLike.getPosting());
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -206,18 +207,18 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean beforeChangePwd(MemberDto memberDto) {
         Optional<MemberEntity> byId = memberRepositoryDataJpa.findById(memberDto.getId());
-        if(byId.isPresent()){
-            String dbPwd=byId.get().getPassword();
+        if (byId.isPresent()) {
+            String dbPwd = byId.get().getPassword();
             boolean matches = passwordEncoder.matches(memberDto.getPassword(), dbPwd);
             return matches;
-        }else
+        } else
             return false;
     }
 
     @Override
     public boolean changePwd(MemberDto memberDto) {
         Optional<MemberEntity> byId = memberRepositoryDataJpa.findById(memberDto.getId());
-        if(byId.isPresent()){
+        if (byId.isPresent()) {
             memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
             MemberEntity memberEntity = MemberTransMapper.INSTANCE.dtoToEntity(memberDto);
             memberRepositoryImpl.updatePwd(memberEntity);
@@ -228,30 +229,30 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void confirmMailSend(MemberEntity memberEntity) throws MessagingException {
-        String token = memberEntity.getRole().toString()+UUID.randomUUID().toString();
+        String token = memberEntity.getRole().toString() + UUID.randomUUID().toString();
         String verificationUrl = "http://localhost:3000/verify?token=" + token;
-            ConfirmTokenEntity confirmTokenEntity =ConfirmTokenEntity.builder()
+        ConfirmTokenEntity confirmTokenEntity = ConfirmTokenEntity.builder()
                 .memberEntity(memberEntity)
                 .token(token)
                 .build();
-            confirmTokenEntity.getMemberEntity().setRole(MemberRole.ROLE_GUEST);
+        confirmTokenEntity.getMemberEntity().setRole(MemberRole.ROLE_GUEST);
         memberRepositoryImpl.confirmSave(confirmTokenEntity);
-        mailSend.sendEmail(memberEntity.getEmail(),"jsg 가입인증 메일입니다. ",verificationUrl = "http://localhost:3000/verify?token=" + token+"&id="+memberEntity.getId());
+        mailSend.sendEmail(memberEntity.getEmail(), "jsg 가입인증 메일입니다. ", verificationUrl = "http://localhost:3000/verify?token=" + token + "&id=" + memberEntity.getId());
     }
 
     @Override
     public boolean confirmCheck(ConfirmTokenDto confirmTokenDto) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setId(confirmTokenDto.getId());
-        ConfirmTokenEntity confirmTokenEntity=ConfirmTokenEntity.builder()
+        ConfirmTokenEntity confirmTokenEntity = ConfirmTokenEntity.builder()
                 .token(confirmTokenDto.getToken())
                 .memberEntity(memberEntity)
                 .build();
         boolean result = memberRepositoryImpl.confirmDelete(confirmTokenEntity);
-        if(!result) return false;
+        if (!result) return false;
         if (confirmTokenDto.getToken().contains("MEMBER"))
             memberEntity.setRole(MemberRole.ROLE_MEMBER);
-        else if(confirmTokenDto.getToken().contains("COMPANY"))
+        else if (confirmTokenDto.getToken().contains("COMPANY"))
             memberEntity.setRole(MemberRole.ROLE_COMPANY);
         memberRepositoryImpl.roleUpdate(memberEntity);
         return true;
