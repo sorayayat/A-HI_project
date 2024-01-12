@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
 const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
+
 const CompanyUpdate = () => {
   const navigate = useNavigate();
   const [logoPreview, setLogoPreview] = useState("");
@@ -24,38 +25,29 @@ const CompanyUpdate = () => {
   });
     
   useEffect(() => {
-    const fetchUserInfo = () => {
-      const user = sessionStorage.getItem('userInfo');
-      const data = JSON.parse(user); 
-      const establishmentDate = new Date(data.companyEntity.establishmentDate).toISOString().split("T")[0];
-      console.log("사진"+data.companyEntity.logoEntity.serverName);
+    const fetchUserInfo = async () => {
+      const response = await axios.get(`http://${serverIp}:${serverPort}/api/in/member/infoCompany`,{ withCredentials: true });
+      const data = response.data;
       console.log(data);
-      const img=data.companyEntity.logoEntity.serverName;
       setOriginalNumber(data.phoneNumber);
       setFormData({
         email: data.email,
         name: data.name,
         phoneNumber: data.phoneNumber,
-        companyId: data.companyEntity.companyId,
-        company: data.companyEntity.company,
-        companyType: data.companyEntity.companyType,
-        employeesNumber: data.companyEntity.employeesNumber,
-        establishmentDate: establishmentDate,
-        companyHomepage: data.companyEntity.companyHomepage,
-         logo: data.companyEntity.logoEntity.serverName,
-        memberId: data.id,
+        companyId:data.companyId,
+        company:data.company,
+        companyType:data.companyType,
+        employeesNumber:data.employeesNumber,
+        establishmentDate:data.establishmentDate,
+        companyHomepage:data.companyHomepage,
+        logo: response.data.logo,
+        memberId:response.data.memberId,
       });
-  
-      setLogoPreview(`http://${serverIp}:${serverPort}/logoimg/${img}`);
+      setLogoPreview(`http://${serverIp}:${serverPort}/logoimg/`+response.data.logoServer);
     };
-  
-    try {
-      fetchUserInfo();
-    } catch (error) {
-      console.error('Error fetching data: ', error);
-    }
+
+    fetchUserInfo();
   }, []);
-  
 
   const handlePhoneNumberCheck = () => {
     if(formData.phoneNumber===originalNumber){
@@ -68,7 +60,7 @@ const CompanyUpdate = () => {
       return;
     }
     
-    axios.get(`http://${serverIp}:${serverPort}/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    axios.get(`/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`,{ withCredentials: true })
           .then(response => {
             if(response.data===true) {
               alert("등록 가능한 번호 입니다.");
@@ -127,26 +119,12 @@ const CompanyUpdate = () => {
       alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     }
-    axios.put(`http://${serverIp}:${serverPort}/api/in/member/company_info_update`, data, { withCredentials: true })
-    .then(() => {
-      const currentUserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-      
-      // formData의 필드를 사용하여 currentUserInfo 업데이트
+    axios.put(`http://${serverIp}:${serverPort}/api/in/member/company_info_update`, data,{ withCredentials: true })
+    .then(response => {
       const updatedUserInfo = {
-        ...currentUserInfo,
-        ...formData,
-        companyEntity: {
-          ...currentUserInfo.companyEntity,
-          company: formData.company,
-          companyHomepage: formData.companyHomepage,
-          companyId: formData.companyId,
-          companyType: formData.companyType,
-          employeesNumber: formData.employeesNumber,
-          establishmentDate: formData.establishmentDate
-        }
-        // 로고 엔티티 정보도 필요한 경우 여기에 추가
+        ...JSON.parse(sessionStorage.getItem('userInfo')),
+        ...formData
       };
-
       sessionStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
       alert('정보수정완료');
       navigate('/');
@@ -181,6 +159,11 @@ const CompanyUpdate = () => {
     <div className={styles.container}>
       <div className={styles.formContainer}>
         <h2>정보수정</h2>
+
+
+        
+
+
         <div className={styles.inputContainer}>
           <label htmlFor="email">이메일</label>
           <div className={styles.inputOnly}>
@@ -267,14 +250,14 @@ const CompanyUpdate = () => {
           </div>
           <span></span>
         </div>
-        {/* <div className={styles.inputContainer}>
+        <div className={styles.inputContainer}>
           <label htmlFor="logo">회사로고</label>
           <div className={styles.inputOnly}>
             <input type="file" id="logo" onChange={handleLogoChange} accept="image/*" />
           </div>
           {logoPreview && <img src={logoPreview} alt="Logo Preview" className={styles.logoPreview} />}
            
-        </div> */}
+        </div>
 
 
 

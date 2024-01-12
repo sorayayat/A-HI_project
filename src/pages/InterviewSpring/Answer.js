@@ -41,7 +41,7 @@ export const Answer = ({ answer }) => {
             question1: questionText,
             result: responseText,
             question2: index + 1,
-        }).then(response => {
+        },{ withCredentials: true }).then(response => {
             setShowRankModal(false);
             console.log("Server response:", response.data);
         
