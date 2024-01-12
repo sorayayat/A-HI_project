@@ -17,7 +17,7 @@ const FindForm = () => {
 
 
 const findData = () =>{
-  axios.post(`http://${serverIp}:${serverPort}/api/find_info`,formData)
+  axios.post(`http://${serverIp}:${serverPort}/api/find_info`,formData,{ withCredentials: true })
   .then(response => {
     if(response.data.check==='success'){
       setFormData({ ...formData, email: response.data.email });
@@ -31,7 +31,7 @@ const findData = () =>{
 }
 
 const findPwd =() =>{
-  axios.put(`http://${serverIp}:${serverPort}/api/find_pwd`,formData)
+  axios.put(`http://${serverIp}:${serverPort}/api/find_pwd`,formData,{ withCredentials: true })
   .then(response => {
     if(response.data.check==='success'){
       

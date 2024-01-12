@@ -29,7 +29,7 @@ const InterviewSpring = () => {
             setIsLoading(true);
         }, 1000);
 
-        axios.get(`http://${serverIp}:${serverPort}/interview/gpt?queryString=${searchQuery}`)
+        axios.get(`http://${serverIp}:${serverPort}/interview/gpt?queryString=${searchQuery}`,{ withCredentials: true })
             .then(response => {
                 const responseData = response.data;
                 if (response.data.result === 'success') {
