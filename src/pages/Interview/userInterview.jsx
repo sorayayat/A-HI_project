@@ -12,8 +12,9 @@ const UserInterview = () => {
     const [file, setfile] = useState();
     // gpt에게 들어온 질문 json 타입
     const [question, setquestion] = useState('');
-    // 사용자 답변 json 타입 
-    const [userAnswer, setuserAnswer] = useState('');
+    const [q, setq] = useState('');
+    // 사용자 답변
+    const [userAnswer, setuserAnswer] = useState([]);
     // gpt 답변 json 타입
     const [AIanswer, setAIanswer] = useState('');
     // 상태 값에 따라 로딩바 동작
@@ -24,12 +25,13 @@ const UserInterview = () => {
     const [droppedFiles, setDroppedFiles] = useState();
     const dispatch = useDispatch();
 
-    
+
+
     const handleDrop = (e) => {
-        
+
         e.preventDefault();
         setDragging(true);
-        
+
         const files = Array.from(e.dataTransfer.files)
 
         const nonPdfFiles = files.filter(file => file.type !== 'application/pdf');
@@ -53,10 +55,9 @@ const UserInterview = () => {
         const fileNames = files.map(file => file.name);
         console.log('드롭한 파일:', fileNames);
 
-        setDroppedFiles(fileNames); 
+        setDroppedFiles(fileNames);
 
     };
-
 
     const handleQuestion = async () => {
         if (!file) {
@@ -64,45 +65,62 @@ const UserInterview = () => {
                 icon: 'error',
                 text: '파일을 먼저 업로드해주세요.',
             });
-            return ;
+            return;
         }
 
         try {
             const formData = new FormData();
-            
+
             console.log("gd", file[0]);
-            
+
             formData.append("file", file[0]);
-            setIsLoading(true);
-            dispatch(calluserInterview({file: formData}, (data, error) => {
-            if (error) {
-                console.error("오류 발생:", error);
-                Swal.fire({
-                    icon: 'error',
-                    text: '오류가 발생했습니다. 다시 시도해주세요.',
-                });
-            } else {
-                setquestion(data.question);
-            }
-            setIsLoading(false);
+            setIsLoading(true); 
+            dispatch(calluserInterview({ file: formData }, (data, error) => {
+                if (error) {
+                    console.error("오류 발생:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        text: '오류가 발생했습니다. 다시 시도해주세요.',
+                    });
+                } else {
+                    // setquestion(data.question);
+                }
+                setIsLoading(false);
             }));
-            
-            } catch (error) {
+
+        } catch (error) {
             console.error("오류 발생:", error);
             Swal.fire({
                 icon: 'error',
                 text: '오류가 발생했습니다. 다시 시도해주세요.',
             });
-        } 
-        
-    };
+        }
 
+    };
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setDragging(true);
+    };
+    const handleToggle = (index) => {
+        setIsToggled(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }));
+    };
+    
+    
     const questions = question.split('\n').filter(q => q.trim() !== '');
     
-    const handleSendAnswer = async (index, value) => {
-        const answerToSend = {[index]: value}
+
+    const handleSendAnswer = async (index) => {
+
+        const selectedQuestion = questions[index];
+        const selectedAnswer = userAnswer[index];
+        const teststr = "";
+
+        console.log("index:", index, "Question:", selectedQuestion, "Answer:", selectedAnswer);
         setIsLoading(true); // 로딩 시작
-        dispatch(callInterviewAnswer({ userAnswer : answerToSend }, (AIanswer, error) => {
+        dispatch(callInterviewAnswer({ question: selectedQuestion, answer: selectedAnswer }, (AIanswer, error) => {
             if (error) {
                 console.error("오류", error);
             } else {
@@ -111,33 +129,26 @@ const UserInterview = () => {
             setIsLoading(false); // 로딩 종료
         }));
     };
-    
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        setDragging(true);
-    };
 
-    const handleAnswerChange = (index, value, e) => {
+    const handleAnswerChange = (index, value, q, e) => {
         e.stopPropagation();
-        setuserAnswer(prev => ({ ...prev, [index]: value }));
+        setuserAnswer(prev => { const newAnswers = [...prev];
+             newAnswers[index] = value;
+             return newAnswers;
+        });
+       
     };
 
-    const handleToggle = (index) => {
-        setIsToggled(prev => ({
-            ...prev,
-            [index]: !prev[index]
-        }));
-    };
 
     // 화면 작업은 return 내부에 작성한다.
     return (
         <>
-        {/* 로딩화면을 나타낸다 */}
-        
+            {/* 로딩화면을 나타낸다 */}
+
             {/* 첫 화면에 나타날 내용 */}
-        <div className={interviewstyle.container}>
-            <div className={interviewstyle.header}><h1>AI 면접</h1>
-            </div>
+            <div className={interviewstyle.container}>
+                <div className={interviewstyle.header}><h1>AI 면접</h1>
+                </div>
                 <div className={interviewstyle.shoulder}><h3>이력서로 AI와 함께 면접을 준비해보세요</h3></div>
                 <div className={styles.uploadBox} onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDrop}
@@ -152,40 +163,41 @@ const UserInterview = () => {
                         <div >
                             {droppedFiles.map((fileName, index) => (
                                 <p key={index}>{fileName}</p>
-                                ))}
+                            ))}
                         </div>
                     )}
                 </div>
                 <button className={styles.recommendationButton} onClick={handleQuestion}>AI 면접시작하기</button>
-        </div>
+            </div>
 
             {/* 질문창과 답변 창을 중앙으로 정렬 */}
             <div className={interviewstyle.questionBoxWrapper}>
                 {questions.map((q, index) => (
                     <div className={interviewstyle.questionBox}
-                                onClick={() => handleToggle(index)}
-                                style={{cursor: 'pointer'}}>
+                        onClick={() => handleToggle(index)}
+                        style={{ cursor: 'pointer' }}>
                         <p>{q}</p>
                         {/* 토글된 상태에 따라 답변란 표시 */}
                         {isToggled[index] && (
                             <div className={interviewstyle.answerBoxs}
-                            onClick={(e) => e.stopPropagation()}>
+                                onClick={(e) => e.stopPropagation()}>
                                 <input type="text"
-                                    value={userAnswer[index] || ''}
-                                    onChange={(e) => handleAnswerChange(index, e.target.value, e)}
+                                    value={userAnswer[index] || ''} 
+                                    onChange={(e) => handleAnswerChange(index, e.target.value, q, e)}
                                     autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
-                                <button className={interviewstyle.actionButton} onClick={() => handleSendAnswer(index, userAnswer[index])}>답변 하기</button>
-                                {AIanswer && (
+                                <button className={interviewstyle.actionButton} onClick={() => handleSendAnswer(userAnswer[index], q[index])}>답변 하기</button>
+                                {AIanswer[index] && (
                                     <div className={interviewstyle.questionBox}>
-                                        {AIanswer && <p>AI 피드백: {AIanswer}</p>}
+                                        {AIanswer && <p>AI 피드백: {AIanswer[index]}</p>}
                                     </div>)}
                             </div>
                         )}
+
                     </div>
                 ))}
-
+                
             </div>
-            <LoadingScreen isLoading={isLoading} />
+            {/* <LoadingScreen isLoading={isLoading} /> */}
         </>
     )
 }
