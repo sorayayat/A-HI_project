@@ -1,7 +1,7 @@
 .linkContainer {
     display: flex; /* 가로 방향 배치 */
     align-items: stretch; /* 링크들이 컨테이너 높이에 맞춰 늘어나도록 함 */
-    height: 8vh;
+    height: 5vh;
     width: 100%; /* 컨테이너 너비 100% */
     background-color: #f4f4f4;
     border-radius: 10px;
