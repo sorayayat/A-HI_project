@@ -3,8 +3,9 @@ const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
 const FAST_SERVER_PORT = `${process.env.REACT_APP_FAST_APP_SERVER_PORT}`;
 const FAST_PRE_URL = `http://${FAST_SERVER_IP}:${FAST_SERVER_PORT}/userinterview`
 
-export const callInterviewAnswer = (serverDATA, callback) => {
-    const requestURL = `${FAST_PRE_URL}/sendAnswer`;    
+export const callInterviewAnswer = (interviewData, callback) => {
+    const requestURL = `${FAST_PRE_URL}/sendAnswer`; 
+    console.log("call data : ",interviewData);
     return async (dispatch, getState) => {
         try {
             const sendAnswer = await fetch(requestURL, {
@@ -12,7 +13,7 @@ export const callInterviewAnswer = (serverDATA, callback) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(serverDATA)
+                body: JSON.stringify(interviewData)
             });
 
             if (sendAnswer.ok) {
