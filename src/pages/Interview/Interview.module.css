@@ -41,12 +41,12 @@
 }
 
 /* Button Styles */
-.blueButton, .actionButton {
+.blueButton {
     background-color: #3674EA;
     color: white;
-    padding: 10px 20px;
+    padding: 9px 20px;
     border: none;
-    border-radius: 35px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 1em;
     margin-top: 10px;
@@ -54,6 +54,18 @@
     /* Added margin-bottom */
 }
 
+.actionButton {
+    background-color: #3674EA;
+    color: white;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    /* Added margin-bottom */
+}
 
 .questionBoxWrapper {
     display: flex;
@@ -107,7 +119,9 @@
 
 .answerBoxs {
     display: flex;
-    align-items: center; /* Center elements vertically */
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end; /* Center elements vertically */
 }
 
 .answerBoxs input {
@@ -123,6 +137,14 @@
     outline: none;
 }
 
+.textarea {
+    padding: 10px;
+    width: 95%;
+    height: 100px;
+    resize: none;
+    overflow: auto;
+    font-size: 20px;
+}
   
   .answerBoxs button {
     margin-left: 1px; /* 버튼과 입력창 사이의 간격 */
@@ -206,4 +228,16 @@
     border-radius: 8px; /* 모서리 둥글게 */
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 그림자 추가 */
     width: 90%; /* 너비 조정 */
+}
+
+p {
+    margin: 25px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.charCounter {
+    text-align: right;
+    color: gray;
+    margin-top: 5px;
 }

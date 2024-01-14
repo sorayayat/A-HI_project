@@ -73,7 +73,7 @@ const UserInterview = () => {
             console.log("gd", file[0]);
 
             formData.append("file", file[0]);
-            setIsLoading(true); 
+            setIsLoading(true);
             dispatch(calluserInterview({ file: formData }, (data, error) => {
                 if (error) {
                     console.error("오류 발생:", error);
@@ -106,17 +106,17 @@ const UserInterview = () => {
             [index]: !prev[index]
         }));
     };
-    
-    //       ========= test 데이터 ========
-//     const teststr = `1. 경희대학교 필드하키팀 감독으로서의 경험이 웹/앱 개발 분야에서 어떻게 활용될 수 있을까요?
-// 2. 자신이 가장 성공적으로 수행했다고 생각하는 프로젝트는 무엇이며, 그 이유는 무엇인가요?
-// 3. '서번트 리더십'을 가지고 있다고 하셨는데, 이를 구체적인 예시를 들어 설명해주실 수 있나요?
-// 4. 입사 후 3년 차에 전문가로 성장하여 프로젝트를 이끌고 싶다고 하셨는데, 그를 위해 어떤 계획을 가지고 계신가요?`;
 
-//     const questions = teststr.split('\n').filter(q => q.trim() !== '');
+    //   ========= test 데이터 ========
+    const teststr = `1. 경희대학교 필드하키팀 감독으로서의 경험이 웹/앱 개발 분야에서 어떻게 활용될 수 있을까요?
+2. 자신이 가장 성공적으로 수행했다고 생각하는 프로젝트는 무엇이며, 그 이유는 무엇인가요?
+3. '서번트 리더십'을 가지고 있다고 하셨는데, 이를 구체적인 예시를 들어 설명해주실 수 있나요?
+4. 입사 후 3년 차에 전문가로 성장하여 프로젝트를 이끌고 싶다고 하셨는데, 그를 위해 어떤 계획을 가지고 계신가요?`;
 
-    const questions = question.split('\n').filter(q => q.trim() !== '');
- 
+    const questions = teststr.split('\n').filter(q => q.trim() !== '');
+
+    // const questions = question.split('\n').filter(q => q.trim() !== '');
+
 
     const [aiFeedback, setaiFeedback] = useState([]);
     const handleSendAnswer = async (index) => {
@@ -124,9 +124,9 @@ const UserInterview = () => {
         var selectedQuestion = questions[index];
         var selectedAnswer = userAnswer[index];
 
-        console.log("핸들러","index:", index, "Question:", selectedQuestion, "Answer:", selectedAnswer);
+        console.log("핸들러", "index:", index, "Question:", selectedQuestion, "Answer:", selectedAnswer);
         setIsLoading(true); // 로딩 시작
-        dispatch(callInterviewAnswer({ question: selectedQuestion, answer: selectedAnswer}, (AIanswer, error) => {
+        dispatch(callInterviewAnswer({ question: selectedQuestion, answer: selectedAnswer }, (AIanswer, error) => {
             if (error) {
                 console.error("오류", error);
             } else {
@@ -141,14 +141,30 @@ const UserInterview = () => {
         }));
     };
 
+    // 입력하는 글자수를 보여준다
+    const [userAnswerLength, setuserAnswerLength] = useState([]);
+
     const handleAnswerChange = (index, value) => {
-        // e.stopPropagation();
-        setuserAnswer(prev => { const newAnswers = [...prev];
-             newAnswers[index] = value;
-             return newAnswers;
+        setuserAnswer(prev => {
+            const newAnswers = [...prev];
+            newAnswers[index] = value;
+            return newAnswers;
         });
-       
+
+        setuserAnswerLength(prevLengths => {
+            // prevLengths가 배열인지 확인
+            if (!Array.isArray(prevLengths)) {
+                prevLengths = new Array(questions.length).fill(0);
+            }
+            const newLengths = [...prevLengths];
+            newLengths[index] = value.length;
+            return newLengths;
+        });
     };
+
+    useEffect(() => {
+        setuserAnswerLength(new Array(questions.length).fill(0));
+    }, [questions.length]);
 
     // 화면 작업은 return 내부에 작성한다.
     return (
@@ -184,15 +200,21 @@ const UserInterview = () => {
                     <div key={index} className={interviewstyle.questionBox}
                         onClick={() => handleToggle(index)}
                         style={{ cursor: 'pointer' }}>
-                        <div><p>{q}</p></div>
+                        <div className="margin: 100px"><p>{q}</p></div>
                         {/* 토글된 상태에 따라 답변란 표시 */}
                         {isToggled[index] && (
                             <div className={interviewstyle.answerBoxs}
                                 onClick={(e) => e.stopPropagation()}>
-                                <input type="text"
-                                    value={userAnswer[index] || ''} 
+                                <textarea className={interviewstyle.textarea}
+                                    type="text"
+                                    value={userAnswer[index] || ''}
                                     onChange={(e) => handleAnswerChange(index, e.target.value, q, e)}
-                                    autoComplete='off' placeholder="여기에 답변을 입력해주세요."></input>
+                                    maxLength="200"
+                                    autoComplete='off' placeholder="여기에 답변을 입력해주세요.">
+                                </textarea>
+                                <div className={interviewstyle.charCounter}>
+                                    {userAnswerLength[index] || 0}/200 자
+                                </div>
                                 <button className={interviewstyle.actionButton} onClick={() => handleSendAnswer(index)}>답변 하기</button>
                                 {AIanswer[index] && (
                                     <div className={interviewstyle.feedback}>
@@ -203,7 +225,7 @@ const UserInterview = () => {
 
                     </div>
                 ))}
-                
+
             </div>
             <LoadingScreen isLoading={isLoading} />
         </>
