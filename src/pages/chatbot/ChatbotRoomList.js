@@ -1,5 +1,9 @@
 import React from "react";
 import styles from "./ChatbotRoomList.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+
+
 
 const ChatbotRoomList = ({
   chatRooms,
@@ -41,14 +45,14 @@ const ChatbotRoomList = ({
           <div className={styles.roomListMenuSet}>
             {chatRooms.map((room) => (
               <div
-                key={room.roomId}
-                className={`${styles.roomLists} ${
-                  room.roomId === activeChatRoomId ? styles.activeRoom : ""
-                }`}
-                onClick={() => onSelectChatRoom(room.roomId)}
-              >
+              key={room.roomId}
+              className={`${styles.roomLists} ${
+                room.roomId === activeChatRoomId ? styles.activeRoom : ""
+              }`}
+              onClick={() => onSelectChatRoom(room.roomId)}
+            >
+              <div className={styles.roomTexts}> {/* 새로운 div */}
                 <p className={styles.newOrExp}>{room.prompt || "신입"}</p>
-                {/* 채팅방의 마지막 메시지 또는 기본 텍스트 표시 */}
                 <p>
                   {Array.isArray(room.messageList) &&
                   room.messageList.length > 0
@@ -58,13 +62,40 @@ const ChatbotRoomList = ({
                       )
                     : "채팅을 시작해 보세요!"}
                 </p>
-                <button
-                  className={styles.deleteButton}
-                  onClick={(e) => handleDeleteClick(e, room.roomId)}
-                >
-                  삭제
-                </button>
               </div>
+              <button
+                className={styles.deleteButton}
+                onClick={(e) => handleDeleteClick(e, room.roomId)}
+              >
+                <FontAwesomeIcon icon={faArrowRightFromBracket} size="2x"/>
+              </button>
+            </div>
+            
+              // <div
+              //   key={room.roomId}
+              //   className={`${styles.roomLists} ${
+              //     room.roomId === activeChatRoomId ? styles.activeRoom : ""
+              //   }`}
+              //   onClick={() => onSelectChatRoom(room.roomId)}
+              // >
+              //   <p className={styles.newOrExp}>{room.prompt || "신입"}</p>
+              //   {/* 채팅방의 마지막 메시지 또는 기본 텍스트 표시 */}
+              //   <p>
+              //     {Array.isArray(room.messageList) &&
+              //     room.messageList.length > 0
+              //       ? truncateText(
+              //           room.messageList[room.messageList.length - 1].content,
+              //           16
+              //         )
+              //       : "채팅을 시작해 보세요!"}
+              //   </p>
+              //   <button
+              //     className={styles.deleteButton}
+              //     onClick={(e) => handleDeleteClick(e, room.roomId)}
+              //   >
+              //     삭제
+              //   </button>
+              // </div>
             ))}
           </div>
         </div>

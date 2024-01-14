@@ -8,6 +8,9 @@ import { clearChatRoomData } from "../../modules/chatbotModules";
 import { useDispatch, useSelector } from "react-redux";
 import bubbleIcon from "../mainpage/Icons/bubbleIcon.png";
 import { setPrompt } from "../../modules/chatbotModules";
+import { setResumeDownloadable } from '../../modules/chatbotModules';
+
+
 const ChatbotMain = () => {
   // 채팅방 관련 상태관리
   const [chatRooms, setChatRooms] = useState([]); // 채팅방 목록 상태
@@ -16,10 +19,27 @@ const ChatbotMain = () => {
   const [selectedPrompt, setSelectedPrompt] = useState(null);
   const [userEmail, setUserEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const chatroomListFromStore = useSelector(
-    (state) => state.chatbotReducer.chatroomList
-  );
   const dispatch = useDispatch();
+  const chatroomListFromStore = useSelector((state) => state.chatbotReducer.chatroomList);
+
+  const updateSelectedChatRoom = (updatedData) => {
+    setSelectedChatRoom(prevRoom => ({ ...prevRoom, ...updatedData }));
+
+    // resumePath가 존재할 경우에만 chatRooms 상태 업데이트
+    if (updatedData.resumePath) {
+      console.log("if (updatedData.resumePath) 넘어감")
+      setChatRooms(prevRooms => {
+          return prevRooms.map(room => {
+              if (room.roomId === activeChatRoomId) {
+                  return { ...room, ...updatedData };
+              }
+              return room;
+          });
+      });
+  }
+};
+
+  
   useEffect(() => {
     const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
     if (userInfo && userInfo.email) {
@@ -28,10 +48,17 @@ const ChatbotMain = () => {
       fetchAllChatRooms(userInfo.email); // 사용자 이메일로 채팅방 데이터 불러오기
     }
   }, []);
+
+
+
+
   // 고유 ID 생성
   const generateUniqueID = () => {
     return window.crypto.randomUUID();
   };
+
+
+
   // 새 채팅방 생성
   const createNewChatRoom = () => {
     if (selectedPrompt) {
@@ -49,22 +76,34 @@ const ChatbotMain = () => {
       console.log("프롬프트를 선택해주세요.");
     }
   };
+
+
+
   // newChatButton 누르면 프롬프트 선택화면으로 이동
   const handleNewChatButtonClick = () => {
     setSelectedPrompt(null); // 프롬프트 상태 초기화
     setActiveChatRoomId(null); // 활성화된 채팅방 ID 초기화
     setSelectedChatRoom(null); // 선택된 채팅방 상태 초기화
   };
+
+
+
   // 프롬프트 선택 로직
   const handlePromptSelection = (prompt) => {
     setSelectedPrompt(prompt);
     // createNewChatRoom(); // 새 채팅방 생성
   };
+
+
+  
   useEffect(() => {
     if (selectedPrompt) {
       createNewChatRoom();
     }
   }, [selectedPrompt]);
+
+
+
   // 프롬프트 선택화면 함수
   const renderPromptSelection = () => {
     return (
@@ -116,6 +155,9 @@ const ChatbotMain = () => {
       </div>
     );
   };
+
+
+
   useEffect(() => {
     const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
     if (userInfo && userInfo.email) {
@@ -129,6 +171,10 @@ const ChatbotMain = () => {
       dispatch(clearChatRoomData()); // Redux 스토어의 채팅방 데이터도 초기화
     }
   }, [sessionStorage.getItem("userInfo")]);
+
+
+
+
   // 채팅 메시지가 추가될 때마다 ChatRoom 컴포넌트에서 이를 ChatbotMain 컴포넌트의 chatRooms 상태에 반영
   const updateChatRoomsWithNewMessage = (roomId, newMessage) => {
     setChatRooms((prevChatRooms) => {
@@ -143,6 +189,9 @@ const ChatbotMain = () => {
       });
     });
   };
+
+
+
   // 로그인된 사용자의 모든 채팅방 데이터 불러오기
   const fetchAllChatRooms = async (userEmail) => {
     try {
@@ -167,6 +216,7 @@ const ChatbotMain = () => {
       console.error(error);
     }
   };
+
   // 채팅방 선택했을때 활성화된 채팅방으로 상태값 변경
   // const handleSelectChatRoom = (roomId) => {
   //     const foundRoom = chatRooms.find(room => room.roomId === roomId);
@@ -178,11 +228,16 @@ const ChatbotMain = () => {
   //         setSelectedPrompt(roomPrompt);
   //     }
   // };
+
   const handleSelectChatRoom = (roomId) => {
     const foundRoom = chatRooms.find((room) => room.roomId === roomId);
     setActiveChatRoomId(roomId); // 활성화된 채팅방 ID 설정
     setSelectedChatRoom(foundRoom); // 선택된 채팅방 설정
   };
+
+
+
+
   // activeChatRoomId가 변경될 때 해당 ID에 해당하는 채팅방을 찾음
   useEffect(() => {
     const foundRoom = chatRooms.find(
@@ -215,6 +270,9 @@ const ChatbotMain = () => {
       console.error("채팅방 삭제 에러 발생 ", error);
     }
   };
+
+
+
   useEffect(() => {
     setChatRooms(chatroomListFromStore);
   }, [chatroomListFromStore]);
@@ -243,6 +301,7 @@ const ChatbotMain = () => {
               updateChatRoomsMessages={updateChatRoomsWithNewMessage}
               selectedPrompt={selectedPrompt}
               setSelectedPrompt={setSelectedPrompt}
+              updateSelectedChatRoom={updateSelectedChatRoom} // 콜백 함수 전달
             />
           ) : (
             renderPromptSelection()
