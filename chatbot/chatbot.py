@@ -410,4 +410,3 @@ def send_resume_data(resume_data, email, roomId):
     print("================================== 웹 접근 가능 URL ================================== ", web_accessible_url)
 
     return web_accessible_url
-
