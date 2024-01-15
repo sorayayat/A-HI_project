@@ -13,6 +13,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
+    font-family: Pretendard;
     
 }
 
@@ -27,7 +28,7 @@
     border: 1px solid rgba(0.1, 0.1, 0.1, 0.2);
     margin-top: 100px;
     background-color: #fff;
-    border-radius: 5px;
+    border-radius: 25px;
     box-shadow: 1px 5px 20px rgba(0, 0, 0, 0.1);
 
 
@@ -38,19 +39,25 @@
 
     display: flex;
     flex-direction: row;
-
+    padding: 20px;
+    font-size: 17px;
 }
 
 .titleText2 {
     flex: 1;
     margin-left: 20px;
-    
+    margin-top: 10px;
 
 }
 
+.requirement {
+    padding-bottom: 6px;
+}
+
+
 .titleText3 {
     flex: 1;
-
+    margin-top: 10px;
 }
 
 .titleText1 {

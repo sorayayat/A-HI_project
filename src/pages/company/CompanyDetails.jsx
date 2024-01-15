@@ -53,7 +53,8 @@ function CompanyDetails() {
         width: "100%",
         height: "auto",
         marginTop: "30px",
-        boxShadow: "1px 5px 20px rgba(0, 0, 0, 0.1)"
+        boxShadow: "1px 5px 20px rgba(0, 0, 0, 0.1)",
+        borderRadius: "25px"
     }
 
 
@@ -125,7 +126,7 @@ function CompanyDetails() {
             </div>
 
             <div className={style.mainContainer}>
-                <h1 id="jobPosting" style={{ marginBottom: '-70px' }}>채용 정보</h1>
+                <h1 id="jobPosting" style={{ marginBottom: '-50px', marginTop: '50px', fontWeight: 700 }}>채용 정보</h1>
 
                 <div className={style.companyInfoContainer}>
                     <div>
@@ -135,16 +136,16 @@ function CompanyDetails() {
                     </div>
                     <div className={style.companyInfo}>
                         <div className={style.titleText2}>
-                            <p>지원 자격</p>
-                            <div>학력 : {posting?.education}</div>
-                            <div>스킬: {posting?.skillList.map((skill, index) => (
+                            <p style={{ paddingBottom: '20px' }}><b>지원 자격</b></p>
+                            <div className={style.requirement}>학력 : {posting?.education}</div>
+                            <div className={style.requirement}>스킬: {posting?.skillList.map((skill, index) => (
                                 <span key={index}>{skill.skillName}{index < posting?.skillList.length - 1 ? ', ' : ''}</span>
                             ))}</div>
-                            <div>경력 : {posting?.postingExperienceList.map((experience, index) => (
+                            <div className={style.requirement}>경력 : {posting?.postingExperienceList.map((experience, index) => (
                                 <span key={index}>{experience.experienceLevel}{index < posting?.postingExperienceList.length -1 ? ',' : ''}</span>))}</div>
                         </div>
                         <div className={style.titleText3}>
-                            <p>근무 조건</p>
+                            <p style={{ paddingBottom: '20px' }}><b>근무 조건</b></p>
                             <div>{posting?.workTypeList.map((workType, index) => (
                                 <span key={index}>{workType.workConditions}{index < posting?.workTypeList.length -1 ? ',' : ''}</span>))}  </div>
                         </div>

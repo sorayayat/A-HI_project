@@ -45,10 +45,11 @@ export const setPrompt = (roomId, prompt) => ({
 });
 
 // 이력서 다운로드 가능 상태 설정 액션 생성자
-export const setResumeDownloadable = (downloadable, path) => ({
+export const setResumeDownloadable = (roomId, downloadable, path) => ({
   type: SET_RESUME_DOWNLOADABLE,
-  payload: { downloadable, path },
+  payload: { roomId, downloadable, path },
 });
+
 
 
 
@@ -123,9 +124,11 @@ const chatbotReducer = (state = initialState, action) => {
       case SET_RESUME_DOWNLOADABLE:
         return {
           ...state,
-          resumeDownloadable: action.payload.downloadable,
-          resumePath: action.payload.path,
+          resumeDownloadable: action.payload.resumeDownloadable,
+          resumePath: action.payload.resumePath,
         };
+
+        
     
     default:
       return state;
