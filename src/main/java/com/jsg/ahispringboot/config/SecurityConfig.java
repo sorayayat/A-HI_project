@@ -15,19 +15,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
+import org.springframework.security.config.http.SessionCreationPolicy;
 import java.io.IOException;
 import java.sql.Date;
-
-import static io.micrometer.core.instrument.util.StringEscapeUtils.escapeJson;
 
 @Configuration
 @EnableWebSecurity
@@ -47,17 +44,17 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
-                        .requestMatchers(request -> {
-                            String[] pathSegments = request.getRequestURI().split("/");
-                            return pathSegments.length > 2 && "in".equals(pathSegments[2]);
-                        }).authenticated()
-                        .requestMatchers("/in/member/**").hasRole("MEMBER")
-                        .requestMatchers("/in/company/**").hasRole("COMPANY")
+//                        .requestMatchers(request -> {
+//                            String[] pathSegments = request.getRequestURI().split("/");
+//                            return pathSegments.length > 2 && "in".equals(pathSegments[2]);
+//                        }).authenticated()
+//                        .requestMatchers("/in/member/**").hasRole("MEMBER")
+//                        .requestMatchers("/in/company/**").hasRole("COMPANY")
                 )
                 .formLogin((form) -> form.loginPage("/api/loginForm")
                         .loginProcessingUrl("/login")
@@ -77,10 +74,11 @@ public class SecurityConfig implements WebMvcConfigurer {
                                     companyEntity.setEmployeesNumber(0);
                                     companyEntity.setCompanyType("no");
                                     companyEntity.setCompany("no");
-                                    // userDetails.getMemberEntity().setCompanyEntity(companyEntity);
+                                     userDetails.getMemberEntity().setCompanyEntity(companyEntity);
                                 }
                                 userDetails.getMemberEntity().setPassword("N");
 //
+
                                 ObjectMapper mapper = new ObjectMapper();
                                 String json = mapper.writeValueAsString(userDetails);
                                 response.setStatus(HttpServletResponse.SC_OK);
@@ -107,10 +105,13 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .logout((out) -> out
                         .logoutUrl("/logout") // 로그아웃 처리 URL 설정
                         .logoutSuccessUrl("/") // 로그아웃 성공 후 리다이렉트할 URL
-                        .invalidateHttpSession(true) // 세션 무효화
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true))
-
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션 생성 정책 설정
+                        .sessionFixation(sessionFixation -> sessionFixation.changeSessionId()) // 세션 고정 방지 전략
+                        .maximumSessions(1) // 동시 세션 제어
+                )
                 .build();
     }
 
