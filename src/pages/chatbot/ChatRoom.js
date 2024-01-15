@@ -202,14 +202,7 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
         }
     };
 
-    // const handleDownloadResume = () => {
-    //     if (activeChatRoom && activeChatRoom.resumePath) {
-    //         const filename = activeChatRoom.resumePath.split('/').pop();
-    //         console.log("!!!!!!!!!!!!!!!!!!!!!Downloading file:", filename);
-    //         window.location.href = `http://localhost:8000/chatbot/download/${filename}`;
-    //     }
-    // };
-    
+  
 
 
 
