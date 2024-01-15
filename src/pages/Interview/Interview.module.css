@@ -230,7 +230,7 @@
     width: 90%; /* 너비 조정 */
 }
 
-p {
+.p {
     margin: 25px;
     text-align: center;
     font-size: 22px;
