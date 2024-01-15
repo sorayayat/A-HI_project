@@ -1,7 +1,7 @@
 .footerWrapper {
     width: 100%;
     padding: 13px 0 16px;
-    background-color: #f8f8f8;
+    background-color: #fff;
     border-top: 1px solid rgba(0,0,0,.08);
 }
 
@@ -20,7 +20,7 @@
     grid-gap: 8px;
     gap: 8px;
     margin-top: 28px;
-    margin-bottom: 90px;
+    /* margin-bottom: 90px; */
     color: gray;
 }
 
