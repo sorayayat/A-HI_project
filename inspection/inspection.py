@@ -59,6 +59,8 @@ class ModifyResumeDTO(BaseModel):
 class RequestEntity(BaseModel):
     modify: List[ModifyResumeDTO]
 
+
+
 # openAI 라이브러리 버전 1.0 이상에서만 작동함 
 #  openai.api_key = OPENAI_API_KEY
 #         response = client.chat.completions.create(
