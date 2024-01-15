@@ -4,14 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from inspection.inspection import ITrouter
 from company.posting import POrouter
 from chatbot.chatbot import CBrouter
-# from resume.resume import resume_router
 from recommendation.recommendation import RErouter
 from recommendation.likePosting import LIrouter
+from fastapi.staticfiles import StaticFiles
+
+
 from interview.userinterview import userInterViewrouter
 # from chatbot.chatbot import create_chatbot_router
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 app.include_router(CBrouter)
