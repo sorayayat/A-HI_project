@@ -200,7 +200,7 @@ const UserInterview = () => {
                     <div key={index} className={interviewstyle.questionBox}
                         onClick={() => handleToggle(index)}
                         style={{ cursor: 'pointer' }}>
-                        <div className="margin: 100px"><p>{q}</p></div>
+                        <div className={interviewstyle.p}><p>{q}</p></div>
                         {/* 토글된 상태에 따라 답변란 표시 */}
                         {isToggled[index] && (
                             <div className={interviewstyle.answerBoxs}
