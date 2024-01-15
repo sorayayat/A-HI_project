@@ -82,6 +82,15 @@
     flex-direction: column;
     align-items: start;
     gap: 8px;
+    position: relative; /* 추가된 부분 */
+}
+
+.roomTexts {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
 }
 
 
@@ -107,6 +116,14 @@ p {
 
 .roomLists .deleteButton {
     display: none;
+    position: absolute; /* 수정된 부분 */
+    top: 50%; /* 버튼을 상자의 중앙에 위치시킴 */
+    right: 20px; /* 오른쪽 여백 */
+    transform: translateY(-40%); /* 버튼을 수직 중앙에 정확히 위치시키기 위함 */
+    background: none;
+    border: none;
+    color: #a3b9e3;
+    cursor: pointer;
 }
 
 .roomLists:hover .deleteButton {
