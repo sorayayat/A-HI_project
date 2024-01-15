@@ -24,8 +24,8 @@ public class MultipartConfig {
 
         MultipartConfigFactory factory = new MultipartConfigFactory();
         factory.setLocation("c:\\shop");
-        factory.setMaxRequestSize(DataSize.ofMegabytes(100L));
-        factory.setMaxFileSize(DataSize.ofMegabytes(100L));
+        factory.setMaxRequestSize(DataSize.ofMegabytes(500L));
+        factory.setMaxFileSize(DataSize.ofMegabytes(500L));
 
         return factory.createMultipartConfig();
     }
