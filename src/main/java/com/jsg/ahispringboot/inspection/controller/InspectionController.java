@@ -75,15 +75,31 @@ public class InspectionController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "통신완료", modifyResume));
     }
 
+    // @PostMapping("/saveResume")
+    // public ResponseEntity<ResponseDTO> saveResume(@RequestParam("resumeCode")
+    // Long resumeCode,
+    // @RequestParam("image") MultipartFile image, @RequestParam("memberId") Long
+    // memberId) {
+    // if (image.isEmpty()) {
+    // log.info("파일 없음");
+    // return ResponseEntity.badRequest().body(new
+    // ResponseDTO(HttpStatus.BAD_REQUEST, "파일이 없습니다.", null));
+    // }
+    // Map<String, Object> pdf = inspectionsService.imageToPdf(resumeCode, image,
+    // memberId);
+    // return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로
+    // 저장하였습니다.", pdf));
+    // }
+
     @PostMapping("/saveResume")
-    public ResponseEntity<ResponseDTO> saveResume(@RequestParam("resumeCode") Long resumeCode,
-            @RequestParam("image") MultipartFile image, @RequestParam("memberId") Long memberId) {
-        if (image.isEmpty()) {
+    public ResponseEntity<ResponseDTO> saveResume(@RequestParam("title") String title,
+            @RequestParam("pdf") MultipartFile pdf, @RequestParam("memberId") Long memberId) {
+        if (pdf.isEmpty()) {
             log.info("파일 없음");
             return ResponseEntity.badRequest().body(new ResponseDTO(HttpStatus.BAD_REQUEST, "파일이 없습니다.", null));
         }
-        Map<String, Object> pdf = inspectionsService.imageToPdf(resumeCode, image, memberId);
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 저장하였습니다.", pdf));
+        String message = inspectionsService.SavePdf(title, pdf, memberId);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 저장하였습니다.", message));
     }
 
     @GetMapping("/search/{search}")
