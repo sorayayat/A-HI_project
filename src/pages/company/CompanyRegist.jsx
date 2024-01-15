@@ -190,7 +190,7 @@ function CompanyRegist() {
 
                     <div style={{ padding: '20px' }}>직무 / 직군</div>
                     <select name="job" id={style.job} value={selectedJob} onChange={handleJobChange}>
-                        <option value="프론트앤드">프론트앤드</option>
+                        <option value="프론트엔드">프론트엔드</option>
                         <option value="백">백</option>
                         <option value="풀스택">풀스택</option>
                         <option value="안드로이드 앱">안드로이드 앱</option>

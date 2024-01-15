@@ -7,7 +7,8 @@ import { callGetCompanyLogo } from '../../apis/postingAPICalls';
 import { LoadingSpiner } from '../../other/LoadingSpiner';
 
 
-
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 
 const Announcement = () => {
 
@@ -32,7 +33,7 @@ const Announcement = () => {
 
         }))
 
-    }, []);
+    },[]);
 
 
 
@@ -102,8 +103,8 @@ const Announcement = () => {
                                     <div className={styles.jobContainer} onClick={() => onClickPostingHandler(posting, index)}>
                                         <div data-cy="jobCard">
                                             
-                                                <img src={posting.company.logoEntity.path} className={styles.jobThumbnail}></img>
-                                                <div>
+                                                <img  src={`http://${serverIp}:${serverPort}/logoimg/${posting.company.logoEntity.serverName}`} alt="공고이미지없음" className={styles.jobThumbnail} style={{width:"100%", paddingBottom:"0px", height: "160px"}}></img>
+                                                <div style={{paddingLeft: "10px"}}>
                                                     <p>{truncateText(posting.postingTitle, 16)}</p>
                                                 </div>
                                             

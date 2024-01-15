@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import styles from './SearchPage.module.css';
-import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { callCompanyNameSearch } from '../../apis/postingAPICalls';
-
+import React, { useState, useEffect } from "react";
+import styles from "./SearchPage.module.css";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { callCompanyNameSearch } from "../../apis/postingAPICalls";
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams(); // URL 파라미터로 검색어 받아오기
-  const searchQuery = searchParams.get('query');
-  const dispatch = useDispatch(); 
-  const posting = useSelector(state => state.companyReducer.searchName)
+  const searchQuery = searchParams.get("query");
+  const dispatch = useDispatch();
+  const posting = useSelector((state) => state.companyReducer.searchName);
   const postingDataList = posting?.data;
-
-  
-
 
   // console.log(posting.data , "523152315");
 
-
-  const [searchResults, setSearchResults] = useState([]); 
+  const [searchResults, setSearchResults] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -34,23 +29,21 @@ const SearchPage = () => {
   //   { id: 6, title: `${searchQuery}6`, description: "Make my wish come true" },
   //   { id: 7, title: `${searchQuery}7`, description: "All I want for Christmas is you" },
   //   { id: 8, title: `${searchQuery}8`, description: "Yeah" },
-    
+
   // ]);
 
-  
-
   useEffect(() => {
-
-    dispatch(callCompanyNameSearch({
-
-        searchName : searchQuery
-    }))
-  },[])
-
+    dispatch(
+      callCompanyNameSearch({
+        searchName: searchQuery,
+      })
+    );
+  }, []);
 
   useEffect(() => {
     // 검색 결과를 가져오는 API 호출
-    axios.get(`/api/search?query=${searchQuery}`)
+    axios
+      .get(`/api/search?query=${searchQuery}`)
       .then((response) => {
         setSearchResults(response.data.results);
         setLoading(false);
@@ -65,14 +58,16 @@ const SearchPage = () => {
     return <div>Loading...</div>;
   }
 
-
   return (
     <div className={styles.searchResultContainer}>
       <div className={styles.titleContainer}>
-        <h1><span className={styles.searchQuery}>{`'${searchQuery}'`}</span>{'의 기업 및 공고 검색 결과입니다.'}</h1>
+        <h1>
+          <span className={styles.searchQuery}>{`'${searchQuery}'`}</span>
+          {"의 기업 및 공고 검색 결과입니다."}
+        </h1>
       </div>
       <div className={styles.cardContainer}>
-        {postingDataList?.map(posting => (
+        {postingDataList?.map((posting) => (
           <div key={posting.postingCode} className={styles.resultCard}>
             <h3 className={styles.resultTitle}>{posting.postingTitle}</h3>
             <p className={styles.resultDescription}>{posting.location}</p>
@@ -82,10 +77,6 @@ const SearchPage = () => {
         ))}
       </div>
     </div>
-
-    
-
-    
   );
 };
 export default SearchPage;

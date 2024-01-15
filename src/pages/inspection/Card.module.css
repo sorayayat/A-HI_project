@@ -10,14 +10,13 @@
   align-items: flex-start; /* 컨텐츠를 위쪽에서부터 정렬 */
   margin: auto; /* NEVER CHANGE */
   max-width: 900px; /* NO CHANGE */
-  height: 900px; /* NO CHANGE */
+  height: 100%; /* NO CHANGE */
   background-color: #ffffff; /* NO CHANGE */
   color: #333; /* NO CHANGE */
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* NO CHANGE */
   margin-top: 20px;
   margin-bottom: 20px;
-  overflow: hidden;
   position: relative; /* NO CHANGE */ /* 내부 요소를 절대 위치로 배치*/
   color: #043d68; /* NO CHANGE */
   font-size: 19px;
@@ -90,7 +89,7 @@
   height: 70%;
   position: absolute; 
   right: 5%;
-  top: 105%;
+  top: 120%;
 }
 
 .selfContent .Line{
@@ -172,4 +171,90 @@
   .modiftBtn2:hover{
       background-color: rgb(151, 151, 151);
   }
+
+.ProjectsDev{
+  border-bottom: 1px solid gray;
+}
+
+.resumeBack{
+  width: 100%;
+  height: 100%;
+}
+
+.befoAfter{
+  margin-left: 100px;
+  display: flex;
+  width: 80%;
+  height: 100%;
+}
+
+.befo{
+  margin: auto;
+  margin-right: 50px;
+  height: 100%;
+}
+
+.after{
+  margin: auto;
+  margin-left: 50px;
+  height: 100%;
+}
+
+
+.resumeTitle{
+  text-align: center;
+}
+.personalInformation{
+  text-align: center;
+}
+
+.loadingIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  /* 화면에 고정 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  /* 반투명 배경 */
+  z-index: 9999;
+  /* 다른 요소들 위에 표시 */
+}
+
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid blue;
+  /* 상단 색상 지정 */
+  border-radius: 50%;
+  margin: 200 , auto;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  padding: 20px;
+  margin: 100 , auto;
+}
+
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+.white_bg{
+  width: 60%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 200px auto;
+}
+
+
 

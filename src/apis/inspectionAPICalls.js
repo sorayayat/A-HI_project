@@ -59,9 +59,7 @@ export const callPafRaderAPI = (file) =>{
 }
 
 export const callResumeDetailAPI = (info) =>{
-    console.log(info)
     const requestURL = `${SB_PRE_URL}/getResume`;
-    console.log(info);
     return async(dispath,getState) =>{
         const result = await fetch(requestURL , {
             method : 'POST',
@@ -94,6 +92,8 @@ export const callModifyResumeAPI = (form , index) => {
         if(result.status === 200){
             console.log(result)
             result.data = Object.assign({}, result.data,{"index" : index});
+            result.data = Object.assign({}, result.data,{"skille" : form.skill});
+            result.data = Object.assign({}, result.data,{"eligibility" : form.eligibility});
             dispath(postModify(result));
             return {status : result.status}
         }
@@ -101,8 +101,8 @@ export const callModifyResumeAPI = (form , index) => {
 }
  export const callImageToPdfAPI = (form) =>{
     const requestURL = `${SB_PRE_URL}/saveResume`;
-    console.log(form.get('resumeCode'))
-    console.log(form.get('image'))
+    console.log(form.get('title'))
+    console.log(form.get('pdf'))
     console.log(form.get('memberId'))
     return async(dispath , getState) =>{
         const result = await fetch(requestURL,{
@@ -114,6 +114,7 @@ export const callModifyResumeAPI = (form , index) => {
         }).then(resp => resp.json());
         if(result.status === 200){
            dispath(postNew(result));
+           return {status : result.status}
         }
     }
     

@@ -120,6 +120,18 @@
       background-color: rgb(223, 57, 57);
   }
 
+.searchResults {
+    width: 50%; /* 드롭박스 너비 */
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 20px 20px;
+    border: 4px solid #D9E5FB;
+    border-top: none;
+    margin : auto;
+}
+
   .searchResultItem {
     padding: 16px; /* 내부 여백 */
     border-bottom: 1px solid #eee;
@@ -156,4 +168,40 @@
 
 .skill{
     margin-left: 10px;
+}
+
+.loadingIndicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    padding: 20px;
+    bottom: 0;
+    z-index: 9999;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid blue;
+    /* 상단 색상 지정 */
+    border-radius: 50%;
+    margin: 200 , auto;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    padding: 20px;
+    margin: 100 , auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
