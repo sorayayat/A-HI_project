@@ -19,6 +19,7 @@ function InspectionMain()
     const [info , setInfo] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLogin , setIsLogin] = useState(false);
+    const [isLoding , setIsLoding] = useState(false);
     const resume = useSelector((state) => state.inspectionReducer.resumelist);
     const dispatch = useDispatch();
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
@@ -49,6 +50,7 @@ function InspectionMain()
         }
 
     };
+
     useEffect(() => {
         const clickOutside = (e) => {
           
@@ -64,14 +66,17 @@ function InspectionMain()
 
     useEffect(() =>{
         if(info?.resumeCode){
+          setIsLoding(true);
             dispatch(callResumeDetailAPI(info)).then((result) => {
                 console.log(result);
-                if(result.status === 200)
-                    navigate("/inspection/detail")
+                if(result.status === 200){
+                  setIsLoding(false);
+                  navigate("/inspection/detail")
+                }
+                    
             })
         }
-        else
-            console.log(info)
+        console.log(info)
     },[info])
 
     useEffect(() =>{
@@ -97,7 +102,8 @@ function InspectionMain()
   };
 
     const onClickPdfHandler = () => {
-        if(Object.keys(file).length !== 0){
+        if(file.name){
+          setIsLoding(true);
             const formData = new FormData();
             formData.append("file",file);
             if(formData){
@@ -124,7 +130,14 @@ function InspectionMain()
     return(
     <div>
         <div>
-            {isModalOpen && 
+            {
+            isLoding && (
+                <div className={modalStyle.loadingIndicator}>
+                  <div className={modalStyle.spinner}></div>
+                </div>
+            )
+            }
+            {isModalOpen && !isLoding &&
                 <div className={modalStyle.black_bg} >
                     <div className={modalStyle.white_bg} ref={ref}>
                     <button onClick={closeModal} className={modalStyle.closeBtn}>X</button>

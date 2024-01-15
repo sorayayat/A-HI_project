@@ -5,12 +5,25 @@ import { callInspectionResumeAPI, callResumeDetailAPI } from "../../apis/inspect
 import style from "./static/css/inspectionDetail.module.css";
 import styles from "./Card.module.css";
 import ModifyModal from "./modal/ResumeModifyModal";
+import Swal from "sweetalert2";
 
 function InspectionDetail()
 {
     const resume = useSelector((state) => state.inspectionReducer.resume);
     const [modifySelf , setModifySelf] = useState([{}]);
     const [isModalOpen , setIsModalOpen] = useState(false);
+    const navgaite = useNavigate();
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'ri',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', () => Swal.stopTimer())
+            toast.addEventListener('mouseleave', () => Swal.resumeTimer())
+        }
+    });
 
     console.log(resume?.data)
     const onClickHandler = (SelfIntroduction , index) =>{
@@ -23,6 +36,17 @@ function InspectionDetail()
         });
         
     }
+
+    useEffect(() =>{
+        if(!resume?.data){
+            Toast.fire({
+                icon: 'error',
+                title: "이력서 가 존재하지않습니다.\n 메인페이지로 이동합니다. "
+            }).then(() =>{
+                navgaite("/")
+            })
+        }
+    },[resume])
 
     useEffect(() =>{
         if(!isModalOpen)
@@ -60,7 +84,7 @@ function InspectionDetail()
                         <div className={styles.Awards}>
                             <h5 className={styles.text}>AWARDS & CERTIFICATIONS</h5>
                             {
-                            resume.data.awardsCertifications.map((awa) => (
+                            resume.data.AwardsCertifications.map((awa) => (
                                 <p className={styles.text}>{awa}</p>
                             ))
                             }
