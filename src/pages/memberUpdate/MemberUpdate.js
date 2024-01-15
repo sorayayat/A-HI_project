@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
 const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
+
 const MemberUpdate = () => {
   const navigate = useNavigate();
   const [isPhoneChecked, setIsPhoneChecked] = useState(true);
@@ -41,7 +42,7 @@ const MemberUpdate = () => {
       alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     }
-    axios.get(`http://${serverIp}:${serverPort}/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
+    axios.get(`/api/phoneNumber_duplication_check?phoneNumber=${formData.phoneNumber}`)
           .then(response => {
             if(response.data===true) {
               alert("등록 가능한 번호 입니다.");
@@ -92,7 +93,7 @@ const MemberUpdate = () => {
       alert("전화번호는 최소 10자리 이상 11자리 이하여야 합니다.");
       return;
     }
-    axios.put(`/api/in/member/info_update`,formData)
+    axios.put(`http://${serverIp}:${serverPort}/api/in/member/info_update`,formData,{ withCredentials: true })
     .then(response => {
       const updatedUserInfo = {
         ...JSON.parse(sessionStorage.getItem('userInfo')),

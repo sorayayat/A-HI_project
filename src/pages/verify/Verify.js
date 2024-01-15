@@ -24,7 +24,7 @@ const Verify = () => {
     }, [location]);
 
     const verifyToken = (token, id) => {
-      axios.put(`http://${serverIp}:${serverPort}/api/confirmCheck`, { token, id })
+      axios.put(`http://${serverIp}:${serverPort}/api/confirmCheck`, { token, id },{ withCredentials: true })
         .then(response => {
            if(response.data===true){
             setTimeout(() => {

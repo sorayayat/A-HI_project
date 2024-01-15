@@ -222,10 +222,10 @@
   }
 
   .resumeButton {
-    width: 200px;
+    width: 230px;
     height: 70px;
     border-radius: 50px;
-    background-color: #dbebfc;
+    background-color: #c2defd;
     cursor: pointer;
     justify-content: center;
     color: rgb(96, 95, 98);
@@ -237,15 +237,16 @@
     border: none;
     font-size: 20px;
     font-weight: bold;
-    margin-left: 60px;
+    margin-left: 47px;
+    border: 3px solid #9fcbfd;
   }
 
 
   .resumeButton:hover {
-    width: 200px;
+    width: 230px;
     height: 70px;
     border-radius: 50px;
-    background-color: #c2defd;
+    background-color: #dbebfc;
     cursor: pointer;
     justify-content: center;
     color:rgb(96, 95, 98);
@@ -254,8 +255,14 @@
     margin-top: 20px;
     margin-bottom: 10px;
     align-items: center;
-    border: 3px solid #9fcbfd;
+  
     font-size: 20px;
     font-weight: bold;
-    margin-left: 60px;
+    margin-left: 47px;
+  }
+
+  .chatbotLoading {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: rgb(59, 63, 78);
   }

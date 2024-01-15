@@ -10,7 +10,7 @@ const RankModal = () => {
     useEffect(() => {
         const rankInfo = async () => {
             try {
-                const response = await axios.get(`http://${serverIp}:${serverPort}/api/rank/post`);
+                const response = await axios.get(`http://${serverIp}:${serverPort}/api/rank/post`,{ withCredentials: true });
                 setData(response.data);
             } catch (error) {
                 console.error("Error fetching data: ", error);

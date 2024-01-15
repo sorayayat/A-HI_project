@@ -24,12 +24,10 @@ const LoginForm = () => {
         formData.append('username', loginData.username);
         formData.append('password', loginData.password);
 
-        axios.post(`http://${serverIp}:${serverPort}/login`,formData.toString())
+        axios.post(`http://${serverIp}:${serverPort}/login`,formData.toString(),{ withCredentials: true })
             .then(response => {
 
                 if(response.data.memberEntity.password==='N'){
-                    // localStorage.setItem('isLoggedIn', 'true');
-                    // localStorage.setItem('userInfo', JSON.stringify(response.data)); 
                     sessionStorage.setItem('userInfo', JSON.stringify(response.data.memberEntity));
                     navigate('/');
                 }

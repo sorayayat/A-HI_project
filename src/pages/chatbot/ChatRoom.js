@@ -3,10 +3,9 @@ import sendIcon from '../mainpage/Icons/Sent.png';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useRef } from 'react';
-import { setResumeDownloadable } from '../../modules/chatbotModules';
+import ChatbotLoadingScreen from './chatbotLoadingScreen';
 
-
-const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, setSelectedPrompt }) => {
+const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, setSelectedPrompt, updateSelectedChatRoom }) => {
 
     const [userEmail, setUserEmail] = useState('');  
     const [message, setMessage] = useState('');
@@ -18,7 +17,8 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     const [serverResponse, setServerResponse] = useState(null);
     const resumeDownloadable = useSelector(state => state.chatbotReducer.resumeDownloadable);
     const resumePath = useSelector(state => state.chatbotReducer.resumePath);
-    const dispatch = useDispatch();
+    const [showLoadingBubble, setShowLoadingBubble] = useState(false);
+  
 
 
     useEffect(() => {
@@ -90,45 +90,67 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     // 메세지 전송 함수
     const sendMessage = async () => {
         if (activeChatRoom) {
+            try {
+                const newUserMessage = { sender: '사용자', content: message };
 
-            const newUserMessage = { sender: '사용자', content: message };
+                setMessageList(prevMessages => [...prevMessages, newUserMessage]);
+                setMessage('');
+                
+                // 새 메시지를 chatRooms 상태에 반영
+                updateChatRoomsMessages(activeChatRoom.roomId, newUserMessage);
+                
 
-            const payload = {
-                email: userEmail, 
-                roomId: activeChatRoom.roomId,
-                prompt: selectedPrompt,
-                message: message
-            };
+                const payload = {
+                    email: userEmail, 
+                    roomId: activeChatRoom.roomId,
+                    prompt: selectedPrompt,
+                    message: message
+                };
 
-            console.log("PAYLOAD ===================> " ,payload)
-    
-            const response = await fetch('http://localhost:8000/chatbot/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+                console.log("PAYLOAD ===================> " ,payload)
+        
+                // 챗봇 응답 로딩 상태 설정
+                setShowLoadingBubble(true);
 
-            const data = await response.json();
-            setServerResponse(data); // 서버 응답으로 상태 업데이트
-            console.log("========================== [sendMessage] chatbot_endpoint response ==========================\n", data);
-            const newChatbotMessage = { sender: '챗봇', content: data.gptMessage };
+                const response = await fetch('http://localhost:8000/chatbot/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            setMessage('');
+                const data = await response.json();
+                setServerResponse(data); // 서버 응답으로 상태 업데이트
+                console.log("========================== [sendMessage] chatbot_endpoint response ==========================\n", data);
+                const newChatbotMessage = { sender: '챗봇', content: data.gptMessage };
 
-            setMessageList(prevMessages => [...prevMessages, newUserMessage, newChatbotMessage]);
+                // 챗봇 응답이 도착하면 로딩 상태 변경
+                setShowLoadingBubble(false);
 
-             // 새 메시지를 chatRooms 상태에 반영
-            updateChatRoomsMessages(activeChatRoom.roomId, newUserMessage);
-            updateChatRoomsMessages(activeChatRoom.roomId, newChatbotMessage);
+                setMessageList(prevMessages => [...prevMessages, newChatbotMessage]);
 
-            // 이력서 생성 버튼 표시 여부 결정 및 이력서 경로 설정
-            if (data.resumeReady) {
-                console.log("!!!!!!!!!!!!!!!!!!!!!이력서 준비됨: ", data.resumeReady);
-                setShowResumeButton(true);
-                setActiveChatRoomResumePath(data.resumePath);
+                // 새 메시지를 chatRooms 상태에 반영
+                updateChatRoomsMessages(activeChatRoom.roomId, newChatbotMessage);
+
+
+
+                // 이력서 생성 버튼 표시 여부 결정 및 이력서 경로 설정
+                if (data.resumeReady) {
+                    console.log("!!!!!!!!!!!!!!!!!!!!!이력서 준비됨: ", data.resumeReady);
+                    setShowResumeButton(true);
+                    setActiveChatRoomResumePath(data.resumePath);
+                }
+            } catch (error) {
+                console.error("Error during sendMessage:", error);
+                setShowLoadingBubble(false);
             }
+
         }
     };
+
+
+
+    
+
 
     useEffect(() => {
         console.log("activeChatRoom 변경됨: ", activeChatRoom);
@@ -138,14 +160,24 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
     }, [activeChatRoom]);
 
 
+    useEffect(() => {
+        if (resumePath) {
+            setShowResumeButton(true);
+            setActiveChatRoomResumePath(resumePath);
+        } else {
+            setShowResumeButton(false);
+            setActiveChatRoomResumePath(null);
+        }
+    }, [resumePath]);
+    
 
     // 채팅방에 진입할 때마다 이력서 다운로드 상태 확인
-    // useEffect(() => {
-    //     if (resumeDownloadable && resumePath) {
-    //         setShowResumeButton(true);
-    //         setActiveChatRoomResumePath(resumePath);
-    //     }
-    // }, [resumeDownloadable, resumePath]);
+    useEffect(() => {
+        if (resumeDownloadable && resumePath) {
+            setShowResumeButton(true);
+            setActiveChatRoomResumePath(resumePath);
+        }
+    }, [resumeDownloadable, resumePath]);
 
 
 
@@ -181,7 +213,7 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
 
 
 
-    return (
+return (
         <>
             {/* ChatbotMain에서 받아온 사용자 메세지와 챗봇 답변 props로 받아와서 화면에 보여줌 */}
             <div className={styles.messageListWrapper}>
@@ -190,22 +222,32 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
                         {/* 사용자가 프롬프트 선택 후 채팅을 진행할 경우 */}
                         <div className={styles.chattingScrollContainer}>
                             <div className={styles.chattingList} ref={scrollRef}>
-                                {activeChatRoom && Array.isArray(activeChatRoom.messageList) && 
-                                    activeChatRoom.messageList.map((msg, index) => (
-                                        <div key={`${msg.sender}-${msg.content}-${index}`} className={msg.sender === '사용자' ? styles.userMessage : styles.chatbotMessage}>
-                                            <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
-                                                {msg.content}
-                                                    {/* 조건부 렌더링으로 버튼 추가 */}
-                                                    {/* 챗봇의 메시지에 특정 텍스트가 포함되어 있을 때만 이력서 버튼을 표시합니다. */}
-                                                    {msg.sender === '챗봇' && msg.content.includes("이력서에 필요한 정보 수집이 완료되었습니다!") && showResumeButton && activeChatRoomResumePath && (
-                                                        <button onClick={handleDownloadResume} className={styles.resumeButton}>
-                                                            이력서 다운로드
-                                                        </button>
-                                                    )}
-                                            </p>
+                            {activeChatRoom && Array.isArray(activeChatRoom.messageList) && 
+                                activeChatRoom.messageList.map((msg, index) => (
+                                    <div key={`${msg.sender}-${msg.content}-${index}`} className={msg.sender === '사용자' ? styles.userMessage : styles.chatbotMessage}>
+                                        <p className={styles.messageBubble} style={{ whiteSpace: 'pre-wrap' }}>
+                                            {msg.content}
+                                             {/* 조건부 렌더링으로 버튼 추가 */}
+                                            {/* 챗봇의 메시지에 특정 텍스트가 포함되어 있을 때만 이력서 버튼을 표시합니다. */}
+                                            {msg.sender === '챗봇' && msg.content.includes("이력서에 필요한 정보 수집이 완료되었습니다!") && activeChatRoom.resumePath && (
+                                                <button onClick={handleDownloadResume} className={styles.resumeButton}>
+                                                    Download Resume
+                                                </button>
+                                            )}
+                                        </p>
+                                    </div>
+                                ))
+                            }
+                            {showLoadingBubble && (
+                                <div className={styles.chatbotMessage}>
+                                    <p className={styles.messageBubble}>
+                                        <div className={styles.chatbotLoading}>
+                                            <ChatbotLoadingScreen isLoading={true}/>
                                         </div>
-                                ))}
-                                {/* 이력서 생성하기 버튼을 말풍선 목록 마지막에 추가 */}
+                                    </p>
+                                </div>
+                                )}
+
                             </div>
                         </div>
                         

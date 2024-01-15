@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import logonav from './logonav.png';
 import { clearChatRoomData } from '../../modules/chatbotModules'; 
 import { useDispatch } from 'react-redux';
-
+const serverIp = process.env.REACT_APP_SPRING_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SPRING_APP_SERVER_PORT;
 
 const Header = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Header = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('/logout', { method: 'POST' });
+            const response = await fetch(`http://${serverIp}:${serverPort}/logout`, { method: 'POST' });
             if (response.ok) {
                 // localStorage.setItem('isLoggedIn', 'false');
                 // localStorage.removeItem('userInfo'); 
