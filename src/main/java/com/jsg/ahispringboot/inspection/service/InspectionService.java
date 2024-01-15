@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -18,6 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jsg.ahispringboot.company.dto.PostingDTO;
+import com.jsg.ahispringboot.company.entity.Member;
+import com.jsg.ahispringboot.company.entity.Posting;
+import com.jsg.ahispringboot.company.repository.PostingRepository;
 import com.jsg.ahispringboot.inspection.dto.AnswerDTO;
 import com.jsg.ahispringboot.inspection.dto.ModifyResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
@@ -29,6 +34,8 @@ import com.jsg.ahispringboot.inspection.repository.InspectionRepository;
 import com.jsg.ahispringboot.inspection.utils.FileUtils;
 import com.jsg.ahispringboot.inspection.utils.FileUtilsImpl;
 import com.jsg.ahispringboot.member.dto.MemberDto;
+import com.jsg.ahispringboot.member.entity.MemberEntity;
+import com.jsg.ahispringboot.member.repository.MemberRepository;
 
 import jakarta.mail.Multipart;
 import lombok.extern.slf4j.Slf4j;
@@ -38,17 +45,21 @@ import lombok.extern.slf4j.Slf4j;
 public class InspectionService {
 
     private final InspectionRepository inspectionRepositroy;
+    private final PostingRepository postingRepository;
+    private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
     private final FileUtils fileUtils;
     @Value("${fastapi.endpoint}")
     private String endPoint;
 
     public InspectionService(InspectionRepository inspectionRepositroy,
-            ModelMapper modelMapper,
-            FileUtilsImpl fileUtilsImpl) {
+            ModelMapper modelMapper, PostingRepository postingRepository,
+            MemberRepository memberRepository, FileUtilsImpl fileUtilsImpl) {
         this.inspectionRepositroy = inspectionRepositroy;
         this.modelMapper = modelMapper;
         this.fileUtils = fileUtilsImpl;
+        this.postingRepository = postingRepository;
+        this.memberRepository = memberRepository;
     }
 
     public List<ResumeDTO> selectMemberResume(Long memberId) {
@@ -74,9 +85,11 @@ public class InspectionService {
         Long beforeTime = System.currentTimeMillis();
         Resume resume = inspectionRepositroy.findResumeCode(resumeCode, userCode);
         ResumeDTO resumeDTO = modelMapper.map(resume, ResumeDTO.class);
+        String title = fileUtils.getTitle(resumeDTO.getResumePath());
         ByteArrayResource resource = fileUtils.FileToByteArray(resumeDTO.getResumePath());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = fileUtils.FileCreatebody(resource, "file");
         ReaderDTO reader = fileUtils.GetJsonData(endPoint, requestEntity);
+        reader.setTitle(title);
         Long afterTime = System.currentTimeMillis();
         Long diffTime = (afterTime - beforeTime) / 1000;
         log.info("실행 시간(sec) : " + diffTime);
@@ -132,6 +145,35 @@ public class InspectionService {
         log.info("map : {}", map);
 
         return map;
+    }
+
+    @Transactional
+    public String SavePdf(String title, MultipartFile pdf, Long memberId) {
+        LocalDateTime date = LocalDateTime.now();
+        String newDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
+        MemberEntity member = memberRepository.findById(memberId);
+        MemberDto memberDto = modelMapper.map(member, MemberDto.class);
+        try {
+            byte[] resource = pdf.getBytes();
+            String path = fileUtils.SavePdf(resource, memberDto.getName(), title);
+            Resume modifyResume = new Resume();
+            modifyResume.setResumePath(path);
+            modifyResume.setCreateDate(newDate);
+            modifyResume.setMember(member);
+            inspectionRepositroy.save(modifyResume);
+
+            return "성공적으로 저장하였습니다.";
+        } catch (IOException e) {
+            String memssage = e.getMessage();
+            return memssage;
+        }
+    }
+
+    public List<PostingDTO> findPosting(String search) {
+        List<Posting> posting = postingRepository.findPostingLikeSearch(search);
+        List<PostingDTO> postingDTO = posting.stream().map(p -> modelMapper.map(p, PostingDTO.class))
+                .collect(Collectors.toList());
+        return postingDTO;
     }
 
 }

@@ -210,7 +210,7 @@ public class PostingController {
 
         System.out.println("postingCode" + postingCode);
 
-
+        postingService.deletePosting(postingCode);
 
         // FastAPI 엔드포인트 URL
         String fastApiEndpoint = "http://localhost:8000/posting/delete/{postingCode}";

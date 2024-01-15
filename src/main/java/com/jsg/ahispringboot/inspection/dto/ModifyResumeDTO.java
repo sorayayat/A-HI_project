@@ -16,14 +16,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ModifyResumeDTO {
-    @JsonProperty("type")
-    public String type;
     @JsonProperty("direction")
     public String direction;
     @JsonProperty("eligibility")
-    public String eligibility;
+    public List<String> eligibility;
     @JsonProperty("skill")
-    public String skill;
+    public List<String> skill;
     @JsonProperty("selfIntroduction")
     public List<SelfIntroductionDTO> selfIntroduction;
 }

@@ -6,6 +6,7 @@ import com.jsg.ahispringboot.member.dto.MemberDto;
 import com.jsg.ahispringboot.member.entity.MemberEntity;
 import jakarta.mail.MessagingException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
@@ -23,7 +24,7 @@ public interface MemberService {
 
     void memberInfoUpdate(Authentication authentication,MemberDto memberDto);
 
-     void companyInfoUpdate(CompanyDto companyDto, Authentication authentication, MultipartFile logo);
+    void companyInfoUpdate(CompanyDto companyDto, Authentication authentication, MultipartFile logo);
 
     void withdrawal(MemberDto memberDto);
 
