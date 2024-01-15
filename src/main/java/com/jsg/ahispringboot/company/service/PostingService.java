@@ -72,7 +72,7 @@ public class PostingService {
 
             List<String> selectedConditionsList = objectMapper.readValue(postingDTO.getSelectedConditions(), new TypeReference<List<String>>() {
             });
-            System.out.println("selectedConditions:");
+
             for (String item : selectedConditionsList) {
                 System.out.println(item);
 
@@ -90,7 +90,7 @@ public class PostingService {
 
             List<String> selectedSkillsList = objectMapper.readValue(postingDTO.getSelectedSkills(), new TypeReference<List<String>>() {
             });
-            System.out.println("selectedSkills:");
+
             for (String item : selectedSkillsList) {
                 System.out.println(item);
 
@@ -174,7 +174,7 @@ public class PostingService {
         Integer postingCode = postingDTO.getPostingCode();
         MemberEntity member = memberRepository2.findById(memberCode);
 
-        System.out.println(member + "ㅠ");
+
         Posting posting = postingRepository.findByPostingCode(postingCode);
 
         // 이미 존재하는지 확인
@@ -268,7 +268,7 @@ public class PostingService {
 
         List<Posting> postingList = result.getContent();
 
-        System.out.println(postingList + "????");
+
 
         return postingList.stream().map(posting -> modelMapper.map(posting, PostingDTO.class)).collect(Collectors.toList());
     }
@@ -303,7 +303,7 @@ public class PostingService {
 
             List<Posting> postingList = postingRepository.findByCompanyCompanyId(companyEntities.get(i).getCompanyId());
 
-            System.out.println(postingList + "Eldyd");
+
 
             for (Posting posting : postingList) {
                 Optional<Posting> optionalPosting = Optional.ofNullable(posting);
@@ -317,7 +317,7 @@ public class PostingService {
 
 
 
-        System.out.println(postingDTOList + "ㅎㅇㅎㅇㅎㅇ");
+
 
 
 

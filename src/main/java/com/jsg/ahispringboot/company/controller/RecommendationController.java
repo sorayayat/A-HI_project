@@ -37,7 +37,7 @@ public class RecommendationController {
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
 
-        System.out.println(matchingIds);
+
 
         List<PostingDTO> postingDTO = recommendationService.matchingIdsPosting(matchingIds);
 
@@ -68,7 +68,7 @@ public class RecommendationController {
 
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        System.out.println("postingDTOJson" + postingDTOJson);
+
 
         HttpEntity<String> requestEntity = new HttpEntity<>(postingDTOJson, headers);
 
@@ -86,7 +86,7 @@ public class RecommendationController {
 
         List<Integer> postingCode = (List<Integer>) responseDTO.getData();
 
-        System.out.println(postingCode + "ㅎㅇㅎㅇ");
+
 
         postingDTOList = recommendationService.selectResultLike(postingCode);
 
