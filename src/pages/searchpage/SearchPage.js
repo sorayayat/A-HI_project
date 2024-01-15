@@ -12,6 +12,11 @@ const SearchPage = () => {
   const posting = useSelector((state) => state.companyReducer.searchName);
   const postingDataList = posting?.data;
 
+  
+
+  
+
+
   // console.log(posting.data , "523152315");
 
   const [searchResults, setSearchResults] = useState([]);
