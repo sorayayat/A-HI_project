@@ -16,7 +16,7 @@ from sqlalchemy.exc import IntegrityError
 
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
-client = chromadb.HttpClient(host="52.79.181.213", port=8005)
+client = chromadb.HttpClient(host="15.164.164.18", port=8005)
 # client = chromadb.PersistentClient(path="C:\dev\jgsProject\chromaDB")
 
 
@@ -162,7 +162,7 @@ async def get_posting():
         collection_name = "posting"
         collection = client.get_collection(name=collection_name)
 
-        query_text = "280"
+        query_text = "저희 이마트 6에서 경험 있는 안드로이드를 찾고 있습니다."
         query_embedding = model.encode(query_text)
 
         result = collection.query(
@@ -170,6 +170,8 @@ async def get_posting():
             query_embeddings=[query_embedding.tolist()],
             n_results=2
         )
+
+        print(result)
 
         if result:
             # 결과 반환
