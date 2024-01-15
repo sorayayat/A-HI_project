@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import style from "./static/css/inspectionMain.module.css";
 import modalStyle from "./static/css/ResumeListModal.module.css";
-import logo from "../../components/commons/logo.png";
+// import logo from "../../components/commons/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   callInspectionResumeAPI,
@@ -133,7 +133,8 @@ function InspectionMain() {
         )}
       </div>
       <div className={style.container}>
-        <img className={style.logo} src={logo} alt="로고" />
+        <h1 className={style.bubble1}>자기소개서를 첨삭받아 보세요!</h1>
+        {/* <img className={style.logo} src={logo} alt="로고" /> */}
         <div className={style.attachedFile}>
           <div
             className={style.uploadBox}
@@ -145,7 +146,7 @@ function InspectionMain() {
               backgroundColor: dragging ? "gray" : "white",
             }}
           >
-            <p>{dragging ? "" : "여기로 파일을 드래그하세요"}</p>
+            <p>{dragging ? "" : "이력서 파일을 드래그해 주세요"}</p>
             {file && (
               <div>
                 <p>{file.name}</p>
@@ -158,13 +159,13 @@ function InspectionMain() {
           className={style.recommendationButton}
           onClick={onClickPdfHandler}
         >
-          PDF 파일로 자소서 평가 받기
+          PDF로 자기소개서 평가 받기
         </button>
-        <h1 className={style.noResume}>등록된 이력서가 있다면?</h1>
+        <h1 className={style.bubble}>이미 이력서가 있으신가요?</h1>
+        <h2 className={style.bubble}>이력서 목록을 확인할 수 있어요!</h2>
         <button className={style.resumeButton} onClick={openModal}>
           내 이력서 확인
         </button>
-        <h2 className={style.noResume}>이력서 확인!</h2>
       </div>
     </div>
   );

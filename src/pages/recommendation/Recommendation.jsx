@@ -1,6 +1,6 @@
 import style from "./Recommendation.module.css";
 import { useState, useEffect } from "react";
-import logo from "./images/KakaoTalk_20231218_121636945 (2).jpg";
+// import logo from "./images/KakaoTalk_20231218_121636945 (2).jpg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { callRecommendationResume } from "../../apis/recommendationAPICalls";
@@ -61,7 +61,7 @@ function Recommendation() {
     if (file === undefined) {
       Swal.fire({
         icon: "info",
-        text: "파일 넣으셈",
+        text: "먼저 파일을 넣어 주세요.",
       });
     } else {
       const formData = new FormData();
@@ -83,8 +83,7 @@ function Recommendation() {
   return (
     <>
       <div className={style.container}>
-        <img className={style.logo} src={logo} alt="로고" />
-
+        <h1 className={style.bubble1}>나에게 딱 맞는 공고를 찾아 보세요!</h1>
         <div className={style.attachedFile}>
           <div
             className={style.uploadBox}
@@ -96,7 +95,7 @@ function Recommendation() {
               backgroundColor: dragging ? "gray" : "white",
             }}
           >
-            <p>{dragging ? "" : "파일을 드래그해 주세요"}</p>
+            <p>{dragging ? "" : "이력서 파일을 드래그해 주세요"}</p>
 
             {droppedFiles && (
               <div>
@@ -112,16 +111,15 @@ function Recommendation() {
           className={style.recommendationButton}
           onClick={onClickRecommendationHandler}
         >
-          공고 추천하기
+          공고 추천받기
         </button>
 
-        <h1 className={style.noResume}>이력서가 없으신가요?</h1>
+        <h1 className={style.bubble}>이력서가 없으신가요?</h1>
+        <h2 className={style.bubble}>AI가 이력서 작성을 도와드려요!</h2>
 
-        <Link to="/createResume" className={style.resumeButton}>
-          이력서 작성 바로가기
+        <Link to="/chatbot" className={style.resumeButton}>
+          작성 바로가기
         </Link>
-
-        <h2 className={style.noResume}>AI와 함께 이력서를 작성해 보세요!</h2>
 
         {isModalOpen && (
           <RecommendationModal
