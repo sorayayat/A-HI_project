@@ -260,7 +260,7 @@ function InspectionChoice() {
                                             <div className={style.Awards}>
                                                 <h5 className={style.text}>AWARDS & CERTIFICATIONS</h5>
                                                 {
-                                                    resume.data.AwardsCertifications.map((awa) => (
+                                                    resume.data.awardsCertifications.map((awa) => (
                                                         <p className={style.text}>{awa}</p>
                                                     ))
                                                 }
@@ -349,7 +349,7 @@ function InspectionChoice() {
                                                 <div className={style.Awards}>
                                                     <h5 className={style.text}>AWARDS & CERTIFICATIONS</h5>
                                                     {
-                                                        resume.data.AwardsCertifications.map((awa) => (
+                                                        resume.data.awardsCertifications.map((awa) => (
                                                             <p className={style.text}>{awa}</p>
                                                         ))
                                                     }

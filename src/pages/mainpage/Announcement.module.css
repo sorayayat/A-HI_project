@@ -55,13 +55,12 @@
     width: 5400px;
     height: 300px;
     display: flex;
-    column-gap: 40px;
-    
+    column-gap: 25px;
 }
 
 .slick {
     outline: none;
-    width: 230px;
+    width: 245px;
 }
 
 .jobContainer {
@@ -71,8 +70,8 @@
     /* border: 1px solid gray; */
     box-shadow: inset 0px 0px 5px 0px #808080a1;
     border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    /* padding-left: 10px; */
+    /* padding-right: 10px; */
     cursor: pointer;
 }
 
@@ -94,7 +93,7 @@
     padding-bottom: 67%;
     background-size: cover;
     background-position: 50%;
-    border-radius: 12px;
+    border-radius: 12px 12px 0px 0px;
 }
 
 .jobTitle {
@@ -106,3 +105,4 @@ a {
     text-decoration: none;
     color: black;
 }
+
