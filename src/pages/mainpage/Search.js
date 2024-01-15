@@ -40,9 +40,9 @@ const Search = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        
+        if(inputValue.length >= 2)
         dispatch(callSearchCompany({}))
-    },[])
+    },[inputValue])
 
     useEffect(() =>{
         if(companyList?.data){
