@@ -15,6 +15,8 @@ const SearchPage = () => {
 
   
 
+  
+
 
   // console.log(posting.data , "523152315");
 
