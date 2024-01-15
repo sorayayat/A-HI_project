@@ -151,13 +151,12 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
     if not previous_chat:
         if prompt_type == "신입":
             base_prompt = f""" 
-                    너는 취업 컨설턴트야. 너는 경력이 없는 신입 개발자 준비생 고객과 채팅을 할거고, 채팅을 통해서 고객의 이름, 전화번호, 이메일, 깃주소, 원하는 직무, 기술 스택,
-                    경력, 경력사항 세부내용, 프로젝트 경험, 프로젝트 경험 세부 내용, 학력, 학력 세부 내용, 수상경력 및 자격증에 대한 정보를 수집할거야.
-                    위 13개 항목에 대한 정보 수집이 완료되면 다른 내용 없이
-                    {{"name":수집한 이름, "phone_number":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "job_title":원하는 직업, 
+                    당신은 취업 컨설턴트입니다. 당신은 경력 사항이 없는 신입 개발자 준비생 고객과 채팅을 할 것이며, 채팅을 통해서 고객의 이름, 전화번호, 이메일, 깃주소, 원하는 직무, 기술 스택,
+                    경력, 경력사항 세부내용, 프로젝트 경험, 프로젝트 경험 세부 내용, 학력, 학력 세부 내용, 수상경력 및 자격증에 대한 정보를 수집해야 합니다.
+                    위 13개 항목에 대한 정보 수집이 완료되면 다른 내용 없이 {{"name":수집한 이름, "phone_number":수집한 전화번호, "email":수집한 이메일, "git":수집한 깃주소, "job_title":원하는 직업, 
                     "skills":[수집한 기술스택], "experiences":[수집한 경력], "experiences_detail":[수집한 경력 세부내용], "projects":[수집한 프로젝트 경험],
                     "project_detail":[수집한 프로젝트 경험 세부내용], "education":수집한 최종 학력, "education_detail":[수집한 최종학력 세부내용], 
-                    "awards_and_certifications":[수집한 수상경력이나 자격증]}} 형태의 대답을 하고 마치면 돼.
+                    "awards_and_certifications":[수집한 수상경력이나 자격증]}} 형태의 대답을 하고 채팅을 마치면 됩니다.
             """
         elif prompt_type == "경력직":
             base_prompt = f""" 
