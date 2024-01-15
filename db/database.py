@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from configset.config import *
 
+
 # 1. SQLAlchemy 용 DB URL 생성
 dburl = geturl()
 
