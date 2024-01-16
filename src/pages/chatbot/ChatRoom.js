@@ -136,8 +136,14 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
                 // 이력서 생성 버튼 표시 여부 결정 및 이력서 경로 설정
                 if (data.resumeReady) {
                     console.log("!!!!!!!!!!!!!!!!!!!!!이력서 준비됨: ", data.resumeReady);
+                    console.log("!!!!!!!!!!!!!!!!!!!!!이력서 경로: ", data.resumePath);
+
+                    // updateSelectedChatRoom 함수 호출하여 상위 컴포넌트 상태 업데이트
+                    updateSelectedChatRoom({ resumePath: data.resumePath });
+                    
                     setShowResumeButton(true);
                     setActiveChatRoomResumePath(data.resumePath);
+
                 }
             } catch (error) {
                 console.error("Error during sendMessage:", error);
@@ -147,9 +153,6 @@ const ChatRoom = ({ activeChatRoom, updateChatRoomsMessages, selectedPrompt, set
         }
     };
 
-
-
-    
 
 
     useEffect(() => {

@@ -24,6 +24,8 @@ const ChatbotMain = () => {
 
   const updateSelectedChatRoom = (updatedData) => {
     setSelectedChatRoom(prevRoom => ({ ...prevRoom, ...updatedData }));
+    console.log("@@@@@@@@@@updateSelectedChatRoom 호출됨, updatedData: ", updatedData);
+    console.log("@@@@@@@@@@updateSelectedChatRoom 호출됨, updatedData: ", updatedData.resumePath);
 
     // resumePath가 존재할 경우에만 chatRooms 상태 업데이트
     if (updatedData.resumePath) {

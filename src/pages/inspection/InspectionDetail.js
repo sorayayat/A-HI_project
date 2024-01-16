@@ -84,6 +84,7 @@ function InspectionDetail()
                         <div className={styles.Awards}>
                             <h5 className={styles.text}>AWARDS & CERTIFICATIONS</h5>
                             {
+
                             resume.data?.AwardsCertifications.map((awa) => (
                                 <p className={styles.text}>{awa}</p>
                             ))
