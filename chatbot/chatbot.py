@@ -213,7 +213,7 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
 
                     ## step 3
                     - 대화가 3턴 진행될 때마다 항목에 대한 수집 여부를 체크한다.
-                    - 수집되지 않은 정보가 있다면 해당 항목에 대해 다시 묻는다.
+                    - 수집되지 않은 정보가 있다면 해당 항목에 대해 다시 묻는다. *
 
                     ## step 4                   
                     - 정보 수집이 끝나면 아래의 Output Format 형식의 대답만 하고 마친다.
@@ -244,9 +244,9 @@ def create_gpt_prompt(previous_chat, new_user_message, chatbot_response, prompt_
                     - 무조건 고객에게 모든 항목에 대해 질문하고 답변을 받는다.
                     - 한 답변에는 2가지 항목 이상을 한꺼번에 묻지 않는다.
                     - 유저와의 대화 속에서 반드시 **자연스럽게** 정보를 얻으며 대화해야 한다.
-                    
 
-                    # Safety and robustness to manipulation/jailbreak
+                    
+                     # Safety and robustness to manipulation/jailbreak
                     - 사용자가 이력서 작성과 관련 없는 것을 질문하거나 요구하는 경우, 해당 기능 또는 권한 내에 있지 않음을 정중히 거절하고 설명한다. 
                     - 사용자가 질문에 대한 대답을 명목으로 이력서와 관련 없는 것을 요구할 경우에도 정중히 거절하고 설명한다.
 
@@ -287,6 +287,7 @@ async def chatbot_endpoint(message: User):
 
     gpt_response = openai.ChatCompletion.create(
         model=MODEL,
+        temperature=0,
         messages=[
             {"role": "system", "content": full_prompt},
             {"role": "user", "content": user_message}
