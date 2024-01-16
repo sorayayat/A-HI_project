@@ -51,32 +51,50 @@ RErouter = APIRouter(prefix="/recommendation")
 
 def gpt_question(data):
 
+    experiences = ""
+
+    prompt = f"""
+    1.Never mention "AI."
+    2.Do not use language that expresses apology or regret.
+    3.Avoid repeating the same response.
+    4.In the read data, I want you to read the experience in the EXPERIENCES field and calculate the number of years of experience and output the text 1+ if it's more than 1 year, 3+ if it's more than 3 years, 5+ if it's more than 5 years.
+    5.If there is no experiences field, it will print Newbie.
+    6.Answers must be "1년 이상", "3년 이상", "5년 이상", or "신입".
+    7.Answers must be in Korean
+
+    """
+    # 1. ai라고 절대 언급하지 말것.
+    # 2. 사과, 후회등의 언어 구성을 하지말것
+    # 3. 같은 응답을 반복하지 말것
+    # 4. 읽은 데이터에서 experiences란에 경력 사항을 읽고 경력을 계산해서 1년이상이면 1년 이상 3년이상이면 3년 이상 5년이상 이면 5년 이상이라고 텍스트 출력해줘
+    # 5. 만약 experiences란이 없다면 신입 이라고 출력할것
+    # 6. 답변은 반드시 1년 이상, 3년 이상, 5년 이상 , 신입 이라고만 대답해줘
+    # 7. 대답은 반드시 한국말로 하고
+
     response = openai.ChatCompletion.create(
-        model=MODEL,  # 필수적으로 사용 될 모델을 불러온다.
+        model="gpt-3.5-turbo-1106",  # 필수적으로 사용 될 모델을 불러온다.
         frequency_penalty=0.5,  # 반복되는 내용 값을 설정 한다.
         temperature=0.6,
         messages=[
             {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": "{0}여기에 있는 데이터읽어줘".format(data)},
-                    {"type": "text", "text": "읽은 데이터에서 experiences란에 경력 사항을 읽고 경력을 계산해서 1년이상이면 1년이상 3년이상이면 3년이상 5년이상 이면 5년이상이라고 텍스트 출력해줘"},
-                    {"type": "text", "text": "만약 experiences란이 없다면 신입 이라고 출력해줘"},
-                    {"type": "text", "text": "너는 아무말하지말고 경력에 대한 텍스트만 출력해줘"},
-                    {"type": "text", "text": " '경력 :'  이런거 붙이지마 "},
+                "role": "system", "content": prompt
+            },
+            {"role": "user",
+             "content": [
+                     {"type": "text", "text": "{0}여기에 있는 데이터읽어줘".format(data)},
 
 
 
 
-                    #     {
-                    #         "type": "image_url",
-                    #         "image_url": {
-                    #             "url": f"data:image/jpeg;base64,{data}",
-                    #             "detail" : "high"
-                    #   },
-                    # },
-                ],
-            }
+                 #     {
+                 #         "type": "image_url",
+                 #         "image_url": {
+                 #             "url": f"data:image/jpeg;base64,{data}",
+                 #             "detail" : "high"
+                 #   },
+                 # },
+             ], }
+
         ],
         max_tokens=1000,
     )
@@ -85,29 +103,40 @@ def gpt_question(data):
     return output_text
 
 
-def gpt_selectCompany(postingSkill, resume, question):
+def gpt_selectCompany(postingSkill, resume):
 
+    prompt = f"""
+    1.Never mention "AI."
+    2.Do not use language that expresses apology or regret.
+    3.Avoid repeating the same response.
+    4.You're a job counselor who recommends jobs that might be a good fit for you.
+    5.Answers must be in JSON format.
+    6.Responses should be clear and specific, utilizing the full capabilities of GPT.
+    7.If the position in the resume is Back, please select Back jobs and Frontend jobs.
+    8.Please output the postingCode of the jobs with the most similar tech stack from the selected jobs with up to 5 {{matching_job_ids : []}}.'
+    9.Never have more than 5 matching_job_ids
+    """
+    # 1. ai라고 절대 언급하지 말것.
+    # 2. 사과, 후회등의 언어 구성을 하지말것
+    # 3. 같은 응답을 반복하지 말것
+    # 4. 너는 사용자에게 어울릴거같은 공고를 추천해주는 취업 상담사야
+    # 5. 답변은 반드시 Json형태로 할것
+    # 6. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
+    # 7. 이력서의 포지션이 백이면 백인공고 프론트엔드면 프론트엔드 공고를 선별해주세요
+    # 8. 선별한 공고에서 가장 비슷한 기술스택을 가진 공고의 postingCode를 최대 5개를  matching_job_ids : [] 담아 출력해주세요
     response = openai.ChatCompletion.create(
-        model=MODEL,  # 필수적으로 사용 될 모델을 불러온다.
+        model="gpt-3.5-turbo-1106",  # 필수적으로 사용 될 모델을 불러온다.
         frequency_penalty=0.5,  # 반복되는 내용 값을 설정 한다.
         temperature=0.6,
         response_format={"type": "json_object"},
         messages=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": "{0}여기에 공고의 posting Code에 해당하는 각각의 스킬과 포지션을 읽어주세요".format(postingSkill)},
-                    {"type": "text", "text": "{0}여기에 있는 내 이력서의 스킬 목록과 포지션이 '백'인지 '프론트앤드' 인지 읽어주세요.".format(resume)},
-                    {"type": "text", "text": "이력서의 포지션이 백이면 백인공고 프론트엔드면 프론트엔드 공고를 선별해주세요. "},
-                    {"type": "text", "text": "선별한 공고에서 가장 비슷한 기술스택을 가진 공고의 postingCode를 최대 5개 출력해주세요"},
-                    {"type": "text", "text": "postingCode를 반드시 Json 형태로 뽑아 주세요." "{ matching_job_ids : [] } 형태로 뽑아 주세요."},
-
-                ],
-            }
-        ],
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": f"{postingSkill} 여기에 공고의 posting Code에 해당하는 각각의 스킬과 포지션을 읽어주세요. {resume} 여기에 있는 내 이력서의 스킬 목록과 포지션이 '백'인지 '프론트앤드' 인지 읽어주세요"}
+        ]
 
     )
     output_text = response["choices"][0]["message"]["content"]
+    
 
     return output_text
 
@@ -164,7 +193,7 @@ async def get_posting(file: UploadFile = File(...)):
         results = connection.execute(stmt).fetchall()
     # 결과에서 skill_name을 추출
     skill_data = [(result.skill_name, result.posting_code)
-                    for result in results]
+                  for result in results]
 
     postingTable = Table("posting", metadata_obj, autoload_with=engine)
 
@@ -189,13 +218,10 @@ async def get_posting(file: UploadFile = File(...)):
     grouped_positions = {}
     for position, posting_code in position_data:
         if posting_code not in grouped_positions:
-            grouped_positions[posting_code] = {"positions": []}
-        grouped_positions[posting_code]["positions"].append(position)
+            grouped_positions[posting_code] = []
+        grouped_positions[posting_code].append(position)
 
     print(grouped_positions, "그룹 포지션")
-
-    
-
 
     postingSkill = []
     # 그룹화된 skill_name을 출력
@@ -212,11 +238,14 @@ async def get_posting(file: UploadFile = File(...)):
         result_json.append({
             "Posting Code": posting_code,
             "Skills": skills,
-            'position': grouped_positions[posting_code]['positions']
+            'position': grouped_positions[posting_code]
+
         })
 
-    json_output = json.dumps(result_json, indent=2)
-    print(json_output, " ㅆㅂ")
+    json_output = json.dumps(result_json, indent=2,
+                             ensure_ascii=False)
+
+    print(json_output, "뭐야")
 
     # collection_name = "posting"
     # collection = client.get_collection(name=collection_name)
@@ -244,9 +273,9 @@ async def get_posting(file: UploadFile = File(...)):
     #     postingData = document_ids , soup.get_text(strip=True)
     #     postingList.append('\n'.join(postingData))
 
-    answer = gpt_selectCompany(json_output, resume, question)
+    answer = gpt_selectCompany(json_output, resume)
 
-    print(answer)
+    print(answer,  "ㅎㅎ")
 
     answer = answer.replace("```json", "").replace("```", "").strip()
 

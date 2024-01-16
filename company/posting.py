@@ -162,7 +162,7 @@ async def get_posting():
         collection_name = "posting"
         collection = client.get_collection(name=collection_name)
 
-        query_text = "저희 이마트 6에서 경험 있는 안드로이드를 찾고 있습니다."
+        query_text = "백앤드"
         query_embedding = model.encode(query_text)
 
         result = collection.query(
