@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 import interviewstyle from './Interview.module.css';
 import styles from '../recommendation/Recommendation.module.css'
 import { callInterviewAnswer } from '../../apis/interviewAPIanswerCall'
@@ -108,12 +108,12 @@ const UserInterview = () => {
     };
 
     //   ========= test 데이터 ========
-    //     const teststr = `1. 경희대학교 필드하키팀 감독으로서의 경험이 웹/앱 개발 분야에서 어떻게 활용될 수 있을까요?
+    // const teststr = `1. 경희대학교 필드하키팀 감독으로서의 경험이 웹/앱 개발 분야에서 어떻게 활용될 수 있을까요?
     // 2. 자신이 가장 성공적으로 수행했다고 생각하는 프로젝트는 무엇이며, 그 이유는 무엇인가요?
     // 3. '서번트 리더십'을 가지고 있다고 하셨는데, 이를 구체적인 예시를 들어 설명해주실 수 있나요?
     // 4. 입사 후 3년 차에 전문가로 성장하여 프로젝트를 이끌고 싶다고 하셨는데, 그를 위해 어떤 계획을 가지고 계신가요?`;
 
-    //     const questions = teststr.split('\n').filter(q => q.trim() !== '');
+    // const questions = teststr.split('\n').filter(q => q.trim() !== '');
 
     const questions = question.split('\n').filter(q => q.trim() !== '');
 
@@ -124,8 +124,16 @@ const UserInterview = () => {
         var selectedQuestion = questions[index];
         var selectedAnswer = userAnswer[index];
 
+        if (!selectedAnswer || selectedAnswer.trim().length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                text: '답변을 입력해주세요.',
+            });
+            return;
+        }
+
         console.log("핸들러", "index:", index, "Question:", selectedQuestion, "Answer:", selectedAnswer);
-        setIsLoading(true); // 로딩 시작
+        setIsLoading(true);
         dispatch(callInterviewAnswer({ question: selectedQuestion, answer: selectedAnswer }, (AIanswer, error) => {
             if (error) {
                 console.error("오류", error);
@@ -212,10 +220,10 @@ const UserInterview = () => {
                                     maxLength="200"
                                     autoComplete='off' placeholder="여기에 답변을 입력해주세요.">
                                 </textarea>
-                                <div className={interviewstyle.charCounter}>
-                                    {userAnswerLength[index] || 0}/200 자
-                                </div>
-                                <button className={interviewstyle.actionButton} onClick={() => handleSendAnswer(index)}>답변 하기</button>
+                                    <div className={interviewstyle.charCounter}>
+                                        {userAnswerLength[index] || 0}/200 자
+                                    </div>
+                                    <button className={interviewstyle.actionButton} onClick={() => handleSendAnswer(index)}>답변 하기</button>
                                 {AIanswer[index] && (
                                     <div className={interviewstyle.feedback}>
                                         {AIanswer && <p>AI 피드백: {aiFeedback[index]}</p>}
