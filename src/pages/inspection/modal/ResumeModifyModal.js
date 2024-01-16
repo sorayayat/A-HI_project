@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import style from "../static/css/ResumeModifyModal.module.css";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { callModifyResumeAPI, callPostingSearch } from "../../../apis/inspectionAPICalls";
+import { callGetEligibility, callModifyResumeAPI, callPostingSearch } from "../../../apis/inspectionAPICalls";
 import { useNavigate } from "react-router";
+import LoadingScreen from "../../Interview/LoadingScreen";
 
 const highlightText = (text, highlight) => {
     const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
@@ -25,17 +26,20 @@ function ResumeModifyModal({ setModifyIsModalOpen, modifyIsModalOpen, selfIntrod
     const ref = useRef();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const postings = useSelector(state => state.inspectionReducer.postings);
+    const Rcontent = useSelector(state => state.inspectionReducer.content);
     const [form, setForm] = useState({});
     const [updateForm, setUpdateForm] = useState({});
-    const postings = useSelector(state => state.inspectionReducer.postings);
     const [search, setSearch] = useState("");
-    const [eligibility, setEligibility] = useState([]);
+    const [eligibility, setEligibility] = useState({});
     const [searchResults, setSearchResults] = useState([]);
     const [title, setTitle] = useState([])
     const [showDropDown, setShowDropDown] = useState(false);
     const [isPosting, setIsPosting] = useState(false);
-    const [skilles, setSkilles] = useState({});
+    const [content, setContent] = useState('');
     const [isLoading , setIsLoading] = useState(false);
+    const [isEligibility , setIsEligibility] = useState(false)
+
     const regex = /[가-힣]|[a-zA-Z]{4,}/;
     const Toast = Swal.mixin({
         toast: true,
@@ -49,13 +53,31 @@ function ResumeModifyModal({ setModifyIsModalOpen, modifyIsModalOpen, selfIntrod
         }
     });
 
-    useEffect(() => {
-        if (selfIntroduction?.Skills)
-            setForm({ "skill": selfIntroduction.Skills })
-    }, [selfIntroduction])
+    useEffect(() =>{
+        setIsPosting(false);
+    },[])
 
-    console.log(selfIntroduction.SelfIntroduction
-    );
+
+    useEffect(() => {
+        if (selfIntroduction?.Skills){
+            setForm({
+                skill : selfIntroduction.Skills 
+            });
+        }
+    },[selfIntroduction])
+
+    useEffect(() => {
+        if(Rcontent?.job){
+            setIsPosting(true);
+            setIsEligibility(false)
+            setEligibility(Rcontent);
+            setForm({
+                eligibility : Rcontent,
+                skill: selfIntroduction.Skills
+            });
+        }
+    },[Rcontent]);
+
     useEffect(() => {
         const clickOutside = (e) => {
             if (modifyIsModalOpen && ref.current && !ref.current.contains(e.target)) {
@@ -77,7 +99,7 @@ function ResumeModifyModal({ setModifyIsModalOpen, modifyIsModalOpen, selfIntrod
         });
     }
 
-
+    console.log(updateForm);
     const onCallAPIBtn = () => {
         if (!form.direction) {
             Toast.fire({
@@ -117,7 +139,6 @@ function ResumeModifyModal({ setModifyIsModalOpen, modifyIsModalOpen, selfIntrod
         if (updateForm?.direction) {
             setIsLoading(true);
             dispatch(callModifyResumeAPI(updateForm, selfIntroduction.index)).then((result) => {
-                console.log(result)
                 if (result.status === 200) {
                     setIsLoading(false);
                     navigate("/inspection/choice")
@@ -151,22 +172,21 @@ function ResumeModifyModal({ setModifyIsModalOpen, modifyIsModalOpen, selfIntrod
     };
 
     const handleResultClick = (result) => {
-        setIsPosting(true);
-        setSkilles(result.skillList.map(skille => skille.skillName));
-        setShowDropDown(false);
+        if(result !== undefined){
+            setContent(result?.content);
+            setShowDropDown(false);
+        }
     }
 
     useEffect(() => {
-        if (skilles.length > 0) {
-            setForm({
-                ...form,
-                "eligibility": skilles
-            });
+        if(content !== ''){
+            setIsEligibility(true);
+            dispatch(callGetEligibility(content));
         }
 
-    }, [skilles])
+    }, [content])
 
-    console.log("from : ", form);
+
     useEffect(() => {
         if (regex.test(search)) {
             dispatch(callPostingSearch(search))
@@ -215,6 +235,12 @@ function ResumeModifyModal({ setModifyIsModalOpen, modifyIsModalOpen, selfIntrod
                                         className={style.searchBox}
                                     />
                                 }
+                                {
+                                    isEligibility &&          
+                                    <div className={style.loadingModal}>
+                                        <div className={style.spinner}></div>
+                                    </div>
+                                }
                                 {showDropDown &&
                                     <div className={style.searchResults}>
                                         {postings?.data.map((posting, index) => (
@@ -227,11 +253,10 @@ function ResumeModifyModal({ setModifyIsModalOpen, modifyIsModalOpen, selfIntrod
                                 {
                                     isPosting &&
                                     <dev className={style.skilles}>
-                                        {skilles.map((skille, index) => (
-                                            <dev key={index}>
-                                                <p className={style.skill}>{skille}</p>
-                                            </dev>
-                                        ))}
+                                        <p className={style.skill}>{eligibility.job}</p>
+                                        <p className={style.skill}>{eligibility.eligibility}</p>
+                                        <p className={style.skill}>{eligibility.knowledge}</p>
+                                        <p className={style.skill}>{eligibility.skills}</p>
                                     </dev>
 
                                 }

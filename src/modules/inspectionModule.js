@@ -9,17 +9,19 @@ const POST_RESUME = 'inspection/POST_RESUME';
 const POST_MODIFY = 'inspection/POST_MODIFY';
 const POST_NEW = 'inspection/POST_NEW';
 const GET_POSTINGS = 'inspection/GET_POSTINGS';
+const GET_CONTENT = 'inspection/GET_CONTENT';
 const RESET_STATE = 'inspection/RESET_STATE';
 
 
 // 액션 함수 정의
-export const { inspection : {postAsk , postResumelist , postResume , postModify , postNew , getPostings , resetState}} = createActions({
+export const { inspection : {postAsk , postResumelist , postResume , postModify , postNew , getPostings , resetState , getContent}} = createActions({
     [POST_ASK] : res => res,
     [POST_RESUMELIST] : res => res,
     [POST_RESUME] : res => res,
     [POST_MODIFY] : res => res,
     [POST_NEW] : res => res,
     [GET_POSTINGS] : res => res,
+    [GET_CONTENT] : res => res,
     [RESET_STATE] : () => {}
 });
 
@@ -31,6 +33,7 @@ const inspectionReducer = handleActions({
     [POST_MODIFY] : (state , { payload }) => ({...state , modify : payload }),
     [POST_NEW] : (state , {payload}) => ({...state , newResume : payload}),
     [GET_POSTINGS] : (state , {payload}) => ({...state , postings : payload}),
+    [GET_CONTENT] : (state , {payload}) => ({...state, content : payload}),
     [RESET_STATE] : () => initialState
     },initialState);
 

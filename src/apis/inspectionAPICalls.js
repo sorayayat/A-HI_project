@@ -1,4 +1,4 @@
-import { getPostings, postAsk, postModify, postNew, postResume, postResumelist } from "../modules/inspectionModule";
+import { getContent, getPostings, postAsk, postModify, postNew, postResume, postResumelist } from "../modules/inspectionModule";
 import { json, useNavigate } from "react-router";
 
 const FAST_SERVER_IP = `${process.env.REACT_APP_FAST_APP_SERVER_IP}`;
@@ -80,7 +80,6 @@ export const callResumeDetailAPI = (info) =>{
 
 export const callModifyResumeAPI = (form , index) => {
     const requestURL = `${SB_PRE_URL}/modifyResume`;
-    console.log(form)
     return async(dispath , getState) =>{
         const result = await fetch(requestURL,{
             method : "POST",
@@ -128,5 +127,13 @@ export const callPostingSearch = (search) =>{
             dispath(getPostings(result));
             return { status : result.status};
         }
+    }
+}
+
+export const callGetEligibility = (content) =>{
+    const requestURL = `${FAST_PRE_URL}/getContent?content=${content}`
+    return async(dispath , getState) =>{
+        const result = await fetch(requestURL).then(resp => resp.json());
+        dispath(getContent(result));
     }
 }

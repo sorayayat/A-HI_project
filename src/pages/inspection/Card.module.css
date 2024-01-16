@@ -50,6 +50,12 @@
   margin-top: 210px;
 }
 
+
+
+.resumeTitle{
+  text-align: center;
+}
+
 .Education{
   margin-top: 40px;
 }
@@ -201,10 +207,13 @@
 }
 
 
-.resumeTitle{
-  text-align: center;
-}
+
 .personalInformation{
+  width: 1000px;
+  margin: auto;
+}
+
+.gptAnswer{
   text-align: center;
 }
 

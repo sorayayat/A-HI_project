@@ -232,234 +232,205 @@ function InspectionChoice() {
     });
   };
 
-  return (
-    <>
-      {isLoding && (
-        <div className={style.loadingIndicator}>
-          <div className={style.spinner}></div>
-        </div>
-      )}
-      {modify?.data && (
-        <div>
-          <div className={style.resumeBack}>
-            <h1 className={style.resumeTitle}>수정 팁</h1>
-            <div className={style.personalInformation}>
-              <h4>{modify.data.gptAnswer}</h4>
-            </div>
-            <div className={style.befoAfter}>
-              <div className={style.befo}>
-                <h1 className={style.title}>제목 : befo</h1>
-                <div className={[style.container]}>
-                  <div className={style.resumeArea}>
-                    <div className={style.contentArea}>
-                      <div className={style.Contect}>
-                        <h5 className={style.text}>CONTECT</h5>
-                        <p className={style.text}>
-                          {resume.data.PersonalInformation.email}
-                        </p>
-                        <p className={style.text}>
-                          {resume.data.PersonalInformation.phone}
-                        </p>
-                        <p className={style.text}>
-                          {resume.data.PersonalInformation.github}
-                        </p>
-                      </div>
-                      <p className={style.Line}></p>
-                      <div className={style.Education}>
-                        <h5 className={style.text}>EDUCATION</h5>
-                        <p className={style.text}>
-                          {resume.data.PersonalInformation.education}
-                        </p>
-                      </div>
-                      <p className={style.Line}></p>
-                      <div className={style.Awards}>
-                        <h5 className={style.text}>AWARDS & CERTIFICATIONS</h5>
-                        {resume.data.awardsCertifications.map((awa) => (
-                          <p className={style.text}>{awa}</p>
-                        ))}
-                      </div>
-                      <p className={style.Line}></p>
-                    </div>
-                    <div className={style.content}>
-                      {/* 카드 내 흰색 부분 영역 */}
-                      <h3 className={style.text}>
-                        이름 : {resume.data.PersonalInformation.name}
-                      </h3>
-                      <h3 className={style.text}>
-                        {resume.data.PersonalInformation.position}
-                      </h3>
-                      <p className={style.Line}></p>
-                      <h3 className={style.text}>SKILLS</h3>
-                      <div className={style.skillDev}>
-                        {resume.data.Skills.map((skille) => (
-                          <p className={style.text}>{skille}</p>
-                        ))}
-                      </div>
-                      <p className={style.Line}></p>
-                      <div className={style.ExperienceDev}>
-                        <h3 className={style.text}>EXPERIENCE</h3>
-                        {resume.data.Experience.map((exp) => (
-                          <>
-                            <h5 className={style.text}>{exp.company}</h5>
-                            <h6 className={style.text}>{exp.duration}</h6>
-                          </>
-                        ))}
-                      </div>
-                      <p className={style.Line}></p>
-                      <div className={style.ProjectsDev}>
-                        <h3 className={style.text}>Projects</h3>
-                        {resume.data.Projects.map((project) => (
-                          <>
-                            <h5 className={style.text}>
-                              {project.ProjectsTitle}
-                            </h5>
-                            <h6 className={style.text}>
-                              {project.ProjectsContent}
-                            </h6>
-                          </>
-                        ))}
-                      </div>
-                      <>
-                        <p className={style.Line}></p>
-                      </>
-                    </div>
-                  </div>
-                  <div className={style.selfContent}>
-                    <p className={style.Line}></p>
-                    <h3>자기소개서</h3>
-                    <button
-                      className={style.modiftBtn1}
-                      onClick={
-                        /*() => onClickHandler(resume?.data.SelfIntroduction, 99)*/ null
-                      }
-                    >
-                      전체 수정
-                    </button>
-                    <p className={style.Line}></p>
-                    <dev className={style.selfDev}>
-                      {resume.data.SelfIntroduction.map((self, index) => (
-                        <div key={index} className={style.self}>
-                          <button
-                            className={style.modiftBtn2}
-                            onClick={/*() => onClickHandler(self, index)*/ null}
-                          >
-                            수정
-                          </button>
-                          <h4 className={style.selfTitle}>{self.title}</h4>
-                          <p className={style.selfText}>{self.content}</p>
-                        </div>
-                      ))}
-                    </dev>
-                  </div>
+    return (
+        <>
+            {
+            isLoding && 
+                <div className={style.loadingIndicator}>
+                  <div className={style.spinner}></div>
                 </div>
-              </div>
-              {modifyResume.length > 0 && (
-                <>
-                  <div className={style.after}>
-                    <h1 className={style.title}>제목 : After</h1>
-                    <div className={[style.container]} ref={divRef}>
-                      <div className={style.contentArea}>
-                        <div className={style.Contect}>
-                          <h5 className={style.text}>CONTECT</h5>
-                          <p className={style.text}>
-                            {resume.data.PersonalInformation.email}
-                          </p>
-                          <p className={style.text}>
-                            {resume.data.PersonalInformation.phone}
-                          </p>
-                          <p className={style.text}>
-                            {resume.data.PersonalInformation.github}
-                          </p>
+            }
+            {
+                modify?.data &&
+                <div>
+                    <div className={style.resumeBack}>
+                            <h1 className={style.resumeTitle}>수정 팁</h1>
+                        <div className={style.personalInformation}>
+                            <h4 className={style.gptAnswer}>{modify.data.gptAnswer}</h4>
                         </div>
-                        <p className={style.Line}></p>
-                        <div className={style.Education}>
-                          <h5 className={style.text}>EDUCATION</h5>
-                          <p className={style.text}>
-                            {resume.data.PersonalInformation.education}
-                          </p>
-                        </div>
-                        <p className={style.Line}></p>
-                        <div className={style.Awards}>
-                          <h5 className={style.text}>
-                            AWARDS & CERTIFICATIONS
-                          </h5>
-                          {resume.data.awardsCertifications.map((awa) => (
-                            <p className={style.text}>{awa}</p>
-                          ))}
-                        </div>
-                        <p className={style.Line}></p>
-                      </div>
-                      <div className={style.content}>
-                        {/* 카드 내 흰색 부분 영역 */}
-                        <h3 className={style.text}>
-                          이름 : {resume.data.PersonalInformation.name}
-                        </h3>
-                        <h3 className={style.text}>
-                          {resume.data.PersonalInformation.position}
-                        </h3>
-                        <p className={style.Line}></p>
-                        <h3 className={style.text}>SKILLS</h3>
-                        <div className={style.skillDev}>
-                          {resume.data.Skills.map((skille) => (
-                            <p className={style.text}>{skille}</p>
-                          ))}
-                        </div>
-                        <p className={style.Line}></p>
-                        <div className={style.ExperienceDev}>
-                          <h3 className={style.text}>EXPERIENCE</h3>
-                          {resume.data.Experience.map((exp) => (
-                            <>
-                              <h5 className={style.text}>{exp.company}</h5>
-                              <h6 className={style.text}>{exp.duration}</h6>
-                            </>
-                          ))}
-                        </div>
-                        <p className={style.Line}></p>
-                        <div className={style.ProjectsDev}>
-                          <h3 className={style.text}>Projects</h3>
-                          {resume.data.Projects.map((project) => (
-                            <>
-                              <h5 className={style.text}>
-                                {project.ProjectsTitle}
-                              </h5>
-                              <h6 className={style.text}>
-                                {project.ProjectsContent}
-                              </h6>
-                            </>
-                          ))}
-                        </div>
-                      </div>
-                      <p className={style.Line}></p>
-                      <div className={style.selfContent}>
-                        <h3>자기소개서</h3>
-                        <p className={style.Line}></p>
-                        <dev className={style.selfDev}>
-                          {modifyResume.map((self, index) => (
-                            <div key={index} className={style.self}>
-                              <h4 className={style.selfTitle}>{self.title}</h4>
-                              <p className={style.selfText}>{self.content}</p>
+                        <div className={style.befoAfter}>
+                            <div className={style.befo}>
+                                <h1 className={style.title}>제목 : befo</h1>
+                                <div className={[style.container]} >
+                                    <div className={style.resumeArea}>
+                                        <div className={style.contentArea}>
+                                            <div className={style.Contect}>
+                                                <h5 className={style.text}>CONTECT</h5>
+                                                <p className={style.text}>{resume.data.PersonalInformation.email}</p>
+                                                <p className={style.text}>{resume.data.PersonalInformation.phone}</p>
+                                                <p className={style.text}>{resume.data.PersonalInformation.github}</p>
+                                            </div>
+                                            <p className={style.Line}></p>
+                                            <div className={style.Education}>
+                                                <h5 className={style.text}>EDUCATION</h5>
+                                                <p className={style.text}>{resume.data.PersonalInformation.education}</p>
+                                            </div>
+                                            <p className={style.Line}></p>
+                                            <div className={style.Awards}>
+                                                <h5 className={style.text}>AWARDS & CERTIFICATIONS</h5>
+                                                {
+                                                    resume.data?.AwardsCertifications.map((awa) => (
+                                                        <p className={style.text}>{awa}</p>
+                                                    ))
+                                                }
+                                            </div>
+                                            <p className={style.Line}></p>
+                                        </div>
+                                        <div className={style.content}>
+                                            {/* 카드 내 흰색 부분 영역 */}
+                                            <h3 className={style.text}>이름 : {resume.data.PersonalInformation.name}</h3>
+                                            <h3 className={style.text}>{resume.data.PersonalInformation.position}</h3>
+                                            <p className={style.Line}></p>
+                                            <h3 className={style.text}>SKILLS</h3>
+                                            <div className={style.skillDev}>
+                                                {resume.data.Skills.map((skille) => (
+                                                    <p className={style.text}>{skille}</p>
+                                                ))}
+                                            </div>
+                                            <p className={style.Line}></p>
+                                            <div className={style.ExperienceDev}>
+                                                <h3 className={style.text}>EXPERIENCE</h3>
+                                                {
+                                                    resume.data.Experience.map((exp) => (
+                                                        <>
+                                                            <h5 className={style.text}>{exp.company}</h5>
+                                                            <h6 className={style.text}>{exp.duration}</h6>
+                                                        </>
+                                                    ))
+                                                }
+                                            </div>
+                                            <p className={style.Line}></p>
+                                            <div className={style.ProjectsDev}>
+                                                <h3 className={style.text}>Projects</h3>
+                                                {
+                                                    resume.data.Projects.map((project) => (
+                                                        <>
+                                                            <h5 className={style.text}>{project.ProjectsTitle}</h5>
+                                                            <h6 className={style.text}>{project.ProjectsContent}</h6>
+                                                        </>
+                                                    ))
+                                                }
+                                            </div>
+                                            <>
+                                                <p className={style.Line}></p>
+                                            </>
+                                        </div>
+                                    </div>
+                                    <div className={style.selfContent}>
+                                        <p className={style.Line}></p>
+                                        <h3>자기소개서</h3>
+                                        <button className={style.modiftBtn1}
+                                            onClick={/*() => onClickHandler(resume?.data.SelfIntroduction, 99)*/ null}>전체 수정</button>
+                                        <p className={style.Line}></p>
+                                        <dev className={style.selfDev}>
+                                            {
+                                                resume.data.SelfIntroduction.map((self, index) => (
+                                                    <div key={index} className={style.self}>
+                                                        <button className={style.modiftBtn2}
+                                                            onClick={/*() => onClickHandler(self, index)*/null}>수정</button>
+                                                        <h4 className={style.selfTitle}>{self.title}</h4>
+                                                        <p className={style.selfText}>{self.content}</p>
+                                                    </div>
+                                                ))
+                                            }
+                                        </dev>
+                                    </div>
+                                </div>
                             </div>
-                          ))}
-                        </dev>
-                      </div>
+                            {modifyResume.length > 0 &&
+                            <>
+                                <div className={style.after}>
+                                    <h1 className={style.title}>제목 : After</h1>
+                                        <div className={[style.container]} ref={divRef}>
+                                            <div className={style.contentArea}>
+                                                <div className={style.Contect}>
+                                                    <h5 className={style.text}>CONTECT</h5>
+                                                    <p className={style.text}>{resume.data.PersonalInformation.email}</p>
+                                                    <p className={style.text}>{resume.data.PersonalInformation.phone}</p>
+                                                    <p className={style.text}>{resume.data.PersonalInformation.github}</p>
+                                                </div>
+                                                <p className={style.Line}></p>
+                                                <div className={style.Education}>
+                                                    <h5 className={style.text}>EDUCATION</h5>
+                                                    <p className={style.text}>{resume.data.PersonalInformation.education}</p>
+                                                </div>
+                                                <p className={style.Line}></p>
+                                                <div className={style.Awards}>
+                                                    <h5 className={style.text}>AWARDS & CERTIFICATIONS</h5>
+                                                    {
+                                                        resume.data.AwardsCertifications.map((awa) => (
+                                                            <p className={style.text}>{awa}</p>
+                                                        ))
+                                                    }
+                                                </div>
+                                                <p className={style.Line}></p>
+                                            </div>
+                                            <div className={style.content}>
+                                                {/* 카드 내 흰색 부분 영역 */}
+                                                <h3 className={style.text}>이름 : {resume.data.PersonalInformation.name}</h3>
+                                                <h3 className={style.text}>{resume.data.PersonalInformation.position}</h3>
+                                                <p className={style.Line}></p>
+                                                <h3 className={style.text}>SKILLS</h3>
+                                                <div className={style.skillDev}>
+                                                    {resume.data.Skills.map((skille) => (
+                                                        <p className={style.text}>{skille}</p>
+                                                    ))}
+                                                </div>
+                                                <p className={style.Line}></p>
+                                                <div className={style.ExperienceDev}>
+                                                    <h3 className={style.text}>EXPERIENCE</h3>
+                                                    {
+                                                        resume.data.Experience.map((exp) => (
+                                                            <>
+                                                                <h5 className={style.text}>{exp.company}</h5>
+                                                                <h6 className={style.text}>{exp.duration}</h6>
+                                                            </>
+                                                        ))
+                                                    }
+                                                </div>
+                                                <p className={style.Line}></p>
+                                                <div className={style.ProjectsDev}>
+                                                    <h3 className={style.text}>Projects</h3>
+                                                    {
+                                                        resume.data.Projects.map((project) => (
+                                                            <>
+                                                                <h5 className={style.text}>{project.ProjectsTitle}</h5>
+                                                                <h6 className={style.text}>{project.ProjectsContent}</h6>
+                                                            </>
+                                                        ))
+                                                    }
+                                                </div>
+                                            </div>
+                                            <p className={style.Line}></p>
+                                            <div className={style.selfContent}>
+                                                <h3>자기소개서</h3>
+                                                <p className={style.Line}></p>
+                                                <dev className={style.selfDev}>
+                                                    {
+                                                        modifyResume.map((self, index) => (
+                                                            <div key={index} className={style.self}>
+                                                                <h4 className={style.selfTitle}>{self.title}</h4>
+                                                                <p className={style.selfText}>{self.content}</p>
+                                                            </div>
+                                                        ))
+                                                    }
+                                                </dev>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+
+                            }
+                        </div>
+                        <div className={btnStyle.btnBox}>
+                            <button className={btnStyle.saveBtn} onClick={saveBtnHandler}>저장</button>
+                            <button className={btnStyle.cencelBtn} onClick={null}>취소</button>
+                        </div>
                     </div>
-                  </div>
-                </>
-              )}
-            </div>
-            <div className={btnStyle.btnBox}>
-              <button className={btnStyle.saveBtn} onClick={saveBtnHandler}>
-                저장
-              </button>
-              <button className={btnStyle.cencelBtn} onClick={null}>
-                취소
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
+                </div>
+            }
+        </>
+    )
 }
 
 export default InspectionChoice;
