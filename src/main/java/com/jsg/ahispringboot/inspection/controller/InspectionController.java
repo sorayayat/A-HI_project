@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jsg.ahispringboot.common.ResponseDTO;
+import com.jsg.ahispringboot.company.dto.PostingDTO;
 import com.jsg.ahispringboot.inspection.dto.AnswerDTO;
 import com.jsg.ahispringboot.inspection.dto.ModifyResumeDTO;
 import com.jsg.ahispringboot.inspection.dto.ReaderDTO;
@@ -43,8 +44,6 @@ public class InspectionController {
 
     @PostMapping("/getResumeList")
     public ResponseEntity<ResponseDTO> selectResume(@RequestBody MemberDto member) {
-        log.info("getResumeList : {}", member);
-        Long code = 3L;
         List<ResumeDTO> resume = inspectionsService.selectMemberResume(member.getId());
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공", resume));
@@ -76,15 +75,40 @@ public class InspectionController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "통신완료", modifyResume));
     }
 
+    // @PostMapping("/saveResume")
+    // public ResponseEntity<ResponseDTO> saveResume(@RequestParam("resumeCode")
+    // Long resumeCode,
+    // @RequestParam("image") MultipartFile image, @RequestParam("memberId") Long
+    // memberId) {
+    // if (image.isEmpty()) {
+    // log.info("파일 없음");
+    // return ResponseEntity.badRequest().body(new
+    // ResponseDTO(HttpStatus.BAD_REQUEST, "파일이 없습니다.", null));
+    // }
+    // Map<String, Object> pdf = inspectionsService.imageToPdf(resumeCode, image,
+    // memberId);
+    // return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로
+    // 저장하였습니다.", pdf));
+    // }
+
     @PostMapping("/saveResume")
-    public ResponseEntity<ResponseDTO> saveResume(@RequestParam("resumeCode") Long resumeCode,
-            @RequestParam("image") MultipartFile image, @RequestParam("memberId") Long memberId) {
-        if (image.isEmpty()) {
+    public ResponseEntity<ResponseDTO> saveResume(@RequestParam("title") String title,
+            @RequestParam("pdf") MultipartFile pdf, @RequestParam("memberId") Long memberId) {
+        if (pdf.isEmpty()) {
             log.info("파일 없음");
             return ResponseEntity.badRequest().body(new ResponseDTO(HttpStatus.BAD_REQUEST, "파일이 없습니다.", null));
         }
-        Map<String, Object> pdf = inspectionsService.imageToPdf(resumeCode, image, memberId);
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 저장하였습니다.", pdf));
+        String message = inspectionsService.SavePdf(title, pdf, memberId);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "성공적으로 저장하였습니다.", message));
+    }
+
+    @GetMapping("/search/{search}")
+    public ResponseEntity<ResponseDTO> findPosting(@PathVariable String search) {
+        log.info("search : {}", search);
+        List<PostingDTO> postingDTO = inspectionsService.findPosting(search);
+        log.info("postingDTO : {}", postingDTO);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "통신양호", postingDTO));
+
     }
 
 }
