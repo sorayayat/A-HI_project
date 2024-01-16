@@ -80,7 +80,7 @@ public class PostingController {
 
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        System.out.println("postingDTOJson" + postingDTOJson);
+
 
         HttpEntity<String> requestEntity = new HttpEntity<>(postingDTOJson, headers);
 
@@ -146,7 +146,7 @@ public class PostingController {
 
         boolean result =  postingService.updatePostingLike(postingDTO, memberCode);
 
-        System.out.println(result + "왜이래");
+
 
 
         return ResponseEntity.ok()
@@ -192,7 +192,7 @@ public class PostingController {
     @GetMapping("{searchName}")
     public ResponseEntity<ResponseDTO> searchCompanyName(@PathVariable String searchName) {
 
-        System.out.println(searchName);
+
 
         List<PostingDTO> postingDTO = postingService.searchCompanyName(searchName);
 

@@ -57,7 +57,7 @@ public class RecommendationService {
 
         }
 
-        System.out.println(postingDTOList);
+
 
 
 
@@ -71,7 +71,6 @@ public class RecommendationService {
 
         List<PostingLike> postingLikes =  postingLikeRepository.findByMemberEntityId(memberCode);
 
-        System.out.println(postingLikes + "?");
 
         List<PostingDTO> postingDTOList = new ArrayList<>();
 
@@ -112,7 +111,6 @@ public class RecommendationService {
 
         List<Posting> postingList = postingRepository.findByResultLike(convertedPostingCodes);
 
-        System.out.println(postingList + "gggg");
 
         List<PostingDTO> mappedDTOList = postingList.stream()
                 .map(posting -> modelMapper.map(posting, PostingDTO.class))
@@ -120,7 +118,6 @@ public class RecommendationService {
 
         postingDTOList.addAll(mappedDTOList);
 
-        System.out.println(postingDTOList + "끄읕");
 
         return postingDTOList;
     }
