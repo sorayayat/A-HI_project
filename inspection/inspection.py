@@ -132,7 +132,7 @@ async def readResume(file : UploadFile = File(...)):
     pre_prompt2 = "2.Separate the content into key and value, distinguishing between title and content.;"
     pre_prompt3 = "3.Separate the PersonalInformation and SelfIntroduction sections within the content."
     # pre_prompt4 = "ex) ReaderDTO : {{PersonalInformation : name:name , position : position, dateOfBirth : dateOfBirth , gender : gender , department : department ....}, {SelfIntroduction : title : title , content : content ...}};"
-    pre_prompt4 = "ex) ReaderDTO : {{PersonalInformation : name:name , email : email, github : github , phone : phone , education : education},{awardsCertifications : [awardsCertification]},{Skills : [Skillname]...},{Experience : company : company , duration : duration},{Projects : ProjectsTitle : ProjectsTitle , ProjectsContent : ProjectsContent...} ,{SelfIntroduction : title : title , content : content ...}};"
+    pre_prompt4 = "ex) ReaderDTO : {{PersonalInformation : name:name , email : email, github : github , phone : phone , education : education},{AwardsCertifications : [AwardsCertification]},{Skills : [Skillname]...},{Experience : company : company , duration : duration},{Projects : ProjectsTitle : ProjectsTitle , ProjectsContent : ProjectsContent...} ,{SelfIntroduction : title : title , content : content ...}};"
     # pre_prompt5 = "4.Provide in JSON format"
     pre_prompt5 = "4.You are a helpful assistant designed to output JSON."
     pre_prompt6 = "5.Translate only 'key' into English."
@@ -238,11 +238,4 @@ async def ImageToPdf(file : UploadFile=File(...)):
         return Response(content=pdf_bytes.getvalue(), media_type="application/pdf")
     except Exception as e :
         print(str(e))
-        return 
-
-
-
-
-
-
- 
+        return
