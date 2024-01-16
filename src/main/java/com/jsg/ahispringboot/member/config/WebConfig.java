@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/logoimg/**")
-                .addResourceLocations("file:E:\\last\\AHI-SPRINGBOOT\\logoimg");
+                .addResourceLocations("file:C:///dev2/AHI-SPRINGBOOT/logoimg/");
     }
 
 //

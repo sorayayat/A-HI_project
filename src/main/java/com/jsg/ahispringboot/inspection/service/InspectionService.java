@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -19,6 +20,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jsg.ahispringboot.company.dto.PostingDTO;
+import com.jsg.ahispringboot.company.entity.Member;
 import com.jsg.ahispringboot.company.entity.Posting;
 import com.jsg.ahispringboot.company.repository.PostingRepository;
 import com.jsg.ahispringboot.inspection.dto.AnswerDTO;
@@ -32,6 +34,8 @@ import com.jsg.ahispringboot.inspection.repository.InspectionRepository;
 import com.jsg.ahispringboot.inspection.utils.FileUtils;
 import com.jsg.ahispringboot.inspection.utils.FileUtilsImpl;
 import com.jsg.ahispringboot.member.dto.MemberDto;
+import com.jsg.ahispringboot.member.entity.MemberEntity;
+import com.jsg.ahispringboot.member.repository.MemberRepository;
 
 import jakarta.mail.Multipart;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +46,7 @@ public class InspectionService {
 
     private final InspectionRepository inspectionRepositroy;
     private final PostingRepository postingRepository;
+    private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
     private final FileUtils fileUtils;
     @Value("${fastapi.endpoint}")
@@ -49,11 +54,12 @@ public class InspectionService {
 
     public InspectionService(InspectionRepository inspectionRepositroy,
             ModelMapper modelMapper, PostingRepository postingRepository,
-            FileUtilsImpl fileUtilsImpl) {
+            MemberRepository memberRepository, FileUtilsImpl fileUtilsImpl) {
         this.inspectionRepositroy = inspectionRepositroy;
         this.modelMapper = modelMapper;
         this.fileUtils = fileUtilsImpl;
         this.postingRepository = postingRepository;
+        this.memberRepository = memberRepository;
     }
 
     public List<ResumeDTO> selectMemberResume(Long memberId) {
@@ -139,6 +145,28 @@ public class InspectionService {
         log.info("map : {}", map);
 
         return map;
+    }
+
+    @Transactional
+    public String SavePdf(String title, MultipartFile pdf, Long memberId) {
+        LocalDateTime date = LocalDateTime.now();
+        String newDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"));
+        MemberEntity member = memberRepository.findById(memberId);
+        MemberDto memberDto = modelMapper.map(member, MemberDto.class);
+        try {
+            byte[] resource = pdf.getBytes();
+            String path = fileUtils.SavePdf(resource, memberDto.getName(), title);
+            Resume modifyResume = new Resume();
+            modifyResume.setResumePath(path);
+            modifyResume.setCreateDate(newDate);
+            modifyResume.setMember(member);
+            inspectionRepositroy.save(modifyResume);
+
+            return "성공적으로 저장하였습니다.";
+        } catch (IOException e) {
+            String memssage = e.getMessage();
+            return memssage;
+        }
     }
 
     public List<PostingDTO> findPosting(String search) {
