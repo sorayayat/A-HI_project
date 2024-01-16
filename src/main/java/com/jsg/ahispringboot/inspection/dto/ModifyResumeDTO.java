@@ -19,7 +19,7 @@ public class ModifyResumeDTO {
     @JsonProperty("direction")
     public String direction;
     @JsonProperty("eligibility")
-    public List<String> eligibility;
+    public EligibilityDTO eligibility;
     @JsonProperty("skill")
     public List<String> skill;
     @JsonProperty("selfIntroduction")
