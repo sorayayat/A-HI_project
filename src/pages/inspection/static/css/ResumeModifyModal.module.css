@@ -291,12 +291,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
-    height: 50%;
+    width: 28%;
+    height: 53%;
     background: rgba(0,0,0,0.5);
     position: fixed;
     padding: 20px;
-    bottom: 0;
+    top: 5%;
     z-index: 9999;
 }
 
