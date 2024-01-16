@@ -108,7 +108,7 @@ async def readResume(file : UploadFile = File(...)):
     contents = await file.read()
     buffer = io.BytesIO(contents) 
     pdf_reader = PdfReader(buffer)
-    text = "";
+    text = ""
     for page in pdf_reader.pages:
         page_text = page.extract_text()
         if page_text :
@@ -133,10 +133,10 @@ async def readResume(file : UploadFile = File(...)):
         gptSec = (time.time() - start) 
         gptEndTime = str(datetime.timedelta(seconds=gptSec)).split(".")
         gptEndTime = gptEndTime[0]
+        print("pdfEndTime : ", pdfEndTime)
+        print("gptEndTime : ", gptEndTime)
     except :
         json_object = {"error" : "통신에러"}
-    print("pdfEndTime : ", pdfEndTime)
-    print("gptEndTime : ", gptEndTime)
     return json_object
 
 
