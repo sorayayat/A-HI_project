@@ -80,7 +80,7 @@
     position: relative;
     width: 60%;
     /* Adjusted width */
-    padding: 15px;
+    padding: 15px 40px 15px 15px;
     border: 1px solid #dbe6fc;
     background-color: #dbe6fc;
     border-radius: 8px;
@@ -144,6 +144,7 @@
     resize: none;
     overflow: auto;
     font-size: 20px;
+    border-radius: 10px;
 }
   
   .answerBoxs button {
@@ -231,7 +232,7 @@
 }
 
 .p {
-    margin: 25px;
+    margin: 25px 25px 25px 0px;
     text-align: center;
     font-size: 22px;
 }
