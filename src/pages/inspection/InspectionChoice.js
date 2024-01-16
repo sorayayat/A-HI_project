@@ -235,9 +235,9 @@ function InspectionChoice() {
                 modify?.data &&
                 <div>
                     <div className={style.resumeBack}>
-                        <h1 className={style.resumeTitle}>수정 팁</h1>
+                            <h1 className={style.resumeTitle}>수정 팁</h1>
                         <div className={style.personalInformation}>
-                            <h4>{modify.data.gptAnswer}</h4>
+                            <h4 className={style.gptAnswer}>{modify.data.gptAnswer}</h4>
                         </div>
                         <div className={style.befoAfter}>
                             <div className={style.befo}>
@@ -260,7 +260,7 @@ function InspectionChoice() {
                                             <div className={style.Awards}>
                                                 <h5 className={style.text}>AWARDS & CERTIFICATIONS</h5>
                                                 {
-                                                    resume.data.AwardsCertifications.map((awa) => (
+                                                    resume.data.awardsCertifications.map((awa) => (
                                                         <p className={style.text}>{awa}</p>
                                                     ))
                                                 }
@@ -349,7 +349,7 @@ function InspectionChoice() {
                                                 <div className={style.Awards}>
                                                     <h5 className={style.text}>AWARDS & CERTIFICATIONS</h5>
                                                     {
-                                                        resume.data.AwardsCertifications.map((awa) => (
+                                                        resume.data.awardsCertifications.map((awa) => (
                                                             <p className={style.text}>{awa}</p>
                                                         ))
                                                     }
