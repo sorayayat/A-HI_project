@@ -10,6 +10,7 @@ import {
   callResumeDetailAPI,
 } from "../../apis/inspectionAPICalls.js";
 import Swal from "sweetalert2";
+import "font-awesome/css/font-awesome.min.css";
 
 function InspectionMain() {
   const navigate = useNavigate();
@@ -145,7 +146,7 @@ function InspectionMain() {
                     <div className={modalStyle.title_head}>
                       <h4 className={modalStyle.title1}>자소서 번호</h4>
                       <h4 className={modalStyle.title2}>자소서 제목</h4>
-                      <h4 className={modalStyle.title3}>자소서 생성일</h4>
+                      <h4 className={modalStyle.title3}>자소서 생성일</h4>z1
                     </div>
                     <div className={modalStyle.resumeDev}>
                       {resume?.data.map((res) => (
@@ -181,7 +182,7 @@ function InspectionMain() {
                     <p className={modalStyle.Line}></p>
                     <img className={modalStyle.warningImage} src={warningImg} />
                     <p className={modalStyle.text}>
-                      등록 된 이력서가 존재하지 않습니다.
+                      등록된 이력서가 존재하지 않습니다.
                     </p>
                     <p className={modalStyle.Line}></p>
                   </div>
@@ -215,6 +216,25 @@ function InspectionMain() {
         )}
       </div>
       <div className={style.container}>
+        <h1 className={style.title}>
+          <i
+            className="fas fa-gear"
+            style={{
+              marginRight: "15px",
+              fontFamily: "FontAwesome",
+              color: "#d9d9d9",
+            }}
+          ></i>
+          AI 에게 자기소개서를 첨삭받을 수 있어요!
+          <i
+            className="fas fa-gear"
+            style={{
+              marginLeft: "15px",
+              fontFamily: "FontAwesome",
+              color: "#d9d9d9",
+            }}
+          ></i>
+        </h1>
         <div className={style.attachedFile}>
           <div
             className={style.uploadBox}
@@ -239,7 +259,7 @@ function InspectionMain() {
           className={style.recommendationButton}
           onClick={onClickPdfHandler}
         >
-          PDF로 자기소개서 평가 받기
+          PDF로 자기소개서 첨삭받기
         </button>
         <h1 className={style.bubble}>이미 이력서가 있으신가요?</h1>
         <h2 className={style.bubble}>이력서 목록을 확인할 수 있어요!</h2>

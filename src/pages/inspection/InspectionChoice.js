@@ -13,215 +13,224 @@ import { resetState } from "../../modules/inspectionModule";
 import Swal from "sweetalert2";
 
 function InspectionChoice() {
+  const modify = useSelector((state) => state.inspectionReducer.modify);
+  const resume = useSelector((state) => state.inspectionReducer.resume);
+  const newResume = useSelector((state) => state.inspectionReducer.newResume);
+  const [modifyResume, setModifyResume] = useState({});
+  const [btn, setBtn] = useState(false);
+  const divRef = useRef();
+  const navgaite = useNavigate();
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [img, setImg] = useState([]);
+  const [count, setCount] = useState();
+  const [desiredHeight, setDesiredHeight] = useState([]);
+  const [isLoding, setIsLoading] = useState(false);
+  const [pdf, setPdf] = useState();
+  const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "ri",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", () => Swal.stopTimer());
+      toast.addEventListener("mouseleave", () => Swal.resumeTimer());
+    },
+  });
 
-    const modify = useSelector((state) => state.inspectionReducer.modify);
-    const resume = useSelector((state) => state.inspectionReducer.resume);
-    const newResume = useSelector((state) => state.inspectionReducer.newResume);
-    const [modifyResume, setModifyResume] = useState({});
-    const [btn, setBtn] = useState(false);
-    const divRef = useRef();
-    const navgaite = useNavigate();
-    const dispatch = useDispatch();
-    const [form, setForm] = useState({});
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [img , setImg] = useState([]);
-    const [count , setCount] = useState();
-    const [desiredHeight , setDesiredHeight] = useState([]);
-    const [isLoding , setIsLoading] = useState(false);
-    const [pdf , setPdf] = useState();
-    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'ri',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', () => Swal.stopTimer())
-            toast.addEventListener('mouseleave', () => Swal.resumeTimer())
+  console.log(form);
+  useEffect(() => {
+    if (modify?.data)
+      setForm({
+        eligibility: modify.data.eligibility,
+        skilles: modify.data.skille,
+      });
+    if (!resume?.data && !modify?.data) {
+      Toast.fire({
+        icon: "error",
+        title: "이력서 가 존재하지않습니다.\n 메인페이지로 이동합니다. ",
+      }).then(() => {
+        navgaite("/");
+      });
+    }
+  }, []);
+
+  console.log(modify);
+  useEffect(() => {
+    if (modify?.data.index !== 99) {
+      setModifyResume(undefined);
+      setModifyResume(resume?.data.SelfIntroduction);
+      setModifyResume(
+        resume?.data.SelfIntroduction.map((state, index) => {
+          if (index === modify?.data.index) {
+            return {
+              ...modifyResume,
+              content: modify?.data.SelfIntroduction[index].content,
+              title: modify?.data.SelfIntroduction[index].title,
+            };
+          } else {
+            return {
+              ...modifyResume,
+              content: state.content,
+              title: state.title,
+            };
+          }
+        })
+      );
+    } else {
+      setModifyResume(modify?.data.SelfIntroduction);
+    }
+  }, [resume?.data.SelfIntroduction]);
+
+  useEffect(() => {
+    if (newResume?.data && newResume?.status === 200 && btn == true) {
+      const byteCharacters = atob(newResume.data.pdf);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "application/pdf" });
+      saveAs(blob, newResume.data.title + ".pdf");
+      setBtn(false);
+    }
+  }, [newResume]);
+
+  const saveBtnHandler = async () => {
+    setIsLoading(true);
+    if (!divRef.current) return;
+    try {
+      const div = divRef.current;
+      const a4Height = 1122;
+      const allCanvases = [];
+      const totalHeight = div.scrollHeight;
+      const numOfSections = Math.ceil(totalHeight / a4Height);
+      const orginOverflow = div.style.overflow;
+      div.style.overflow = "visible";
+      for (let i = 0; i < numOfSections; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const captureHeight =
+          i === numOfSections - 1 ? totalHeight - i * a4Height : a4Height;
+        const yOffset =
+          i === numOfSections - 1 && i !== 0 ? i * a4Height - 50 : i * a4Height;
+        const canvas = await html2canvas(div, {
+          scale: 4,
+          useCORS: true,
+          y: yOffset,
+          height: captureHeight,
+        });
+        allCanvases.push(canvas);
+      }
+      div.style.overflow = orginOverflow;
+      setCount(allCanvases.length);
+      allCanvases.forEach((canvas, i) => {
+        canvas.toBlob((blob) => {
+          setImg((previmg) => [...previmg, blob]);
+        });
+      });
+    } catch (error) {
+      console.error("Error converting div to image:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (img.length === count) {
+      for (let i = 0; i < count; i++) {
+        blobToImageSize(img[i]).then((size) => {
+          setDesiredHeight((height) => [...height, size.height]);
+        });
+      }
+    }
+  }, [img]);
+
+  useEffect(() => {
+    if (desiredHeight.length === count) {
+      console.log(desiredHeight);
+      BlobsToPdf();
+    }
+  }, [desiredHeight]);
+
+  useEffect(() => {
+    if (pdf) {
+      const formData = new FormData();
+      formData.append("title", resume.data.title);
+      formData.append("memberId", userInfo.id);
+      formData.append("pdf", pdf.output("blob"), resume.data.title + ".pdf");
+      dispatch(callImageToPdfAPI(formData)).then((result) => {
+        if (result.status === 200) {
+          pdf.save(
+            resume.data.title ? resume.data.title : userInfo.name + ".pdf"
+          );
+          setIsLoading(false);
+          dispatch(resetState());
+          navgaite("/", redirect);
         }
+      });
+    }
+  }, [pdf]);
+
+  const blobToImageSize = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const img = new Image();
+        img.onload = function () {
+          resolve({ width: this.width, height: this.height });
+        };
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
     });
+  };
 
-    console.log(form)
-    useEffect(() => {
-        if (modify?.data)
-            setForm({
-                "eligibility": modify.data.eligibility,
-                "skilles": modify.data.skille
-            });
-        if(!resume?.data && !modify?.data){
-            Toast.fire({
-                icon: 'error',
-                title: "이력서 가 존재하지않습니다.\n 메인페이지로 이동합니다. "
-            }).then(() =>{
-                navgaite("/")
-            })
-        }
-    }, [])
+  const BlobsToPdf = async () => {
+    const pdf = new jsPDF("p", "mm");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    let pdfHeightLeft = pdf.internal.pageSize.getHeight();
 
-    console.log(modify)
-    useEffect(() => {
-        if (modify?.data.index !== 99) {
-            setModifyResume(undefined);
-            setModifyResume(resume?.data.SelfIntroduction);
-            setModifyResume(resume?.data.SelfIntroduction.map((state, index) => {
-                if (index === modify?.data.index) {
-                    return {
-                        ...modifyResume,
-                        content: modify?.data.SelfIntroduction[index].content,
-                        title: modify?.data.SelfIntroduction[index].title,
-                    }
-                }
-                else {
-                    return {
-                        ...modifyResume,
-                        content: state.content,
-                        title: state.title
-                    }
-                }
-            }));
-        }
-        else{
-            setModifyResume(modify?.data.SelfIntroduction)
-        }
-    }, [resume?.data.SelfIntroduction])
+    for (let i = 0; i < img.length; i++) {
+      const { dataUrl, width, height } = await BlobToPdf(
+        img[i],
+        pdfWidth,
+        desiredHeight[i]
+      );
 
-    useEffect(() => {
-        if (newResume?.data && newResume?.status === 200 && btn == true) {
-            const byteCharacters = atob(newResume.data.pdf);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: "application/pdf" });
-            saveAs(blob, newResume.data.title + ".pdf");
-            setBtn(false);
-        }
-    }, [newResume])
+      if (height > pdfHeightLeft && i > 0) {
+        pdf.addPage();
+        pdfHeightLeft = pdf.internal.pageSize.getHeight();
+      }
 
-
-    const saveBtnHandler = async () => {
-        setIsLoading(true);
-        if (!divRef.current) return;
-        try {
-            const div = divRef.current;
-            const a4Height = 1122;
-            const allCanvases = [];
-            const totalHeight = div.scrollHeight; 
-            const numOfSections = Math.ceil(totalHeight / a4Height); 
-            const orginOverflow = div.style.overflow;
-            div.style.overflow = 'visible';
-            for(let i = 0; i < numOfSections; i++){
-                await new Promise(resolve => setTimeout(resolve, 100));
-                const captureHeight = (i === numOfSections - 1) ?  totalHeight - (i * a4Height)  : a4Height;
-                const yOffset = (i === numOfSections - 1 && i !== 0) ? i * a4Height - 50 : i * a4Height;
-                const canvas = await html2canvas(div, { scale: 4, useCORS: true, y: yOffset , height: captureHeight });
-                allCanvases.push(canvas);
-            }
-            div.style.overflow = orginOverflow;
-            setCount(allCanvases.length);
-           allCanvases.forEach((canvas, i) => {
-            canvas.toBlob((blob) => {
-                  setImg((previmg) => [...previmg , blob]);
-                });
-              });
-        }
-        catch (error) {
-            console.error("Error converting div to image:", error);
-        }
+      pdf.addImage(dataUrl, "PNG", 0, 0, width, height);
+      pdfHeightLeft -= height;
     }
 
-    useEffect(() =>{
-        if(img.length === count){
-            for(let i = 0 ; i < count ; i++){
-                blobToImageSize(img[i]).then(size => {
-                    setDesiredHeight((height) => [...height, size.height]);
-                })
-            }
+    setPdf(pdf);
+  };
 
-        }
-    },[img])
-
-    useEffect(() =>{
-        if(desiredHeight.length === count){
-            console.log(desiredHeight)
-            BlobsToPdf();
-        }
-    },[desiredHeight])
-
-    useEffect(() => {
-        if(pdf){
-            const formData = new FormData();
-            formData.append("title" , resume.data.title);
-            formData.append("memberId", userInfo.id);
-            formData.append("pdf", pdf.output('blob') , resume.data.title + ".pdf");
-            dispatch(callImageToPdfAPI(formData)).then((result) =>{
-                if(result.status === 200){
-                    pdf.save(resume.data.title ? resume.data.title : userInfo.name + ".pdf");
-                    setIsLoading(false);
-                    dispatch(resetState());
-                    navgaite("/",redirect);
-                }
-            })
-        }
-    },[pdf])
-
-    const blobToImageSize = (blob) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                const img = new Image();
-                img.onload = function() {
-                    resolve({ width: this.width, height: this.height });
-                }
-                img.onerror = reject;
-                img.src = reader.result;
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
-    }
-
-    const BlobsToPdf = async () =>{
-        const pdf = new jsPDF('p','mm');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        let pdfHeightLeft = pdf.internal.pageSize.getHeight();
-
-        for(let i = 0; i < img.length; i++){
-            const { dataUrl, width, height } = await BlobToPdf(img[i], pdfWidth, desiredHeight[i]);
-
-            if(height > pdfHeightLeft && i > 0) {
-                pdf.addPage();
-                pdfHeightLeft = pdf.internal.pageSize.getHeight();
-            }
-    
-            pdf.addImage(dataUrl, 'PNG', 0, 0, width, height);
-            pdfHeightLeft -= height;
-        }
-
-        setPdf(pdf);
-    }
-
-    const BlobToPdf = (blob,pdfWidth,pdfHeight) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = async () => {
-                const dataUrl = reader.result;
-                const img = new Image();
-                img.onload = () => {
-                    const ratio = Math.min(pdfWidth / img.width, pdfHeight / img.height);
-                    const width = img.width * ratio;
-                    const height = img.height * ratio;
-                    resolve({ dataUrl, width, height });
-                };
-                img.onerror = reject;
-                img.src = dataUrl;
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
-    }
+  const BlobToPdf = (blob, pdfWidth, pdfHeight) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const dataUrl = reader.result;
+        const img = new Image();
+        img.onload = () => {
+          const ratio = Math.min(pdfWidth / img.width, pdfHeight / img.height);
+          const width = img.width * ratio;
+          const height = img.height * ratio;
+          resolve({ dataUrl, width, height });
+        };
+        img.onerror = reject;
+        img.src = dataUrl;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
 
     return (
         <>

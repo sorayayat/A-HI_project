@@ -37,15 +37,17 @@ const Search = () => {
   );
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(callSearchCompany({}));
-  }, []);
+    useEffect(() => {
+        if(inputValue.length >= 2)
+        dispatch(callSearchCompany({}))
+    },[])
 
-  useEffect(() => {
-    if (companyList?.data) {
-      setCompanyName(companyList.data.map((company) => company.company));
-    }
-  }, [companyList]);
+    useEffect(() =>{
+        if(companyList?.data){
+            setCompanyName(companyList.data.map(company => company.company))
+        }
+    },[])
+
 
   const handleInputChange = (event) => {
     const value = event.target.value;

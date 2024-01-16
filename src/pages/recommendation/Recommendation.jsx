@@ -19,10 +19,7 @@ function Recommendation() {
     dispatch(postRecommendation({}));
   }, []);
 
-
-    const selectPostingData = selectPosting?.response?.data
-
-    
+  const selectPostingData = selectPosting?.response?.data;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -86,7 +83,25 @@ function Recommendation() {
   return (
     <>
       <div className={style.container}>
-        <h1 className={style.bubble1}>나에게 딱 맞는 공고를 찾아 보세요!</h1>
+        <h1 className={style.title}>
+          <i
+            className="fas fa-font-awesome"
+            style={{
+              marginRight: "15px",
+              fontFamily: "FontAwesome",
+              color: "#d9d9d9",
+            }}
+          ></i>
+          나에게 딱 맞는 공고를 찾아 보세요!
+          <i
+            className="fas fa-font-awesome"
+            style={{
+              marginLeft: "15px",
+              fontFamily: "FontAwesome",
+              color: "#d9d9d9",
+            }}
+          ></i>
+        </h1>
         <div className={style.attachedFile}>
           <div
             className={style.uploadBox}
