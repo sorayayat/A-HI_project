@@ -18,7 +18,7 @@ import lombok.ToString;
 public class ReaderDTO {
     @JsonProperty("PersonalInformation")
     private PersonalInformationDTO personalInformationDTO;
-    @JsonProperty("AwardsCertifications")
+    @JsonProperty("awardsCertifications")
     private List<String> awardsCertifications;
     @JsonProperty("Skills")
     private List<String> skills;
