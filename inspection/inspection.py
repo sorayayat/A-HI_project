@@ -1,5 +1,5 @@
 from fastapi import APIRouter , Request , UploadFile , File
-from fastapi.responses import StreamingResponse , Response
+from fastapi.responses import StreamingResponse , Response , JSONResponse
 from PyPDF2 import PdfReader , PdfFileReader
 # from openai import OpenAI
 from configset.config import getAPIkey ,getModel
@@ -50,9 +50,15 @@ class ReaderDTO(BaseModel):
     PersonalInformation : PersonalInformation
     SelfIntroduction: List[SelfIntroduction]
 
+class EligibilityDTO(BaseModel):
+    eligibility : str
+    job: str
+    knowledge : str
+    skills : str
+
 class ModifyResumeDTO(BaseModel):
     direction: str
-    eligibility: List[str]
+    eligibility: EligibilityDTO
     skill: List[str]
     selfIntroduction: List[SelfIntroduction]
 
@@ -72,6 +78,8 @@ class RequestEntity(BaseModel):
 #             stop=None,
 #             temperature=0.5
 #         )
+
+
 
 def post_gap(system_content, user_content):
     try:
@@ -95,6 +103,7 @@ def post_gap(system_content, user_content):
             "data" : "그냥 오류요 뭐요 다시 시도해보든가"
         }
         return {"resp" : resp}
+
 
 @ITrouter.post("/aks")
 async def ask(ask : Ask):
@@ -144,6 +153,25 @@ async def readResume(file : UploadFile = File(...)):
     return json_object
 
 
+@ITrouter.get("/getContent")
+def get_content(request : Request) :
+    print("시작")
+    content = request.query_params.get("content")
+    pre_prompt = """회사 공고의 대한 내용인데 주요업무와 지원 자격에 대한 내용만을 분류 해줄래?
+                    {{job : job},{eligibility : eligibility},{knowledge : knowledge},{skills : skills}} Json 형식으로 반환 해주는데 
+                    key 값은 영어로 들어와야돼"""
+    
+    try :
+        answer = post_gap(pre_prompt, content)
+
+        if not isinstance(answer, dict):
+            answer = json.loads(answer)
+
+        return JSONResponse(content=answer , status_code=200)
+    except :
+        return JSONResponse(content= "에러 확인")
+
+
 @ITrouter.post("/modify")
 async def modify(modifyResume : RequestEntity):
     print("시작")
@@ -170,7 +198,7 @@ async def modify(modifyResume : RequestEntity):
     for d in data :
         d = d.direction
 
-   
+    print(eligibility)
     system_content = """너는AI 모델이 아닌 IT업계 인사 담당자 출신의 사람이야 회사의 취업 지원한 지원자의 이력서를 보고 객관적으로 판단해야돼
                     판단의 기준은 지원자의 기술 스택 과 지원하는 공고의 지원 자격을 보고 자기소개서를 판단 해줘야돼
                     판단을 다하고 나면 해당 자기소개서의 내용을 수정하고 자기소개서에서 보충해야되는 방향을 출력해주는데
