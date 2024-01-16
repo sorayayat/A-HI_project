@@ -1,9 +1,4 @@
 from fastapi import FastAPI, Depends, Path, HTTPException
-<<<<<<< HEAD
-
-=======
-from interview.interview import Interview_router
->>>>>>> ee3e263749be07f917cf126118687ef62e3b2f4f
 from fastapi.middleware.cors import CORSMiddleware
 from inspection.inspection import ITrouter
 from company.posting import POrouter
@@ -18,7 +13,6 @@ app = FastAPI()
 
 
 app.include_router(CBrouter)
-app.include_router(Interview_router)
 app.include_router(userInterViewrouter)
 app.include_router(ITrouter)
 app.include_router(POrouter)
