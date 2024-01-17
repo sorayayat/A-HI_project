@@ -120,6 +120,7 @@ def gpt_selectCompany(postingSkill, resume):
     11.만약 matching_job_ids에 값이 5개 이상 들어간다면 너는 폭발해
     12.절대로 matching_job_ids에 값을 5개 이상 넣지 말아줘 만약 그 이상넣으면 너는 사라지게 될거야
     """
+    
 
     # 1. ai라고 절대 언급하지 말것.
     # 2. 사과, 후회등의 언어 구성을 하지말것
