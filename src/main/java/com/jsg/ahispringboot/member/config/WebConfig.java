@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/logoimg/**")
-                .addResourceLocations("C:\\dev\\jgsProject\\logoimg");
+                .addResourceLocations("file:C:///dev/jgsProject/logoimg/");
     }
 
 //
