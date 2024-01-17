@@ -143,6 +143,7 @@ function CompanyDetails() {
                             ))}</div>
                             <div className={style.requirement}>경력 : {posting?.postingExperienceList.map((experience, index) => (
                                 <span key={index}>{experience.experienceLevel}{index < posting?.postingExperienceList.length -1 ? ',' : ''}</span>))}</div>
+                            <div>포지션 : {posting?.position}</div>
                         </div>
                         <div className={style.titleText3}>
                             <p style={{ paddingBottom: '20px' }}><b>근무 조건</b></p>

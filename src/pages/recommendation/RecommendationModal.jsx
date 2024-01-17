@@ -46,7 +46,7 @@ function RecommendationModal({ selectPostingData, closeModal }) {
 
                 <div className={style.recommendationTitle}>공고 추천</div>
 
-                {selectPostingData.map((posting, index) => (
+                {selectPostingData.postingDTO.map((posting, index) => (
                     <div key={index} className={style.companyDetails} onClick={() => onClickPostingHandler(posting, index)} >
                         <div className={style.companyTitle}>
                             <div><strong>{posting.postingTitle}</strong></div>
