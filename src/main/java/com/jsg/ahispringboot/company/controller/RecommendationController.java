@@ -1,6 +1,7 @@
 package com.jsg.ahispringboot.company.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jsg.ahispringboot.common.ResponseDTO;
 import com.jsg.ahispringboot.company.dto.PostingDTO;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +33,12 @@ public class RecommendationController {
         // 원래 데이터를 가져옵니다.
         List<?> tempMatchingIds = (List<?>) data.get("matching_job_ids");
 
+
+        Map<String, String> reasonsMap = (Map<String, String>) data.get("Reasons");
+
+        System.out.println(reasonsMap);
+
+
         // 안전하게 Integer로 변환합니다.
         List<Integer> matchingIds = tempMatchingIds.stream()
                 .map(Object::toString)
@@ -41,13 +49,17 @@ public class RecommendationController {
 
         List<PostingDTO> postingDTO = recommendationService.matchingIdsPosting(matchingIds);
 
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("postingDTO", postingDTO);
+        responseData.put("reasonsMap", reasonsMap);
+
 
 
         return ResponseEntity.ok()
                 .body(ResponseDTO.builder()
                         .status(HttpStatus.valueOf(HttpStatus.CREATED.value()))
                         .message("success")
-                        .data(postingDTO)
+                        .data(responseData)
                         .build());
     }
 
