@@ -59,7 +59,6 @@ def gpt_question(data):
     2.Do not use language that expresses apology or regret.
     3.Avoid repeating the same response.
     4.In the read data, I want you to read the experience in the EXPERIENCES field and calculate the number of years of experience and output the text 1+ if it's more than 1 year, 3+ if it's more than 3 years, 5+ if it's more than 5 years. If there is no experiences field, it will print "신입"
-    
     5.Answers must be "1년 이상", "3년 이상", "5년 이상"
     6.Don't say anything except print the text.
     7.Answers must be in Korean
