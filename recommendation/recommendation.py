@@ -20,6 +20,7 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from configset.config import *
+from bs4 import BeautifulSoup
 
 
 OPENAI_API_KEY = getAPIkey()
@@ -57,9 +58,10 @@ def gpt_question(data):
     1.Never mention "AI."
     2.Do not use language that expresses apology or regret.
     3.Avoid repeating the same response.
-    4.In the read data, I want you to read the experience in the EXPERIENCES field and calculate the number of years of experience and output the text 1+ if it's more than 1 year, 3+ if it's more than 3 years, 5+ if it's more than 5 years.
-    5.If there is no experiences field, it will print Newbie.
-    6.Answers must be "1년 이상", "3년 이상", "5년 이상", or "신입".
+    4.In the read data, I want you to read the experience in the EXPERIENCES field and calculate the number of years of experience and output the text 1+ if it's more than 1 year, 3+ if it's more than 3 years, 5+ if it's more than 5 years. If there is no experiences field, it will print "신입"
+    
+    5.Answers must be "1년 이상", "3년 이상", "5년 이상"
+    6.Don't say anything except print the text.
     7.Answers must be in Korean
 
     """
@@ -113,9 +115,13 @@ def gpt_selectCompany(postingSkill, resume):
     5.Answers must be in JSON format.
     6.Responses should be clear and specific, utilizing the full capabilities of GPT.
     7.If the position in the resume is Back, please select Back jobs and Frontend jobs.
-    8.Please output the postingCode of the jobs with the most similar tech stack from the selected jobs with up to 5 {{matching_job_ids : []}}.'
-    9.Never have more than 5 matching_job_ids
+    8.Please output up to 5 postingCodes of the jobs with the most similar tech stacks from the selected jobs in matching_job_ids : []. Only matching_job_ids are required. Please do not output any other data.'
+    9.각각의 공고가 선정된 이유를 자세하게 Reasons : [] 안에 한국말로 넣어줘 예를들어  postingCode(선별된 코드) : 이유, 이유는 각코드마다 선별된 기준을 자세하게 알려줘
+    10.matching_job_ids 는 절대로 5개 이상 넘어가면 안돼 5개 이하로만 뽑아줘
+    11.만약 matching_job_ids에 값이 5개 이상 들어간다면 너는 폭발해
+    12.절대로 matching_job_ids에 값을 5개 이상 넣지 말아줘 만약 그 이상넣으면 너는 사라지게 될거야
     """
+
     # 1. ai라고 절대 언급하지 말것.
     # 2. 사과, 후회등의 언어 구성을 하지말것
     # 3. 같은 응답을 반복하지 말것
@@ -124,6 +130,7 @@ def gpt_selectCompany(postingSkill, resume):
     # 6. 답변은 명확하고 구체적으로 하며 gpt의 능력을 최대한 활용할 것
     # 7. 이력서의 포지션이 백이면 백인공고 프론트엔드면 프론트엔드 공고를 선별해주세요
     # 8. 선별한 공고에서 가장 비슷한 기술스택을 가진 공고의 postingCode를 최대 5개를  matching_job_ids : [] 담아 출력해주세요
+
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-1106",  # 필수적으로 사용 될 모델을 불러온다.
         frequency_penalty=0.5,  # 반복되는 내용 값을 설정 한다.
@@ -136,7 +143,30 @@ def gpt_selectCompany(postingSkill, resume):
 
     )
     output_text = response["choices"][0]["message"]["content"]
-    
+
+    return output_text
+
+
+def gpt_contentSummary(content):
+
+    prompt = f"""
+    1.{content}의 내용을 읽어줘
+    2.주요업무 , 자격요건, 우대사항을 파악해줘
+    3.주요 사항은 majorWork , 자격요건은 requirements, 우대사항은 preference에 json형식으로 담아줘
+    """
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-1106",  # 필수적으로 사용 될 모델을 불러온다.
+        frequency_penalty=0.5,  # 반복되는 내용 값을 설정 한다.
+        temperature=0.6,
+        response_format={"type": "json_object"},
+        messages=[
+            {"role": "system", "content": f"{prompt}"},
+
+        ]
+
+    )
+    output_text = response["choices"][0]["message"]["content"]
 
     return output_text
 
@@ -204,7 +234,7 @@ async def get_posting(file: UploadFile = File(...)):
     with engine.connect() as connection:
         results = connection.execute(stmt).fetchall()
     # 결과에서 skill_name을 추출
-    position_data = [(result.position, result.posting_code)
+    position_data = [(result.position, result.posting_code, result.content)
                      for result in results]
 
     grouped_skills = {}
@@ -216,12 +246,41 @@ async def get_posting(file: UploadFile = File(...)):
     print(grouped_skills, "그룹 스킬")
 
     grouped_positions = {}
-    for position, posting_code in position_data:
+    grouped_content = {}
+    for position, posting_code, content in position_data:
         if posting_code not in grouped_positions:
             grouped_positions[posting_code] = []
         grouped_positions[posting_code].append(position)
 
-    print(grouped_positions, "그룹 포지션")
+        if posting_code not in grouped_content:
+            grouped_content[posting_code] = []
+        grouped_content[posting_code].append(content)
+
+    for posting_code, contents in grouped_content.items():
+        # 각 content에 대해 HTML 태그 제거
+        cleaned_contents = []
+        for content in contents:
+            soup = BeautifulSoup(content, 'html.parser')
+            text_content = soup.get_text(separator=' ', strip=True)
+            cleaned_contents.append(text_content)
+
+        # cleaned_contents로 업데이트
+        grouped_content[posting_code] = cleaned_contents
+
+    # 결과 출력
+    print(grouped_content, "내용")
+
+    # contentSummaries = []  # 결과를 저장할 리스트를 초기화합니다.
+
+    # for key, value in grouped_content.items():
+
+    #     contentSummary = gpt_contentSummary(value)
+    #     contentSummaries.append(contentSummary)
+
+    # for summary in contentSummaries:
+    #     print(summary)
+
+    # print(grouped_positions, "그룹 포지션")
 
     postingSkill = []
     # 그룹화된 skill_name을 출력
@@ -238,7 +297,8 @@ async def get_posting(file: UploadFile = File(...)):
         result_json.append({
             "Posting Code": posting_code,
             "Skills": skills,
-            'position': grouped_positions[posting_code]
+            'position': grouped_positions[posting_code],
+
 
         })
 
