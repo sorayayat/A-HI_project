@@ -6,6 +6,7 @@ current_directory = os.getcwd()
 
 current_directory = os.getcwd()
 
+
 def format_skills(skills):
     formatted_skills = ''
     for i, skill in enumerate(skills):
@@ -17,8 +18,10 @@ def format_skills(skills):
     return formatted_skills
 
 # 이력서 데이터를 받아서 텍스트 치환에 사용할 context를 생성
+
+
 def generate_resume(resume_data):
-    
+
     formatted_skills = format_skills(resume_data.get("skills", []))
 
     # Placeholder에 대해 초기 공백 값 설정
@@ -57,13 +60,18 @@ def generate_resume(resume_data):
     return context
 
 # 텍스트 치환 함수
+
+
 def replace_text_in_paragraph(paragraph, context):
     for run in paragraph.runs:
         for key, value in context.items():
             if key in run.text:
-                run.text = run.text.replace(key, ' ' if value is None or value == '' else value)
+                run.text = run.text.replace(
+                    key, ' ' if value is None or value == '' else value)
 
 # 이력서 템플릿을 채우고 저장하는 함수
+
+
 def fill_template(template_path, output_path, context):
     try:
         doc = Document(template_path)
@@ -81,46 +89,54 @@ def fill_template(template_path, output_path, context):
         print("Document created successfully. File path:", output_path)
     except Exception as e:
         print(f"Error: {e}")
-        
+
 
 # LibreOffice 실행 파일 경로 설정
 libreoffice_path = 'C:\\Program Files\\LibreOffice\\program\\soffice.exe'
-             
+
 # Docx 파일을 PDF로 변환하는 함수
+
+
 def convert_to_pdf(output_path_docx, output_path_pdf, libreoffice_path):
     try:
-        subprocess.run([libreoffice_path, '--headless', '--convert-to', 'pdf', output_path_docx, '--outdir', os.path.dirname(output_path_pdf)])
+        subprocess.run([libreoffice_path, '--headless', '--convert-to', 'pdf',
+                       output_path_docx, '--outdir', os.path.dirname(output_path_pdf)])
         print(f"PDF conversion successful. File path: {output_path_pdf}")
     except Exception as e:
         print(f"Error during PDF conversion: {e}")
 
+
 def generate_resume_content(resume_data):
-    
+
     user_name = resume_data.get("name", "Unnamed").replace(' ', '_')
-    
 
     output_folder = os.path.join(current_directory, 'static/resumeResult')
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-
      # 파일 경로에 사용자 이름 포함
-    output_path_docx = os.path.join(output_folder, '{}_Resume.docx'.format(user_name))
-    output_path_pdf = os.path.join(output_folder, '{}_Resume.pdf'.format(user_name))
-    
+    output_path_docx = os.path.join(
+        output_folder, '{}_Resume.docx'.format(user_name))
+    output_path_pdf = os.path.join(
+        output_folder, '{}_Resume.pdf'.format(user_name))
+
     # resume_data를 확인해 적절한 템플릿 파일 선택
     experiences = resume_data.get("experiences")
     certifications = resume_data.get("awardsandcertifications")
 
     if experiences and certifications:
-        template_path = os.path.join(current_directory, 'resume/tem', 'Template1.docx')  # 경력과 자격증 둘 다 존재하는 경우
+        template_path = os.path.join(
+            current_directory, 'resume/tem', 'Template100.docx')  # 경력과 자격증 둘 다 존재하는 경우
     elif not experiences and certifications:
-        template_path = os.path.join(current_directory, 'resume/tem', 'Template2.docx')  # 자격증만 있는 신입 템플릿
+        template_path = os.path.join(
+            current_directory, 'resume/tem', 'Template2.docx')  # 자격증만 있는 신입 템플릿
     elif experiences and not certifications:
-        template_path = os.path.join(current_directory, 'resume/tem', 'Template3.docx')  # 경력만 있는 경력자 템플릿
+        template_path = os.path.join(
+            current_directory, 'resume/tem', 'Template3.docx')  # 경력만 있는 경력자 템플릿
     else:
-        template_path = os.path.join(current_directory, 'resume/tem', 'Template4.docx')  # 경력과 자격증 모두 없는 신입 템플릿
+        template_path = os.path.join(
+            current_directory, 'resume/tem', 'Template4.docx')  # 경력과 자격증 모두 없는 신입 템플릿
 
     # 선택된 템플릿으로 context를 적용
     context = generate_resume(resume_data)
@@ -130,6 +146,5 @@ def generate_resume_content(resume_data):
 
     # Docx 파일을 PDF로 변환
     convert_to_pdf(output_path_docx, output_path_pdf, libreoffice_path)
-    
 
     return output_path_pdf  # PDF 파일 경로 반환

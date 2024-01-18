@@ -137,7 +137,6 @@ async def get_posting(posting_dto_list: List[PostingDTO]):
         n_results=2
         )
 
-
         
         if result.get("ids"):
                 for id in result["ids"][0]:
@@ -150,7 +149,7 @@ async def get_posting(posting_dto_list: List[PostingDTO]):
     
 
 
-    print(all_results)
+    print(all_results , "?")
 
     response_data = {"result": "success", "message": "Your response message", "data": all_results}
 

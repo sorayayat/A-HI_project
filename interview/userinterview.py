@@ -1,12 +1,11 @@
-from configset.config import getAPIkey,getModel
+from configset.config import getAPIkey, getModel
 import openai
-from fastapi import APIRouter, UploadFile, File, Body, FastAPI, HTTPException
+from fastapi import APIRouter, UploadFile, File
 import pdfplumber
 from io import BytesIO
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from typing import List, Dict, Optional, ClassVar
-import json
+
 
 OPENAI_API_KEY = getAPIkey()
 openai.api_key = OPENAI_API_KEY
@@ -16,6 +15,20 @@ userInterViewrouter = APIRouter(prefix="/userinterview")
 
 
 def gpt_question(userdata):
+    en_prompt = f"""
+    1.Never mention "AI."
+    2.Do not use language that expresses apology or regret.
+    3.Avoid repeating the same response.
+    4.Act as a veteran interviewer for an IT development company with exceptional talent recruitment skills.
+    5.Responses must be in Korean.
+    6.Responses should be clear and specific, utilizing the full capabilities of GPT.
+    7.If irrelevant information is included, state that the response is incorrect.
+    8.Ask a question related to computer science.
+    9.Ask two questions about {userdata}.
+    10.Only ask questions.
+    11.Take a deep breath, think carefully, and then respond. If you do well, I'll give you a gift.
+    """
+
     prompt = f"""
             1. ai라고 절대 언급하지 말것.
             2. 사과, 후회등의 언어 구성을 하지말것
@@ -28,20 +41,19 @@ def gpt_question(userdata):
             9. 오직 질문만 할 것
             10. 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘 잘 수행한다면 선물을 줄게
     """
-    
+
     response = openai.ChatCompletion.create(
-      model= MODEL, # 필수적으로 사용 될 모델을 불러온다.
-      frequency_penalty=0.3, # 반복되는 내용 값을 설정 한다.
-      temperature=0.3,
-      messages=[
-              {"role": "system", "content": prompt},
-              
-          ])
+        model=MODEL,  # 필수적으로 사용 될 모델을 불러온다.
+        frequency_penalty=0.3,  # 반복되는 내용 값을 설정 한다.
+        temperature=0.3,
+        messages=[
+            {"role": "system", "content": prompt},
+
+        ])
     output_text = response["choices"][0]["message"]["content"]
-    
+
     print(output_text)
     return output_text
-
 
 
 def gpt_feedback(question, userAnswer):
@@ -57,39 +69,37 @@ def gpt_feedback(question, userAnswer):
             9. 심호흡을 하고 천천히 잘 생각한 뒤 대답해줘 잘 수행한다면 선물을 줄게
     """
     response = openai.ChatCompletion.create(
-      model=MODEL,
-      frequency_penalty=0.3, # 반복되는 내용 값을 설정 한다.
-      temperature=0.3,
-      messages=[
-          {"role": "system", "content": Answerprompt},
-          {"role": "system", "content": f"{userAnswer} 대한 답을 듣고 더 나은 답변을 피드백 해줘"},
-          
-      ]
-   )
+        model=MODEL,
+        frequency_penalty=0.3,  # 반복되는 내용 값을 설정 한다.
+        temperature=0.3,
+        messages=[
+            {"role": "system", "content": Answerprompt},
+            {"role": "system", "content": f"{userAnswer} 대한 답을 듣고 더 나은 답변을 피드백 해줘"},
+
+        ]
+    )
     output_text = response["choices"][0]["message"]["content"]
-    
+
     print(output_text)
     return output_text
-
 
 
 @userInterViewrouter.post("/userinterview")
 async def get_userPDF(file: UploadFile = File(...)):
 
     userdata = await file.read()
-    
+
     with pdfplumber.open(BytesIO(userdata)) as pdf:
         textPDF = [page.extract_text() for page in pdf.pages]
-    
+
     # print(textPDF)
-    question =  gpt_question(textPDF)
+    question = gpt_question(textPDF)
     return JSONResponse(content={"question": question})
 
 
-
 class AnswerData(BaseModel):
-    question : str
-    answer : str
+    question: str
+    answer: str
 
 
 @userInterViewrouter.post('/sendAnswer')
@@ -101,4 +111,4 @@ async def AI_question(AnswerData: AnswerData):
     except Exception as e:
 
         return JSONResponse(status_code=500, content={"message": f"An error occurred: {str(e)}"})
-    return JSONResponse(content={"feedback" : feedback})
+    return JSONResponse(content={"feedback": feedback})
