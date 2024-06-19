@@ -3,12 +3,15 @@
 > 개요 : AI를 활용한 취업 지원 서비스 입니다.
 > 이력서 초안 , 자소서 첨삭 , 공고 추천 , 면접 준비 기능으로 취업을 지원합니다.
 
-<img width="449" alt="image" src="https://github.com/sorayayat/AHI-project/assets/141603333/df0f272c-6ffb-4019-acfe-d241d033cf57">
+<br>
+
+<img width="487" alt="image" src="https://github.com/sorayayat/A-HI_project/assets/141603333/fc1dee18-d186-4e09-ad12-1bf677e78fec">
 
 
 ### 서비스 아키텍처
 
-<img width="800" alt="image" src="https://github.com/sorayayat/AHI-project/assets/141603333/e1ee9f67-4951-447a-b5f0-f325c1839050">
+<img width="750" alt="image" src="https://github.com/sorayayat/A-HI_project/assets/141603333/66066f11-ed25-4cb1-aa3b-7b57df38ec7e">
+
 
 <br>
 <br>
