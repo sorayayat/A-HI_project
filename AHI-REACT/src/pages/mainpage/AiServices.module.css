@@ -1,0 +1,92 @@
+.aiServiceTopMargin {
+    height: 90px;
+}
+
+.aiServiceTitle {
+    margin-bottom: 35px;
+}
+
+.aiServiceContents {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    height: 335px;
+}
+
+.aiServiceBox {
+    display: block;
+}
+
+li {
+    list-style: none;
+}
+
+.boxList {
+    display: flex;
+    height: 100%;
+    -webkit-column-gap: 16px;
+    -moz-column-gap: 16px;
+    column-gap: 32px;
+    padding-left: 0px;
+}
+
+.box {
+    display: block;
+    position: relative;
+    width: 240px;
+    height: 240px;
+    padding: 15px;
+    border: 1px solid #dbe6fc;
+    background-color: #dbe6fc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.box:hover {
+    border: 3px solid #bfd1f5;
+    background-color: #e9eff9;
+}
+
+.boxTitle {
+    text-align: center;   
+}
+
+.boxTitle h2 {
+    margin-top: 15px;   
+    margin-bottom: 10px;   
+}
+
+.boxText {
+    font-size: 18px;
+    color: gray;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.boxText h4{
+    font-weight: 300;
+    margin-top: 7px;
+    margin-bottom: 15px;
+}
+
+.paperIcon {
+    display: flex;
+    justify-content: center;
+}
+
+.pdfIcon {
+    display: flex;
+    justify-content: center;
+}
+
+
+.headIcon {
+    display: flex;
+    justify-content: center;
+}
+
+.speakerIcon {
+    display: flex;
+    justify-content: center;  
+}

@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&family=Shadows+Into+Light&family=Sunflower:wght@300&display=swap");
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  font-family: "pretendard";
+}
+
+/* .logo {
+  width: 300px;
+  height: 100px;
+} */
+
+.uploadBox {
+  margin-top: 30px;
+  border-radius: 20px;
+  width: 400px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recommendationButton {
+  margin-top: 50px;
+  margin-bottom: 70px;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  /* text-decoration: none; */
+  cursor: pointer;
+  border: 2px solid #3498db;
+  background-color: #fff;
+  color: #3498db;
+  border-radius: 30px;
+  transition: background-color 0.5s, color 0.5s;
+  font-family: "pretendard";
+}
+
+.recommendationButton:hover {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.noResume.h1 {
+  margin-top: 40px;
+  margin-bottom: 0px;
+}
+
+.noResume.h2 {
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+.resumeButton {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  /* text-decoration: none; */
+  cursor: pointer;
+  border: 2px solid #3498db;
+  background-color: #fff;
+  color: #3498db;
+  border-radius: 30px;
+  transition: background-color 0.5s, color 0.5s;
+  margin-bottom: 40px;
+  font-family: "pretendard";
+}
+
+.resumeButton:hover {
+  background-color: #3498db;
+  color: #fff;
+}
+
+/* 말풍선 스타일 추가 */
+.bubble {
+  position: relative;
+  display: inline-block;
+  margin-top: -20px; /* 말풍선 위치 조절 */
+  margin-right: 10px; /* 말풍선과 텍스트 사이 간격 조절 */
+  padding: 15px 20px;
+  background-color: #3674ea;
+  color: #ffffff;
+  border-radius: 15px;
+  font-size: 15px;
+  font-family: "pretendard";
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.bubble::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent #3674ea transparent transparent;
+}

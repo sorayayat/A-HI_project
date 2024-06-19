@@ -1,0 +1,58 @@
+.modalOverlay {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  align-items: center;
+  justify-content: center;
+  z-index: 101;
+}
+
+.recommendationContainer {
+  background-color: white;
+  width: 500px;
+  height: auto;
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.companyTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.recommendationTitle {
+  font-size: 40px;
+  font-weight: 800;
+  color: #3498db;
+  margin-bottom: 20px;
+}
+
+.companyDetails{
+    
+    border-radius: 20px;
+    padding: 20px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.closeButton:hover {
+  color: #000;
+}

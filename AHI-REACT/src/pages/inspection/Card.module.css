@@ -1,0 +1,269 @@
+/* NO CHANGE 주석 달린 부분 제외하고 수정하셔도 됩니다 */
+/* 물론 기본틀이 크게 훼손되지 않는 범위 내에서!! */
+/* 해당 부분 수정 필요 시 저 또는 다희 님에게 컨펌 요청 */
+/* 야근 수당은 맛있는 간식으로 받겠습니다 */
+
+.container {
+  display: flex;
+  flex-direction: row; /* 가로 방향으로 내용을 나열*/
+  justify-content: flex-start; /* 컨텐츠를 왼쪽에서부터 정렬 */
+  align-items: flex-start; /* 컨텐츠를 위쪽에서부터 정렬 */
+  margin: auto; /* NEVER CHANGE */
+  max-width: 900px; /* NO CHANGE */
+  height: 100%; /* NO CHANGE */
+  background-color: #ffffff; /* NO CHANGE */
+  color: #333; /* NO CHANGE */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* NO CHANGE */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  position: relative; /* NO CHANGE */ /* 내부 요소를 절대 위치로 배치*/
+  color: #043d68; /* NO CHANGE */
+  font-size: 19px;
+  overflow: auto;
+  padding-right: 15px;
+}
+
+.contentArea {
+  /* 전체 NO CHANGE */
+  padding: 40px;
+  width: 35%;
+  height: 890px;
+  background-color: #e9f5fe; /* 하늘색 배 경 */
+  position: absolute; /* 절대 위치 */
+  right: 0;
+  top: 0;
+}
+
+.content {
+  padding: 40px;
+  width: 50%;
+  text-align: left;
+  margin-right: 350px; /* NO CHANGE */ /* 겹치지 않도록 */
+}
+
+.contentArea p {
+  font-size: 14px
+}
+
+.Contect{
+  margin-top: 210px;
+}
+
+
+
+.resumeTitle{
+  text-align: center;
+}
+
+.Education{
+  margin-top: 40px;
+}
+
+.text {
+  margin: 20px; /* 모든 방향에 마진 */
+  margin-top: 20px;
+}
+
+.title {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 30px;
+  color: #043d68;
+}
+
+.skillDev{
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.skillDev p{
+  flex: 1;
+}
+
+.Line{
+  border-bottom: 1px solid rgba(87, 87, 87 , 0.2);
+  margin: 30px auto;
+  width: 100%;
+}
+
+.selfContent {
+  width: 90%;
+  height: 70%;
+  position: absolute; 
+  right: 5%;
+  top: 120%;
+}
+
+.selfContent .Line{
+  border-bottom: 1px solid rgba(87, 87, 87 , 1);
+  width: 100%;
+}
+
+.selfDev{
+  margin-bottom: 50px;
+}
+
+.self{
+  padding-right: 20px;
+  padding-bottom: 20px;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.selfTitle{
+  border-bottom: 1px solid black;
+  margin-top: 0;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.selfText{
+  margin-bottom: 40px;
+}
+
+.modiftBtn1{
+  color: white; 
+  padding: 5px 10px;
+  display: inline-block;
+  position: relative;
+  bottom: 26px; 
+  left: 90%; 
+  transform: translate(-50%, -50%);
+  background-color: #7d7b7b;
+  border: 1px solid rgba(0,0,0,0.21);
+  border-bottom-color: rgba(0,0,0,0.34);
+  text-shadow:0 1px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+              0 2px 0 -1px rgba(0,0,0,0.13), 
+              0 3px 0 -1px rgba(0,0,0,0.08), 
+              0 3px 13px -1px rgba(0,0,0,0.21);
+
+}
+.modiftBtn1:active{
+    border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+}
+.modiftBtn1:hover{
+    background-color: rgb(151, 151, 151);
+}
+
+.modiftBtn2{
+    color: white; 
+    padding: 5px 15px;
+    display: inline-block;
+    position: relative;
+    top: 40px; 
+    left: 93%; 
+    transform: translate(-50%, -50%);
+    background-color: #7d7b7b;
+    border: 1px solid rgba(0,0,0,0.21);
+    border-bottom-color: rgba(0,0,0,0.34);
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+                0 2px 0 -1px rgba(0,0,0,0.13), 
+                0 3px 0 -1px rgba(0,0,0,0.08), 
+                0 3px 13px -1px rgba(0,0,0,0.21);
+  
+  }
+  .modiftBtn2:active{
+      border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+  }
+  .modiftBtn2:hover{
+      background-color: rgb(151, 151, 151);
+  }
+
+.ProjectsDev{
+  border-bottom: 1px solid gray;
+}
+
+.resumeBack{
+  width: 100%;
+  height: 100%;
+}
+
+.befoAfter{
+  margin-left: 100px;
+  display: flex;
+  width: 80%;
+  height: 100%;
+}
+
+.befo{
+  margin: auto;
+  margin-right: 50px;
+  height: 100%;
+}
+
+.after{
+  margin: auto;
+  margin-left: 50px;
+  height: 100%;
+}
+
+
+
+.personalInformation{
+  width: 1000px;
+  margin: auto;
+}
+
+.gptAnswer{
+  text-align: center;
+}
+
+.loadingIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  /* 화면에 고정 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  /* 반투명 배경 */
+  z-index: 9999;
+  /* 다른 요소들 위에 표시 */
+}
+
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid blue;
+  /* 상단 색상 지정 */
+  border-radius: 50%;
+  margin: 200 , auto;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  padding: 20px;
+  margin: 100 , auto;
+}
+
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+.white_bg{
+  width: 60%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 200px auto;
+}
+
+
+

@@ -1,0 +1,324 @@
+.backGround{
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,00.5);
+    position: fixed;
+    padding: 20px;
+    bottom: 0;
+    z-index: 999;
+}
+
+.contentBack{
+    width: 30%;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    position:relative;
+    top: 5%;
+    left: 35%;
+}
+
+.contentIn{
+    border: 1px solid black;
+    border-radius: 8px;
+}
+
+.title{
+    text-align: center;
+}
+
+.way{
+    text-align: center;
+}
+
+.selectDev{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.select{
+    width: 150px;
+    height: 30px;
+    background-size: 20px;
+    padding: 5px 30px 5px 10px;
+    border-radius: 4px;
+    outline: 0 none;
+}
+
+.option{
+    background: rgb(0, 0, 0);
+    color: #fff;
+    padding: 3px 0;
+}
+
+.inputText{
+    text-align: center;
+}
+
+.input{
+    width: 50%;
+    height: 100px;
+    resize: none;
+    box-sizing: border-box;
+    border: solid 2px #7f878f;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btnBox{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%; 
+}
+
+.saveBtn{
+    color: white; 
+    padding: 5px 15px;
+    margin: 10px;
+    background-color: #8cd682;
+    border: 1px solid rgba(0,0,0,0.21);
+    border-bottom-color: rgba(0,0,0,0.34);
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+                0 2px 0 -1px rgba(0,0,0,0.13), 
+                0 3px 0 -1px rgba(0,0,0,0.08), 
+                0 3px 13px -1px rgba(0,0,0,0.21);
+  
+  }
+  .saveBtn:active{
+      border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+  }
+  .saveBtn:hover{
+      background-color: rgb(99, 223, 57);
+  }
+
+  .cencelBtn{
+    color: white; 
+    padding: 5px 15px;
+    background-color: #d68282;
+    border: 1px solid rgba(0,0,0,0.21);
+    border-bottom-color: rgba(0,0,0,0.34);
+    text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+                0 2px 0 -1px rgba(0,0,0,0.13), 
+                0 3px 0 -1px rgba(0,0,0,0.08), 
+                0 3px 13px -1px rgba(0,0,0,0.21);
+  
+  }
+  .cencelBtn:active{
+      border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+  }
+  .cencelBtn:hover{
+      background-color: rgb(223, 57, 57);
+  }
+
+.searchResults {
+    width: 50%; /* 드롭박스 너비 */
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 20px 20px;
+    border: 4px solid #D9E5FB;
+    border-top: none;
+    margin : auto;
+}
+
+  .searchResultItem {
+    padding: 16px; /* 내부 여백 */
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.searchResultItem:hover {
+    background-color: #f5f5f5;
+}
+
+.searchResultItem:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.searchBox {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: "Pretendard";
+    width: 200px;
+    margin-left: 10px;
+}
+
+.skilles{
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: center;
+    margin : auto;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.skill{
+    margin-left: 10px;
+    margin-bottom: 5px;
+
+}
+
+.loading {
+    width: 100vw;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .loading span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: gray;
+    border-radius: 50%;
+    animation: loading 1s linear infinite;
+    background-color: black;
+  }
+  
+  .loading span:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  .loading span:nth-child(2) {
+    animation-delay: 0.2s;
+  
+    .overlay {
+      position: fixed;
+      /* 고정된 위치 */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      /* 반투명 검정색 배경 */
+      display: flex;
+      justify-content: center;
+      /* 중앙 정렬 */
+      align-items: center;
+      z-index: 1000;
+      /* 다른 요소들 위에 표시 */
+    }
+  
+    .loadingBar {
+      width: 50%;
+      /* 로딩바의 너비 */
+      max-width: 300px;
+      /* 최대 너비 */
+      height: 20px;
+      background-color: #ddd;
+      border-radius: 10px;
+      /* 둥근 모서리 */
+      overflow: hidden;
+      /* 내부 진행 막대가 테두리를 넘지 않게 함 */
+    }
+  
+    .loadingBarProgress {
+      height: 100%;
+      width: 0;
+      padding: 20;
+      background-color: white;
+      animation: loadingAnimation 2s linear infinite;
+    }
+  
+    @keyframes loadingAnimation {
+      0% {
+        width: 0;
+      }
+  
+      100% {
+        width: 100%;
+      }
+    }
+  
+  
+    .loading span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+  }
+  
+  @keyframes loading {
+  
+    0%,
+    100% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+  
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+  
+  .msg {
+    font-size: 20px;
+    background-color: gray;
+    width: 50%;
+    padding: 10px;
+  }
+
+.loadingIndicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    padding: 20px;
+    bottom: 0;
+    z-index: 9999;
+}
+
+.loadingModal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28%;
+    height: 53%;
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    padding: 20px;
+    top: 5%;
+    z-index: 9999;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid blue;
+    /* 상단 색상 지정 */
+    border-radius: 50%;
+    margin: 200 , auto;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    padding: 20px;
+    margin: 100 , auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

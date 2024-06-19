@@ -1,0 +1,90 @@
+.loginFormContainer {
+  margin-top: 5vh;
+  width: 300px; /* 기본 너비 설정 */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 5vh;
+}
+
+  .formGroup {
+    margin-bottom: 15px;
+  }
+  
+  .loginLabel {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .loginInput {
+    flex: 2; /* 수정된 부분: 버튼이 차지하는 공간을 포함하여 input이 남은 공간을 차지하도록 수정 */
+    border-radius: 5px;
+    outline: none;
+    transition: box-shadow 0.3s;
+  
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #5d91f1;
+    margin-top: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s; /* 포커스 트랜지션 추가 */
+  }
+  
+  .loginInput:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
+    border-color: #87CEEB; /* 포커스 시 테두리 색상 변경 */
+  }
+  
+  .loginBtn {
+    width: 100%;
+    padding: 10px;
+    background-color: #3674EA;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px; /* 버튼과 입력 필드 간격 30px로 조정 */
+  }
+  
+  .loginBtn:hover {
+    background-color: #4682B4;
+  }
+  
+  .links {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .links a {
+    margin-bottom: 10px;
+    color: #3674EA;
+    text-decoration: none;
+  }
+  
+  .links a:hover {
+    text-decoration: underline;
+    color: #4682B4;
+  }
+  
+
+  @media (max-width: 768px) {
+    .loginFormContainer {
+      width: 60%; /* 화면 너비에 따라 너비 조정 */
+      margin-top: 10vh;
+      margin-bottom: 10vh;
+    }
+  }
+  
+  /* 작은 화면 크기(모바일)에 대한 스타일 */
+  @media (max-width: 480px) {
+    .loginFormContainer {
+      width: 90%; /* 화면 너비에 따라 너비 조정 */
+      margin-top: 10vh;
+      margin-bottom: 10vh;
+    }
+  }

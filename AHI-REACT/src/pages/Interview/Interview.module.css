@@ -1,0 +1,244 @@
+/* General Styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Header Style */
+.header {
+    font-size: 2em;
+    color: #3674EA;
+    margin-bottom: 5px;
+    /* Increased spacing */
+    text-align: center;
+
+}
+
+.shoulder {
+    font-size: 2em;
+    color: black;
+    margin-bottom: 20px;
+    /* Increased spacing */
+    text-align: center;
+}
+
+/* Search Bar Style */
+.searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    /* Increased spacing */
+}
+
+.searchBox {
+    width: 50%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Button Styles */
+.blueButton {
+    background-color: #3674EA;
+    color: white;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    /* Added margin-bottom */
+}
+
+.actionButton {
+    background-color: #3674EA;
+    color: white;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    /* Added margin-bottom */
+}
+
+.questionBoxWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center align */
+    margin-bottom: 20px;
+    /* Increased spacing */
+}
+
+.questionBox {
+    position: relative;
+    width: 60%;
+    /* Adjusted width */
+    padding: 15px 40px 15px 15px;
+    border: 1px solid #dbe6fc;
+    background-color: #dbe6fc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    /* Increased spacing */
+    font-size: 20px;
+}
+.questionBox :hover {
+    border: #3674EA;
+}
+
+.toggle {
+    position: absolute;
+    right: 1px;
+    top: 5px;
+    background-color: transparent; /* 임시 배경색 */
+    color: black; /* 텍스트 색상 */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    z-index: 1000; /* z-index 추가 */
+}
+
+
+.answerBoxs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    /* Adjusted width */
+}
+
+.answerBoxs {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end; /* Center elements vertically */
+}
+
+.answerBoxs input {
+    position: relative;
+    flex-grow: 1; /* Fill available space */
+    min-width: auto; /* Minimum width */
+    width: 100%; /* Responsive width based on viewport */
+    height: 50px;
+    padding: 1 10px;
+    font-size: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.textarea {
+    padding: 10px;
+    width: 95%;
+    height: 100px;
+    resize: none;
+    overflow: auto;
+    font-size: 20px;
+    border-radius: 10px;
+}
+  
+  .answerBoxs button {
+    margin-left: 1px; /* 버튼과 입력창 사이의 간격 */
+    /* 필요에 따라 추가 스타일링 */
+  }
+  
+
+/* Feedback Style */
+.feedback {
+    font-size: 1em;
+    color: #666;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.answerblueButton {
+    background-color: #3674EA;
+    color: white;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 5px;
+
+}
+
+
+/* 로딩 아이콘을 보여준다 */
+
+.loadingIndicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    /* 화면에 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    /* 반투명 배경 */
+    z-index: 9999;
+    /* 다른 요소들 위에 표시 */
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid blue;
+    /* 상단 색상 지정 */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.load {
+    font-size: 25px;
+}
+
+
+.feedback {
+    font-size: 1em;
+    color: #666;
+    text-align: left; /* 왼쪽 정렬 */
+    margin-top: 10px;
+    padding: 15px; /* 패딩 추가 */
+    border: 1px solid #dbe6fc; /* 테두리 추가 */
+    background-color: #f5f5f5; /* 배경색 추가 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+    width: 90%; /* 너비 조정 */
+}
+
+.p {
+    margin: 25px 25px 25px 0px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.charCounter {
+    text-align: right;
+    color: gray;
+    margin-top: 5px;
+}

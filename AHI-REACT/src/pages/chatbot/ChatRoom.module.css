@@ -1,0 +1,269 @@
+.messageListWrapper {
+    width: calc(100vW - 300px);
+    min-width: 400px; 
+    position: relative;
+}
+
+.messageList {
+    width: 100%;
+    height: calc(100vh - 80px);
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.messageContainer {
+    width: 100%;
+    flex: 1 1 0%;
+    position: relative;
+    display: flex;
+    /* height: calc(100vh - 80px); */
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.messageItemScreen {
+    display: flex;
+    flex-direction: column;
+    top: 0px;
+    left: 0px;
+    padding: 80px 20px 224px;
+    gap: 85px;
+    width: 100vh;
+    /* height: calc(100vh - 80px); */
+}
+
+
+.chatDirectionText p {
+    color: rgb(104, 104, 104);
+}
+
+.promptSelect {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex: 1 1 0%;
+    gap: 20px;
+}
+
+.prompt {
+    display: flex;
+    max-width: 640px;
+    width: 100%;
+    flex: 1 0 0px;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.promptBox {
+    /* width: 100%; */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 27px;
+}
+
+.promptBox1, .promptBox2 {
+    width: 350px;
+    height: 100px;
+    background-color: #DDFBFF;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 1020px) {
+    .promptBox {
+        flex-direction: column; /* 세로 정렬로 변경 */
+        align-items: center;
+    }
+
+    .promptBox1,
+    .promptBox2 {
+        flex-basis: auto; /* 자동으로 너비 조정 */
+        width: 350px; /* 원래 너비로 설정 */
+        margin-top: 15px; /* 간격 설정 */
+    }
+}
+
+
+
+.box1Text b {
+    color: #3674EA; 
+}
+
+.box2Text b {
+    color: #3674EA; 
+}
+
+
+.inputMessageArea {
+    width: 100%;
+    padding: 20px 20px 40px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    position: sticky; /* 스크롤 시 고정 */
+    bottom: 0; /* 화면 하단에 고정 */
+    z-index: 1; /* 다른 요소 위에 배치 */
+      
+}
+
+.inputMessageBar {
+    width: 100%;
+    height: 60px;
+    max-width: 750px;
+    border: 2px solid rgb(222, 222, 222);
+    border-radius: 10px;
+}
+
+.inputMessage {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.inputMessage textarea{
+    background: none;
+    width: 90%;
+    font-size: 20px;
+    line-height: 1.7;
+    font-weight: 100;
+    font-family: "Pretendard";
+    padding-top: 13px;
+    padding-left: 10px;
+    border: none;
+    outline: none;
+    resize: none;
+    white-space: pre-wrap; /* 줄 바꿈 유지 */
+    overflow-y: hidden;
+    color: rgb(59, 63, 78);
+}
+
+.inputMessage textarea::placeholder {
+    color:rgb(176, 176, 176);
+  }
+
+
+.messageSendBtn {
+    border: none;
+    background: none;
+    padding-top: 13px;
+    padding-left: 18px;
+}
+
+
+
+/* ========================== 채팅창 메세지, 말풍선 디자인 ========================== */
+
+
+.userMessage {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+  }
+  
+  .chatbotMessage {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 40px;
+  }
+  
+  .userMessage .messageBubble {
+    background-color: #007aff;
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 10px 15px;
+    /* max-width: 75%; */
+    text-align: left !important;
+    line-height: 180%;
+  }
+  
+  .chatbotMessage .messageBubble {
+    background-color: rgb(242, 247, 255);
+    border-radius: 10px;
+    padding: 10px 15px;
+    /* max-width: 75%; */
+    text-align: left !important;
+    line-height: 180%;
+    color: rgb(59, 63, 78);
+  }
+
+  .chattingScrollContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(100% - 60px);
+  }
+
+
+  .chattingList {
+    height: calc(100% - 90px); /* 기존 높이에서 입력창 높이만큼 뺌 */
+    width: 100%;
+    min-width: 100%;
+    max-height: calc(100vh - 140px); /* 채팅창 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤바 표시 */
+    margin: 0px auto;
+    max-width: 750px;
+    padding-top: 30px;
+    background: white;
+    scrollbar-width: none; /* Firefox에 적용되는 속성 */
+    -ms-overflow-style: none; /* IE/Edge에 적용되는 속성 */
+  }
+  
+  .chattingList::-webkit-scrollbar {
+    display: none; /* Webkit 기반 브라우저에 적용되는 속성 */
+  }
+
+  .resumeButton {
+    width: 230px;
+    height: 70px;
+    border-radius: 50px;
+    background-color: #c2defd;
+    cursor: pointer;
+    justify-content: center;
+    color: rgb(96, 95, 98);
+    font-family: "Pretendard";
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    align-items: center;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 47px;
+    border: 3px solid #9fcbfd;
+  }
+
+
+  .resumeButton:hover {
+    width: 230px;
+    height: 70px;
+    border-radius: 50px;
+    background-color: #dbebfc;
+    cursor: pointer;
+    justify-content: center;
+    color:rgb(96, 95, 98);
+    font-family: "Pretendard";
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    align-items: center;
+  
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 47px;
+  }
+
+  .chatbotLoading {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: rgb(59, 63, 78);
+  }

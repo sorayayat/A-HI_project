@@ -1,0 +1,131 @@
+.roomListWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.newButtonWrapper {
+    padding: 12px;
+}
+
+
+.newChatBtn {
+    width: 280px;
+    height: 40px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    font-family: "Pretendard";
+    color: #3674EA;
+    font-weight: 600;
+    cursor: pointer;
+    padding-left: 16px;
+}
+
+
+.roomListMenu {
+    height: 300px;
+    flex: 1 1 0%;
+    overflow: hidden;
+}
+
+
+.roomListMenuSetWrapper {
+    height: calc(100% - 60px);
+    width: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.roomListMenuSetWrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.roomListMenuSet {
+    width: 100%;
+    flex: 1 1 0%;
+}
+
+.roomListMenu1 {
+    padding: 10px 15px;
+    font-size: 15px;
+    height: 40px;
+    display: flex;
+    align-items: center; 
+    color: rgb(104, 104, 104);
+}
+
+
+.roomListMenu2 {
+    padding: 20px 15px;
+    display: flex;
+    border-top: 1px solid rgb(228, 227, 227);
+}
+
+.roomListMenu2:hover {
+    background-color: #cadbfc;
+}
+
+.roomListMenu3:hover {
+    background-color: #cadbfc;
+}
+
+
+.roomLists {
+    height: 75px;
+    padding: 5px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 8px;
+    position: relative; /* 추가된 부분 */
+}
+
+.roomTexts {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+
+.roomLists:hover {
+    background-color: #cadbfc;
+}
+
+
+p {
+    margin: 0px;
+}
+
+.newOrExp {
+    display: flex;
+    font-size: 14px;
+    color: rgb(104, 104, 104);
+}
+
+
+.activeRoom:hover {
+    background-color: #bfd1f5;
+}
+
+.roomLists .deleteButton {
+    display: none;
+    position: absolute; /* 수정된 부분 */
+    top: 50%; /* 버튼을 상자의 중앙에 위치시킴 */
+    right: 20px; /* 오른쪽 여백 */
+    transform: translateY(-40%); /* 버튼을 수직 중앙에 정확히 위치시키기 위함 */
+    background: none;
+    border: none;
+    color: #a3b9e3;
+    cursor: pointer;
+}
+
+.roomLists:hover .deleteButton {
+    display: block; /* 마우스 올렸을 때만 삭제 버튼 보이게 */
+}
